@@ -7,7 +7,7 @@
       <span class="uppercase text-primary-500 dark:text-primary-400">
         {{ item.header ? item.header : "" }}
       </span>
-      <p class="text-gray-500 dark:text-secondary">
+      <p class="text-gray-400 dark:text-secondary">
         {{ item.description ? item.description : "" }}
       </p>
     </div>

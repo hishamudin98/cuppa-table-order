@@ -11,7 +11,7 @@
 
 <script>
 import RsHeader from "@/layout/components/Header.vue";
-import RsTopMenu from "@/layout/components/TopMenu.vue";
+import RsTopMenu from "@/layout/components/vertical/TopMenu.vue";
 import RsFooter from "@/layout/components/Footer.vue";
 
 export default {

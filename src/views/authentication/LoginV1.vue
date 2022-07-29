@@ -8,7 +8,7 @@
           </div>
           <h3 class="mb-5">Login</h3>
           <p class="text-slate-500 mb-5">
-            Welcome to Rose UI. Please login to continue.
+            Welcome to Malaya Grill. Please login to continue.
           </p>
           <div class="grid grid-cols-2">
             <FormKit
@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="absolute bottom-5 left-5 text-xs text-slate-400">
-        © Rose UI 2022
+        © Malaya Grill 2022
       </div>
     </div>
     <div class="flex-auto w-full lg:w-7/12 m-auto hidden md:block">

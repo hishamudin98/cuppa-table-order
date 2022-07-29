@@ -316,7 +316,7 @@ import products from "./data";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
-// Rose Ui Components
+// Malaya Grill Components
 import RsButton from "@/components/Button.vue";
 import RsCollapse from "@/components/Collapse.vue";
 import RsCollapseItem from "@/components/CollapseItem.vue";

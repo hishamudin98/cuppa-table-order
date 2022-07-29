@@ -2,8 +2,9 @@
   <div
     class="
       vertical-menu
-      bg-white
+      bg-slate-800
       dark:bg-slate-800
+      text-white
       text-base
       h-screen
       fixed
@@ -16,21 +17,13 @@
       dark:shadow-slate-900
     "
   >
-    <div class="py-2 px-4">
+    <div class=" px-4">
       <div class="flex flex-auto gap-3 justify-center items-center">
         <img
-          class="h-10 w-10 block dark:hidden"
-          src="@/assets/images/logo/logo.png"
-          alt=""
-        />
-        <img
-          class="h-10 w-10 hidden dark:block"
+          class="h-18 w-18"
           src="@/assets/images/logo/logo-white.png"
           alt=""
         />
-        <span class="text-xl font-semibold text-primary-500 dark:text-white"
-          >Rose UI</span
-        >
       </div>
     </div>
     <div class="flex flex-col justify-between my-6">
