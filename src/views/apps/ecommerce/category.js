@@ -1,32 +1,18 @@
 export default [
   {
-    name: "Graphics",
-    image:
-      "https://www.nvidia.com/content/dam/en-zz/Solutions/shop/1532541-gf-web-dmo-graphics-cards-3060ti-594x308.png",
+    name: "Frozen Food",
+    image: "https://cf.shopee.com.my/file/f0638d2b2b604df5e6cb30faac1dc2b6",
   },
   {
-    name: "Laptop",
-    image:
-      "https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP858/mbp16-gray.png",
+    name: "Dried Food",
+    image: "https://cf.shopee.com.my/file/6bcd1177b185c7f776a1dc6e18bd6a76",
   },
   {
-    name: "Audio",
-    image:
-      "https://www.sony.com.my/image/134a2eefe22c3000f28cf57296b6bcb5?fmt=png-alpha&wid=480",
+    name: "Ingredients",
+    image: "https://cf.shopee.com.my/file/1515c80151a7c7660d3284d1ca27a8c0",
   },
   {
-    name: "Mobile",
-    image:
-      "https://support.apple.com/library/content/dam/edam/applecare/images/en_US/sfaq/sfaq-iphone_2x.png",
-  },
-  {
-    name: "Games",
-    image:
-      "https://preview.redd.it/xh5sw1yxzq971.png?auto=webp&s=ba0159b1215b01c25fdd94a811043f11a0c5b077",
-  },
-  {
-    name: "TV & Video",
-    image:
-      "https://images.samsung.com/is/image/samsung/sg-fhd-t5300-ua43t6000akxxs-frontblack-220764447?$650_519_PNG$",
+    name: "Snacks",
+    image: "https://cf.shopee.com.my/file/5798838bfaf96b0af5aa5810e4fddd30",
   },
 ];

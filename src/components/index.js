@@ -1,5 +1,5 @@
 import RsLayout from "@/layout/Layout.vue";
-import RsBreadcrumb from "@/layout/components/Breadcrumb.vue";
+import RsBreadcrumb from "@/components/layout/Breadcrumb.vue";
 import RsCard from "@/components/Card.vue";
 
 // Register components globally

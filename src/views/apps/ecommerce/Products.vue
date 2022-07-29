@@ -23,18 +23,7 @@
     <!-- Filter n Categories -->
     <div class="filter-top-wrapper flex pb-4">
       <button
-        class="
-          flex
-          items-center
-          rounded-lg
-          py-2
-          px-4
-          bg-white
-          dark:bg-slate-800 dark:text-gray-300
-          hover:bg-slate-200
-          shadow-md shadow-slate-200
-          dark:shadow-slate-900
-        "
+        class="flex items-center rounded-lg py-2 px-4 bg-white dark:bg-slate-800 dark:text-gray-300 hover:bg-slate-200 shadow-md shadow-slate-200 dark:shadow-slate-900"
         @click="showFilter ? (showFilter = false) : (showFilter = true)"
       >
         <vue-feather size="1.25rem" type="filter"></vue-feather>
@@ -42,20 +31,7 @@
       <perfect-scrollbar style="width: 100%">
         <div class="category-wrapper flex gap-x-4 pl-4">
           <button
-            class="
-              flex
-              items-center
-              rounded-lg
-              py-2
-              px-3
-              bg-white
-              dark:bg-slate-800 dark:text-gray-300
-              hover:bg-slate-200
-              font-semibold
-              text-sm
-              shadow-md shadow-slate-200
-              dark:shadow-slate-900
-            "
+            class="flex items-center rounded-lg py-2 px-3 bg-white dark:bg-slate-800 dark:text-gray-300 hover:bg-slate-200 font-semibold text-sm shadow-md shadow-slate-200 dark:shadow-slate-900"
             :class="{
               'bg-gray-200': categorySelect === category.name,
             }"
@@ -64,18 +40,7 @@
             :key="index"
           >
             <div
-              class="
-                flex
-                items-center
-                bg-slate-100
-                dark:bg-slate-700
-                border border-slate-200
-                dark:border-slate-700
-                w-10
-                h-10
-                rounded-lg
-                mr-2
-              "
+              class="flex items-center bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 w-10 h-10 rounded-lg mr-2"
             >
               <img
                 class="h-full w-full object-scale-down"
@@ -90,20 +55,7 @@
 
     <!-- Filter Content -->
     <div
-      class="
-        filter-wrapper
-        fixed
-        md:relative
-        top-0
-        right-0
-        float-none
-        md:float-left
-        w-64
-        mr-0
-        md:mr-6
-        z-50
-        md:z-0
-      "
+      class="filter-wrapper fixed md:relative top-0 right-0 float-none md:float-left w-64 mr-0 md:mr-6 z-50 md:z-0"
       :class="{
         'filter-wrapper-show': showFilter,
         'filter-wrapper-hide': !showFilter,
@@ -120,14 +72,7 @@
 
       <!-- Filter -->
       <rs-card
-        class="
-          p-4
-          rounded-none
-          md:rounded-lg
-          max-h-screen
-          md:max-h-fit
-          overflow-auto
-        "
+        class="p-4 rounded-none md:rounded-lg max-h-screen md:max-h-fit overflow-auto"
       >
         <div class="filter-title mb-4">
           <h3 class="flex items-center text-lg font-semibold">Search Filter</h3>
@@ -148,15 +93,6 @@
           <FormKit type="number" placeholder="Max" outer-class="mb-0" />
         </div>
         <hr class="my-4" />
-        <span class="font-semibold">Brand</span>
-        <FormKit
-          type="radio"
-          :options="['Asus', 'Samsung', 'MSI', 'Apple', 'Playstation 5']"
-          :classes="{
-            fieldset: 'border-none !p-0 mt-4',
-          }"
-        />
-        <hr class="my-4" />
         <rs-button class="w-full" @click="(categorySelect = ''), (search = '')"
           >Clear Filter</rs-button
         >
@@ -171,14 +107,7 @@
       }"
     >
       <div
-        class="
-          product-wrapper
-          grid grid-cols-1
-          md:grid-cols-2
-          lg:grid-cols-2
-          xl:grid-cols-3
-          gap-x-5
-        "
+        class="product-wrapper grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-5"
       >
         <rs-card
           class="cursor-pointer hover:scale-105 transition-all"
@@ -195,18 +124,7 @@
 
             <span
               v-if="product.discount && product.discount != 0"
-              class="
-                product-discount
-                text-sm
-                bg-primary-500
-                text-white
-                absolute
-                top-3
-                -right-2
-                px-2
-                py-1
-                rounded-md
-              "
+              class="product-discount text-sm bg-primary-500 text-white absolute top-3 -right-2 px-2 py-1 rounded-md"
             >
               {{ product.discount }}% off
             </span>

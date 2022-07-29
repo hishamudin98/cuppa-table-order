@@ -10,10 +10,10 @@
 
 <script>
 import state from "@/store";
-import RsHeader from "@/layout/components/Header.vue";
+import RsHeader from "@/components/layout/Header.vue";
 // import RsSideMenu from "@/layout/components/sidemenu/SideMenu.vue";
-import RsSideMenu from "@/layout/components/sidemenu/SideMenu.vue";
-import RsFooter from "@/layout/components/Footer.vue";
+import RsSideMenu from "@/components/layout/horizontal/sidemenu/SideMenu.vue";
+import RsFooter from "@/components/layout/Footer.vue";
 
 export default {
   name: "layout-vertical",

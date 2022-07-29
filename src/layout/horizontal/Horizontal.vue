@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import RsHeader from "@/layout/components/Header.vue";
-import RsTopMenu from "@/layout/components/vertical/TopMenu.vue";
-import RsFooter from "@/layout/components/Footer.vue";
+import RsHeader from "@/components/layout/Header.vue";
+import RsTopMenu from "@/components/layout/vertical/TopMenu.vue";
+import RsFooter from "@/components/layout/Footer.vue";
 
 export default {
   name: "layout-horizontal",

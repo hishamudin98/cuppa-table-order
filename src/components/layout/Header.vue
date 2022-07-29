@@ -1,47 +1,15 @@
 <template>
   <div
-    class="
-      w-header
-      z-20
-      bg-white
-      dark:bg-slate-800
-      fixed
-      top-0
-      right-0
-      px-5
-      py-3
-      duration-300
-      shadow-md shadow-slate-200
-      dark:shadow-slate-900
-    "
+    class="w-header z-20 bg-slate-800 dark:bg-slate-800 fixed top-0 right-0 px-5 duration-300 shadow-md shadow-slate-200 dark:shadow-slate-900"
   >
-    <div class="flex items-stretch justify-between">
-      <div v-if="nonHorizontal" class="flex">
-        <span class="flex items-center justify-center"
-          ><button
-            class="icon-btn h-10 w-10 rounded-full"
-            @click="toggleMenuOpened"
-          >
-            <vue-feather type="menu" mb-2></vue-feather></button
-        ></span>
-      </div>
-      <div class="flex" v-else>
+    <div class="flex items-center justify-center">
+      <div class="flex">
         <div class="flex flex-auto gap-3 justify-center items-center">
           <img
-            class="h-10 w-10 block dark:hidden"
-            src="@/assets/images/logo/logo.png"
-            alt=""
-          />
-          <img
-            class="h-10 w-10 hidden dark:block"
+            class="h-16 w-16"
             src="@/assets/images/logo/logo-white.png"
             alt=""
           />
-          <span
-            v-if="isDesktop"
-            class="text-xl font-semibold text-primary-500 dark:text-white"
-            >Malaya Grill</span
-          >
         </div>
       </div>
 
@@ -52,35 +20,13 @@
   <!-- Search Nav for Layout Vertical -->
   <div
     tabindex="0"
-    class="
-      w-header-search
-      bg-white
-      dark:bg-slate-800
-      px-4
-      z-40
-      duration-300
-      shadow-md shadow-slate-200
-      dark:shadow-slate-900
-      -top-20
-      focus-within:top-0
-      right-0
-    "
+    class="w-header-search bg-white dark:bg-slate-800 px-4 z-40 duration-300 shadow-md shadow-slate-200 dark:shadow-slate-900 -top-20 focus-within:top-0 right-0"
   >
     <vue-feather type="search" mb-2 size="18"></vue-feather>
     <input
       id="header-search"
       type="text"
-      class="
-        w-full
-        ml-2
-        px-2
-        py-3
-        appearance-none
-        text-md
-        rounded-lg
-        focus:outline-none
-        dark:bg-slate-800
-      "
+      class="w-full ml-2 px-2 py-3 appearance-none text-md rounded-lg focus:outline-none dark:bg-slate-800"
       name="Search"
       placeholder="Search..."
     />

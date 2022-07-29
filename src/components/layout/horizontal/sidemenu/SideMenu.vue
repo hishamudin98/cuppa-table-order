@@ -36,7 +36,7 @@
 
 <script>
 import { onMounted } from "vue";
-import RsMenuItems from "@/layout/components/sidemenu/MenuItem.vue";
+import RsMenuItems from "./MenuItem.vue";
 import Menu from "@/layout/navigation";
 
 export default {
