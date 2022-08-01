@@ -161,9 +161,11 @@
 </template>
 
 <script>
-import { ref } from "vue";
+/* eslint-disable */
+import { ref, onMounted } from "vue";
 import RsButton from "@/components/Button";
 import products from "./data";
+import axios from "axios";
 
 export default {
   name: "ecommerce-checkout",
@@ -172,12 +174,27 @@ export default {
   },
   setup() {
     const data = ref(products);
+    const getBankCode = ref("");
     const formatPrice = (price) => {
       return parseFloat(price)
         .toFixed(2)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    // onMounted(() => async () => {
+    //   console.log("masuk x");
+
+    //   getBankCode.value = await axios.get(
+    //     `${process.env.VUE_APP_TYP_URL}/api/getBankFPX`
+    //   );
+    //   if (getBankCode.value.status == 200)
+    //     getBankCode.value = JSON.parse(JSON.stringify(getBankCode.value.data));
+    //   console.log(getBankCode.value);
+    // });
+
+    // console.log("masuk x");
+
     return { data, formatPrice };
   },
 };

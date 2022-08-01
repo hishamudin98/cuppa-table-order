@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-header z-20 bg-slate-800 dark:bg-slate-800 fixed top-0 right-0 px-5 duration-300 shadow-md shadow-slate-200 dark:shadow-slate-900"
+    class="w-header z-20 bg-gray-900 dark:bg-slate-800 fixed top-0 right-0 px-5 duration-300 shadow-md shadow-slate-200 dark:shadow-slate-900"
   >
     <div class="flex items-center justify-center">
       <div class="flex">

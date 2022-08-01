@@ -16,7 +16,7 @@ const props = defineProps({
 });
 
 const mask = String(props.context.mask);
-console.log(props.context)
+// console.log(props.context)
 
 function handleInput(e) {
   props.context.node.input(e.target.value);

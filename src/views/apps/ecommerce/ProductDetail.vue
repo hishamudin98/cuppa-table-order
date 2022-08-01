@@ -115,10 +115,12 @@
               gap-4
             "
           >
-            <rs-button class="w-full md:w-fit">
-              <vue-feather class="mr-2" type="shopping-cart"></vue-feather>
-              <span class="text-white">Add to Cart</span>
-            </rs-button>
+            <router-link class="w-full md:w-fit" :to="{ name: 'ecommerce-checkout'}">
+              <rs-button class="w-full md:w-fit">
+                <vue-feather class="mr-2" type="shopping-cart"></vue-feather>
+                <span class="text-white" >Add to Cart</span>
+              </rs-button>
+            </router-link>
             <rs-button variant="primary-outline" class="w-full md:w-fit">
               <vue-feather class="mr-2" type="heart"></vue-feather>
               <span>Wishlist</span>
@@ -144,7 +146,17 @@
           </div>
         </div>
       </div>
-      <div class="item-features py-14 md:py-20 bg-gray-50 dark:bg-gray-700 grid md:grid-cols-3">
+      <div
+        class="
+          item-features
+          py-14
+          md:py-20
+          bg-gray-50
+          dark:bg-gray-700
+          grid
+          md:grid-cols-3
+        "
+      >
         <div
           class="flex flex-col items-center justify-center px-4 my-4 md:my-0"
         >

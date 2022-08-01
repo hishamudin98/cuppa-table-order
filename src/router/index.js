@@ -11,7 +11,7 @@ import uiRoute from "./routes/ui";
 import errorRoute from "./routes/error";
 
 const routes = [
-  { path: "/", redirect: { name: "dashboard" } },
+  { path: "/", redirect: { name: "ecommerce-products" } },
   ...dashboardRoute,
   ...appsRoute,
   ...uiRoute,

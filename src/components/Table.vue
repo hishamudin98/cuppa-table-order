@@ -609,7 +609,6 @@ export default {
       } else {
         // If key exist, update filter
         filter.value[index].action[action] = condition;
-        console.log(filter.value);
       }
     };
 
