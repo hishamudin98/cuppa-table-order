@@ -29,7 +29,7 @@
         @click="navigateMenu(item.route)"
       >
         <vue-feather :type="item.icon"></vue-feather>
-        <a href="">{{ item.title }}</a>
+        {{ item.title }}
       </li>
     </ul>
   </div>

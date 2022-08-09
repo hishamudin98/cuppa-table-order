@@ -14,47 +14,59 @@
       >
         <div
           v-show="modelValue"
-          class="modal-dialog"
+          class="modal-dialog !mb-0"
           :style="{
-            width: size == 'sm' ? '300px' : size == 'md' ? '500px' : '800px',
+            width:
+              size == 'sm'
+                ? '300px'
+                : size == 'md'
+                ? '500px'
+                : size == 'full'
+                ? '100vw'
+                : '800px',
           }"
         >
           <div
             class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:bg-slate-800 bg-clip-padding rounded-md outline-none text-current"
           >
-            <div
-              class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 rounded-t-md"
-            >
-              <h4 v-if="!$slots.header">
-                {{ title }}
-              </h4>
-              <slot name="header"></slot>
-              <vue-feather
-                @click="closeModal"
-                class="hover:text-gray-800 cursor-pointer"
-                type="x"
-              ></vue-feather>
+            <div v-if="!$slots.noBody" class="modal-body relative">
+              <slot name="no-body"></slot>
             </div>
-            <div class="modal-body relative p-4">
-              <slot name="body"></slot>
-              <slot v-if="!$slots.body"></slot>
-            </div>
-            <div
-              class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 dark:border-slate-700 rounded-b-md gap-x-3"
-            >
-              <slot name="footer"></slot>
-              <rs-button
-                v-if="!$slots.footer && !okOnly"
-                @click="validateCancelCallback"
-                class="bg-gray-500 hover:bg-gray-600"
+            <div v-else>
+              <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 rounded-t-md"
               >
-                {{ cancelTitle }}</rs-button
+                <h4 v-if="!$slots.header">
+                  {{ title }}
+                </h4>
+                <slot name="header"></slot>
+                <vue-feather
+                  @click="closeModal"
+                  class="hover:text-gray-800 cursor-pointer"
+                  type="x"
+                ></vue-feather>
+              </div>
+              <div class="modal-body relative p-4">
+                <slot name="body"></slot>
+                <slot v-if="!$slots.body"></slot>
+              </div>
+              <div
+                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 dark:border-slate-700 rounded-b-md gap-x-3"
               >
-              <rs-button
-                v-if="!$slots.footer && !cancelOnly"
-                @click="okCallback"
-                >{{ okTitle }}</rs-button
-              >
+                <slot name="footer"></slot>
+                <rs-button
+                  v-if="!$slots.footer && !okOnly"
+                  @click="validateCancelCallback"
+                  class="bg-gray-500 hover:bg-gray-600"
+                >
+                  {{ cancelTitle }}</rs-button
+                >
+                <rs-button
+                  v-if="!$slots.footer && !cancelOnly"
+                  @click="okCallback"
+                  >{{ okTitle }}</rs-button
+                >
+              </div>
             </div>
           </div>
         </div>

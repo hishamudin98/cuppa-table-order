@@ -5,14 +5,14 @@ export default [
     icon: "home",
   },
   {
+    title: "Order",
+    route: { name: "order" },
+    icon: "trello",
+  },
+  {
     title: "Shop",
     route: { name: "ecommerce-products" },
     icon: "shopping-bag",
-  },
-  {
-    title: "Location",
-    route: { name: "location" },
-    icon: "map-pin",
   },
   {
     title: "Settings",
