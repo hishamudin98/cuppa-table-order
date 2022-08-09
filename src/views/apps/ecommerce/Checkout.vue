@@ -114,28 +114,169 @@
                 my-4
               "
             >
-              Card Details
+              Payment Type
             </div>
-            <div class="form-card px-10">
-              <FormKit
-                type="mask"
-                label="Card Number"
-                placeholder="**** **** **** ****"
-                mask="#### #### #### ####"
-              />
-              <div class="grid grid-cols-2 gap-4">
-                <FormKit
-                  type="mask"
-                  label="Expiration Date"
-                  placeholder="MM/YY"
-                  mask="##/##"
-                />
-                <FormKit
-                  type="mask"
-                  label="Security Code"
-                  placeholder="CVC"
-                  mask="###"
-                />
+            <div class="flex mx-4">
+              <div class="w-full">
+                <ul class="flex mb-0 list-none pt-4 pb-3 flex-col">
+                  <li
+                    class="
+                      mb-0
+                      last:mr-0
+                      flex-auto
+                      text-left
+                      sm:text-center
+                      relative
+                    "
+                  >
+                    <a
+                      class="
+                        text-xs
+                        font-bold
+                        uppercase
+                        px-5
+                        py-4
+                        shadow
+                        block
+                        leading-normal
+                      "
+                      @click="toggleTabs(1)"
+                      :class="{
+                        'text-primary bg-white': paymentMethod !== 1,
+                        'text-white bg-primary-400': paymentMethod === 1,
+                      }"
+                    >
+                      Online Banking (FPX)
+                      <img
+                        src="@/assets/images/fpx-default.png"
+                        class="w-16 float-right invisible md:visible"
+                        style="position: absolute; top: 9px; right: 15px"
+                        alt=""
+                        v-if="paymentMethod !== 1"
+                      />
+                      <img
+                        src="@/assets/images/fpx-white.png"
+                        class="w-16 float-right invisible md:visible"
+                        style="position: absolute; top: 9px; right: 15px"
+                        alt=""
+                        v-if="paymentMethod === 1"
+                      />
+                    </a>
+                  </li>
+                  <li
+                    class="
+                      -mb-px
+                      mr-2
+                      last:mr-0
+                      flex-auto
+                      text-left
+                      sm:text-center
+                      relative
+                    "
+                  >
+                    <a
+                      class="
+                        text-xs
+                        font-bold
+                        uppercase
+                        px-5
+                        py-4
+                        shadow
+                        block
+                        leading-normal
+                      "
+                      @click="toggleTabs(2)"
+                      :class="{
+                        'text-primary bg-white': paymentMethod !== 2,
+                        'text-white bg-primary-400': paymentMethod === 2,
+                      }"
+                    >
+                      Kad Kredit / Debit
+
+                      <img
+                        src="@/assets/images/card-credit-trans.png"
+                        class="w-16 float-right invisible md:visible"
+                        style="position: absolute; top: 14px; right: 15px"
+                        alt=""
+                      />
+                    </a>
+                  </li>
+                </ul>
+                <div class="payment-card">
+                  <div
+                    class="
+                      relative
+                      flex flex-col
+                      min-w-0
+                      break-words
+                      w-full
+                      mb-6
+                    "
+                  >
+                    <div class="px-4 py-5 flex-auto">
+                      <div class="tab-content tab-space">
+                        <div
+                          :class="{
+                            hidden: paymentMethod !== 1,
+                            block: paymentMethod === 1,
+                          }"
+                        >
+                          <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
+                            <div v-for="val in getBankCode" :key="val.CODE">
+                              <button
+                                class="
+                                  px-4
+                                  pb-2
+                                  pt-3
+                                  bg-gray-200
+                                  hover:bg-gray-300
+                                  text-sm
+                                  font-medium
+                                  w-full
+                                  h-full
+                                "
+                                @click="bankcode = val.CODE"
+                                :class="{
+                                  '!bg-primary-400 text-white':
+                                    bankcode === val.CODE,
+                                }"
+                              >
+                                <img
+                                  :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
+                                  class="w-10 mx-auto"
+                                  v-if="val.CODE !== 'BIMB0340'"
+                                />
+                                <img
+                                  :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
+                                  class="w-20 mx-auto"
+                                  v-if="val.CODE === 'BIMB0340'"
+                                />
+                                <br />
+                                <span> {{ val.NAME }}</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          :class="{
+                            hidden: paymentMethod !== 2,
+                            block: paymentMethod === 2,
+                          }"
+                        >
+                          <!-- CREDIT CARD -->
+                          <div class="bg-gray-300 w-full p-4 rounded-md">
+                            <ul>
+                              <li>
+                                Payment using credit/debit card will be using
+                                iServe platform.
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="px-10">
@@ -147,11 +288,12 @@
                 <div class="font-semibold">Discount (10%)</div>
                 <div>RM 2,880.45</div>
               </div>
-              <div class="total flex justify-between my-2">
+              <hr />
+              <div class="total flex justify-between my-2 text-xl">
                 <div class="font-semibold">Total</div>
                 <div>RM 2,880.45</div>
               </div>
-              <rs-button class="w-full mt-4">Pay RM 2,880.45</rs-button>
+              <rs-button class="w-full mt-4">Pay Now</rs-button>
             </div>
           </div>
         </div>
@@ -175,6 +317,9 @@ export default {
   setup() {
     const data = ref(products);
     const getBankCode = ref("");
+    const bankcode = ref("");
+    const paymentMethod = ref(0);
+
     const formatPrice = (price) => {
       return parseFloat(price)
         .toFixed(2)
@@ -182,20 +327,28 @@ export default {
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    // onMounted(() => async () => {
-    //   console.log("masuk x");
+    const toggleTabs = (tabNumber) => {
+      paymentMethod.value = tabNumber;
+    };
 
-    //   getBankCode.value = await axios.get(
-    //     `${process.env.VUE_APP_TYP_URL}/api/getBankFPX`
-    //   );
-    //   if (getBankCode.value.status == 200)
-    //     getBankCode.value = JSON.parse(JSON.stringify(getBankCode.value.data));
-    //   console.log(getBankCode.value);
-    // });
+    onMounted(() => {
+      axios
+        .get(`${process.env.VUE_APP_TYP_URL}/api/getBankFPX`)
+        .then((response) => {
+          if (response.status == 200)
+            getBankCode.value = JSON.parse(JSON.stringify(response.data));
+          console.log(getBankCode.value);
+        });
+    });
 
-    // console.log("masuk x");
-
-    return { data, formatPrice };
+    return {
+      data,
+      formatPrice,
+      toggleTabs,
+      getBankCode,
+      bankcode,
+      paymentMethod,
+    };
   },
 };
 </script>

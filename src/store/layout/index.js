@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 export const state = {
-  layoutType: localStorage.getItem('layoutType') || 'bottom',
+  layoutType: 'bottom',
   windowWidth: window.innerWidth,
   mobileWidth: "1024",
 };
