@@ -5,15 +5,15 @@ $xlarge: 1280px;
 
 .b-layout {
   height: 100%;
-  .content-page {
-    padding: 2rem 2rem 5rem 2rem;
-  }
+  // .content-page {
+  //   padding: 2rem 2rem 5rem 2rem;
+  // }
 
-  @media screen and (max-width: $medium) {
-    .content-page {
-      padding: 2rem 0.5rem 2rem 0.5rem;
-    }
-  }
+  // @media screen and (max-width: $medium) {
+  //   .content-page {
+  //     padding: 2rem 0.5rem 2rem 0.5rem;
+  //   }
+  // }
 
   .w-header,
   .w-header-search {

@@ -14,6 +14,7 @@
       >
         <div
           v-show="modelValue"
+          id="rs-modal"
           class="modal-dialog !mb-0"
           :style="{
             width:
@@ -27,14 +28,37 @@
           }"
         >
           <div
-            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:bg-slate-800 bg-clip-padding rounded-md outline-none text-current"
+            class="
+              modal-content
+              border-none
+              shadow-lg
+              relative
+              flex flex-col
+              w-full
+              pointer-events-auto
+              bg-white
+              dark:bg-slate-800
+              bg-clip-padding
+              rounded-md
+              outline-none
+              text-current
+            "
           >
             <div v-if="!$slots.noBody" class="modal-body relative">
               <slot name="no-body"></slot>
             </div>
             <div v-else>
               <div
-                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 rounded-t-md"
+                class="
+                  modal-header
+                  flex flex-shrink-0
+                  items-center
+                  justify-between
+                  p-4
+                  border-b border-gray-200
+                  dark:border-slate-700
+                  rounded-t-md
+                "
               >
                 <h4 v-if="!$slots.header">
                   {{ title }}
@@ -51,7 +75,17 @@
                 <slot v-if="!$slots.body"></slot>
               </div>
               <div
-                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 dark:border-slate-700 rounded-b-md gap-x-3"
+                class="
+                  modal-footer
+                  flex flex-shrink-0 flex-wrap
+                  items-center
+                  justify-end
+                  p-4
+                  border-t border-gray-200
+                  dark:border-slate-700
+                  rounded-b-md
+                  gap-x-3
+                "
               >
                 <slot name="footer"></slot>
                 <rs-button
