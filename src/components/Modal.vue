@@ -44,8 +44,8 @@
               text-current
             "
           >
-            <div v-if="!$slots.noBody" class="modal-body relative">
-              <slot name="no-body"></slot>
+            <div v-if="!!$slots.custom" class="modal-body relative">
+              <slot name="custom"></slot>
             </div>
             <div v-else>
               <div

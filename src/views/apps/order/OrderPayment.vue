@@ -1,15 +1,27 @@
 <template>
   <rs-layout>
-    <div class="flex justify-between items-center mb-4">
-      <p class="font-semibold text-lg">Order Confirmation</p>
-      <div class="bg-primary-400 px-3 py-1 rounded-full text-white">
-        Table 1
+    <div class="bg-primary-400 after:content-[''] p-4">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-x-2">
+          <router-link
+            class="flex items-center justify-center"
+            :to="{ name: 'order' }"
+          >
+            <vue-feather class="text-white" type="chevron-left"></vue-feather>
+          </router-link>
+          <p class="font-semibold text-white text-lg">Order Confirmation</p>
+        </div>
+        <div class="bg-white px-3 py-1 rounded-full text-primary-400">
+          Table 1
+        </div>
       </div>
     </div>
 
+    <div class="font-semibold text-xl mx-3 mt-5 mb-3">Dine In</div>
     <perfect-scrollbar style="height: 17rem">
       <div class="gap-4">
         <rs-card
+          @click="viewDetailItem(product)"
           class="relative mb-5 cursor-pointer"
           v-for="(product, index) in items"
           :key="index"
@@ -68,169 +80,246 @@
         </rs-card>
       </div>
     </perfect-scrollbar>
-    <rs-card class="p-4 mt-4">
-      <div class="subtotal flex justify-between">
-        <div class="font-semibold">Subtotal</div>
-        <div>RM 1,000.00</div>
-      </div>
-      <div class="discount flex justify-between my-2">
-        <div class="font-semibold">Discount (10%)</div>
-        <div>RM 900.00</div>
-      </div>
-      <div class="discount flex justify-between my-2">
-        <div class="font-semibold">SST(6%)</div>
-        <div class="text-red-500">- RM 6.00</div>
-      </div>
-      <div class="discount flex justify-between my-2">
-        <div class="font-semibold">Service Charges(10%)</div>
-        <div class="text-red-500">- RM 10.00</div>
-      </div>
-      <hr />
-      <div class="total flex justify-between my-2 text-xl">
-        <div class="font-semibold">Total</div>
-        <div class="font-semibold">RM 884.00</div>
-      </div>
-    </rs-card>
 
-    <div class="text-base font-semibold px-2 my-4">Payment Type</div>
-    <div class="flex">
-      <div class="w-full">
-        <ul class="flex mb-0 list-none pt-4 pb-3 flex-col">
-          <li
-            class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
-          >
-            <a
-              class="
-                text-xs
-                font-bold
-                uppercase
-                px-5
-                py-4
-                shadow
-                block
-                leading-normal
-              "
-              @click="toggleTabs(1)"
-              :class="{
-                'text-primary bg-white': paymentMethod !== 1,
-                'text-white bg-primary-400': paymentMethod === 1,
-              }"
-            >
-              Online Banking (FPX)
+    <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
+    <perfect-scrollbar style="height: 17rem">
+      <div class="gap-4">
+        <rs-card
+          @click="viewDetailItem(product)"
+          class="relative mb-5 cursor-pointer"
+          v-for="(product, index) in items"
+          :key="index"
+        >
+          <div class="flex justify-center items-center">
+            <div class="product-image relative w-30 h-30 p-4 rounded-lg">
               <img
-                src="@/assets/images/fpx-default.png"
-                class="w-16 float-right invisible md:visible"
-                style="position: absolute; top: 9px; right: 15px"
-                alt=""
-                v-if="paymentMethod !== 1"
+                class="object-scale-down w-full"
+                :src="
+                  product.images && product.images.length > 0
+                    ? product.images[0]
+                    : ''
+                "
+                :alt="product.name"
               />
-              <img
-                src="@/assets/images/fpx-white.png"
-                class="w-16 float-right invisible md:visible"
-                style="position: absolute; top: 9px; right: 15px"
-                alt=""
-                v-if="paymentMethod === 1"
-              />
-            </a>
-          </li>
-          <li
-            class="
-              -mb-px
-              mr-2
-              last:mr-0
-              flex-auto
-              text-left
-              sm:text-center
-              relative
-            "
-          >
-            <a
-              class="
-                text-xs
-                font-bold
-                uppercase
-                px-5
-                py-4
-                shadow
-                block
-                leading-normal
-              "
-              @click="toggleTabs(2)"
-              :class="{
-                'text-primary bg-white': paymentMethod !== 2,
-                'text-white bg-primary-400': paymentMethod === 2,
-              }"
-            >
-              Kad Kredit / Debit
-
-              <img
-                src="@/assets/images/card-credit-trans.png"
-                class="w-16 float-right invisible md:visible"
-                style="position: absolute; top: 14px; right: 15px"
-                alt=""
-              />
-            </a>
-          </li>
-        </ul>
-        <div class="payment-card">
-          <div class="relative flex flex-col min-w-0 break-words w-full mb-6">
-            <div class="px-4 py-5 flex-auto">
-              <div class="tab-content tab-space">
-                <div
-                  :class="{
-                    hidden: paymentMethod !== 1,
-                    block: paymentMethod === 1,
-                  }"
-                >
-                  <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
-                    <div v-for="val in getBankCode" :key="val.CODE">
-                      <button
-                        class="
-                          px-4
-                          pb-2
-                          pt-3
-                          bg-gray-200
-                          hover:bg-gray-300
-                          text-sm
-                          font-medium
-                          w-full
-                          h-full
-                        "
-                        @click="bankcode = val.CODE"
-                        :class="{
-                          '!bg-primary-400 text-white': bankcode === val.CODE,
-                        }"
+            </div>
+            <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
+              <div class="product-title mt-4">
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.name }}
+                </span>
+              </div>
+              <div class="product-content flex flex-col">
+                <div class="product-price flex justify-between items-center">
+                  <div class="truncate">
+                    <div class="text-sm text-primary-500">
+                      {{ product.currency
+                      }}<span class="text-lg">
+                        {{
+                          product.discountedPrice
+                            ? formatPrice(product.discountedPrice)
+                            : formatPrice(product.price)
+                        }}</span
                       >
-                        <img
-                          :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
-                          class="w-10 mx-auto"
-                          v-if="val.CODE !== 'BIMB0340'"
-                        />
-                        <img
-                          :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
-                          class="w-20 mx-auto"
-                          v-if="val.CODE === 'BIMB0340'"
-                        />
-                        <br />
-                        <span> {{ val.NAME }}</span>
-                      </button>
                     </div>
                   </div>
+                  <div
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      h-7
+                      w-7
+                      bg-primary-400
+                      text-primary-100
+                      rounded-full
+                      text-sm
+                    "
+                  >
+                    x{{ Math.floor(Math.random() * (10 - 1 + 1)) + 1 }}
+                  </div>
                 </div>
-                <div
-                  :class="{
-                    hidden: paymentMethod !== 2,
-                    block: paymentMethod === 2,
-                  }"
-                >
-                  <!-- CREDIT CARD -->
-                  <div class="bg-gray-300 w-full p-4 rounded-md">
-                    <ul>
-                      <li>
-                        Payment using credit/debit card will be using iServe
-                        platform.
-                      </li>
-                    </ul>
+              </div>
+            </div>
+          </div>
+        </rs-card>
+      </div>
+    </perfect-scrollbar>
+
+    <div class="px-4 pb-6">
+      <rs-card class="p-4 mt-4">
+        <div class="subtotal flex justify-between">
+          <div class="font-semibold">Subtotal</div>
+          <div>RM 1,000.00</div>
+        </div>
+        <div class="discount flex justify-between my-2">
+          <div class="font-semibold">Discount (10%)</div>
+          <div>RM 900.00</div>
+        </div>
+        <div class="discount flex justify-between my-2">
+          <div class="font-semibold">SST(6%)</div>
+          <div class="text-red-500">RM 6.00</div>
+        </div>
+        <div class="discount flex justify-between my-2">
+          <div class="font-semibold">Service Charges(10%)</div>
+          <div class="text-red-500">RM 10.00</div>
+        </div>
+        <div class="discount flex justify-between my-2">
+          <div class="font-semibold">Infaq</div>
+          <div class="text-red-500">RM 10.00</div>
+        </div>
+        <hr />
+        <div class="total flex justify-between my-2 text-xl">
+          <div class="font-semibold">Total</div>
+          <div class="font-semibold">RM 884.00</div>
+        </div>
+      </rs-card>
+
+      <div class="text-base font-semibold">Payment Type</div>
+      <div class="flex mb-6">
+        <div class="w-full">
+          <ul class="flex mb-0 list-none pt-4 pb-3 flex-col">
+            <li
+              class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
+            >
+              <a
+                class="
+                  text-xs
+                  font-bold
+                  uppercase
+                  px-5
+                  py-4
+                  shadow
+                  block
+                  leading-normal
+                "
+                @click="toggleTabs(1)"
+                :class="{
+                  'text-primary bg-white': paymentMethod !== 1,
+                  'text-white bg-primary-400': paymentMethod === 1,
+                }"
+              >
+                Online Banking (FPX)
+                <img
+                  src="@/assets/images/fpx-default.png"
+                  class="w-16 float-right invisible md:visible"
+                  style="position: absolute; top: 9px; right: 15px"
+                  alt=""
+                  v-if="paymentMethod !== 1"
+                />
+                <img
+                  src="@/assets/images/fpx-white.png"
+                  class="w-16 float-right invisible md:visible"
+                  style="position: absolute; top: 9px; right: 15px"
+                  alt=""
+                  v-if="paymentMethod === 1"
+                />
+              </a>
+            </li>
+            <li
+              class="
+                -mb-px
+                mr-2
+                last:mr-0
+                flex-auto
+                text-left
+                sm:text-center
+                relative
+              "
+            >
+              <a
+                class="
+                  text-xs
+                  font-bold
+                  uppercase
+                  px-5
+                  py-4
+                  shadow
+                  block
+                  leading-normal
+                "
+                @click="toggleTabs(2)"
+                :class="{
+                  'text-primary bg-white': paymentMethod !== 2,
+                  'text-white bg-primary-400': paymentMethod === 2,
+                }"
+              >
+                Kad Kredit / Debit
+
+                <img
+                  src="@/assets/images/card-credit-trans.png"
+                  class="w-16 float-right invisible md:visible"
+                  style="position: absolute; top: 14px; right: 15px"
+                  alt=""
+                />
+              </a>
+            </li>
+          </ul>
+          <div
+            class="payment-card"
+            :class="{
+              hidden: paymentMethod == '',
+              block: paymentMethod != '',
+            }"
+          >
+            <div class="relative flex flex-col min-w-0 break-words w-full">
+              <div class="">
+                <div class="tab-content tab-space">
+                  <div
+                    :class="{
+                      hidden: paymentMethod !== 1,
+                      block: paymentMethod === 1,
+                    }"
+                  >
+                    <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
+                      <div v-for="val in getBankCode" :key="val.CODE">
+                        <button
+                          class="
+                            px-4
+                            pb-2
+                            pt-3
+                            bg-gray-200
+                            hover:bg-gray-300
+                            text-sm
+                            font-medium
+                            w-full
+                            h-full
+                          "
+                          @click="bankcode = val.CODE"
+                          :class="{
+                            '!bg-primary-400 text-white': bankcode === val.CODE,
+                          }"
+                        >
+                          <img
+                            :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
+                            class="w-10 mx-auto"
+                            v-if="val.CODE !== 'BIMB0340'"
+                          />
+                          <img
+                            :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
+                            class="w-20 mx-auto"
+                            v-if="val.CODE === 'BIMB0340'"
+                          />
+                          <br />
+                          <span> {{ val.NAME }}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    :class="{
+                      hidden: paymentMethod !== 2,
+                      block: paymentMethod === 2,
+                    }"
+                  >
+                    <!-- CREDIT CARD -->
+                    <div class="bg-gray-300 w-full p-4 rounded-md">
+                      <ul>
+                        <li>
+                          Payment using credit/debit card will be using iServe
+                          platform.
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -238,47 +327,475 @@
           </div>
         </div>
       </div>
+
+      <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
+        >Pay Now with min infaq RM885.00
+      </rs-button>
+      <rs-button
+        @click="openModalConfirmation = true"
+        class="w-full mb-2"
+        variant="primary-outline"
+        >Pay Now with more infaq RM890.00</rs-button
+      >
+      <router-link :to="{ name: 'order-confirm' }">
+        <rs-button variant="primary-outline" class="w-full">
+          Just pay RM884.00
+        </rs-button>
+      </router-link>
     </div>
-    <router-link
-      class="
-        rounded-lg
-        flex
-        justify-center
-        items-center
-        h-fit
-        text-sm
-        px-8
-        py-2.5
-        text-white
-        bg-primary-400
-        hover:bg-primary-500
-        disabled:bg-primary-50
-        disabled:text-primary-100
-        disabled:border-primary-50
-        disabled:cursor-default
-        dark:disabled:bg-slate-700
-        dark:disabled:text-slate-800
-        dark:disabled:border-slate-700
-        w-full
-        mt-4
-      "
-      :to="{ name: 'order-confirm' }"
+    <rs-modal
+      title="This is a modal"
+      v-model="openModal"
+      position="bottom"
+      size="full"
     >
-      <div>Pay Now</div>
-    </router-link>
+      <template #custom>
+        <div class="rounded-t-3xl" style="min-height: 90vh">
+          <perfect-scrollbar class="mb-4" style="height: 90vh">
+            <button
+              class="
+                flex
+                justify-center
+                items-center
+                p-1
+                bg-primary-400
+                absolute
+                top-2
+                right-2
+                rounded-full
+                z-50
+              "
+            >
+              <vue-feather
+                @click="openModal = false"
+                class="text-primary-100"
+                type="x"
+              ></vue-feather>
+            </button>
+            <div class="relative">
+              <img
+                class="w-full h-60 object-cover rounded-t-xl"
+                :src="modalData ? modalData.images[0] : ''"
+                alt=""
+              />
+              <rs-button
+                class="absolute bottom-2 right-2 py-1 !px-4"
+                variant="primary"
+              >
+                RM
+                {{
+                  modalData && modalData.discountedPrice
+                    ? formatPrice(modalData.discountedPrice)
+                    : formatPrice(modalData.price)
+                }}</rs-button
+              >
+            </div>
+
+            <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
+              <div class="modal-item-header">
+                <span class="font-semibold text-lg line-clamp-2 mb-2">{{
+                  modalData ? modalData.name : ""
+                }}</span>
+                <p class="line-clamp-2 text-sm text-gray-400">
+                  {{ modalData ? modalData.description : "" }}
+                </p>
+              </div>
+              <hr class="my-4" />
+              <div class="modal-item-content">
+                <div
+                  class="
+                    membership
+                    flex
+                    gap-3
+                    rounded-md
+                    shadow-md
+                    w-full
+                    p-3
+                    mb-4
+                  "
+                >
+                  <form-kit
+                    type="text"
+                    placeholder="Got membership code?"
+                    :classes="{
+                      outer: 'flex-1 mb-0',
+                    }"
+                  />
+                  <rs-button>Apply</rs-button>
+                </div>
+
+                <div v-if="modalData.variants" class="modal-item-variance">
+                  <div v-for="(val, index) in modalData.variants" :key="index">
+                    <div class="font-semibold text-lg mb-4">
+                      {{ val.title }}
+                      <span
+                        class="text-gray-400 font-normal text-sm"
+                        v-if="val.required"
+                        >(required)</span
+                      >
+                    </div>
+                    <div class="variant-choice">
+                      <form-kit
+                        v-if="val.type == 'radio'"
+                        :type="val.type"
+                        :options="val.data"
+                        :classes="{
+                          fieldset: '!border-0 !p-0',
+                        }"
+                      />
+                      <div v-else>
+                        <div
+                          class="flex justify-between items-center mb-3"
+                          v-for="(val, index) in val.data"
+                          :key="index"
+                        >
+                          <div class="flex items-center cursor-pointer">
+                            <input
+                              class="rs-checkbox"
+                              type="checkbox"
+                              :id="modalData.sku + '-check-' + index"
+                              :value="val"
+                            />
+                            <label
+                              class="
+                                text-gray-700
+                                dark:text-gray-200
+                                text-sm
+                                formkit-disabled:text-gray-300
+                                dark:formkit-disabled:text-gray-700
+                              "
+                              :for="modalData.sku + '-check-' + index"
+                            >
+                              {{ val }}
+                              <span class="text-primary-500">( +1.00 )</span>
+                            </label>
+                          </div>
+                          <div class="flex items-center gap-x-2">
+                            <button
+                              class="
+                                flex
+                                items-center
+                                justify-center
+                                bg-primary-400
+                                text-primary-50
+                                p-1
+                                rounded-lg
+                              "
+                            >
+                              <vue-feather
+                                size="1rem"
+                                type="minus"
+                              ></vue-feather>
+                            </button>
+                            <span class="text-gray-500">x1</span>
+                            <button
+                              class="
+                                flex
+                                items-center
+                                justify-center
+                                bg-primary-400
+                                text-primary-50
+                                p-1
+                                rounded-lg
+                              "
+                            >
+                              <vue-feather
+                                size="1rem"
+                                type="plus"
+                              ></vue-feather>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-item-type mb-6 px-2">
+              <div class="font-semibold text-lg mb-4">Order Type</div>
+              <div class="flex gap-4">
+                <rs-button variant="primary" class="h-10">Dine-In</rs-button>
+                <rs-button variant="primary-outline" class="h-10"
+                  >Takeaway</rs-button
+                >
+              </div>
+            </div>
+            <div
+              class="
+                modal-item-action
+                flex
+                w-full
+                justify-between
+                items-center
+                overflow-auto
+                px-2
+                gap-x-2
+              "
+            >
+              <button
+                class="bg-primary-400 text-white w-full py-2 px-4 rounded-full"
+                @click="addToCart(modalData)"
+              >
+                Add to Cart - RM
+                {{
+                  modalData && modalData.discountedPrice
+                    ? formatPrice(modalData.discountedPrice + 1)
+                    : formatPrice(modalData.price + 1)
+                }}
+              </button>
+              <div class="flex gap-x-2">
+                <button
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-primary-400
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
+                  @click="quantity > 0 ? quantity-- : (quantity = 0)"
+                >
+                  <vue-feather type="minus"></vue-feather>
+                </button>
+                <form-kit
+                  type="text"
+                  :value="quantity"
+                  :classes="{
+                    outer: 'mb-0',
+                    input: 'w-10 h-10 text-center',
+                  }"
+                />
+                <button
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-primary-400
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
+                  @click="quantity = quantity + 1"
+                >
+                  <vue-feather type="plus"></vue-feather>
+                </button>
+              </div>
+            </div>
+          </perfect-scrollbar>
+        </div>
+      </template>
+    </rs-modal>
+    <rs-modal
+      title="This is a modal"
+      position="bottom"
+      size="full"
+      v-model="openModalConfirmation"
+    >
+      <template #custom>
+        <div
+          class="rounded-t-3xl"
+          :style="{ minHeight: infaqtype == 'choose' ? '45vh' : '40vh' }"
+        >
+          <button
+            class="
+              flex
+              justify-center
+              items-center
+              p-1
+              bg-primary-400
+              absolute
+              top-2
+              right-2
+              rounded-full
+              z-50
+            "
+          >
+            <vue-feather
+              @click="openModalConfirmation = false"
+              class="text-primary-100"
+              type="x"
+            ></vue-feather>
+          </button>
+
+          <vue-feather
+            v-if="infaqtype == 'choose'"
+            @click="infaqtype = ''"
+            class="text-primary-400 absolute top-3 left-3"
+            type="chevron-left"
+          ></vue-feather>
+
+          <div v-if="infaqtype != 'choose'" class="h-full p-4">
+            <div class="font-semibold text-xl text-center mt-6 mb-4">
+              Infaq Type
+            </div>
+            <rs-button class="w-full mb-4" @click="infaqtype = 'choose'">
+              Choose organization to infaq
+            </rs-button>
+            <hr class="my-6" />
+            <rs-button
+              @click="navigateConfirm({ name: 'order-confirm' })"
+              class="w-full"
+              variant="primary-outline"
+              >Let Us Choose for You</rs-button
+            >
+          </div>
+          <div v-else class="p-4 h-full">
+            <div class="font-semibold text-xl text-center mt-6 mb-4">
+              Choose Organization
+            </div>
+            <div class="p-4">
+              <swiper
+                :slidesPerView="2"
+                :spaceBetween="20"
+                :freeMode="true"
+                :modules="modules"
+              >
+                <swiper-slide
+                  v-for="(org, index) in organizationList"
+                  :key="index"
+                >
+                  <div class="shadow-md w-full rounded-lg h-full relative">
+                    <input
+                      class="rs-radio !mr-0 absolute top-2 right-2"
+                      type="radio"
+                      name="organization"
+                      :id="'infaq-check-' + index"
+                      :value="org.name"
+                    />
+                    <label
+                      class="absolute after:content-[''] w-full h-full"
+                      :for="'infaq-check-' + index"
+                    >
+                    </label>
+                    <img
+                      class="h-26 object-cover w-full rounded-t-lg"
+                      :src="org.image"
+                      alt=""
+                    />
+                    <div class="p-2">
+                      <span class="text-sm font-semibold line-clamp-1">{{
+                        org.name
+                      }}</span>
+                      <p class="text-xs text-primary-400 uppercase">
+                        {{ org.type }}
+                      </p>
+                    </div>
+                  </div>
+                </swiper-slide>
+              </swiper>
+            </div>
+            <rs-button
+              @click="navigateConfirm({ name: 'order-confirm' })"
+              class="w-full mt-4"
+              >Pay RM 885.00 with RM 5.00 infaq</rs-button
+            >
+          </div>
+        </div>
+      </template>
+    </rs-modal>
   </rs-layout>
 </template>
 
 <script>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import items from "./data";
+import axios from "axios";
+import router from "@/router";
+
+import RsModal from "@/components/Modal.vue";
+import RsButton from "@/components/Button.vue";
+
+import { FreeMode } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
 
 export default {
+  components: {
+    RsModal,
+    RsButton,
+    Swiper,
+    SwiperSlide,
+  },
   setup() {
     const getBankCode = ref("");
     const bankcode = ref("");
     const paymentMethod = ref(0);
+
+    const openModal = ref(false);
+    const modalData = ref({});
+    const quantity = ref(1);
+
+    const openModalConfirmation = ref(false);
+
+    const infaqtype = ref("choose");
+    const organizationList = ref([
+      {
+        name: "K. Asrama Anak Yatim Pulau Indah",
+        type: "Rumah Anak Yatim",
+        image:
+          "https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/images/KOMPLEKSANAKYATIM01.jpg",
+      },
+      {
+        name: "Masjid Seberang Jaya",
+        type: "Masjid",
+        image:
+          "https://images.unsplash.com/photo-1552423314-cf29ab68ad73?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8YWwlMjBhcXNhJTIwbW9zcXVlfGVufDB8fDB8fA%3D%3D&w=1000&q=80",
+      },
+      {
+        name: "Pengurusan Baitul Kasih",
+        type: "Rumah Anak Yatim",
+        image:
+          "https://assets-toyyibinfaq.s3-ap-southeast-1.amazonaws.com/images/1838ff2b-ac1a-45ca-ae2e-1232396177cb.jpeg",
+      },
+      {
+        name: "Maahad Tahfiz Darul Qodariah",
+        type: "Tahfiz",
+        image:
+          "http://pitas.awfatech.com/persatuan/content/news/newsf1_Root_1527063956.jpg",
+      },
+    ]);
+
+    onMounted(() => {
+      axios
+        .get(`${process.env.VUE_APP_TYP_URL}/api/getBankFPX`)
+        .then((response) => {
+          if (response.status == 200)
+            getBankCode.value = JSON.parse(JSON.stringify(response.data));
+          // console.log(getBankCode.value);
+        });
+    });
+
+    watch(openModal, (val) => {
+      if (val) {
+        disableScroll(val);
+      } else {
+        disableScroll(val);
+      }
+    });
+
+    watch(openModalConfirmation, (val) => {
+      infaqtype.value = "";
+      if (val) {
+        disableScroll(val);
+      } else {
+        disableScroll(val);
+      }
+    });
+
+    const disableScroll = (hide) => {
+      const body = document.querySelector("body");
+      if (hide) {
+        body.style.overflow = "hidden";
+      } else {
+        body.style.overflow = "auto";
+      }
+    };
+
+    const navigateConfirm = (path) => {
+      openModalConfirmation.value = false;
+      router.push(path);
+    };
 
     const formatPrice = (price) => {
       return parseFloat(price)
@@ -296,28 +813,39 @@ export default {
       paymentMethod.value = tabNumber;
     };
 
-    onMounted(() => {
-      axios
-        .get(`${process.env.VUE_APP_TYP_URL}/api/getBankFPX`)
-        .then((response) => {
-          if (response.status == 200)
-            getBankCode.value = JSON.parse(JSON.stringify(response.data));
-          console.log(getBankCode.value);
-        });
-    });
+    const viewDetailItem = (product) => {
+      modalData.value = product;
+      openModal.value = true;
+    };
 
     return {
       items,
       bankcode,
       paymentMethod,
       getBankCode,
+      quantity,
+      modalData,
+      openModal,
+      openModalConfirmation,
+      infaqtype,
+      organizationList,
       toggleTabs,
       formatPrice,
       formatSold,
+      viewDetailItem,
+      navigateConfirm,
+      modules: [FreeMode],
     };
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.swiper {
+  border-radius: 0.5rem;
+  box-shadow: unset;
+}
+.swiper-slide {
+  height: auto;
+}
 </style>

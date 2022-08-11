@@ -2,7 +2,7 @@ export default [
   {
     sku: "P-1001",
     name: "Nasi Arab Ayam (2PAX)",
-    description: "Nasi Arab tersedap di Malaysia.",
+    description: "Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia.",
     store: "Malaya Grill",
     variants: [
       {

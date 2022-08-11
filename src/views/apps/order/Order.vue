@@ -44,8 +44,8 @@
         >
           Table #1
         </div>
-        <form-kit type="text" placeholder="Customer Name" />
-        <form-kit type="text" placeholder="Customer Phone Number" />
+        <form-kit type="text" placeholder="Enter your name" />
+        <form-kit type="text" placeholder="Enter your phone number" />
         <rs-button class="w-full" @click="customerProceed = true"
           >Proceed Order</rs-button
         >
@@ -167,51 +167,134 @@
             'pb-10': order && order.length > 0,
           }"
         >
-          <rs-card
-            @click="viewDetailItem(product)"
-            class="relative mb-5 cursor-pointer"
+          <div
+            class="relative"
             v-for="(product, index) in items"
             :key="index"
+            @click="viewDetailItem(product)"
           >
-            <div class="flex justify-center items-center">
-              <div class="product-image relative w-30 h-30 p-4 rounded-lg">
-                <img
-                  class="object-scale-down w-full"
-                  :src="
-                    product.images && product.images.length > 0
-                      ? product.images[0]
-                      : ''
-                  "
-                  :alt="product.name"
-                />
-              </div>
-              <div
-                class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
-              >
-                <div class="product-title mt-4">
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.name }}
+            <div
+              v-if="index == items.length - 1"
+              class="
+                bg-red-500
+                absolute
+                top-10
+                left-6
+                z-30
+                text-white
+                py-2
+                px-2
+                rounded-lg
+              "
+            >
+              Sold Out
+            </div>
+            <rs-card
+              class="mb-5 cursor-pointer"
+              :class="{
+                'bg-gray-100 opacity-40': index == items.length - 1,
+              }"
+            >
+              <div class="flex justify-center items-center">
+                <div class="product-image relative w-30 h-30 p-4 rounded-lg">
+                  <img
+                    class="object-scale-down w-full"
+                    :src="
+                      product.images && product.images.length > 0
+                        ? product.images[0]
+                        : ''
+                    "
+                    :alt="product.name"
+                  />
+
+                  <span
+                    v-if="product.discount && product.discount != 0"
+                    class="
+                      product-discount
+                      text-sm
+                      bg-primary-500
+                      text-white
+                      absolute
+                      top-3
+                      -right-2
+                      px-2
+                      py-1
+                      rounded-md
+                    "
+                  >
+                    {{ product.discount }}% off
                   </span>
                 </div>
-                <div class="product-content flex flex-col">
-                  <div class="product-price flex justify-between">
-                    <div class="truncate">
-                      <div class="text-sm text-primary-500">
-                        {{ product.currency
-                        }}<span class="text-lg">
-                          {{
-                            product.discountedPrice
-                              ? formatPrice(product.discountedPrice)
-                              : formatPrice(product.price)
-                          }}</span
+                <div
+                  class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
+                >
+                  <div class="product-title mt-4">
+                    <span class="block text-base font-semibold line-clamp-2"
+                      >{{ product.name }}
+                    </span>
+                  </div>
+                  <div class="product-content flex flex-col">
+                    <div class="product-price flex justify-between">
+                      <div class="truncate leading-tight">
+                        <div class="text-sm text-primary-500">
+                          {{ product.currency
+                          }}<span class="text-lg">
+                            {{
+                              product.discountedPrice
+                                ? formatPrice(product.discountedPrice)
+                                : formatPrice(product.price)
+                            }}</span
+                          >
+                        </div>
+                        <div
+                          v-if="product.discountedPrice"
+                          class="text-xs md:text-md text-gray-400"
                         >
+                          <span class="line-through">
+                            {{ product.currency
+                            }}{{ formatPrice(product.price) }}
+                          </span>
+                          | {{ product.stock }} Left
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </rs-card>
+              <!-- <div
+                class="
+                  tag
+                  bg-primary-400
+                  text-xs
+                  px-1
+                  w-fit
+                  rounded-sm
+                  text-white
+                  absolute
+                  bottom-2
+                  right-2
+                "
+              >
+                NEW
+              </div>
+              <div
+                class="
+                  tag
+                  bg-primary-400
+                  text-xs
+                  px-1
+                  w-fit
+                  rounded-sm
+                  text-white
+                  absolute
+                  bottom-2
+                  right-14
+                "
+              >
+                RECOMMEND
+              </div> -->
+            </rs-card>
+          </div>
         </div>
       </div>
 
@@ -221,7 +304,7 @@
         position="bottom"
         size="full"
       >
-        <template #no-body>
+        <template #custom>
           <div class="rounded-t-3xl" style="min-height: 90vh">
             <perfect-scrollbar class="mb-4" style="height: 90vh">
               <button
@@ -235,6 +318,7 @@
                   top-2
                   right-2
                   rounded-full
+                  z-50
                 "
               >
                 <vue-feather
@@ -243,12 +327,13 @@
                   type="x"
                 ></vue-feather>
               </button>
-
-              <img
-                class="w-full h-60 object-cover rounded-t-3xl"
-                :src="modalData.images ? modalData.images[0] : ''"
-                alt=""
-              />
+              <div class="relative">
+                <img
+                  class="w-full h-60 object-cover rounded-t-xl"
+                  :src="modalData ? modalData.images[0] : ''"
+                  alt=""
+                />
+              </div>
 
               <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
                 <div class="modal-item-header">
@@ -259,6 +344,31 @@
                     {{ modalData ? modalData.description : "" }}
                   </p>
                 </div>
+                <div class="flex justify-start items-center mt-2">
+                  <div class="truncate leading-tight">
+                    <div class="text-lg text-primary-500">
+                      {{ modalData.currency
+                      }}<span class="text-xl">
+                        {{
+                          modalData.discountedPrice
+                            ? formatPrice(modalData.discountedPrice)
+                            : formatPrice(modalData.price)
+                        }}</span
+                      >
+                    </div>
+                    <div
+                      v-if="modalData.discountedPrice"
+                      class="text-lg md:text-xl text-gray-400"
+                    >
+                      <span class="line-through">
+                        {{ modalData.currency
+                        }}{{ formatPrice(modalData.price) }}
+                      </span>
+                      | {{ modalData.stock }} Left
+                    </div>
+                  </div>
+                </div>
+
                 <hr class="my-4" />
                 <div class="modal-item-content">
                   <div
@@ -296,23 +406,94 @@
                           >(required)</span
                         >
                       </div>
-                      <div class="flex">
+                      <div class="variant-choice">
                         <form-kit
+                          v-if="val.type == 'radio'"
                           :type="val.type"
+                          :value="
+                            index == 1
+                              ? 'Nasi Arab'
+                              : index == 2
+                              ? 'Spicy Level 2'
+                              : index == 3
+                              ? 'Tomato'
+                              : ''
+                          "
                           :options="val.data"
                           :classes="{
                             fieldset: '!border-0 !p-0',
                           }"
                         />
-                        <!-- <div v-if="val.type== 'checkbox'">
-                          asdsad
-                        </div> -->
+                        <div v-else>
+                          <div
+                            class="flex justify-between items-center mb-3"
+                            v-for="(val, index) in val.data"
+                            :key="index"
+                          >
+                            <div class="flex items-center cursor-pointer">
+                              <input
+                                class="rs-checkbox"
+                                type="checkbox"
+                                :id="modalData.sku + '-check-' + index"
+                                :value="val"
+                              />
+                              <label
+                                class="
+                                  text-gray-700
+                                  dark:text-gray-200
+                                  text-sm
+                                  formkit-disabled:text-gray-300
+                                  dark:formkit-disabled:text-gray-700
+                                "
+                                :for="modalData.sku + '-check-' + index"
+                              >
+                                {{ val }}
+                                <span class="text-primary-500">( +1.00 )</span>
+                              </label>
+                            </div>
+                            <div class="flex items-center gap-x-2">
+                              <button
+                                class="
+                                  flex
+                                  items-center
+                                  justify-center
+                                  bg-primary-400
+                                  text-primary-50
+                                  p-1
+                                  rounded-lg
+                                "
+                              >
+                                <vue-feather
+                                  size="1rem"
+                                  type="minus"
+                                ></vue-feather>
+                              </button>
+                              <span class="text-gray-500">x1</span>
+                              <button
+                                class="
+                                  flex
+                                  items-center
+                                  justify-center
+                                  bg-primary-400
+                                  text-primary-50
+                                  p-1
+                                  rounded-lg
+                                "
+                              >
+                                <vue-feather
+                                  size="1rem"
+                                  type="plus"
+                                ></vue-feather>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="modal-item-type pb-4 px-2">
+              <div class="modal-item-type mb-6 px-2">
                 <div class="font-semibold text-lg mb-4">Order Type</div>
                 <div class="flex gap-4">
                   <rs-button variant="primary" class="h-10">Dine-In</rs-button>
@@ -344,7 +525,12 @@
                   "
                   @click="addToCart(modalData)"
                 >
-                  Add to Cart - RM 34.50
+                  Add to Cart - RM
+                  {{
+                    modalData && modalData.discountedPrice
+                      ? formatPrice(modalData.discountedPrice + 1)
+                      : formatPrice(modalData.price + 1)
+                  }}
                 </button>
                 <div class="flex gap-x-2">
                   <button
@@ -379,7 +565,7 @@
                       p-1
                       rounded-lg
                     "
-                    @click="quantity = 4"
+                    @click="quantity = quantity + 1"
                   >
                     <vue-feather type="plus"></vue-feather>
                   </button>
@@ -456,7 +642,7 @@ export default {
       name: "",
       phone: "",
     });
-    const customerProceed = ref(true);
+    const customerProceed = ref(false);
 
     const data = ref(items);
     const categories = ref(category);
@@ -502,20 +688,20 @@ export default {
       openModal.value = true;
     };
 
-    watch(openModal, () => {
-      disableScroll();
+    watch(openModal, (val) => {
+      if (val) {
+        disableScroll(val);
+      } else {
+        disableScroll(val);
+      }
     });
 
-    const disableScroll = () => {
+    const disableScroll = (hide) => {
       const body = document.querySelector("body");
-      body.classList.toggle("hidden-modal");
-
-      if (!body.classList.contains("hidden-modal")) {
-        // Disable scroll
-        body.style.overflow = "auto";
-      } else {
-        // Enable scroll
+      if (hide) {
         body.style.overflow = "hidden";
+      } else {
+        body.style.overflow = "auto";
       }
     };
 
@@ -549,5 +735,13 @@ export default {
   left: 50%;
   top: 92%;
   transform: translate(-50%, -50%);
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border: 3px solid transparent;
+  border-left: 0;
+  border-right: 10px solid white;
 }
 </style>
