@@ -3,9 +3,7 @@
     <div class="bg-primary-400 after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
-          <p class="font-semibold text-white text-lg">
-            Receipt (#hu1f3g-41gh8)
-          </p>
+          <p class="font-semibold text-white text-lg">Receipt</p>
         </div>
         <div class="bg-white px-3 py-1 rounded-full text-primary-400">
           Table 1
@@ -38,7 +36,7 @@
     <rs-card class="py-3 px-4">
       <div class="order-detail-wrapper">
         <div class="flex justify-between items-center my-3">
-          <p class="font-semibold uppercase">Order Details</p>
+          <p class="font-semibold uppercase">Order Details (#Hko2-32rfs)</p>
         </div>
         <div class="order-wrapper flex flex-col gap-2">
           <div class="flex justify-between items-center">
@@ -60,7 +58,7 @@
           </div>
           <div class="flex justify-between items-center">
             <div class="font-semibold">SST (6%)</div>
-            <div class="font-semibold ">RM10.00</div>
+            <div class="font-semibold">RM10.00</div>
           </div>
           <div class="flex justify-between items-center">
             <div class="font-semibold">Infaq</div>

@@ -253,6 +253,44 @@
                 />
               </a>
             </li>
+            <li
+              class="
+                -mb-px
+                mr-2
+                last:mr-0
+                flex-auto
+                text-left
+                sm:text-center
+                relative
+              "
+            >
+              <a
+                class="
+                  text-xs
+                  font-bold
+                  uppercase
+                  px-5
+                  py-4
+                  shadow
+                  block
+                  leading-normal
+                "
+                @click="toggleTabs(3)"
+                :class="{
+                  'text-primary bg-white': paymentMethod !== 3,
+                  'text-white bg-primary-400': paymentMethod === 3,
+                }"
+              >
+                Payment Link
+
+                <img
+                  src="@/assets/images/card-credit-trans.png"
+                  class="w-16 float-right invisible md:visible"
+                  style="position: absolute; top: 14px; right: 15px"
+                  alt=""
+                />
+              </a>
+            </li>
           </ul>
           <div
             class="payment-card"
@@ -319,6 +357,21 @@
                           platform.
                         </li>
                       </ul>
+                    </div>
+                  </div>
+                  <div
+                    :class="{
+                      hidden: paymentMethod !== 3,
+                      block: paymentMethod === 3,
+                    }"
+                  >
+                    <!-- CREDIT CARD -->
+                    <div class="bg-white w-full p-4 rounded-md">
+                      <form-kit
+                        type="text"
+                        placeholder="Enter your phone number"
+                      ></form-kit>
+                      <rs-button class="w-full" variant="primary-outline">Send Payment Link</rs-button>
                     </div>
                   </div>
                 </div>
@@ -594,10 +647,7 @@
       v-model="openModalConfirmation"
     >
       <template #custom>
-        <div
-          class="rounded-t-3xl"
-          :style="{ minHeight: infaqtype == 'choose' ? '45vh' : '40vh' }"
-        >
+        <div class="rounded-t-3xl" style="min-height: 50vh">
           <button
             class="
               flex
@@ -630,6 +680,15 @@
             <div class="font-semibold text-xl text-center mt-6 mb-4">
               Infaq Type
             </div>
+            <form-kit type="number" value="2">
+              <template #prefix>
+                <div
+                  class="bg-slate-100 dark:bg-slate-700 h-full rounded-l-md p-3"
+                >
+                  RM
+                </div>
+              </template>
+            </form-kit>
             <rs-button class="w-full mb-4" @click="infaqtype = 'choose'">
               Choose organization to infaq
             </rs-button>

@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/order",
+    path: "/order/:branchID?",
     name: "order",
     component: () => import("@/views/apps/order/Order.vue"),
   },

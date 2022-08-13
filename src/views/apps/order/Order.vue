@@ -8,66 +8,131 @@
           border-bottom-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
         "
-        class="
-          bg-primary-400
-          after:content-['']
-          flex flex-col
-          justify-center
-          items-center
-        "
+        class="bg-primary-400 after:content-['']"
       >
-        <div class="absolute top-3 left-3 bg-black h-12 w-12 p-1 rounded-full">
-          <img
-            class="flex-1"
-            src="@/assets/images/logo/logo-white.png"
-            alt=""
-          />
+        <div class="flex justify-between items-center p-2">
+          <div class="bg-black h-10 w-10 p-1 rounded-full">
+            <img
+              class="flex-1"
+              src="@/assets/images/logo/logo-white.png"
+              alt=""
+            />
+          </div>
+          <div class="text-white">Malaya Grill Sungai Buloh</div>
         </div>
-        <div class="w-70">
-          <img
-            class="object-scale-down"
-            src="@/assets/images/illustration/eating.svg"
-            alt=""
-          />
+        <div
+          style="height: 40vh"
+          class="flex flex-col justify-center items-center"
+        >
+          <div class="w-70">
+            <img
+              class="object-scale-down"
+              src="@/assets/images/illustration/eating.svg"
+              alt=""
+            />
+          </div>
         </div>
       </div>
+
       <div class="m-8">
         <div
           class="
             order-table-number
-            text-center
+            flex
+            items-center
+            justify-center
             font-semibold
             text-2xl
             md:text-3xl
             mb-4
+            gap-x-2
           "
         >
-          Table #1
+          <span v-if="changetable == false"
+            >Table #{{ table ? table : "0" }}</span
+          >
+          <div v-else class="flex justify-center items-center">
+            Table #
+            <form-kit
+              type="number"
+              :classes="{
+                input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
+                outer: 'mb-0',
+              }"
+              v-model="table"
+            />
+          </div>
+          <button
+            class="
+              p-1
+              px-2
+              bg-primary-400
+              text-white
+              rounded-xl
+              text-sm
+              hover:bg-primary-300
+            "
+            @click="changetable ? (changetable = false) : (changetable = true)"
+          >
+            Change table
+          </button>
         </div>
-        <form-kit type="text" placeholder="Enter your name" />
-        <form-kit type="text" placeholder="Enter your phone number" />
-        <rs-button class="w-full" @click="customerProceed = true"
-          >Proceed Order</rs-button
-        >
+        <div v-if="guestMode == true">
+          <div class="h-full p-4">
+            <rs-button class="w-full mb-4" @click="guestMode = false">
+              Enter Customer Details
+            </rs-button>
+            <hr class="my-6" />
+            <rs-button
+              @click="customerProceed = true"
+              class="w-full"
+              variant="primary-outline"
+              >Guest
+            </rs-button>
+          </div>
+        </div>
+        <div v-else>
+          <form-kit type="text" placeholder="Enter your name" />
+          <form-kit type="text" placeholder="Enter your phone number" />
+          <rs-button class="w-full" @click="customerProceed = true"
+            >Proceed Order</rs-button
+          >
+        </div>
       </div>
     </div>
 
     <!-- Order Menu Page -->
     <div v-else class="order-menu-page">
       <div style="height: 43vh" class="bg-primary-400 after:content-[''] p-4">
-        <div class="flex justify-between items-center mb-7">
+        <div class="flex justify-between items-center">
           <div class="flex items-center gap-x-2">
             <vue-feather
               class="text-white"
               type="chevron-left"
               @click="customerProceed = false"
             ></vue-feather>
-            <div class="welcome text-lg font-semibold text-white">Table #1</div>
+            <div class="welcome text-lg font-semibold text-white">
+              Table #{{ table ? table : "0" }}
+            </div>
           </div>
-          <div class="text-white">Hishammudin Ali</div>
+
+          <div class="flex gap-x-2 items-center">
+            <!-- <div class="text-white" v-if="guestMode == false">
+              Hishammudin Ali
+            </div>
+            <div class="text-white" v-if="guestMode == true">Guest</div> -->
+            <div class="text-white">Malaya Grill Sungai Buloh</div>
+            <div class="bg-black h-10 w-10 p-1 rounded-full">
+              <img
+                class="flex-1"
+                src="@/assets/images/logo/logo-white.png"
+                alt=""
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="advertisment">
+        <div style="height: 32vh" class="advertisment flex items-center">
           <swiper
             :modules="modules"
             :slides-per-view="1"
@@ -189,10 +254,27 @@
             >
               Sold Out
             </div>
+            <div
+              v-if="index == items.length - 2"
+              class="
+                bg-red-500
+                absolute
+                top-10
+                left-6
+                z-30
+                text-white
+                py-2
+                px-2
+                rounded-lg
+              "
+            >
+              Out of Stock
+            </div>
             <rs-card
               class="mb-5 cursor-pointer"
               :class="{
-                'bg-gray-100 opacity-40': index == items.length - 1,
+                'bg-gray-100 opacity-40':
+                  index == items.length - 1 || index == items.length - 2,
               }"
             >
               <div class="flex justify-center items-center">
@@ -236,15 +318,15 @@
                   <div class="product-content flex flex-col">
                     <div class="product-price flex justify-between">
                       <div class="truncate leading-tight">
-                        <div class="text-sm text-primary-500">
-                          {{ product.currency
-                          }}<span class="text-lg">
+                        <div class="text-sm text-primary-500 flex items-center">
+                          {{ product.currency }}
+                          <span class="text-lg">
                             {{
                               product.discountedPrice
                                 ? formatPrice(product.discountedPrice)
                                 : formatPrice(product.price)
-                            }}</span
-                          >
+                            }}
+                          </span>
                         </div>
                         <div
                           v-if="product.discountedPrice"
@@ -255,6 +337,12 @@
                             }}{{ formatPrice(product.price) }}
                           </span>
                           | {{ product.stock }} Left
+                        </div>
+                        <div
+                          v-if="product.duration"
+                          class="duration text-primary-400 text-xs md:text-md"
+                        >
+                          ({{ product.duration }} remaining)
                         </div>
                       </div>
                     </div>
@@ -620,6 +708,7 @@
 <script>
 /* eslint-disable */
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
+import { useRoute } from "vue-router";
 import items from "./data";
 import category from "./category";
 
@@ -637,7 +726,17 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  setup() {
+  setup(props) {
+    const changetable = ref(false);
+    const guestMode = ref(true);
+
+    const route = useRoute();
+    console.log(route.query);
+    console.log(route.params);
+    const table = ref(0);
+    table.value = route.query.table;
+    const branch = ref(route.query.branch);
+
     const customerData = ref({
       name: "",
       phone: "",
@@ -706,6 +805,9 @@ export default {
     };
 
     return {
+      table,
+      guestMode,
+      changetable,
       customerData,
       customerProceed,
       items: data,

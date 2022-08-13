@@ -4,18 +4,18 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import NProgress from "nprogress/nprogress";
-import dashboardRoute from "./routes/dashboard";
-import authRoute from "./routes/auth";
+// import dashboardRoute from "./routes/dashboard";
+// import authRoute from "./routes/auth";
 import appsRoute from "./routes/apps";
-import uiRoute from "./routes/ui";
+// import uiRoute from "./routes/ui";
 import errorRoute from "./routes/error";
 
 const routes = [
   { path: "/", redirect: { name: "order" } },
-  ...dashboardRoute,
+  // ...dashboardRoute,
   ...appsRoute,
-  ...uiRoute,
-  ...authRoute,
+  // ...uiRoute,
+  // ...authRoute,
   ...errorRoute,
 ];
 

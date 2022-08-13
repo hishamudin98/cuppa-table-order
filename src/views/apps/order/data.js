@@ -2,7 +2,8 @@ export default [
   {
     sku: "P-1001",
     name: "Nasi Arab Ayam (2PAX)",
-    description: "Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia.",
+    description:
+      "Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia. Nasi Arab tersedap di Malaysia.",
     store: "Malaya Grill",
     variants: [
       {
@@ -40,6 +41,7 @@ export default [
     stock: 30,
     rating: 4.5,
     sold: 250,
+    duration: "10 days",
     category: "Frozen Food",
     attributes: [
       {
