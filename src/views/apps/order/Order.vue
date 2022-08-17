@@ -55,6 +55,10 @@
             Table #
             <form-kit
               type="number"
+              validation="min:0"
+              :validation-messages="{
+                min: 'Please enter table number',
+              }"
               :classes="{
                 input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
                 outer: 'mb-0',
@@ -92,9 +96,24 @@
           </div>
         </div>
         <div v-else>
-          <form-kit type="text" placeholder="Enter your name" />
-          <form-kit type="text" placeholder="Enter your phone number" />
-          <rs-button class="w-full" @click="customerProceed = true"
+          <form-kit
+            type="text"
+            placeholder="Enter your name"
+            validation="required"
+            :validation-messages="{
+              required: 'Please enter a name',
+            }"
+            v-model="name"
+          />
+          <form-kit
+            type="number"
+            placeholder="Enter your phone number"
+            v-model="phone"
+          />
+          <rs-button
+            :disabled="isDisabled"
+            class="w-full"
+            @click="customerProceed = true"
             >Proceed Order</rs-button
           >
         </div>
@@ -234,12 +253,12 @@
         >
           <div
             class="relative"
-            v-for="(product, index) in items"
+            v-for="(product, index) in menus"
             :key="index"
             @click="viewDetailItem(product)"
           >
             <div
-              v-if="index == items.length - 1"
+              v-if="index == menus.length - 1"
               class="
                 bg-red-500
                 absolute
@@ -255,7 +274,7 @@
               Sold Out
             </div>
             <div
-              v-if="index == items.length - 2"
+              v-if="index == menus.length - 2"
               class="
                 bg-red-500
                 absolute
@@ -274,7 +293,7 @@
               class="mb-5 cursor-pointer"
               :class="{
                 'bg-gray-100 opacity-40':
-                  index == items.length - 1 || index == items.length - 2,
+                  index == menus.length - 1 || index == menus.length - 2,
               }"
             >
               <div class="flex justify-center items-center">
@@ -711,6 +730,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 import items from "./data";
 import category from "./category";
+import axios from "axios";
 
 import RsModal from "@/components/Modal.vue";
 import RsButton from "@/components/Button.vue";
@@ -724,6 +744,7 @@ export default {
     RsModal,
     RsButton,
     Swiper,
+    axios,
     SwiperSlide,
   },
   setup(props) {
@@ -744,7 +765,8 @@ export default {
     const customerProceed = ref(false);
 
     const data = ref(items);
-    const categories = ref(category);
+    const categories = ref([]);
+    const menus = ref([]);
 
     const order = ref([]);
     const search = ref("");
@@ -812,6 +834,7 @@ export default {
       customerProceed,
       items: data,
       categories,
+      menus,
       order,
       search,
       modalData,
@@ -823,6 +846,103 @@ export default {
       addToCart,
       modules: [Navigation, Autoplay, Scrollbar, A11y],
     };
+  },
+
+  //TEST FARIS//
+  data() {
+    return {
+      name: "",
+      phone: "",
+      table: 0,
+    };
+  },
+
+  async created() {
+    this.getCategories();
+    this.getMenu();
+  },
+
+  mounted() {
+    window.onbeforeunload = function () {
+      localStorage.clear();
+    };
+
+    if (localStorage.name) {
+      this.name = localStorage.name;
+    }
+    if (localStorage.phone) {
+      this.phone = localStorage.phone;
+    }
+  },
+  computed: {
+    isDisabled() {
+      if (this.name !== "" && this.phone !== "") return false;
+      else return true;
+    },
+  },
+  watch: {
+    customerProceed() {
+      localStorage.name = this.name;
+      localStorage.phone = this.phone;
+    },
+  },
+  methods: {
+    async getCategories() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: "http://localhost:3000/getCategory",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.categories.push({
+                name: response.data.data[i].categoryName,
+                image:
+                  "https://cf.shopee.com.my/file/5798838bfaf96b0af5aa5810e4fddd30",
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    async getMenu() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: "http://localhost:3000/getMenu",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.menus.push({
+                sku: response.data.data[i].menuCode,
+                name: response.data.data[i].menuName,
+                description: response.data.data[i].menuDescription,
+                price: response.data.data[i].menuPrice,
+                currency: "RM",
+                store: "Malaya Grill",
+                images: [
+                  "https://scontent.fkul5-2.fna.fbcdn.net/v/t39.30808-6/298054325_5285353981555243_1982280345259898841_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=730e14&_nc_ohc=mwzdQJDE6YQAX8btmZt&tn=iWXkz7OtuPMcWN4H&_nc_ht=scontent.fkul5-2.fna&oh=00_AT8OT5GDJBwP9ECh8_-gFQaod-SbWPX4S_tmXf_DKvpdQg&oe=62F8309F",
+                ],
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
   },
 };
 </script>

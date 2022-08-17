@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store/index";
 
+
 // import component
 import RsComponent from "./components";
 
@@ -24,6 +25,8 @@ import Maska from "maska";
 import vSelect from "vue-select";
 import Toast from "vue-toastification";
 import { SetupCalendar } from "v-calendar";
+
+
 
 // Setup plugin for defaults or `$screens` (optional)
 
@@ -76,9 +79,12 @@ app.use(Maska);
 app.use(Toast, options);
 app.use(SetupCalendar, {});
 
+
 app.component("country-flag", CountryFlag);
 app.component(VueFeather.name, VueFeather);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("v-select", vSelect);
 
+
 app.mount("#app");
+
