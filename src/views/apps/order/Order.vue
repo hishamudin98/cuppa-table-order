@@ -541,7 +541,7 @@
                               <input
                                 class="rs-checkbox"
                                 type="checkbox"
-                                :id="modalData.sku + '-check-' + index"
+                                :id="menus.sku + '-check-' + index"
                                 :value="val"
                               />
                               <label
@@ -552,7 +552,7 @@
                                   formkit-disabled:text-gray-300
                                   dark:formkit-disabled:text-gray-700
                                 "
-                                :for="modalData.sku + '-check-' + index"
+                                :for="menus.sku + '-check-' + index"
                               >
                                 {{ val }}
                                 <span class="text-primary-500">( +1.00 )</span>
@@ -634,9 +634,9 @@
                 >
                   Add to Cart - RM
                   {{
-                    modalData && modalData.discountedPrice
-                      ? formatPrice(modalData.discountedPrice + 1)
-                      : formatPrice(modalData.price + 1)
+                    modalData && modalData.price
+                      ? formatPrice(modalData.price)
+                      : formatPrice(modalData.price)
                   }}
                 </button>
                 <div class="flex gap-x-2">
@@ -698,7 +698,7 @@
             shadow-md shadow-primary-200
           "
         >
-          RM 20.00
+          RM {{ formatPrice(totalPrice) }}
         </button>
         <router-link
           class="
@@ -771,6 +771,7 @@ export default {
     const order = ref([]);
     const search = ref("");
     const quantity = ref(1);
+    const totalPrice = ref(0);
 
     const openModal = ref(false);
     const modalData = ref({});
@@ -800,10 +801,17 @@ export default {
             : formatPrice(product.price),
           quantity: 1,
         });
+        var total = 0;
+        for (let i = 0; i < order.value.length; i++) {
+          total += parseFloat(order.value[i].price);
+          
+        }
+        totalPrice.value = total;
       }
 
       openModal.value = false;
     };
+
     const viewDetailItem = (product) => {
       modalData.value = product;
       openModal.value = true;
@@ -836,6 +844,7 @@ export default {
       categories,
       menus,
       order,
+      totalPrice,
       search,
       modalData,
       openModal,
