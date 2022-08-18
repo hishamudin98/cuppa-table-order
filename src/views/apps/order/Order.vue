@@ -116,6 +116,14 @@
             @click="customerProceed = true"
             >Proceed Order</rs-button
           >
+          <hr class="my-3" />
+          <rs-button
+            class="w-full"
+            variant="primary-outline"
+            @click="guestMode = true"
+          >
+            Back
+          </rs-button>
         </div>
       </div>
     </div>
@@ -850,7 +858,7 @@ export default {
         );
       });
     });
-    console.log('Search menus :',  searchMenus);
+    console.log("Search menus :", searchMenus);
     return {
       table,
       guestMode,

@@ -12,7 +12,7 @@
           <p class="font-semibold text-white text-lg">Order Confirmation</p>
         </div>
         <div class="bg-white px-3 py-1 rounded-full text-primary-400">
-          Table 1
+          Table # 
         </div>
       </div>
     </div>
@@ -371,7 +371,9 @@
                         type="text"
                         placeholder="Enter your phone number"
                       ></form-kit>
-                      <rs-button class="w-full" variant="primary-outline">Send Payment Link</rs-button>
+                      <rs-button class="w-full" variant="primary-outline"
+                        >Send Payment Link</rs-button
+                      >
                     </div>
                   </div>
                 </div>
