@@ -253,7 +253,7 @@
         >
           <div
             class="relative"
-            v-for="(product, index) in menus"
+            v-for="(product, index) in searchMenus"
             :key="index"
             @click="viewDetailItem(product)"
           >
@@ -792,6 +792,14 @@ export default {
       const exist = order.value.find((item) => item.sku === product.sku);
       if (exist) {
         exist.quantity++;
+        console.log(order.value);
+        var total = 0;
+        var sum = 0;
+        for (let i = 0; i < order.value.length; i++) {
+          sum = parseInt(order.value[i].quantity);
+          total += parseFloat(order.value[i].price) * sum;
+        }
+        totalPrice.value = total;
       } else {
         order.value.push({
           sku: product.sku,
@@ -802,9 +810,10 @@ export default {
           quantity: 1,
         });
         var total = 0;
+        var sum = 0;
         for (let i = 0; i < order.value.length; i++) {
-          total += parseFloat(order.value[i].price);
-          
+          sum = parseInt(order.value[i].quantity);
+          total += parseFloat(order.value[i].price) * sum;
         }
         totalPrice.value = total;
       }
@@ -834,6 +843,14 @@ export default {
       }
     };
 
+    const searchMenus = computed(() => {
+      return menus.value.filter((product) => {
+        return (
+          product.name.toLowerCase().indexOf(search.value.toLowerCase()) != -1
+        );
+      });
+    });
+    console.log('Search menus :',  searchMenus);
     return {
       table,
       guestMode,
@@ -846,6 +863,7 @@ export default {
       order,
       totalPrice,
       search,
+      searchMenus,
       modalData,
       openModal,
       quantity,
