@@ -638,7 +638,7 @@
                     px-4
                     rounded-full
                   "
-                  @click="addToCart(modalData)"
+                  @click="addToCart(modalData,table)"
                 >
                   Add to Cart - RM
                   {{
@@ -723,6 +723,7 @@
             shadow-md shadow-primary-200
           "
           :to="{ name: 'order-payment' }"
+          v-on:click="greet(order)"
         >
           <div>Confirm Order ({{ order.length }})</div>
           <vue-feather type="shopping-cart"></vue-feather>
@@ -796,7 +797,7 @@ export default {
       if (n >= 1e3) return +(n / 1e3).toFixed(1) + "K";
     };
 
-    const addToCart = (product) => {
+    const addToCart = (product,table) => {
       const exist = order.value.find((item) => item.sku === product.sku);
       if (exist) {
         exist.quantity++;
@@ -810,6 +811,7 @@ export default {
         totalPrice.value = total;
       } else {
         order.value.push({
+          tableNo: table.value,
           sku: product.sku,
           name: product.name,
           price: product.discountedPrice
@@ -825,7 +827,7 @@ export default {
         }
         totalPrice.value = total;
       }
-
+      console.log(table);
       openModal.value = false;
     };
 
@@ -858,7 +860,7 @@ export default {
         );
       });
     });
-    console.log("Search menus :", searchMenus);
+
     return {
       table,
       guestMode,
@@ -977,6 +979,12 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    async greet(order) {
+      // `this` inside methods points to the current active instance
+      console.log(order)
+      
+      // `event` is the native DOM event
     },
   },
 };
