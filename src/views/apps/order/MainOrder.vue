@@ -163,7 +163,6 @@ export default {
     const table = ref(0);
     table.value = route.query.table;
     const branch = ref(route.query.branch);
-    const orderID = ref(route.params.orderID);
 
     const customerData = ref({
       name: "",

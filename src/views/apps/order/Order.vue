@@ -131,7 +131,7 @@
         </div>
       </div>
     </div> -->
-    
+
     <!-- v-elseOrder Menu Page -->
     <div class="order-menu-page">
       <div style="height: 43vh" class="bg-primary-400 after:content-[''] p-4">
@@ -143,7 +143,7 @@
               @click="customerProceed = false"
             ></vue-feather>
             <div class="welcome text-lg font-semibold text-white">
-              Table #{{ $route.params.table  }}
+              Table #{{ $route.params.table ? this.table : 0 }}
             </div>
           </div>
 
@@ -630,7 +630,11 @@
                 "
               >
                 <h4>Remarks</h4>
-                <textarea variant="primary-outline" style="width:100%; border:solid 1px orange;" v-model="remarks"></textarea>
+                <textarea
+                  variant="primary-outline"
+                  style="width: 100%; border: solid 1px orange"
+                  v-model="remarks"
+                ></textarea>
               </div>
               <div class="modal-item-type mb-6 px-2">
                 <div class="font-semibold text-lg mb-4">Order Type</div>
@@ -686,7 +690,7 @@
                     px-4
                     rounded-full
                   "
-                  @click="addToCart(modalData, picked, discount,remarks)"
+                  @click="addToCart(modalData, picked, discount, remarks)"
                 >
                   Add to Cart - RM
                   {{
@@ -757,7 +761,7 @@
             shadow-md shadow-primary-200
           "
         >
-          RM {{ formatPrice(totalPrice) }}
+        RM {{ formatPrice(this.totalPrice ) }}
         </button>
         <rs-button
           class="
@@ -816,7 +820,7 @@ export default {
     const table = ref(route.params.table);
     const branch = ref(route.query.branch);
     const orderID = ref(route.params.orderID);
-    
+
     const customerData = ref({
       name: "",
       phone: "",
@@ -863,55 +867,56 @@ export default {
         customerProceed.value = true;
       } else {
         alert("Please Enter a valid table number");
-        
       }
     };
 
-    const addToCart = (product, picked, discount,remarks) => {
-      
-      if (localStorage.name != "") {
-        var nameCust = localStorage.name;
-        var phoneCust = localStorage.phone;
+    const addToCart = (product, picked, discount, remarks) => {
+      if (orderID.value != "") {
       } else {
-        var nameCust = "";
-        var phoneCust = "";
-      }
+        if (localStorage.name != "") {
+          var nameCust = localStorage.name;
+          var phoneCust = localStorage.phone;
+        } else {
+          var nameCust = "";
+          var phoneCust = "";
+        }
 
-      const exist = order.value.find(
-        (item) => item.sku === product.sku && item.orderType == picked
-      );
-      if (exist) {
-        exist.quantity++;
-        var total = 0;
-        var sum = 0;
-        for (let i = 0; i < order.value.length; i++) {
-          sum = parseInt(order.value[i].quantity);
-          total += parseFloat(order.value[i].price) * sum;
+        const exist = order.value.find(
+          (item) => item.sku === product.sku && item.orderType == picked
+        );
+        if (exist) {
+          exist.quantity++;
+          var total = 0;
+          var sum = 0;
+          for (let i = 0; i < order.value.length; i++) {
+            sum = parseInt(order.value[i].quantity);
+            total += parseFloat(order.value[i].price) * sum;
+          }
+          totalPrice.value = total;
+        } else {
+          order.value.push({
+            tableNo: table.value,
+            sku: product.sku,
+            name: product.name,
+            price: product.discountedPrice
+              ? formatPrice(product.discountedPrice)
+              : formatPrice(product.price),
+            quantity: quantity.value,
+            orderType: picked,
+            id: product.id,
+            custName: nameCust,
+            custPhone: phoneCust,
+            discount: discount,
+            remarks: remarks,
+          });
+          var total = 0;
+          var sum = 0;
+          for (let i = 0; i < order.value.length; i++) {
+            sum = parseInt(order.value[i].quantity);
+            total += parseFloat(order.value[i].price) * sum;
+          }
+          totalPrice.value = total;
         }
-        totalPrice.value = total;
-      } else {
-        order.value.push({
-          tableNo: table.value,
-          sku: product.sku,
-          name: product.name,
-          price: product.discountedPrice
-            ? formatPrice(product.discountedPrice)
-            : formatPrice(product.price),
-          quantity: quantity.value,
-          orderType: picked,
-          id: product.id,
-          custName: nameCust,
-          custPhone: phoneCust,
-          discount: discount,
-          remarks: remarks
-        });
-        var total = 0;
-        var sum = 0;
-        for (let i = 0; i < order.value.length; i++) {
-          sum = parseInt(order.value[i].quantity);
-          total += parseFloat(order.value[i].price) * sum;
-        }
-        totalPrice.value = total;
       }
       openModal.value = false;
     };
@@ -984,20 +989,25 @@ export default {
       quantity: 1,
       mmberShip: "",
       discount: false,
-      remarks:"",
-      orderID:0,
+      remarks: "",
+      orderID: 0,
+      totalPrice: 0,
+      orderDetails: [],
     };
   },
 
   async created() {
     this.getCategories();
     this.getMenu();
+    this.orderID = this.$route.params.orderID;
+    this.table = this.$route.params.table;
+    if (this.orderID != "") {
+      this.getOrderID();
+      
+    }
   },
 
   mounted() {
-    this.orderID = this.$route.params.orderID;
-    this.table = this.$route.params.table;
-    
     window.onbeforeunload = function () {
       localStorage.clear();
     };
@@ -1159,6 +1169,46 @@ export default {
       if (/^\W$/.test(e.key)) {
         e.preventDefault();
       }
+    },
+    async getOrderID() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        orderID: this.orderID,
+      });
+      var config = {
+        method: "post",
+        url: "http://localhost:3000/tbl/getOrderCart" /* https://toyyibfnb.com/api/getMenu */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.orderDetails = JSON.parse(response.data.data[0].order_details)
+            for (let i = 0; i < this.orderDetails.length; i++) {
+              this.order.push({
+                tableNo: this.orderDetails[i].tableNo,
+                sku: this.orderDetails[i].sku,
+                name:this.orderDetails[i].name,
+                price: this.orderDetails[i].price,
+                quantity: this.orderDetails[i].quantity,
+                orderType: this.orderDetails[i].orderType,
+                id: this.orderDetails[i].id,
+                custName: this.orderDetails[i].custName,
+                custPhone: this.orderDetails[i].custPhone,
+                discount: this.orderDetails[i].discount,
+                remarks: this.orderDetails[i].remarks,
+              });
+            }
+            this.totalPrice = response.data.data[0].order_amount
+            this.table = this.orderDetails[0].tableNo
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };
