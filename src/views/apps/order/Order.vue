@@ -1,7 +1,7 @@
 <template>
   <rs-layout>
     <!-- Get Customer and Phone -->
-    <div v-if="!customerProceed" class="order-customer">
+    <!-- <div v-if="customerProceed == false" class="order-customer">
       <div
         style="
           height: 56vh;
@@ -18,7 +18,7 @@
               alt=""
             />
           </div>
-          <div class="text-white">Malaya Grill Sungai Buloh</div>
+          <div class="text-white">Malaya Grill Sungai Buloh </div>
         </div>
         <div
           style="height: 40vh"
@@ -63,7 +63,8 @@
                 input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
                 outer: 'mb-0',
               }"
-              v-model="table"
+              v-model.number="table"
+              @keydown="nameKeydown($event)"
             />
           </div>
           <button
@@ -83,12 +84,15 @@
         </div>
         <div v-if="guestMode == true">
           <div class="h-full p-4">
-            <rs-button class="w-full mb-4" @click="guestMode = false">
+            <rs-button
+              class="w-full mb-4"
+              @click="customerAdvanced((dataUser = 'Guest'))"
+            >
               Enter Customer Details
             </rs-button>
             <hr class="my-6" />
             <rs-button
-              @click="customerProceed = true"
+              @click="customerAdvancedOrder(table)"
               class="w-full"
               variant="primary-outline"
               >Guest
@@ -113,7 +117,7 @@
           <rs-button
             :disabled="isDisabled"
             class="w-full"
-            @click="customerProceed = true"
+            @click="customerAdvancedOrder(table)"
             >Proceed Order</rs-button
           >
           <hr class="my-3" />
@@ -126,10 +130,10 @@
           </rs-button>
         </div>
       </div>
-    </div>
-
-    <!-- Order Menu Page -->
-    <div v-else class="order-menu-page">
+    </div> -->
+    
+    <!-- v-elseOrder Menu Page -->
+    <div class="order-menu-page">
       <div style="height: 43vh" class="bg-primary-400 after:content-[''] p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-x-2">
@@ -139,7 +143,7 @@
               @click="customerProceed = false"
             ></vue-feather>
             <div class="welcome text-lg font-semibold text-white">
-              Table #{{ table ? table : "0" }}
+              Table #{{ $route.params.table  }}
             </div>
           </div>
 
@@ -265,7 +269,7 @@
             :key="index"
             @click="viewDetailItem(product)"
           >
-            <div
+            <!-- <div
               v-if="index == menus.length - 1"
               class="
                 bg-red-500
@@ -296,21 +300,19 @@
               "
             >
               Out of Stock
-            </div>
-            <rs-card
-              class="mb-5 cursor-pointer"
-              :class="{
+            </div> -->
+            <rs-card class="mb-5 cursor-pointer"
+              ><!-- :class="{
                 'bg-gray-100 opacity-40':
                   index == menus.length - 1 || index == menus.length - 2,
-              }"
-            >
+              }" -->
               <div class="flex justify-center items-center">
                 <div class="product-image relative w-30 h-30 p-4 rounded-lg">
                   <img
                     class="object-scale-down w-full"
                     :src="
                       product.images && product.images.length > 0
-                        ? product.images[0]
+                        ? product.images
                         : ''
                     "
                     :alt="product.name"
@@ -504,8 +506,9 @@
                       :classes="{
                         outer: 'flex-1 mb-0',
                       }"
+                      v-model="mmberShip"
                     />
-                    <rs-button>Apply</rs-button>
+                    <rs-button @click="checkMembership()">Apply</rs-button>
                   </div>
 
                   <div v-if="modalData.variants" class="modal-item-variance">
@@ -583,7 +586,12 @@
                                   type="minus"
                                 ></vue-feather>
                               </button>
-                              <span class="text-gray-500">x1</span>
+                              <span class="text-gray-500"
+                                ><input
+                                  type="number"
+                                  min="0.00"
+                                  :value="quantity"
+                              /></span>
                               <button
                                 class="
                                   flex
@@ -594,6 +602,7 @@
                                   p-1
                                   rounded-lg
                                 "
+                                @click="increment()"
                               >
                                 <vue-feather
                                   size="1rem"
@@ -608,13 +617,52 @@
                   </div>
                 </div>
               </div>
+              <div
+                class="
+                  membership
+                  flex
+                  gap-3
+                  rounded-md
+                  shadow-md
+                  w-full
+                  p-3
+                  mb-4
+                "
+              >
+                <h4>Remarks</h4>
+                <textarea variant="primary-outline" style="width:100%; border:solid 1px orange;" v-model="remarks"></textarea>
+              </div>
               <div class="modal-item-type mb-6 px-2">
                 <div class="font-semibold text-lg mb-4">Order Type</div>
                 <div class="flex gap-4">
-                  <rs-button variant="primary" class="h-10">Dine-In</rs-button>
+                  <!-- <rs-button  variant="primary" class="h-10">Dine-In </rs-button>
                   <rs-button variant="primary-outline" class="h-10"
                     >Takeaway</rs-button
+                  > -->
+                  <rs-button id="dineIn" variant="primary" class="h-10">
+                    <input
+                      class="rs-radio"
+                      type="radio"
+                      id="dineIn"
+                      value="1"
+                      v-model="picked"
+                    />
+                    <label for="dineIn">Dine In</label>
+                  </rs-button>
+                  <rs-button
+                    id="takeAway"
+                    variant="primary-outline"
+                    class="h-10"
                   >
+                    <input
+                      class="rs-radio"
+                      type="radio"
+                      id="takeAway"
+                      value="2"
+                      v-model="picked"
+                    />
+                    <label for="takeAway">Take Away</label>
+                  </rs-button>
                 </div>
               </div>
               <div
@@ -638,7 +686,7 @@
                     px-4
                     rounded-full
                   "
-                  @click="addToCart(modalData,table)"
+                  @click="addToCart(modalData, picked, discount,remarks)"
                 >
                   Add to Cart - RM
                   {{
@@ -658,18 +706,20 @@
                       p-1
                       rounded-lg
                     "
-                    @click="quantity > 0 ? quantity-- : (quantity = 0)"
+                    @click="decrement()"
                   >
+                    <!-- @click="quantity > 0 ? quantity-- : (quantity = 0)" -->
                     <vue-feather type="minus"></vue-feather>
                   </button>
-                  <form-kit
+                  {{ this.quantity }}
+                  <!-- <form-kit
                     type="text"
                     :value="quantity"
                     :classes="{
                       outer: 'mb-0',
                       input: 'w-10 h-10 text-center',
                     }"
-                  />
+                  /> -->
                   <button
                     class="
                       flex
@@ -680,8 +730,9 @@
                       p-1
                       rounded-lg
                     "
-                    @click="quantity = quantity + 1"
+                    @click="increment()"
                   >
+                    <!-- @click="quantity = quantity + 1" -->
                     <vue-feather type="plus"></vue-feather>
                   </button>
                 </div>
@@ -708,7 +759,7 @@
         >
           RM {{ formatPrice(totalPrice) }}
         </button>
-        <router-link
+        <rs-button
           class="
             flex
             justify-between
@@ -722,12 +773,11 @@
             whitespace-nowrap
             shadow-md shadow-primary-200
           "
-          :to="{ name: 'order-payment' }"
-          v-on:click="greet(order)"
+          v-on:click="insertOrder(discount)"
         >
           <div>Confirm Order ({{ order.length }})</div>
           <vue-feather type="shopping-cart"></vue-feather>
-        </router-link>
+        </rs-button>
       </div>
     </div>
   </rs-layout>
@@ -763,10 +813,10 @@ export default {
     const route = useRoute();
     console.log(route.query);
     console.log(route.params);
-    const table = ref(0);
-    table.value = route.query.table;
+    const table = ref(route.params.table);
     const branch = ref(route.query.branch);
-
+    const orderID = ref(route.params.orderID);
+    
     const customerData = ref({
       name: "",
       phone: "",
@@ -776,6 +826,7 @@ export default {
     const data = ref(items);
     const categories = ref([]);
     const menus = ref([]);
+    const dataUser = ref("Guest");
 
     const order = ref([]);
     const search = ref("");
@@ -784,6 +835,8 @@ export default {
 
     const openModal = ref(false);
     const modalData = ref({});
+    const filters = ref([]);
+    const activeFilter = ref("");
 
     const formatPrice = (price) => {
       return parseFloat(price)
@@ -797,11 +850,38 @@ export default {
       if (n >= 1e3) return +(n / 1e3).toFixed(1) + "K";
     };
 
-    const addToCart = (product,table) => {
-      const exist = order.value.find((item) => item.sku === product.sku);
+    const customerAdvanced = (dataUser) => {
+      if (dataUser != "") {
+        if (dataUser === "Guest") {
+          guestMode.value = false;
+        }
+      }
+    };
+
+    const customerAdvancedOrder = (table) => {
+      if (table != 0) {
+        customerProceed.value = true;
+      } else {
+        alert("Please Enter a valid table number");
+        
+      }
+    };
+
+    const addToCart = (product, picked, discount,remarks) => {
+      
+      if (localStorage.name != "") {
+        var nameCust = localStorage.name;
+        var phoneCust = localStorage.phone;
+      } else {
+        var nameCust = "";
+        var phoneCust = "";
+      }
+
+      const exist = order.value.find(
+        (item) => item.sku === product.sku && item.orderType == picked
+      );
       if (exist) {
         exist.quantity++;
-        console.log(order.value);
         var total = 0;
         var sum = 0;
         for (let i = 0; i < order.value.length; i++) {
@@ -817,7 +897,13 @@ export default {
           price: product.discountedPrice
             ? formatPrice(product.discountedPrice)
             : formatPrice(product.price),
-          quantity: 1,
+          quantity: quantity.value,
+          orderType: picked,
+          id: product.id,
+          custName: nameCust,
+          custPhone: phoneCust,
+          discount: discount,
+          remarks: remarks
         });
         var total = 0;
         var sum = 0;
@@ -827,7 +913,6 @@ export default {
         }
         totalPrice.value = total;
       }
-      console.log(table);
       openModal.value = false;
     };
 
@@ -877,10 +962,13 @@ export default {
       modalData,
       openModal,
       quantity,
+      dataUser,
       formatPrice,
       formatSold,
       viewDetailItem,
       addToCart,
+      customerAdvanced,
+      customerAdvancedOrder,
       modules: [Navigation, Autoplay, Scrollbar, A11y],
     };
   },
@@ -891,6 +979,13 @@ export default {
       name: "",
       phone: "",
       table: 0,
+      picked: "1",
+      IDMENU: 0,
+      quantity: 1,
+      mmberShip: "",
+      discount: false,
+      remarks:"",
+      orderID:0,
     };
   },
 
@@ -900,6 +995,9 @@ export default {
   },
 
   mounted() {
+    this.orderID = this.$route.params.orderID;
+    this.table = this.$route.params.table;
+    
     window.onbeforeunload = function () {
       localStorage.clear();
     };
@@ -928,7 +1026,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "http://localhost:3000/getCategory",
+        url: "http://localhost:3000/tbl/getCategory" /* https://toyyibfnb.com/api/tbl/getCategory */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -938,9 +1036,10 @@ export default {
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
               this.categories.push({
-                name: response.data.data[i].categoryName,
+                name: response.data.data[i].category_name,
                 image:
                   "https://cf.shopee.com.my/file/5798838bfaf96b0af5aa5810e4fddd30",
+                id: response.data.data[i].category_id,
               });
             }
           }.bind(this)
@@ -953,7 +1052,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "http://localhost:3000/getMenu",
+        url: "http://localhost:3000/getMenu" /* https://toyyibfnb.com/api/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -962,16 +1061,21 @@ export default {
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
+              var images = JSON.parse(response.data.data[i].menu_image);
+              if (images == null) {
+                images = [{ image1: "" }];
+              }
               this.menus.push({
-                sku: response.data.data[i].menuCode,
-                name: response.data.data[i].menuName,
-                description: response.data.data[i].menuDescription,
-                price: response.data.data[i].menuPrice,
+                sku: response.data.data[i].menu_code,
+                name: response.data.data[i].menu_name,
+                description: response.data.data[i].menu_desc,
+                price: response.data.data[i].menu_price,
                 currency: "RM",
                 store: "Malaya Grill",
-                images: [
-                  "https://scontent.fkul5-2.fna.fbcdn.net/v/t39.30808-6/298054325_5285353981555243_1982280345259898841_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=730e14&_nc_ohc=mwzdQJDE6YQAX8btmZt&tn=iWXkz7OtuPMcWN4H&_nc_ht=scontent.fkul5-2.fna&oh=00_AT8OT5GDJBwP9ECh8_-gFQaod-SbWPX4S_tmXf_DKvpdQg&oe=62F8309F",
-                ],
+                images: [images[0].image1],
+                id: response.data.data[i].menu_id,
+                catid: response.data.data[i].fkcat_id,
+                /* images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${response.data.data[i].menu_code}.png`], */
               });
             }
           }.bind(this)
@@ -980,11 +1084,81 @@ export default {
           console.log(error);
         });
     },
-    async greet(order) {
-      // `this` inside methods points to the current active instance
-      console.log(order)
-      
-      // `event` is the native DOM event
+    async insertOrder(discount) {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        order: this.order,
+        total: this.totalPrice,
+        discounted: discount,
+      });
+
+      var config = {
+        method: "post",
+        url: "http://localhost:3000/tbl/insertOrder",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.IDMENU = response.data.data;
+            /* :to="{ name: 'order-payment' , params:{id:  } }" */
+            this.$router.push({
+              name: "order-payment",
+              params: { id: this.IDMENU },
+            });
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    async checkMembership() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        mmberID: this.mmberShip,
+      });
+      var config = {
+        method: "post",
+        url: "http://localhost:3000/tbl/getMembership",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            if (response.data.status === 200) {
+              this.discount = true;
+              alert("Discount Applied");
+            } else {
+              this.discount = false;
+              alert("No Membership Found");
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async increment() {
+      this.quantity++;
+    },
+    async decrement() {
+      if (this.quantity === 1) {
+        alert("Negative quantity not allowed");
+      } else {
+        this.quantity--;
+      }
+    },
+    async nameKeydown(e) {
+      if (/^\W$/.test(e.key)) {
+        e.preventDefault();
+      }
     },
   },
 };

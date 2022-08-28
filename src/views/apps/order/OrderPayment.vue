@@ -5,14 +5,14 @@
         <div class="flex items-center gap-x-2">
           <router-link
             class="flex items-center justify-center"
-            :to="{ name: 'order' }"
+            :to="{ name: 'order', params: { orderID: this.MenuID } }"
           >
             <vue-feather class="text-white" type="chevron-left"></vue-feather>
           </router-link>
           <p class="font-semibold text-white text-lg">Order Confirmation</p>
         </div>
         <div class="bg-white px-3 py-1 rounded-full text-primary-400">
-          Table # 
+          Table #{{this.tableNo}}
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
         <rs-card
           @click="viewDetailItem(product)"
           class="relative mb-5 cursor-pointer"
-          v-for="(product, index) in items"
+          v-for="(product, index) in orders"
           :key="index"
         >
           <div class="flex justify-center items-center">
@@ -71,7 +71,7 @@
                       text-sm
                     "
                   >
-                    x{{ Math.floor(Math.random() * (10 - 1 + 1)) + 1 }}
+                    x{{ product.quantity }}
                   </div>
                 </div>
               </div>
@@ -80,14 +80,14 @@
         </rs-card>
       </div>
     </perfect-scrollbar>
-
+    <div v-if="this.orders2.length != 0">
     <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
     <perfect-scrollbar style="height: 17rem">
       <div class="gap-4">
         <rs-card
           @click="viewDetailItem(product)"
           class="relative mb-5 cursor-pointer"
-          v-for="(product, index) in items"
+          v-for="(product, index) in orders2"
           :key="index"
         >
           <div class="flex justify-center items-center">
@@ -135,7 +135,7 @@
                       text-sm
                     "
                   >
-                    x{{ Math.floor(Math.random() * (10 - 1 + 1)) + 1 }}
+                    x{{ quantity }}
                   </div>
                 </div>
               </div>
@@ -144,33 +144,33 @@
         </rs-card>
       </div>
     </perfect-scrollbar>
-
+    </div>
     <div class="px-4 pb-6">
       <rs-card class="p-4 mt-4">
         <div class="subtotal flex justify-between">
           <div class="font-semibold">Subtotal</div>
-          <div>RM 1,000.00</div>
+          <div>RM {{formatPrice(this.totalAmount)}}</div>
         </div>
         <div class="discount flex justify-between my-2">
-          <div class="font-semibold">Discount (10%)</div>
-          <div>RM 900.00</div>
+          <div class="font-semibold">Membership Discount (7%)</div>
+          <div>RM {{formatPrice(discountedP)}}</div>
         </div>
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">SST(6%)</div>
-          <div class="text-red-500">RM 6.00</div>
+          <div class="text-red-500">RM {{formatPrice(sst)}}</div>
         </div>
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">Service Charges(10%)</div>
-          <div class="text-red-500">RM 10.00</div>
+          <div class="text-red-500">RM {{formatPrice(service)}}</div>
         </div>
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">Infaq</div>
-          <div class="text-red-500">RM 10.00</div>
+          <div class="text-red-500">RM 0.00</div>
         </div>
         <hr />
         <div class="total flex justify-between my-2 text-xl">
           <div class="font-semibold">Total</div>
-          <div class="font-semibold">RM 884.00</div>
+          <div class="font-semibold">RM {{formatPrice(this.totalPay)}}</div>
         </div>
       </rs-card>
 
@@ -322,7 +322,7 @@
                             w-full
                             h-full
                           "
-                          @click="bankcode = val.CODE"
+                          @click="sentBank(val.CODE)"
                           :class="{
                             '!bg-primary-400 text-white': bankcode === val.CODE,
                           }"
@@ -384,17 +384,17 @@
       </div>
 
       <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
-        >Pay Now with min infaq RM885.00
+        >Pay Now with min infaq RM {{formatPrice(Math.ceil(this.totalPay))}}
       </rs-button>
       <rs-button
         @click="openModalConfirmation = true"
         class="w-full mb-2"
         variant="primary-outline"
-        >Pay Now with more infaq RM890.00</rs-button
+        >Pay Now with more infaq RM {{formatPrice(Math.ceil(this.totalPay))}}</rs-button
       >
       <router-link :to="{ name: 'order-confirm' }">
         <rs-button variant="primary-outline" class="w-full">
-          Just pay RM884.00
+          Just pay RM {{formatPrice(this.totalPay)}}
         </rs-button>
       </router-link>
     </div>
@@ -770,6 +770,7 @@ import RsButton from "@/components/Button.vue";
 
 import { FreeMode } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
+import { useRoute } from "vue-router";
 
 export default {
   components: {
@@ -782,6 +783,11 @@ export default {
     const getBankCode = ref("");
     const bankcode = ref("");
     const paymentMethod = ref(0);
+    const route = useRoute();
+    const MenuID = route.params.id;
+    
+    const orders = ref([]);
+    const orders2 = ref([]);
 
     const openModal = ref(false);
     const modalData = ref({});
@@ -885,7 +891,11 @@ export default {
       paymentMethod,
       getBankCode,
       quantity,
+      orders,
+      orders2,
       modalData,
+      MenuID,
+      
       openModal,
       openModalConfirmation,
       infaqtype,
@@ -897,6 +907,105 @@ export default {
       navigateConfirm,
       modules: [FreeMode],
     };
+  },
+
+  //TEST FARIS
+  data() {
+    return {
+      orderData: "",
+      totalAmount: 0,
+      sst: 0,
+      service: 0,
+      totalPay: 0,
+      tableNo: 0,
+      discount:"",
+      discountedP:0,
+      
+    };
+  },
+
+  async created() {
+    this.getOrder();
+  },
+
+  methods: {
+    async getOrder() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        iOrder: this.MenuID,
+      });
+      var config = {
+        method: "post",
+        url: "http://localhost:3000/tbl/getOrder",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
+            for (let i = 0; i < this.orderData.length; i++) {
+              if (this.orderData[i].orderType == "1") {
+                this.orders.push({
+                  sku: this.orderData[i].sku,
+                  name: this.orderData[i].name,
+                  price: this.orderData[i].price,
+                  quantity: this.orderData[i].quantity,
+                  images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`],
+                });
+              }
+              else{
+                this.orders2.push({
+                  sku: this.orderData[i].sku,
+                  name: this.orderData[i].name,
+                  price: this.orderData[i].price,
+                  quantity: this.orderData[i].quantity,
+                  images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`],
+                });
+              }
+            }
+            this.tableNo =  this.orderData[0].tableNo;
+            this.totalAmount = response.data.data.am0untOrd3r;
+            this.sst = this.totalAmount*0.06;
+            this.service = this.totalAmount*0.1;
+            this.totalPay = this.totalAmount + this.sst + this.service;
+            this.discount = this.orderData[0].discount;
+            if(this.discount == true)
+            {
+              this.discountedP = this.totalAmount*0.07;
+              this.totalPay = this.totalPay - this.discountedP;
+            }
+    
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async sentBank()/* FOR BANK PAYMENT */
+    {
+      var axios = require("axios");
+      var config = {
+        method: "GET",
+        url: "https://toyyibfnb.com/api/tbl/tblorderPayment",/* http://localhost:8080/order/payment/98 */
+        headers: {
+          "Content-Type": "application/json",
+        }
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            var link = response.data.data2
+            window.location.href = link;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
