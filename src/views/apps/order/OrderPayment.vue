@@ -12,7 +12,7 @@
           <p class="font-semibold text-white text-lg">Order Confirmation</p>
         </div>
         <div class="bg-white px-3 py-1 rounded-full text-primary-400">
-          Table #{{this.tableNo}}
+          Table #{{ this.tableNo }}
         </div>
       </div>
     </div>
@@ -21,27 +21,29 @@
     <perfect-scrollbar style="height: 17rem">
       <div class="gap-4">
         <rs-card
-          @click="viewDetailItem(product)"
           class="relative mb-5 cursor-pointer"
           v-for="(product, index) in orders"
           :key="index"
+          @click="viewDetailItem(product)"
         >
           <div class="flex justify-center items-center">
             <div class="product-image relative w-30 h-30 p-4 rounded-lg">
               <img
                 class="object-scale-down w-full"
                 :src="
-                  product.images && product.images.length > 0
-                    ? product.images[0]
+                  product.menu_image && product.menu_image.length > 0
+                    ? product.menu_image[0]
                     : ''
                 "
-                :alt="product.name"
+                :alt="product.menu_name"
+                style="width: 80px; height: 80px"
+                @error="setAltImg"
               />
             </div>
             <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
               <div class="product-title mt-4">
                 <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.name }}
+                  >{{ product.menu_name }}
                 </span>
               </div>
               <div class="product-content flex flex-col">
@@ -53,7 +55,7 @@
                         {{
                           product.discountedPrice
                             ? formatPrice(product.discountedPrice)
-                            : formatPrice(product.price)
+                            : formatPrice(product.menu_price)
                         }}</span
                       >
                     </div>
@@ -71,7 +73,7 @@
                       text-sm
                     "
                   >
-                    x{{ product.quantity }}
+                    x{{ product.menu_quantity }}
                   </div>
                 </div>
               </div>
@@ -81,96 +83,104 @@
       </div>
     </perfect-scrollbar>
     <div v-if="this.orders2.length != 0">
-    <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
-    <perfect-scrollbar style="height: 17rem">
-      <div class="gap-4">
-        <rs-card
-          @click="viewDetailItem(product)"
-          class="relative mb-5 cursor-pointer"
-          v-for="(product, index) in orders2"
-          :key="index"
-        >
-          <div class="flex justify-center items-center">
-            <div class="product-image relative w-30 h-30 p-4 rounded-lg">
-              <img
-                class="object-scale-down w-full"
-                :src="
-                  product.images && product.images.length > 0
-                    ? product.images[0]
-                    : ''
-                "
-                :alt="product.name"
-              />
-            </div>
-            <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
-              <div class="product-title mt-4">
-                <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.name }}
-                </span>
+      <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
+      <perfect-scrollbar style="height: 17rem">
+        <div class="gap-4">
+          <rs-card
+            class="relative mb-5 cursor-pointer"
+            v-for="(product, index) in orders2"
+            :key="index"
+            @click="viewDetailItem(product)"
+          >
+            <div class="flex justify-center items-center">
+              <div class="product-image relative w-30 h-30 p-4 rounded-lg">
+                <img
+                  class="object-scale-down w-full"
+                  :src="
+                    product.menu_image && product.menu_image.length > 0
+                      ? product.menu_image[0]
+                      : ''
+                  "
+                  style="width: 80px; height: 80px"
+                  :alt="product.menu_name"
+                  @error="setAltImg"
+                />
               </div>
-              <div class="product-content flex flex-col">
-                <div class="product-price flex justify-between items-center">
-                  <div class="truncate">
-                    <div class="text-sm text-primary-500">
-                      {{ product.currency
-                      }}<span class="text-lg">
-                        {{
-                          product.discountedPrice
-                            ? formatPrice(product.discountedPrice)
-                            : formatPrice(product.price)
-                        }}</span
-                      >
+              <div
+                class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
+              >
+                <div class="product-title mt-4">
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }}
+                  </span>
+                </div>
+                <div class="product-content flex flex-col">
+                  <div class="product-price flex justify-between items-center">
+                    <div class="truncate">
+                      <div class="text-sm text-primary-500">
+                        {{ product.currency
+                        }}<span class="text-lg">
+                          {{
+                            product.discountedPrice
+                              ? formatPrice(product.discountedPrice)
+                              : formatPrice(product.menu_price)
+                          }}</span
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    class="
-                      flex
-                      items-center
-                      justify-center
-                      h-7
-                      w-7
-                      bg-primary-400
-                      text-primary-100
-                      rounded-full
-                      text-sm
-                    "
-                  >
-                    x{{ quantity }}
+                    <div
+                      class="
+                        flex
+                        items-center
+                        justify-center
+                        h-7
+                        w-7
+                        bg-primary-400
+                        text-primary-100
+                        rounded-full
+                        text-sm
+                      "
+                    >
+                      x{{ product.menu_quantity }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </rs-card>
-      </div>
-    </perfect-scrollbar>
+          </rs-card>
+        </div>
+      </perfect-scrollbar>
     </div>
     <div class="px-4 pb-6">
       <rs-card class="p-4 mt-4">
         <div class="subtotal flex justify-between">
           <div class="font-semibold">Subtotal</div>
-          <div>RM {{formatPrice(this.totalAmount)}}</div>
+          <div>RM {{ formatPrice(this.totalAmount) }}</div>
         </div>
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">Membership Discount (7%)</div>
-          <div>RM {{formatPrice(discountedP)}}</div>
+          <div>RM {{ formatPrice(this.discountedP) }}</div>
+        </div>
+        <div class="discount flex justify-between my-2">
+          <div class="font-semibold">Outlet Discount (10%)</div>
+          <div>RM {{ formatPrice(this.outletDisc) }}</div>
         </div>
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">SST(6%)</div>
-          <div class="text-red-500">RM {{formatPrice(sst)}}</div>
+          <div class="text-red-500">RM {{ formatPrice(this.sst) }}</div>
         </div>
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">Service Charges(10%)</div>
-          <div class="text-red-500">RM {{formatPrice(service)}}</div>
+          <div class="text-red-500">RM {{ formatPrice(this.service) }}</div>
         </div>
-        <div class="discount flex justify-between my-2">
+        <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Infaq</div>
           <div class="text-red-500">RM 0.00</div>
-        </div>
+        </div> -->
         <hr />
         <div class="total flex justify-between my-2 text-xl">
           <div class="font-semibold">Total</div>
-          <div class="font-semibold">RM {{formatPrice(this.totalPay)}}</div>
+          <div class="font-semibold">RM {{ formatPrice(this.totalPay) }}</div>
         </div>
       </rs-card>
 
@@ -322,7 +332,7 @@
                             w-full
                             h-full
                           "
-                          @click="sentBank(val.CODE)"
+                          @click="SetBank(val.CODE)"
                           :class="{
                             '!bg-primary-400 text-white': bankcode === val.CODE,
                           }"
@@ -370,8 +380,12 @@
                       <form-kit
                         type="text"
                         placeholder="Enter your phone number"
+                        v-model="phone"
                       ></form-kit>
-                      <rs-button class="w-full" variant="primary-outline"
+                      <rs-button
+                        class="w-full"
+                        @click="sentPaymentLink()"
+                        variant="primary-outline"
                         >Send Payment Link</rs-button
                       >
                     </div>
@@ -383,20 +397,24 @@
         </div>
       </div>
 
-      <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
-        >Pay Now with min infaq RM {{formatPrice(Math.ceil(this.totalPay))}}
+      <!--  <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
+        >Pay Now with min infaq RM {{ formatPrice(Math.ceil(this.totalPay)) }}
       </rs-button>
       <rs-button
         @click="openModalConfirmation = true"
         class="w-full mb-2"
         variant="primary-outline"
-        >Pay Now with more infaq RM {{formatPrice(Math.ceil(this.totalPay))}}</rs-button
-      >
-      <router-link :to="{ name: 'order-confirm' }">
-        <rs-button variant="primary-outline" class="w-full">
-          Just pay RM {{formatPrice(this.totalPay)}}
-        </rs-button>
-      </router-link>
+        >Pay Now with more infaq RM
+        {{ formatPrice(Math.ceil(this.totalPay)) }}</rs-button
+      > -->
+      <!-- <router-link :to="{ name: 'order-confirm' }"> -->
+      <rs-button class="w-full mb-2" @click="sentPOS()"
+        >Pay at counter RM {{ formatPrice(this.totalPay) }}
+      </rs-button>
+      <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
+        Pay Online RM {{ formatPrice(this.totalPay) }}
+      </rs-button>
+      <!-- </router-link> -->
     </div>
     <rs-modal
       title="This is a modal"
@@ -441,7 +459,7 @@
                 {{
                   modalData && modalData.discountedPrice
                     ? formatPrice(modalData.discountedPrice)
-                    : formatPrice(modalData.price)
+                    : formatPrice(modalData.menu_price)
                 }}</rs-button
               >
             </div>
@@ -449,15 +467,15 @@
             <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
               <div class="modal-item-header">
                 <span class="font-semibold text-lg line-clamp-2 mb-2">{{
-                  modalData ? modalData.name : ""
+                  modalData ? modalData.menu_name : ""
                 }}</span>
                 <p class="line-clamp-2 text-sm text-gray-400">
-                  {{ modalData ? modalData.description : "" }}
+                  {{ modalData ? modalData.menu_description : "" }}
                 </p>
               </div>
               <hr class="my-4" />
               <div class="modal-item-content">
-                <div
+                <!-- <div
                   class="
                     membership
                     flex
@@ -477,7 +495,7 @@
                     }"
                   />
                   <rs-button>Apply</rs-button>
-                </div>
+                </div> -->
 
                 <div v-if="modalData.variants" class="modal-item-variance">
                   <div v-for="(val, index) in modalData.variants" :key="index">
@@ -567,7 +585,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal-item-type mb-6 px-2">
+            <!--  <div class="modal-item-type mb-6 px-2">
               <div class="font-semibold text-lg mb-4">Order Type</div>
               <div class="flex gap-4">
                 <rs-button variant="primary" class="h-10">Dine-In</rs-button>
@@ -575,7 +593,7 @@
                   >Takeaway</rs-button
                 >
               </div>
-            </div>
+            </div> -->
             <div
               class="
                 modal-item-action
@@ -592,11 +610,11 @@
                 class="bg-primary-400 text-white w-full py-2 px-4 rounded-full"
                 @click="addToCart(modalData)"
               >
-                Add to Cart - RM
+                Save to Cart - RM
                 {{
                   modalData && modalData.discountedPrice
                     ? formatPrice(modalData.discountedPrice + 1)
-                    : formatPrice(modalData.price + 1)
+                    : formatPrice(modalData.menu_price + 1)
                 }}
               </button>
               <div class="flex gap-x-2">
@@ -610,18 +628,11 @@
                     p-1
                     rounded-lg
                   "
-                  @click="quantity > 0 ? quantity-- : (quantity = 0)"
+                  @click="decrement()"
                 >
                   <vue-feather type="minus"></vue-feather>
                 </button>
-                <form-kit
-                  type="text"
-                  :value="quantity"
-                  :classes="{
-                    outer: 'mb-0',
-                    input: 'w-10 h-10 text-center',
-                  }"
-                />
+                {{ modalData.menu_quantity }}
                 <button
                   class="
                     flex
@@ -632,7 +643,7 @@
                     p-1
                     rounded-lg
                   "
-                  @click="quantity = quantity + 1"
+                  @click="increment()"
                 >
                   <vue-feather type="plus"></vue-feather>
                 </button>
@@ -756,6 +767,45 @@
         </div>
       </template>
     </rs-modal>
+    <rs-modal
+      title="Payment Link"
+      v-model="modalOpen"
+      position="middle"
+      size="full"
+    >
+      <div class="grid grid-cols-3 gap-5 content-center ...">
+        <!-- <div>{{ this.link }}</div>
+        <div></div>
+        <div>
+          <rs-button
+            variant="primary-outline"
+            class="w-30%"
+            @click="sentBank()"
+          >
+            Copy
+          </rs-button>
+        </div> -->
+        <div>{{ this.link }}</div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>
+          <rs-button variant="primary" class="w-30%" @click.stop.prevent="copyTestingCode">
+            Copy
+          </rs-button>
+        </div>
+        <input type="hidden" id="testing-code" :value="this.link" />
+      </div>
+    </rs-modal>
+    <rs-modal
+      title="Payment Counter"
+      v-model="modalPOS"
+      position="middle"
+      size="full"
+    >
+      Please pay for Order No. {{ this.MenuID }} , Table No {{ this.tableNo }}
+    </rs-modal>
   </rs-layout>
 </template>
 
@@ -785,7 +835,7 @@ export default {
     const paymentMethod = ref(0);
     const route = useRoute();
     const MenuID = route.params.id;
-    
+
     const orders = ref([]);
     const orders2 = ref([]);
 
@@ -895,7 +945,7 @@ export default {
       orders2,
       modalData,
       MenuID,
-      
+
       openModal,
       openModalConfirmation,
       infaqtype,
@@ -918,9 +968,19 @@ export default {
       service: 0,
       totalPay: 0,
       tableNo: 0,
-      discount:"",
-      discountedP:0,
-      
+      discount: "",
+      discountedP: 0,
+      bankCode: "",
+      billName: "",
+      name: "",
+      modalOpen: false,
+      link: "",
+      phone: "",
+      total: 0,
+      orderno: "",
+      custName: "",
+      custPhone: "",
+      modalPOS: false,
     };
   },
 
@@ -929,6 +989,10 @@ export default {
   },
 
   methods: {
+    async SetBank(code) {
+      this.bankCode = code;
+    },
+
     async getOrder() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -947,37 +1011,63 @@ export default {
           function (response) {
             this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
             for (let i = 0; i < this.orderData.length; i++) {
+              var images = `https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`;
+              if (images == null) {
+                images = [
+                  {
+                    image1:
+                      " https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
+                  },
+                ];
+              } else {
+                images = [
+                  {
+                    image1: ` https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`,
+                  },
+                ];
+              }
               if (this.orderData[i].orderType == "1") {
                 this.orders.push({
                   sku: this.orderData[i].sku,
-                  name: this.orderData[i].name,
-                  price: this.orderData[i].price,
-                  quantity: this.orderData[i].quantity,
-                  images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`],
+                  menu_name: this.orderData[i].menu_name,
+                  menu_price: this.orderData[i].menu_price,
+                  menu_quantity: this.orderData[i].menu_quantity,
+                  menu_image: [images[0].image1],
+                  orderType: this.orderData[i].orderType,
+                  menu_id: this.orderData[i].menu_id,
+                  tableNo: this.orderData[i].tableNo,
                 });
-              }
-              else{
+              } else {
                 this.orders2.push({
                   sku: this.orderData[i].sku,
-                  name: this.orderData[i].name,
-                  price: this.orderData[i].price,
-                  quantity: this.orderData[i].quantity,
-                  images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`],
+                  menu_name: this.orderData[i].menu_name,
+                  menu_price: this.orderData[i].menu_price,
+                  menu_quantity: this.orderData[i].menu_quantity,
+                  menu_image: [images[0].image1],
+                  orderType: this.orderData[i].orderType,
+                  menu_id: this.orderData[i].menu_id,
+                  tableNo: this.orderData[i].tableNo,
                 });
               }
             }
-            this.tableNo =  this.orderData[0].tableNo;
+            this.tableNo = this.orderData[0].tableNo;
             this.totalAmount = response.data.data.am0untOrd3r;
-            this.sst = this.totalAmount*0.06;
-            this.service = this.totalAmount*0.1;
+            this.sst = this.totalAmount * 0.06;
+            this.service = this.totalAmount * 0.1;
             this.totalPay = this.totalAmount + this.sst + this.service;
+            if (this.totalAmount >= 70) {
+              this.outletDisc = this.totalPay * 0.1;
+              this.totalPay = this.totalPay - this.outletDisc;
+            } else {
+              this.outletDisc = 0;
+              this.totalPay = this.totalPay - this.outletDisc;
+            }
             this.discount = this.orderData[0].discount;
-            if(this.discount == true)
-            {
-              this.discountedP = this.totalAmount*0.07;
+            if (this.discount == true) {
+              this.discountedP = this.totalAmount * 0.07;
               this.totalPay = this.totalPay - this.discountedP;
             }
-    
+            this.orderno = response.data.data.order_no;
           }.bind(this)
         )
         .catch(function (error) {
@@ -985,27 +1075,404 @@ export default {
         });
     },
 
-    async sentBank()/* FOR BANK PAYMENT */
-    {
+    async addToCart(modalData) {
+      /* VARIABLES */
+      var total = 0;
+      var sum = 0;
+      var orderTotal = 0;
+      var total1 = 0;
+      var sum1 = 0;
+      var orderTotal1 = 0;
+      /* END VARIABLES */
+
+      /* ________________________________________________________________________ */
+      /* CHECK EXIST ORDER */
+      let exist = this.orders.find(
+        (item) =>
+          item.sku === modalData.sku && item.orderType == modalData.orderType
+      );
+      /* _________________________________________________________________________ */
+      /* CHECK EXIST ORDER2 */
+      let exist2 = this.orders2.find(
+        (item) =>
+          item.sku === modalData.sku && item.orderType == modalData.orderType
+      ); /* _________________________________________________________________________ */
+      /* ADE DALAM ORDER (DINE IN)*/
+      if (exist) {
+        /* KALO NILAI DIA BERTAMBAH */
+        if (modalData.menu_quantity != 0) {
+          /* LOOP FOR TAMBAH ORDER AMOUNT */
+          for (let i = 0; i < this.orders.length; i++) {
+            sum = parseInt(this.orders[i].menu_quantity);
+            total = parseFloat(this.orders[i].menu_price) * sum;
+            orderTotal = orderTotal + total;
+          }
+          /* LOOP FOR TAMBAH ORDERS2 AMOUNT */
+          for (let i = 0; i < this.orders2.length; i++) {
+            sum1 = parseInt(this.orders2[i].menu_quantity);
+            total1 = parseFloat(this.orders2[i].menu_price) * sum1;
+            orderTotal1 = orderTotal1 + total1;
+          }
+          /* __________________________________________________________________________ */
+          this.totalAmount = orderTotal1 + orderTotal;
+          this.sst = this.totalAmount * 0.06;
+          this.service = this.totalAmount * 0.1;
+          this.totalPay = this.totalAmount + this.sst + this.service;
+          this.discount = this.orderData[0].discount;
+          /* ___________________________________________________________________________ */
+          /* KALO ADE DISCOUNT */
+          if (this.discount == true) {
+            this.discountedP = this.totalAmount * 0.07;
+            this.totalPay = this.totalPay - this.discountedP;
+          }
+        } else {
+          /* __________________________________________________________________________ */
+          /* KALO NILAI DIA TOLAK */
+          /* KALO NILAI DIE JADI 0 DALAM ARRAY */
+          if (exist.menu_quantity == 0) {
+            let index = this.orders.findIndex(
+              (item) =>
+                item.sku === modalData.sku &&
+                item.orderType == modalData.orderType
+            );
+            /* BUANG DARI ORDER */
+            this.orders.splice(index, 1);
+
+            /* LOOP FOR TAMBAH ORDER AMOUNT */
+            for (let i = 0; i < this.orders.length; i++) {
+              sum = parseInt(this.orders[i].menu_quantity);
+              total = parseFloat(this.orders[i].menu_price) * sum;
+              orderTotal = orderTotal + total;
+            }
+            /* LOOP FOR TAMBAH ORDERS2 AMOUNT */
+            for (let i = 0; i < this.orders2.length; i++) {
+              sum1 = parseInt(this.orders2[i].menu_quantity);
+              total1 = parseFloat(this.orders2[i].menu_price) * sum1;
+              orderTotal1 = orderTotal1 + total1;
+            }
+            /* __________________________________________________________________________ */
+            this.totalAmount = orderTotal1 + orderTotal;
+            this.sst = this.totalAmount * 0.06;
+            this.service = this.totalAmount * 0.1;
+            this.totalPay = this.totalAmount + this.sst + this.service;
+            this.discount = this.orderData[0].discount;
+            /* ___________________________________________________________________________ */
+            /* KALO ADE DISCOUNT */
+            if (this.discount == true) {
+              this.discountedP = this.totalAmount * 0.07;
+              this.totalPay = this.totalPay - this.discountedP;
+            }
+          } else {
+            /* KALO NILAI TOLAK X JADI KOSONG */
+            /* LOOP FOR TAMBAH ORDER AMOUNT */
+            for (let i = 0; i < this.orders.length; i++) {
+              sum = parseInt(this.orders[i].menu_quantity);
+              total = parseFloat(this.orders[i].menu_price) * sum;
+              orderTotal = orderTotal + total;
+            }
+            /* LOOP FOR TAMBAH ORDERS2 AMOUNT */
+            for (let i = 0; i < this.orders2.length; i++) {
+              sum1 = parseInt(this.orders2[i].menu_quantity);
+              total1 = parseFloat(this.orders2[i].menu_price) * sum1;
+              orderTotal1 = orderTotal1 + total1;
+            }
+            /* __________________________________________________________________________ */
+            this.totalAmount = orderTotal1 + orderTotal;
+            this.sst = this.totalAmount * 0.06;
+            this.service = this.totalAmount * 0.1;
+            this.totalPay = this.totalAmount + this.sst + this.service;
+            this.discount = this.orderData[0].discount;
+            /* ___________________________________________________________________________ */
+            /* KALO ADE DISCOUNT */
+            if (this.discount == true) {
+              this.discountedP = this.totalAmount * 0.07;
+              this.totalPay = this.totalPay - this.discountedP;
+            }
+          }
+        }
+      } else {
+        /* _____________________________________________________________________________ */
+        /* ADE DALAM ORDER2 (TAKEAWAY) */
+        /* KALO NILAI DIA BERTAMBAH */
+        if (modalData.menu_quantity != 0) {
+          /* LOOP FOR TAMBAH ORDER AMOUNT */
+          for (let i = 0; i < this.orders.length; i++) {
+            sum = parseInt(this.orders[i].menu_quantity);
+            total = parseFloat(this.orders[i].menu_price) * sum;
+            orderTotal = orderTotal + total;
+          }
+          /* LOOP FOR TAMBAH ORDERS2 AMOUNT */
+          for (let i = 0; i < this.orders2.length; i++) {
+            sum1 = parseInt(this.orders2[i].menu_quantity);
+            total1 = parseFloat(this.orders2[i].menu_price) * sum1;
+            orderTotal1 = orderTotal1 + total1;
+          }
+          /* __________________________________________________________________________ */
+          this.totalAmount = orderTotal1 + orderTotal;
+          this.sst = this.totalAmount * 0.06;
+          this.service = this.totalAmount * 0.1;
+          this.totalPay = this.totalAmount + this.sst + this.service;
+          this.discount = this.orderData[0].discount;
+          /* ___________________________________________________________________________ */
+          /* KALO ADE DISCOUNT */
+          if (this.discount == true) {
+            this.discountedP = this.totalAmount * 0.07;
+            this.totalPay = this.totalPay - this.discountedP;
+          }
+        } else {
+          /* _____________________________________________________________________________ */
+          /* KALO NILAI DIA TOLAK */
+          /* KALO NILAI DIE JADI 0 DALAM ARRAY */
+          if (exist2.quantity == 0) {
+            let index = this.orders2.findIndex(
+              (item) =>
+                item.sku === modalData.sku &&
+                item.orderType == modalData.orderType
+            );
+            /* BUANG DARI ORDER */
+            this.orders2.splice(index, 1);
+
+            /* LOOP FOR TAMBAH ORDER AMOUNT */
+            for (let i = 0; i < this.orders.length; i++) {
+              sum = parseInt(this.orders[i].menu_quantity);
+              total = parseFloat(this.orders[i].menu_price) * sum;
+              orderTotal = orderTotal + total;
+            }
+            /* LOOP FOR TAMBAH ORDERS2 AMOUNT */
+            for (let i = 0; i < this.orders2.length; i++) {
+              sum1 = parseInt(this.orders2[i].menu_quantity);
+              total1 = parseFloat(this.orders2[i].menu_price) * sum1;
+              orderTotal1 = orderTotal1 + total1;
+            }
+            /* __________________________________________________________________________ */
+            this.totalAmount = orderTotal1 + orderTotal;
+            this.sst = this.totalAmount * 0.06;
+            this.service = this.totalAmount * 0.1;
+            this.totalPay = this.totalAmount + this.sst + this.service;
+            this.discount = this.orderData[0].discount;
+            /* ___________________________________________________________________________ */
+            /* KALO ADE DISCOUNT */
+            if (this.discount == true) {
+              this.discountedP = this.totalAmount * 0.07;
+              this.totalPay = this.totalPay - this.discountedP;
+            }
+          } else {
+            /* KALO NILAI TOLAK X JADI KOSONG */
+            /* LOOP FOR TAMBAH ORDER AMOUNT */
+            for (let i = 0; i < this.orders.length; i++) {
+              sum = parseInt(this.orders[i].menu_quantity);
+              total = parseFloat(this.orders[i].menu_price) * sum;
+              orderTotal = orderTotal + total;
+            }
+            /* LOOP FOR TAMBAH ORDERS2 AMOUNT */
+            for (let i = 0; i < this.orders2.length; i++) {
+              sum1 = parseInt(this.orders2[i].menu_quantity);
+              total1 = parseFloat(this.orders2[i].menu_price) * sum1;
+              orderTotal1 = orderTotal1 + total1;
+            }
+            /* __________________________________________________________________________ */
+            this.totalAmount = orderTotal1 + orderTotal;
+            this.sst = this.totalAmount * 0.06;
+            this.service = this.totalAmount * 0.1;
+            this.totalPay = this.totalAmount + this.sst + this.service;
+            this.discount = this.orderData[0].discount;
+            /* ___________________________________________________________________________ */
+            /* KALO ADE DISCOUNT */
+            if (this.discount == true) {
+              this.discountedP = this.totalAmount * 0.07;
+              this.totalPay = this.totalPay - this.discountedP;
+            }
+          }
+        }
+      }
+
+      this.orders3 = this.orders.concat(this.orders2);
+
       var axios = require("axios");
+      var data = JSON.stringify({
+        order: this.orders3,
+        total: this.totalAmount,
+        discounted: this.discountedP,
+        orderID: this.MenuID,
+      });
+
       var config = {
-        method: "GET",
-        url: "https://toyyibfnb.com/api/tbl/tblorderPayment",/* http://localhost:8080/order/payment/98 */
+        method: "post",
+        url: "http://localhost:3000/tbl/updateOrdertbl",
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        data: data,
       };
       await axios(config)
         .then(
           function (response) {
-            var link = response.data.data2
-            window.location.href = link;
+            console.log(response.data);
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
         });
-    }
+
+      this.quantity = 1;
+      this.openModal = false;
+      this.variasi = "hot  RM0.00";
+    },
+
+    /* FOR BANK PAYMENT */
+    async sentBank() {
+      if (this.bankcode != "") {
+        var axios = require("axios");
+        var data = JSON.stringify({
+          billName: "Order For Table " + this.tableNo,
+          billDesc: "Order For Table " + this.tableNo,
+          billAmount: this.totalPay,
+          billExternalReferenceNo: "Order For Table " + this.tableNo,
+          billTo: localStorage.name,
+          billPhone: localStorage.phone,
+          orderNo: this.orderno,
+        });
+        var config = {
+          method: "GET",
+          url: "http://localhost:3000/tbl/tblorderPayment" /* http://localhost:8080/order/payment/98 */,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+        await axios(config)
+          .then(
+            function (response) {
+              var link = response.data.data2;
+              window.location.href = link;
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        alert("Please Select Bank Before Payment");
+      }
+    },
+
+    async sentPOS() {
+      var axios = require("axios");
+      this.custName = localStorage.name;
+      this.custPhone = localStorage.phone;
+      if (this.custName == null) {
+        this.custName = "Customer";
+        this.custPhone = "Customer Phone";
+      }
+      var data = JSON.stringify({
+        serviceCharge: this.service,
+        discount: this.discountedP + this.discount,
+        tax: this.sst,
+        total: this.totalPay,
+        customerName: this.custName,
+        customerPhone: this.custPhone,
+        MenuID: this.MenuID,
+      });
+      console.log("data :", data);
+      var config = {
+        method: "post",
+        url: "http://localhost:3000/tbl/tblOrderPOS" /* http://localhost:8080/order/payment/98 */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            console.log(response.data);
+            this.modalPOS = true;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async sentPaymentLink() {
+      this.total = this.totalPay.toFixed(2);
+      console.log("this.total :", this.total);
+      console.log("this.totalPay :", this.totalPay);
+      this.roundNumber =
+        this.total.toString().split(".")[0] +
+        this.total.toString().split(".")[1];
+
+      if (this.phone != "") {
+        var axios = require("axios");
+        if (localStorage.name == null) {
+          this.name = "Guest " + this.tableNo;
+        } else {
+          this.name = localStorage.name;
+        }
+        var data = JSON.stringify({
+          billName: "Order For Table " + this.tableNo,
+          billDesc: "Order For Table " + this.tableNo,
+          billAmount: parseInt(this.roundNumber),
+          billExternalReferenceNo: "Order For Table " + this.tableNo,
+          billTo: this.name,
+          billPhone: "0174842981",
+          orderNo: this.orderno,
+        });
+        var config = {
+          method: "POST",
+          url: "http://localhost:3000/tbl/tblorderPayment" /* http://localhost:8080/order/payment/98  https://toyyibfnb.com/api/tbl/tblorderPayment*/,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+        await axios(config)
+          .then(
+            function (response) {
+              this.link = response.data.data2;
+              console.log(response.data.data2);
+              this.modalOpen = true;
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        alert("Please Insert Phone Number");
+      }
+    },
+
+    async setAltImg(event) {
+      event.target.src =
+        "https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png";
+    },
+
+    async increment() {
+      this.modalData.menu_quantity++;
+    },
+    async decrement() {
+      if (this.modalData.menu_quantity === 0) {
+        alert("Negative quantity not allowed");
+      } else {
+        this.modalData.menu_quantity--;
+      }
+    },
+    async copyTestingCode() {
+      let testingCodeToCopy = document.querySelector("#testing-code");
+      testingCodeToCopy.setAttribute("type", "text"); 
+      testingCodeToCopy.select();
+
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+        alert("Copied " + msg);
+      } catch (err) {
+        alert("Oops, unable to copy");
+      }
+
+      /* unselect the range */
+      testingCodeToCopy.setAttribute("type", "hidden");
+      window.getSelection().removeAllRanges();
+    },
   },
 };
 </script>

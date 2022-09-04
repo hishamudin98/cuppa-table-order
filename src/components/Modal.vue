@@ -88,7 +88,7 @@
                 "
               >
                 <slot name="footer"></slot>
-                <rs-button
+                <!-- <rs-button
                   v-if="!$slots.footer && !okOnly"
                   @click="validateCancelCallback"
                   class="bg-gray-500 hover:bg-gray-600"
@@ -99,7 +99,7 @@
                   v-if="!$slots.footer && !cancelOnly"
                   @click="okCallback"
                   >{{ okTitle }}</rs-button
-                >
+                > -->
               </div>
             </div>
           </div>
@@ -110,12 +110,12 @@
 </template>
 
 <script>
-import RsButton from "@/components/Button.vue";
+/* import RsButton from "@/components/Button.vue"; */
 
 export default {
   name: "component-modal",
   components: {
-    RsButton,
+    /* RsButton, */
   },
   props: {
     title: {

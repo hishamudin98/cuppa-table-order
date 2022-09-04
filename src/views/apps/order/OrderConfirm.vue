@@ -36,7 +36,7 @@
     <rs-card class="py-3 px-4">
       <div class="order-detail-wrapper">
         <div class="flex justify-between items-center my-3">
-          <p class="font-semibold uppercase">Order Details (#Hko2-32rfs)</p>
+          <p class="font-semibold uppercase">Order Details ( {{this.orderNo}} )</p>
         </div>
         <div class="order-wrapper flex flex-col gap-2">
           <div class="flex justify-between items-center">
@@ -121,16 +121,91 @@
 
 <script>
 import RsButton from "@/components/Button.vue";
+import { ref} from "vue";
 
 export default {
   components: {
     RsButton,
   },
   setup() {
-    return {};
+    const orders = ref([]);
+    return {
+      orders,
+    };
   },
+  data(){
+    return{
+      orderData : "",
+      billCode : "",
+      transactionId : "",
+      orderNo: "",
+    }
+  },
+  async created() {
+    this.billCode = this.$route.query.billcode;
+    this.transactionId = this.$route.query.transaction_id
+    this.getOrderConfirm()
+  },
+  methods: {
+  async getOrderConfirm()
+  {
+     var axios = require("axios");
+      var data = JSON.stringify({
+        billCode: this.billCode,
+      });
+      var config = {
+        method: "post",
+        url: "http://localhost:3000/tbl/getOrderConfirm",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+          this.orderData = JSON.parse(response.data.data[0].order_detail)
+            for (let i = 0; i < this.orderData.length; i++) {
+                this.orders.push({
+                  sku: this.orderData[i].sku,
+                  menu_name: this.orderData[i].menu_name,
+                  menu_price: this.orderData[i].menu_price,
+                  menu_quantity: this.orderData[i].menu_quantity,
+                  menu_id: this.orderData[i].menu_id,
+                  tableNo: this.orderData[i].tableNo,
+                });
+            }
+          this.orderNo = response.data.data[0].order_no
+            console.log(this.orderNo)
+            /* this.tableNo = this.orderData[0].tableNo;
+            this.totalAmount = response.data.data.am0untOrd3r;
+            this.sst = this.totalAmount * 0.06;
+            this.service = this.totalAmount * 0.1;
+            this.totalPay = this.totalAmount + this.sst + this.service;
+            if(this.totalPay >= 70)
+            {
+              this.outletDisc = this.totalPay * 0.1;
+              this.totalPay = this.totalPay - this.outletDisc;
+            }
+            this.discount = this.orderData[0].discount;
+            if (this.discount == true) {
+              this.discountedP = this.totalAmount * 0.07;
+              this.totalPay = this.totalPay - this.discountedP;
+            }
+            this.orderno = response.data.data.order_no; */
+            
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+  },
+
+  
 };
 </script>
 
 <style lang="scss" scoped>
 </style>
+?status_id=1&billcode=vl421nn4&order_id=Order%20No%2001234&msg=ok&transaction_id=TP137618119143716020922

@@ -137,13 +137,13 @@
       <div style="height: 43vh" class="bg-primary-400 after:content-[''] p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-x-2">
-            <vue-feather
+            <!-- <vue-feather
               class="text-white"
               type="chevron-left"
               @click="customerProceed = false"
-            ></vue-feather>
+            ></vue-feather> -->
             <div class="welcome text-lg font-semibold text-white">
-              Table #{{ $route.params.table ? this.table : 0 }}
+              Table #{{ this.table }}
             </div>
           </div>
 
@@ -230,8 +230,46 @@
                   dark:shadow-slate-900
                   whitespace-nowrap
                 "
+                @click="_filterByCategory(0)"
+              >
+                <div
+                  class="
+                    flex
+                    items-center
+                    bg-slate-100
+                    dark:bg-slate-700
+                    border border-slate-200
+                    dark:border-slate-700
+                    w-10
+                    h-10
+                    rounded-lg
+                    mr-2
+                  "
+                >
+                  <img class="h-full w-full object-scale-down"
+                  src="https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/categoryImage/Logo+Malaya+Grill-03.png" />
+                </div>
+                <span>All Menu</span>
+              </button>
+              <button
+                class="
+                  flex
+                  items-center
+                  rounded-lg
+                  py-2
+                  px-3
+                  bg-white
+                  dark:bg-slate-800 dark:text-gray-300
+                  hover:bg-slate-200
+                  font-semibold
+                  text-sm
+                  shadow-md shadow-slate-200
+                  dark:shadow-slate-900
+                  whitespace-nowrap
+                "
                 v-for="(category, index) in categories"
                 :key="index"
+                @click="_filterByCategory(category.id)"
               >
                 <div
                   class="
@@ -250,6 +288,7 @@
                   <img
                     class="h-full w-full object-scale-down"
                     :src="category.image"
+                    
                   />
                 </div>
                 <span>{{ category.name }}</span>
@@ -315,6 +354,7 @@
                         ? product.images
                         : ''
                     "
+                    style="width:80px;height:80px;"
                     :alt="product.name"
                   />
 
@@ -341,7 +381,7 @@
                 >
                   <div class="product-title mt-4">
                     <span class="block text-base font-semibold line-clamp-2"
-                      >{{ product.name }}
+                      >{{ product.sku }} {{ product.name }}
                     </span>
                   </div>
                   <div class="product-content flex flex-col">
@@ -528,21 +568,21 @@
                         <form-kit
                           v-if="val.type == 'radio'"
                           :type="val.type"
-                          :value="
-                            index == 1
-                              ? 'Nasi Arab'
-                              : index == 2
-                              ? 'Spicy Level 2'
-                              : index == 3
-                              ? 'Tomato'
-                              : ''
-                          "
+                          v-model="variasi"
+                          :value="val.data"
                           :options="val.data"
                           :classes="{
                             fieldset: '!border-0 !p-0',
                           }"
                         />
                         <div v-else>
+                          <!-- index == 1
+                              ? 'Nasi Arab'
+                              : index == 2
+                              ? 'Spicy Level 2'
+                              : index == 3
+                              ? 'Tomato'
+                              : '' -->
                           <div
                             class="flex justify-between items-center mb-3"
                             v-for="(val, index) in val.data"
@@ -632,7 +672,7 @@
                 <h4>Remarks</h4>
                 <textarea
                   variant="primary-outline"
-                  style="width: 100%; border: solid 1px orange"
+                  style="width: 100%; border: solid 1px orange  font-family: ui-sans-serif"
                   v-model="remarks"
                 ></textarea>
               </div>
@@ -690,7 +730,9 @@
                     px-4
                     rounded-full
                   "
-                  @click="addToCart(modalData, picked, discount, remarks)"
+                  @click="
+                    addToCart(modalData, picked, discount, remarks, variasi)
+                  "
                 >
                   Add to Cart - RM
                   {{
@@ -761,7 +803,7 @@
             shadow-md shadow-primary-200
           "
         >
-        RM {{ formatPrice(this.totalPrice ) }}
+          RM {{ formatPrice(this.totalPrice) }}
         </button>
         <rs-button
           class="
@@ -841,6 +883,11 @@ export default {
     const modalData = ref({});
     const filters = ref([]);
     const activeFilter = ref("");
+    const defaultCatID = ref(0);
+    const mmberShip = ref("");
+    const remarks = ref("");
+    const variasi = ref("hot 0.00");
+    const menu = ref([]);
 
     const formatPrice = (price) => {
       return parseFloat(price)
@@ -871,8 +918,58 @@ export default {
     };
 
     const addToCart = (product, picked, discount, remarks) => {
+      console.log("Sebelum tambah dlm order :", order);
+
       if (orderID.value != "") {
+        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
+        var check = parseInt(numsStr, 10);
+        console.log("variasi: ", variasi.value);
+
+        /* ADE ORDER ID */
+        const exist = order.value.find(
+          (item) => item.sku === product.sku && item.orderType == picked
+        );
+        if (exist) {
+          exist.menu_quantity++;
+          var total = 0;
+          var sum = 0;
+          for (let i = 0; i < order.value.length; i++) {
+            sum = parseInt(order.value[i].menu_quantity);
+            total += parseFloat(order.value[i].menu_price) * sum;
+          }
+          totalPrice.value = total;
+        } else {
+          order.value.push({
+            tableNo: table.value,
+            sku: product.sku,
+            menu_name: product.name,
+            menu_price: product.discountedPrice
+              ? formatPrice(product.discountedPrice)
+              : formatPrice(product.price + check),
+            menu_quantity: quantity.value,
+            orderType: picked,
+            menu_id: product.id,
+            custName: nameCust,
+            custPhone: phoneCust,
+            discount: discount,
+            remarks: remarks,
+            menu_variants: variasi.value,
+            menu_image: product.images
+          });
+          var total = 0;
+          var sum = 0;
+          for (let i = 0; i < order.value.length; i++) {
+            sum = parseInt(order.value[i].menu_quantity);
+            total += parseFloat(order.value[i].menu_price) * sum;
+          }
+          totalPrice.value = total;
+          console.log(order.value);
+        }
       } else {
+        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
+        var check = parseInt(numsStr, 10);
+        console.log("Variasi ", check);
+
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
           var phoneCust = localStorage.phone;
@@ -885,52 +982,61 @@ export default {
           (item) => item.sku === product.sku && item.orderType == picked
         );
         if (exist) {
-          exist.quantity++;
+          exist.menu_quantity++;
           var total = 0;
           var sum = 0;
           for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].quantity);
-            total += parseFloat(order.value[i].price) * sum;
+            sum = parseInt(order.value[i].menu_quantity);
+            total += parseFloat(order.value[i].menu_price) * sum;
           }
           totalPrice.value = total;
         } else {
           order.value.push({
             tableNo: table.value,
             sku: product.sku,
-            name: product.name,
-            price: product.discountedPrice
+            menu_name: product.name,
+            menu_price: product.discountedPrice
               ? formatPrice(product.discountedPrice)
-              : formatPrice(product.price),
-            quantity: quantity.value,
+              : formatPrice(product.price + check),
+            menu_quantity: quantity.value,
             orderType: picked,
-            id: product.id,
+            menu_id: product.id,
             custName: nameCust,
             custPhone: phoneCust,
             discount: discount,
             remarks: remarks,
+            menu_variants: variasi,
+            menu_image: product.images
           });
           var total = 0;
           var sum = 0;
           for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].quantity);
-            total += parseFloat(order.value[i].price) * sum;
+            sum = parseInt(order.value[i].menu_quantity);
+            total += parseFloat(order.value[i].menu_price) * sum;
           }
           totalPrice.value = total;
+          console.log(order.value);
         }
       }
+      quantity.value = 1;
       openModal.value = false;
+      variasi.value = "hot  RM0.00";
+      console.log(totalPrice.value);
     };
 
     const viewDetailItem = (product) => {
       modalData.value = product;
       openModal.value = true;
+      mmberShip.value = "";
     };
 
     watch(openModal, (val) => {
       if (val) {
         disableScroll(val);
+        /*  TRUE  */
       } else {
         disableScroll(val);
+        /* False */
       }
     });
 
@@ -943,18 +1049,40 @@ export default {
       }
     };
 
+    function _filterByCategory(type) {
+      defaultCatID.value = type;
+    }
+
     const searchMenus = computed(() => {
-      return menus.value.filter((product) => {
-        return (
-          product.name.toLowerCase().indexOf(search.value.toLowerCase()) != -1
-        );
-      });
+      if (defaultCatID.value === 0) {
+        return menus.value.filter((product) => {
+          return (
+            product.name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+              -1 ||
+            product.sku.toLowerCase().indexOf(search.value.toLowerCase()) != -1
+          );
+        });
+      } else {
+        menu.value = [];
+        let MenuFilter =  menus.value.filter((product) => {
+          let categoryParsed = JSON.parse(product.catid);
+          let result = categoryParsed.map((category) => {
+            if (category.category_id === defaultCatID.value) {
+              menu.value.push(product);
+            }
+          });
+        });
+        
+        return menu.value;
+      }
     });
 
     return {
       table,
+      variasi,
       guestMode,
       changetable,
+      defaultCatID,
       customerData,
       customerProceed,
       items: data,
@@ -973,7 +1101,9 @@ export default {
       viewDetailItem,
       addToCart,
       customerAdvanced,
+      _filterByCategory,
       customerAdvancedOrder,
+      /* _filterByCategory, */
       modules: [Navigation, Autoplay, Scrollbar, A11y],
     };
   },
@@ -1003,7 +1133,6 @@ export default {
     this.table = this.$route.params.table;
     if (this.orderID != "") {
       this.getOrderID();
-      
     }
   },
 
@@ -1030,6 +1159,11 @@ export default {
       localStorage.name = this.name;
       localStorage.phone = this.phone;
     },
+    openModal(val) {
+      if (val == false) {
+        this.remarks = "";
+      }
+    },
   },
   methods: {
     async getCategories() {
@@ -1047,8 +1181,7 @@ export default {
             for (let i = 0; i < response.data.data.length; i++) {
               this.categories.push({
                 name: response.data.data[i].category_name,
-                image:
-                  "https://cf.shopee.com.my/file/5798838bfaf96b0af5aa5810e4fddd30",
+                image:response.data.data[i].category_image,
                 id: response.data.data[i].category_id,
               });
             }
@@ -1071,9 +1204,36 @@ export default {
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
+              /* VARIANTS */
+              var variant = JSON.parse(response.data.data[i].menu_variant);
+              if (variant == null) {
+                variant = {
+                  title: "",
+                  type: "",
+                };
+              } else {
+                variant = {
+                  title: "Temperature",
+                  type: "radio",
+                  data: [
+                    variant[0].temperature[0].data +
+                      "  RM" +
+                      variant[0].temperature[0].price.toFixed(2),
+                    variant[0].temperature[1].data +
+                      "  RM" +
+                      variant[0].temperature[1].price.toFixed(2),
+                  ],
+                };
+              }
+              /* IMAGES */
               var images = JSON.parse(response.data.data[i].menu_image);
               if (images == null) {
-                images = [{ image1: "" }];
+                images = [
+                  {
+                    image1:
+                      " https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
+                  },
+                ];
               }
               this.menus.push({
                 sku: response.data.data[i].menu_code,
@@ -1084,8 +1244,9 @@ export default {
                 store: "Malaya Grill",
                 images: [images[0].image1],
                 id: response.data.data[i].menu_id,
-                catid: response.data.data[i].fkcat_id,
+                catid: response.data.data[i].menu_category,
                 /* images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${response.data.data[i].menu_code}.png`], */
+                variants: [variant],
               });
             }
           }.bind(this)
@@ -1094,36 +1255,70 @@ export default {
           console.log(error);
         });
     },
-    async insertOrder(discount) {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        order: this.order,
-        total: this.totalPrice,
-        discounted: discount,
-      });
 
-      var config = {
-        method: "post",
-        url: "http://localhost:3000/tbl/insertOrder",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            this.IDMENU = response.data.data;
-            /* :to="{ name: 'order-payment' , params:{id:  } }" */
-            this.$router.push({
-              name: "order-payment",
-              params: { id: this.IDMENU },
-            });
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
+    async insertOrder(discount) {
+      if (this.orderID != "") {
+        var axios = require("axios");
+        var data = JSON.stringify({
+          order: this.order,
+          total: this.totalPrice,
+          discounted: discount,
+          orderID: this.orderID,
         });
+
+        var config = {
+          method: "post",
+          url: "http://localhost:3000/tbl/updateOrdertbl",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+        await axios(config)
+          .then(
+            function (response) {
+              this.IDMENU = response.data.data;
+              /* :to="{ name: 'order-payment' , params:{id:  } }" */
+              this.$router.push({
+                name: "order-payment",
+                params: { id: this.IDMENU },
+              });
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        var axios = require("axios");
+        var data = JSON.stringify({
+          order: this.order,
+          total: this.totalPrice,
+          discounted: discount,
+        });
+
+        var config = {
+          method: "post",
+          url: "http://localhost:3000/tbl/insertOrder",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+        await axios(config)
+          .then(
+            function (response) {
+              this.IDMENU = response.data.data;
+              /* :to="{ name: 'order-payment' , params:{id:  } }" */
+              this.$router.push({
+                name: "order-payment",
+                params: { id: this.IDMENU },
+              });
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     },
     async checkMembership() {
       var axios = require("axios");
@@ -1144,9 +1339,11 @@ export default {
             if (response.data.status === 200) {
               this.discount = true;
               alert("Discount Applied");
+              this.mmberShip = "";
             } else {
               this.discount = false;
               alert("No Membership Found");
+              this.mmberShip = "";
             }
           }.bind(this)
         )
@@ -1186,14 +1383,15 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            this.orderDetails = JSON.parse(response.data.data[0].order_details)
+            this.orderDetails = JSON.parse(response.data.data[0].order_details);
+            console.log(this.orderDetails);
             for (let i = 0; i < this.orderDetails.length; i++) {
               this.order.push({
                 tableNo: this.orderDetails[i].tableNo,
                 sku: this.orderDetails[i].sku,
-                name:this.orderDetails[i].name,
-                price: this.orderDetails[i].price,
-                quantity: this.orderDetails[i].quantity,
+                menu_name: this.orderDetails[i].menu_name,
+                menu_price: this.orderDetails[i].menu_price,
+                menu_quantity: this.orderDetails[i].menu_quantity,
                 orderType: this.orderDetails[i].orderType,
                 id: this.orderDetails[i].id,
                 custName: this.orderDetails[i].custName,
@@ -1202,8 +1400,9 @@ export default {
                 remarks: this.orderDetails[i].remarks,
               });
             }
-            this.totalPrice = response.data.data[0].order_amount
-            this.table = this.orderDetails[0].tableNo
+            this.totalPrice = response.data.data[0].order_amount;
+            this.table = this.orderDetails[0].tableNo;
+            console.log("order :", this.order);
           }.bind(this)
         )
         .catch(function (error) {
