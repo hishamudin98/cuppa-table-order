@@ -19,4 +19,9 @@ export default [
     name: "order-confirm",
     component: () => import("@/views/apps/order/OrderConfirm.vue"),
   },
+  {
+    path: "/order/table/:orderID?/:table?",
+    name: "order-table",
+    component: () => import("@/views/apps/order/OrderTablePOS.vue"),
+  },
 ];

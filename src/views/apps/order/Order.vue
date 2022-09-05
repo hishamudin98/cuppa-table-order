@@ -487,7 +487,7 @@
               <div class="relative">
                 <img
                   class="w-full h-60 object-cover rounded-t-xl"
-                  :src="modalData ? modalData.images[0] : ''"
+                  :src="modalData ? modalData.images : ''"
                   alt=""
                 />
               </div>
@@ -918,7 +918,6 @@ export default {
     };
 
     const addToCart = (product, picked, discount, remarks) => {
-      console.log("Sebelum tambah dlm order :", order);
 
       if (orderID.value != "") {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
@@ -1242,7 +1241,7 @@ export default {
                 price: response.data.data[i].menu_price,
                 currency: "RM",
                 store: "Malaya Grill",
-                images: [images[0].image1],
+                images: images[0].image1,
                 id: response.data.data[i].menu_id,
                 catid: response.data.data[i].menu_category,
                 /* images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${response.data.data[i].menu_code}.png`], */

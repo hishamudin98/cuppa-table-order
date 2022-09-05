@@ -791,7 +791,11 @@
         <div></div>
         <div></div>
         <div>
-          <rs-button variant="primary" class="w-30%" @click.stop.prevent="copyTestingCode">
+          <rs-button
+            variant="primary"
+            class="w-30%"
+            @click.stop.prevent="copyTestingCode"
+          >
             Copy
           </rs-button>
         </div>
@@ -990,7 +994,7 @@ export default {
 
   methods: {
     async SetBank(code) {
-      this.bankCode = code;
+      this.bankcode = code;
     },
 
     async getOrder() {
@@ -1322,19 +1326,26 @@ export default {
     /* FOR BANK PAYMENT */
     async sentBank() {
       if (this.bankcode != "") {
+        this.total = this.totalPay.toFixed(2);
+        console.log("this.total :", this.total);
+        console.log("this.totalPay :", this.totalPay);
+        this.roundNumber =
+          this.total.toString().split(".")[0] +
+          this.total.toString().split(".")[1];
+
         var axios = require("axios");
         var data = JSON.stringify({
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
-          billAmount: this.totalPay,
+          billAmount: parseInt(this.roundNumber),
           billExternalReferenceNo: "Order For Table " + this.tableNo,
           billTo: localStorage.name,
           billPhone: localStorage.phone,
           orderNo: this.orderno,
         });
         var config = {
-          method: "GET",
-          url: "http://localhost:3000/tbl/tblorderPayment" /* http://localhost:8080/order/payment/98 */,
+          method: "POST",
+          url: "https://toyyibfnb.com/api/tbl/tblorderPayment" /* http://localhost:8080/order/payment/98 */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1384,8 +1395,13 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log(response.data);
-            this.modalPOS = true;
+              /* :to="{ name: 'order-payment' , params:{id:  } }" */
+              console.log("OrderID :", response.data.data.order_no)
+              console.log("OrderID :", this.tableNo)
+              this.$router.push({
+                name: "order-table",
+                params: { orderID: response.data.data.order_no , table: this.tableNo},
+              });
           }.bind(this)
         )
         .catch(function (error) {
@@ -1419,7 +1435,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url: "http://localhost:3000/tbl/tblorderPayment" /* http://localhost:8080/order/payment/98  https://toyyibfnb.com/api/tbl/tblorderPayment*/,
+          url: "http://localhost:3000/tbl/tblorderPayment" /* https://toyyibfnb.com/api/tbl/tblorderPayment*/,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1458,7 +1474,7 @@ export default {
     },
     async copyTestingCode() {
       let testingCodeToCopy = document.querySelector("#testing-code");
-      testingCodeToCopy.setAttribute("type", "text"); 
+      testingCodeToCopy.setAttribute("type", "text");
       testingCodeToCopy.select();
 
       try {
