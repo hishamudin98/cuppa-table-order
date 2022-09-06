@@ -53,9 +53,12 @@
                       {{ product.currency
                       }}<span class="text-lg">
                         {{
-                          (product.menu_quantity*(product.discountedPrice
-                            ? formatPrice(product.discountedPrice)
-                            : formatPrice(product.menu_price))).toFixed(2)
+                          (
+                            product.menu_quantity *
+                            (product.discountedPrice
+                              ? formatPrice(product.discountedPrice)
+                              : formatPrice(product.menu_price))
+                          ).toFixed(2)
                         }}</span
                       >
                     </div>
@@ -121,9 +124,12 @@
                         {{ product.currency
                         }}<span class="text-lg">
                           {{
-                            (product.menu_quantity*(product.discountedPrice
-                            ? formatPrice(product.discountedPrice)
-                            : formatPrice(product.menu_price))).toFixed(2)
+                            (
+                              product.menu_quantity *
+                              (product.discountedPrice
+                                ? formatPrice(product.discountedPrice)
+                                : formatPrice(product.menu_price))
+                            ).toFixed(2)
                           }}</span
                         >
                       </div>
@@ -1013,7 +1019,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log(response.data.data)
+            console.log(response.data.data);
             this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
             for (let i = 0; i < this.orderData.length; i++) {
               var images = `https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`;
@@ -1336,6 +1342,9 @@ export default {
 
         var axios = require("axios");
         var data = JSON.stringify({
+          serviceCharge: this.service,
+          discount: this.discountedP + this.discount,
+          tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
           billAmount: parseInt(this.roundNumber),
@@ -1396,13 +1405,16 @@ export default {
       await axios(config)
         .then(
           function (response) {
-              /* :to="{ name: 'order-payment' , params:{id:  } }" */
-              console.log("OrderID :", response.data.data.order_no)
-              console.log("OrderID :", this.tableNo)
-              this.$router.push({
-                name: "order-table",
-                params: { orderID: response.data.data.order_no , table: this.tableNo},
-              });
+            /* :to="{ name: 'order-payment' , params:{id:  } }" */
+            console.log("OrderID :", response.data.data.order_no);
+            console.log("OrderID :", this.tableNo);
+            this.$router.push({
+              name: "order-table",
+              params: {
+                orderID: response.data.data.order_no,
+                table: this.tableNo,
+              },
+            });
           }.bind(this)
         )
         .catch(function (error) {
@@ -1426,6 +1438,9 @@ export default {
           this.name = localStorage.name;
         }
         var data = JSON.stringify({
+          serviceCharge: this.service,
+          discount: this.discountedP + this.discount,
+          tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
           billAmount: parseInt(this.roundNumber),
