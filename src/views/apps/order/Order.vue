@@ -731,7 +731,7 @@
                     rounded-full
                   "
                   @click="
-                    addToCart(modalData, picked, discount, remarks, variasi)
+                    addToCart(modalData, picked, discount, mmbershipNo ,  remarks, variasi)
                   "
                 >
                   Add to Cart - RM
@@ -917,8 +917,8 @@ export default {
       }
     };
 
-    const addToCart = (product, picked, discount, remarks) => {
-
+    const addToCart = (product, picked, discount, mmbershipNo , remarks) => {
+      
       if (orderID.value != "") {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
@@ -942,9 +942,7 @@ export default {
             tableNo: table.value,
             sku: product.sku,
             menu_name: product.name,
-            menu_price: product.discountedPrice
-              ? formatPrice(product.discountedPrice)
-              : formatPrice(product.price + check),
+            menu_price: product.price + check,
             menu_quantity: quantity.value,
             orderType: picked,
             menu_id: product.id,
@@ -953,7 +951,8 @@ export default {
             discount: discount,
             remarks: remarks,
             menu_variants: variasi.value,
-            menu_image: product.images
+            menu_image: product.images,
+            membership_no: mmbershipNo,
           });
           var total = 0;
           var sum = 0;
@@ -994,9 +993,7 @@ export default {
             tableNo: table.value,
             sku: product.sku,
             menu_name: product.name,
-            menu_price: product.discountedPrice
-              ? formatPrice(product.discountedPrice)
-              : formatPrice(product.price + check),
+            menu_price: product.price + check,
             menu_quantity: quantity.value,
             orderType: picked,
             menu_id: product.id,
@@ -1005,7 +1002,8 @@ export default {
             discount: discount,
             remarks: remarks,
             menu_variants: variasi,
-            menu_image: product.images
+            menu_image: product.images,
+            membership_no: mmbershipNo,
           });
           var total = 0;
           var sum = 0;
@@ -1122,6 +1120,7 @@ export default {
       orderID: 0,
       totalPrice: 0,
       orderDetails: [],
+      mmbershipNo:0,
     };
   },
 
@@ -1263,6 +1262,7 @@ export default {
           total: this.totalPrice,
           discounted: discount,
           orderID: this.orderID,
+          table: this.table,
         });
 
         var config = {
@@ -1293,6 +1293,7 @@ export default {
           order: this.order,
           total: this.totalPrice,
           discounted: discount,
+          table: this.table,
         });
 
         var config = {
@@ -1337,10 +1338,12 @@ export default {
           function (response) {
             if (response.data.status === 200) {
               this.discount = true;
+              this.mmbershipNo = this.mmberShip;
               alert("Discount Applied");
               this.mmberShip = "";
             } else {
               this.discount = false;
+              this.mmbershipNo = 0;
               alert("No Membership Found");
               this.mmberShip = "";
             }

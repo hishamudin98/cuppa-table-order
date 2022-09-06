@@ -6,7 +6,7 @@
           <p class="font-semibold text-white text-lg">Receipt</p>
         </div>
         <div class="bg-white px-3 py-1 rounded-full text-primary-400">
-          Table 1
+          Table {{this.tableno}}
         </div>
       </div>
     </div>
@@ -30,44 +30,45 @@
         Order has been made.
       </p>
       <p class="flex justify-center items-center font-semibold text-2xl">
-        RM 885.00
+        RM {{ this.orderAmount }}
       </p>
     </div>
     <rs-card class="py-3 px-4">
       <div class="order-detail-wrapper">
         <div class="flex justify-between items-center my-3">
-          <p class="font-semibold uppercase">Order Details ( {{this.orderNo}} )</p>
+          <p class="font-semibold uppercase">Order No ( {{ this.orderNo }} )</p>
         </div>
+        <div v-for="(product, index) in orders" :key="index">
+          <div class="order-wrapper flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+              <div>{{ product.menu_name }}  x {{product.menu_quantity}}</div>
+              <div class="font-semibold">RM {{ (product.menu_quantity*(product.menu_price)).toFixed(2) }}</div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <br />
         <div class="order-wrapper flex flex-col gap-2">
           <div class="flex justify-between items-center">
-            <div>Nasi Arab Ayam (x2)</div>
-            <div class="font-semibold">RM30.00</div>
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Nasi Arab Kambing (x2)</div>
-            <div class="font-semibold">RM55.00</div>
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Teh O Ais Limau (x4)</div>
-            <div class="font-semibold">RM12.00</div>
-          </div>
-          <hr class="my-2" />
-          <div class="flex justify-between items-center">
-            <div class="font-semibold">Service Charge (10%)</div>
-            <div class="font-semibold">RM10.00</div>
-          </div>
-          <div class="flex justify-between items-center">
             <div class="font-semibold">SST (6%)</div>
-            <div class="font-semibold">RM10.00</div>
+            <div class="font-semibold">RM {{(this.tax).toFixed(2)}}</div>
           </div>
           <div class="flex justify-between items-center">
+            <div class="font-semibold">Service Charges (10%)</div>
+            <div class="font-semibold">RM {{(this.service).toFixed(2)}}</div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="font-semibold">Discount Applied</div>
+            <div class="font-semibold">RM {{(this.discount).toFixed(2)}}</div>
+          </div>
+          <!-- <div class="flex justify-between items-center">
             <div class="font-semibold">Infaq</div>
             <div class="font-semibold">RM10.00</div>
-          </div>
+          </div> -->
           <hr class="my-2 mb-1" />
           <div class="flex justify-between items-center text-xl">
             <div class="font-semibold">Total</div>
-            <div class="font-semibold">RM12.00</div>
+            <div class="font-semibold">RM {{ this.orderAmount }}</div>
           </div>
         </div>
       </div>
@@ -84,34 +85,34 @@
           </div>
           <div class="flex justify-between items-center">
             <div>Transaction ID</div>
-            <div class="font-semibold">MG220332</div>
+            <div class="font-semibold">{{this.transacno}}</div>
           </div>
           <div class="flex justify-between items-center">
-            <div>FPX Transaction ID</div>
-            <div class="font-semibold">2022039459813492</div>
+            <div>Bill Code</div>
+            <div class="font-semibold">{{this.billCode}}</div>
           </div>
           <div class="flex justify-between items-center">
             <div>Date Order</div>
-            <div class="font-semibold">04/05/2022</div>
+            <div class="font-semibold">{{this.date}}</div>
           </div>
           <div class="flex justify-between items-center">
             <div>Order Time</div>
-            <div class="font-semibold">10.00am</div>
+            <div class="font-semibold">{{this.time}}</div>
           </div>
-          <div class="flex justify-between items-center">
+          <!-- <div class="flex justify-between items-center">
             <div>Payment Type</div>
             <div class="font-semibold">FPX</div>
-          </div>
+          </div> -->
         </div>
       </div>
     </rs-card>
     <div class="flex flex-col items-center justify-center gap-3 mx-4">
-      <rs-button class="w-full gap-x-2">
+      <!-- <rs-button class="w-full gap-x-2">
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
-      </rs-button>
-      <router-link class="w-full" :to="{ name: 'order' }">
-        <rs-button class="w-full gap-x-2 mb-6" variant="primary-outline">
+      </rs-button> -->
+      <router-link class="w-full" :to="{ name: 'main' }">
+        <rs-button class="w-full gap-x-2 mb-6" variant="primary">
           Order Again
         </rs-button>
       </router-link>
@@ -121,7 +122,9 @@
 
 <script>
 import RsButton from "@/components/Button.vue";
-import { ref} from "vue";
+import { ref } from "vue";
+import moment from 'moment';
+
 
 export default {
   components: {
@@ -133,23 +136,30 @@ export default {
       orders,
     };
   },
-  data(){
-    return{
-      orderData : "",
-      billCode : "",
-      transactionId : "",
+  data() {
+    return {
+      orderData: "",
+      billCode: "",
+      transactionId: "",
       orderNo: "",
-    }
+      orderAmount: 0.0,
+      tax : 0.00,
+      service: 0.00,
+      discount: 0.00,
+      tableno: 0,
+      transacno: "",
+      date: null,
+      time: null,
+    };
   },
   async created() {
     this.billCode = this.$route.query.billcode;
-    this.transactionId = this.$route.query.transaction_id
-    this.getOrderConfirm()
+    this.transactionId = this.$route.query.transaction_id;
+    this.getOrderConfirm();
   },
   methods: {
-  async getOrderConfirm()
-  {
-     var axios = require("axios");
+    async getOrderConfirm() {
+      var axios = require("axios");
       var data = JSON.stringify({
         billCode: this.billCode,
       });
@@ -164,45 +174,34 @@ export default {
       await axios(config)
         .then(
           function (response) {
-          this.orderData = JSON.parse(response.data.data[0].order_detail)
+            this.orderData = JSON.parse(response.data.data[0].order_detail);
             for (let i = 0; i < this.orderData.length; i++) {
-                this.orders.push({
-                  sku: this.orderData[i].sku,
-                  menu_name: this.orderData[i].menu_name,
-                  menu_price: this.orderData[i].menu_price,
-                  menu_quantity: this.orderData[i].menu_quantity,
-                  menu_id: this.orderData[i].menu_id,
-                  tableNo: this.orderData[i].tableNo,
-                });
+              this.orders.push({
+                sku: this.orderData[i].sku,
+                menu_name: this.orderData[i].menu_name,
+                menu_price: this.orderData[i].menu_price,
+                menu_quantity: this.orderData[i].menu_quantity,
+                menu_id: this.orderData[i].menu_id,
+                tableNo: this.orderData[i].tableNo,
+              });
             }
-          this.orderNo = response.data.data[0].order_no
-            console.log(this.orderNo)
-            /* this.tableNo = this.orderData[0].tableNo;
-            this.totalAmount = response.data.data.am0untOrd3r;
-            this.sst = this.totalAmount * 0.06;
-            this.service = this.totalAmount * 0.1;
-            this.totalPay = this.totalAmount + this.sst + this.service;
-            if(this.totalPay >= 70)
-            {
-              this.outletDisc = this.totalPay * 0.1;
-              this.totalPay = this.totalPay - this.outletDisc;
-            }
-            this.discount = this.orderData[0].discount;
-            if (this.discount == true) {
-              this.discountedP = this.totalAmount * 0.07;
-              this.totalPay = this.totalPay - this.discountedP;
-            }
-            this.orderno = response.data.data.order_no; */
-            
+            this.orderNo = response.data.data[0].order_no;
+            this.orderAmount = response.data.data[0].ordertotal_amount;
+            this.orderAmount = this.orderAmount.toFixed(2);
+            this.tableno = response.data.data[0].table_no;
+            this.tax = response.data.data[0].tax;
+            this.service = response.data.data[0].service;
+            this.discount = response.data.data[0].discount;
+            this.transacno = response.data.data[0].transac_no;
+            this.date = moment(response.data.data[0].order_date).format("DD-MM-YYYY")
+            this.time = moment(response.data.data[0].order_date).format("HH:mm:ss")
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
         });
-  }
+    },
   },
-
-  
 };
 </script>
 

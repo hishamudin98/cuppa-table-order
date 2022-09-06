@@ -53,9 +53,9 @@
                       {{ product.currency
                       }}<span class="text-lg">
                         {{
-                          product.discountedPrice
+                          (product.menu_quantity*(product.discountedPrice
                             ? formatPrice(product.discountedPrice)
-                            : formatPrice(product.menu_price)
+                            : formatPrice(product.menu_price))).toFixed(2)
                         }}</span
                       >
                     </div>
@@ -121,9 +121,9 @@
                         {{ product.currency
                         }}<span class="text-lg">
                           {{
-                            product.discountedPrice
-                              ? formatPrice(product.discountedPrice)
-                              : formatPrice(product.menu_price)
+                            (product.menu_quantity*(product.discountedPrice
+                            ? formatPrice(product.discountedPrice)
+                            : formatPrice(product.menu_price))).toFixed(2)
                           }}</span
                         >
                       </div>
@@ -1013,6 +1013,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
+            console.log(response.data.data)
             this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
             for (let i = 0; i < this.orderData.length; i++) {
               var images = `https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`;
@@ -1060,7 +1061,7 @@ export default {
             this.service = this.totalAmount * 0.1;
             this.totalPay = this.totalAmount + this.sst + this.service;
             if (this.totalAmount >= 70) {
-              this.outletDisc = this.totalPay * 0.1;
+              this.outletDisc = this.totalAmount * 0.1;
               this.totalPay = this.totalPay - this.outletDisc;
             } else {
               this.outletDisc = 0;
