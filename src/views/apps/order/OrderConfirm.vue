@@ -165,7 +165,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/getOrderConfirm",
+        url: "https://toyyibfnb.com/api/tbl/getOrderConfirm",  /* http://localhost:3000/tbl/getOrderConfirm */
         headers: {
           "Content-Type": "application/json",
         },
@@ -207,4 +207,3 @@ export default {
 
 <style lang="scss" scoped>
 </style>
-?status_id=1&billcode=vl421nn4&order_id=Order%20No%2001234&msg=ok&transaction_id=TP137618119143716020922

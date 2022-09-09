@@ -384,9 +384,10 @@
                     <!-- CREDIT CARD -->
                     <div class="bg-white w-full p-4 rounded-md">
                       <form-kit
-                        type="text"
+                        type="number"
                         placeholder="Enter your phone number"
                         v-model="phone"
+                        @keydown="nameKeydown($event)"
                       ></form-kit>
                       <rs-button
                         class="w-full"
@@ -454,7 +455,7 @@
             <div class="relative">
               <img
                 class="w-full h-60 object-cover rounded-t-xl"
-                :src="modalData ? modalData.images[0] : ''"
+                :src="modalData ? modalData.menu_image[0] : ''"
                 alt=""
               />
               <rs-button
@@ -955,7 +956,6 @@ export default {
       orders2,
       modalData,
       MenuID,
-
       openModal,
       openModalConfirmation,
       infaqtype,
@@ -1010,7 +1010,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/getOrder",
+        url: "https://toyyibfnb.com/api/tbl/getOrder", /*  http://localhost:3000/tbl/getOrder*/
         headers: {
           "Content-Type": "application/json",
         },
@@ -1019,7 +1019,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log(response.data.data);
+            console.log("Response: ",response.data.data);
             this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
             for (let i = 0; i < this.orderData.length; i++) {
               var images = `https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`;
@@ -1309,7 +1309,7 @@ export default {
 
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/updateOrdertbl",
+        url: "https://toyyibfnb.com/api/tbl/updateOrdertbl",  /* http://localhost:3000/tbl/updateOrdertbl */
         headers: {
           "Content-Type": "application/json",
         },
@@ -1355,7 +1355,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url: "https://toyyibfnb.com/api/tbl/tblorderPayment" /* http://localhost:8080/order/payment/98 */,
+          url: "https://toyyibfnb.com/api/tbl/tblorderPayment", /*  */ 
           headers: {
             "Content-Type": "application/json",
           },
@@ -1396,7 +1396,7 @@ export default {
       console.log("data :", data);
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/tblOrderPOS" /* http://localhost:8080/order/payment/98 */,
+        url: "https://toyyibfnb.com/api/tbl/tblOrderPOS", /* http://localhost:3000/tbl/tblOrderPOS */ 
         headers: {
           "Content-Type": "application/json",
         },
@@ -1451,7 +1451,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url: "http://localhost:3000/tbl/tblorderPayment" /* https://toyyibfnb.com/api/tbl/tblorderPayment*/,
+          url: "https://toyyibfnb.com/api/tbl/tblorderPayment" /* */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1504,6 +1504,11 @@ export default {
       /* unselect the range */
       testingCodeToCopy.setAttribute("type", "hidden");
       window.getSelection().removeAllRanges();
+    },
+    async nameKeydown(e) {
+      if (/^\W$/.test(e.key)) {
+        e.preventDefault();
+      }
     },
   },
 };

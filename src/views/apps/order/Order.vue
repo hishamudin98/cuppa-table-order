@@ -1168,7 +1168,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "http://localhost:3000/tbl/getCategory" /* https://toyyibfnb.com/api/tbl/getCategory */,
+        url: "https://toyyibfnb.com/api/tbl/getCategory" /*  http://localhost:3000/tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1193,7 +1193,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "http://localhost:3000/getMenu" /* https://toyyibfnb.com/api/getMenu */,
+        url: "https://toyyibfnb.com/api/getMenu" /*  http://localhost:3000/getMenu*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1267,7 +1267,7 @@ export default {
 
         var config = {
           method: "post",
-          url: "http://localhost:3000/tbl/updateOrdertbl",
+          url: "https://toyyibfnb.com/api/tbl/updateOrdertbl", /* http://localhost:3000/tbl/updateOrdertbl*/
           headers: {
             "Content-Type": "application/json",
           },
@@ -1298,7 +1298,7 @@ export default {
 
         var config = {
           method: "post",
-          url: "http://localhost:3000/tbl/insertOrder",
+          url: "https://toyyibfnb.com/api/tbl/insertOrder",  /* http://localhost:3000/tbl/insertOrder */
           headers: {
             "Content-Type": "application/json",
           },
@@ -1327,7 +1327,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/getMembership",
+        url: "https://toyyibfnb.com/api/tbl/getMembership",  /* http://localhost:3000/tbl/getMembership */
         headers: {
           "Content-Type": "application/json",
         },
@@ -1376,7 +1376,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/getOrderCart" /* https://toyyibfnb.com/api/getMenu */,
+        url: "https://toyyibfnb.com/api/tbl/getOrderCart", /* http://localhost:3000/tbl/getOrderCart */
         headers: {
           "Content-Type": "application/json",
         },
