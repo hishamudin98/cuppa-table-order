@@ -26,8 +26,21 @@
           font-semibold
           text-lg text-green-500
         "
+        v-if="this.status == 1"
       >
         Order has been made.
+      </p>
+      <p
+        class="
+          flex
+          justify-center
+          items-center
+          font-semibold
+          text-lg text-green-500
+        "
+        v-else-if="this.status == 2"
+      >
+        We are experiencing some problem with your order
       </p>
       <p class="flex justify-center items-center font-semibold text-2xl">
         RM {{ this.orderAmount }}
@@ -150,11 +163,13 @@ export default {
       transacno: "",
       date: null,
       time: null,
+      status:0,
     };
   },
   async created() {
     this.billCode = this.$route.query.billcode;
     this.transactionId = this.$route.query.transaction_id;
+    this.status = this.$route.query.status_id;
     this.getOrderConfirm();
   },
   methods: {

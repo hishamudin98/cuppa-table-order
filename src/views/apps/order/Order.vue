@@ -246,8 +246,10 @@
                     mr-2
                   "
                 >
-                  <img class="h-full w-full object-scale-down"
-                  src="https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/categoryImage/Logo+Malaya+Grill-03.png" />
+                  <img
+                    class="h-full w-full object-scale-down"
+                    src="https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/categoryImage/Logo+Malaya+Grill-03.png"
+                  />
                 </div>
                 <span>All Menu</span>
               </button>
@@ -288,7 +290,6 @@
                   <img
                     class="h-full w-full object-scale-down"
                     :src="category.image"
-                    
                   />
                 </div>
                 <span>{{ category.name }}</span>
@@ -354,7 +355,7 @@
                         ? product.images
                         : ''
                     "
-                    style="width:80px;height:80px;"
+                    style="width: 80px; height: 80px"
                     :alt="product.name"
                   />
 
@@ -731,7 +732,14 @@
                     rounded-full
                   "
                   @click="
-                    addToCart(modalData, picked, discount, mmbershipNo ,  remarks, variasi)
+                    addToCart(
+                      modalData,
+                      picked,
+                      discount,
+                      mmbershipNo,
+                      remarks,
+                      variasi
+                    )
                   "
                 >
                   Add to Cart - RM
@@ -917,8 +925,8 @@ export default {
       }
     };
 
-    const addToCart = (product, picked, discount, mmbershipNo , remarks) => {
-      
+    const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
+      console.log("Variant order:" ,variasi.value)
       if (orderID.value != "") {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
@@ -1001,7 +1009,7 @@ export default {
             custPhone: phoneCust,
             discount: discount,
             remarks: remarks,
-            menu_variants: variasi,
+            menu_variants: variasi.value,
             menu_image: product.images,
             membership_no: mmbershipNo,
           });
@@ -1061,7 +1069,7 @@ export default {
         });
       } else {
         menu.value = [];
-        let MenuFilter =  menus.value.filter((product) => {
+        let MenuFilter = menus.value.filter((product) => {
           let categoryParsed = JSON.parse(product.catid);
           let result = categoryParsed.map((category) => {
             if (category.category_id === defaultCatID.value) {
@@ -1069,7 +1077,7 @@ export default {
             }
           });
         });
-        
+
         return menu.value;
       }
     });
@@ -1120,7 +1128,7 @@ export default {
       orderID: 0,
       totalPrice: 0,
       orderDetails: [],
-      mmbershipNo:0,
+      mmbershipNo: 0,
     };
   },
 
@@ -1179,7 +1187,7 @@ export default {
             for (let i = 0; i < response.data.data.length; i++) {
               this.categories.push({
                 name: response.data.data[i].category_name,
-                image:response.data.data[i].category_image,
+                image: response.data.data[i].category_image,
                 id: response.data.data[i].category_id,
               });
             }
@@ -1193,7 +1201,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://toyyibfnb.com/api/getMenu" /*  http://localhost:3000/getMenu*/,
+        url: "https://toyyibfnb.com/api/getMenu " /* http://localhost:3000/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1210,16 +1218,18 @@ export default {
                   type: "",
                 };
               } else {
+                var variasi = JSON.parse(JSON.stringify(variant));
+                console.log("variasi: ", variasi[0].data[0]);
                 variant = {
                   title: "Temperature",
                   type: "radio",
                   data: [
-                    variant[0].temperature[0].data +
+                    variasi[0].data[0].name +
                       "  RM" +
-                      variant[0].temperature[0].price.toFixed(2),
-                    variant[0].temperature[1].data +
+                      variasi[0].data[0].price.toFixed(2),
+                    variasi[0].data[1].name +
                       "  RM" +
-                      variant[0].temperature[1].price.toFixed(2),
+                      variasi[0].data[1].price.toFixed(2),
                   ],
                 };
               }
@@ -1267,7 +1277,7 @@ export default {
 
         var config = {
           method: "post",
-          url: "https://toyyibfnb.com/api/tbl/updateOrdertbl", /* http://localhost:3000/tbl/updateOrdertbl*/
+          url: "https://toyyibfnb.com/api/tbl/updateOrdertbl" /* http://localhost:3000/tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1298,7 +1308,7 @@ export default {
 
         var config = {
           method: "post",
-          url: "https://toyyibfnb.com/api/tbl/insertOrder",  /* http://localhost:3000/tbl/insertOrder */
+          url: "https://toyyibfnb.com/api/tbl/insertOrder" /* http://localhost:3000/tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1327,7 +1337,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/getMembership",  /* http://localhost:3000/tbl/getMembership */
+        url: "https://toyyibfnb.com/api/tbl/getMembership" /* http://localhost:3000/tbl/getMembership */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1376,7 +1386,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/getOrderCart", /* http://localhost:3000/tbl/getOrderCart */
+        url: "https://toyyibfnb.com/api/tbl/getOrderCart" /* http://localhost:3000/tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",
         },
