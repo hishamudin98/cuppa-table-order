@@ -1128,7 +1128,7 @@ export default {
       orderID: 0,
       totalPrice: 0,
       orderDetails: [],
-      mmbershipNo: 0,
+      mmbershipNo: "",
     };
   },
 
@@ -1188,7 +1188,7 @@ export default {
               this.categories.push({
                 name: response.data.data[i].category_name,
                 image: response.data.data[i].category_image,
-                id: response.data.data[i].category_id,
+                id: response.data.data[i].category_id,  
               });
             }
           }.bind(this)
@@ -1201,7 +1201,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://toyyibfnb.com/api/getMenu " /* http://localhost:3000/getMenu */,
+        url: "https://toyyibfnb.com/api/getMenu" /* http://localhost:3000/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1353,7 +1353,7 @@ export default {
               this.mmberShip = "";
             } else {
               this.discount = false;
-              this.mmbershipNo = 0;
+              this.mmbershipNo = "";
               alert("No Membership Found");
               this.mmberShip = "";
             }
