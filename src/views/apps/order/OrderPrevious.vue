@@ -76,7 +76,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/tbl/getPreviousOrder" /*  */,
+        url: "https://toyyibfnb.com/api/tbl/getPreviousOrder" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
