@@ -66,10 +66,10 @@
             <div class="font-semibold">SST (6%)</div>
             <div class="font-semibold">RM {{(this.tax).toFixed(2)}}</div>
           </div>
-          <div class="flex justify-between items-center">
+          <!-- <div class="flex justify-between items-center">
             <div class="font-semibold">Service Charges (10%)</div>
             <div class="font-semibold">RM {{(this.service).toFixed(2)}}</div>
-          </div>
+          </div> -->
           <div class="flex justify-between items-center">
             <div class="font-semibold">Discount Applied</div>
             <div class="font-semibold">RM {{(this.discount).toFixed(2)}}</div>
@@ -177,6 +177,7 @@ export default {
       var axios = require("axios");
       var data = JSON.stringify({
         billCode: this.billCode,
+        transactionId: this.transactionId,
       });
       var config = {
         method: "post",
@@ -205,7 +206,6 @@ export default {
             this.orderAmount = this.orderAmount.toFixed(2);
             this.tableno = response.data.data[0].table_no;
             this.tax = response.data.data[0].tax;
-            this.service = response.data.data[0].service;
             this.discount = response.data.data[0].discount;
             this.transacno = response.data.data[0].transac_no;
             this.date = moment(response.data.data[0].order_date).format("DD-MM-YYYY")

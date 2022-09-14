@@ -24,4 +24,9 @@ export default [
     name: "order-table",
     component: () => import("@/views/apps/order/OrderTablePOS.vue"),
   },
+  {
+    path: "/order/previous/:orderID?",
+    name: "order-previous",
+    component: () => import("@/views/apps/order/OrderPrevious.vue"),
+  },
 ];

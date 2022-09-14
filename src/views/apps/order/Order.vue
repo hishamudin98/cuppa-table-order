@@ -865,8 +865,8 @@ export default {
     const guestMode = ref(true);
 
     const route = useRoute();
-    console.log(route.query);
-    console.log(route.params);
+    /* console.log(route.query);
+    console.log(route.params); */
     const table = ref(route.params.table);
     const branch = ref(route.query.branch);
     const orderID = ref(route.params.orderID);
@@ -892,7 +892,7 @@ export default {
     const filters = ref([]);
     const activeFilter = ref("");
     const defaultCatID = ref(0);
-    const mmberShip = ref("");
+    const mmberShip = ref(null);
     const remarks = ref("");
     const variasi = ref("hot 0.00");
     const menu = ref([]);
@@ -926,11 +926,11 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      console.log("Variant order:" ,variasi.value)
+      
       if (orderID.value != "") {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
-        console.log("variasi: ", variasi.value);
+       
 
         /* ADE ORDER ID */
         const exist = order.value.find(
@@ -969,12 +969,12 @@ export default {
             total += parseFloat(order.value[i].menu_price) * sum;
           }
           totalPrice.value = total;
-          console.log(order.value);
+          
         }
       } else {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
-        console.log("Variasi ", check);
+       
 
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
@@ -1020,13 +1020,13 @@ export default {
             total += parseFloat(order.value[i].menu_price) * sum;
           }
           totalPrice.value = total;
-          console.log(order.value);
+        
         }
       }
       quantity.value = 1;
       openModal.value = false;
       variasi.value = "hot  RM0.00";
-      console.log(totalPrice.value);
+      
     };
 
     const viewDetailItem = (product) => {
@@ -1219,7 +1219,7 @@ export default {
                 };
               } else {
                 var variasi = JSON.parse(JSON.stringify(variant));
-                console.log("variasi: ", variasi[0].data[0]);
+                
                 variant = {
                   title: "Temperature",
                   type: "radio",
@@ -1239,7 +1239,7 @@ export default {
                 images = [
                   {
                     image1:
-                      " https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
+                      "https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
                   },
                 ];
               }
@@ -1396,7 +1396,7 @@ export default {
         .then(
           function (response) {
             this.orderDetails = JSON.parse(response.data.data[0].order_details);
-            console.log(this.orderDetails);
+            
             for (let i = 0; i < this.orderDetails.length; i++) {
               this.order.push({
                 tableNo: this.orderDetails[i].tableNo,
@@ -1414,7 +1414,7 @@ export default {
             }
             this.totalPrice = response.data.data[0].order_amount;
             this.table = this.orderDetails[0].tableNo;
-            console.log("order :", this.order);
+            
           }.bind(this)
         )
         .catch(function (error) {

@@ -89,12 +89,20 @@
             >
               Enter Customer Details
             </rs-button>
-            <hr class="my-6" />
+            <hr class="my-2" />
             <rs-button
               @click="customerAdvancedOrder(table)"
               class="w-full"
               variant="primary-outline"
               >Guest
+            </rs-button>
+            <hr class="my-2" />
+            <rs-button
+              @click="checkPreviousOrder()"
+              class="w-full"
+              variant="primary-outline"
+              v-if="this.orderid != null"
+              >Check Previous Order
             </rs-button>
             <!-- customerProceed = true -->
           </div>
@@ -158,8 +166,6 @@ export default {
     const changetable = ref(false);
 
     const route = useRoute();
-    console.log(route.query);
-    console.log(route.params);
     const table = ref(0);
     table.value = route.query.table;
     const branch = ref(route.query.branch);
@@ -206,10 +212,15 @@ export default {
       dataUser: "Guest",
       guestMode: true,
       customerProceed: false,
+      orderid: null,
     };
   },
 
   mounted() {
+    if (localStorage.orderid != "") {
+      this.orderid = localStorage.orderid;
+    }
+
     window.onbeforeunload = function () {
       localStorage.clear();
     };
@@ -239,14 +250,20 @@ export default {
     },
     async customerAdvancedOrder(table) {
       if (table != 0) {
-        this.customerProceed = true
+        this.customerProceed = true;
         this.$router.push({
-              name: "order",
-              params: { branchID: "", orderID: "",table: table },
-            });
+          name: "order",
+          params: { branchID: "", orderID: "", table: table },
+        });
       } else {
         alert("Please Enter a valid table number");
       }
+    },
+    async checkPreviousOrder() {
+      this.$router.push({
+        name: "order-previous",
+        params: {  orderID: this.orderid },
+      });
     },
 
     async nameKeydown(e) {

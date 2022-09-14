@@ -175,10 +175,10 @@
           <div class="font-semibold">SST(6%)</div>
           <div class="text-red-500">RM {{ formatPrice(this.sst) }}</div>
         </div>
-        <div class="discount flex justify-between my-2">
+        <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Service Charges(10%)</div>
           <div class="text-red-500">RM {{ formatPrice(this.service) }}</div>
-        </div>
+        </div> -->
         <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Infaq</div>
           <div class="text-red-500">RM 0.00</div>
@@ -383,17 +383,17 @@
                   >
                     <!-- CREDIT CARD -->
                     <div class="bg-white w-full p-4 rounded-md">
-                      <form-kit
+                      <!-- <form-kit
                         type="number"
                         placeholder="Enter your phone number"
                         v-model="phone"
                         @keydown="nameKeydown($event)"
-                      ></form-kit>
+                      ></form-kit> -->
                       <rs-button
                         class="w-full"
                         @click="sentPaymentLink()"
                         variant="primary-outline"
-                        >Send Payment Link</rs-button
+                        >Get Payment Link</rs-button
                       >
                     </div>
                   </div>
@@ -1019,7 +1019,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log("Response: ",response.data.data);
+            
             this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
             for (let i = 0; i < this.orderData.length; i++) {
               var images = `https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`;
@@ -1064,8 +1064,8 @@ export default {
             this.tableNo = this.orderData[0].tableNo;
             this.totalAmount = response.data.data.am0untOrd3r;
             this.sst = this.totalAmount * 0.06;
-            this.service = this.totalAmount * 0.1;
-            this.totalPay = this.totalAmount + this.sst + this.service;
+            /* this.service = this.totalAmount * 0.1; */
+            this.totalPay = this.totalAmount + this.sst ;
             if (this.totalAmount >= 70) {
               this.outletDisc = this.totalAmount * 0.1;
               this.totalPay = this.totalPay - this.outletDisc;
@@ -1127,8 +1127,8 @@ export default {
           /* __________________________________________________________________________ */
           this.totalAmount = orderTotal1 + orderTotal;
           this.sst = this.totalAmount * 0.06;
-          this.service = this.totalAmount * 0.1;
-          this.totalPay = this.totalAmount + this.sst + this.service;
+          /* this.service = this.totalAmount * 0.1; */
+          this.totalPay = this.totalAmount + this.sst ;
           this.discount = this.orderData[0].discount;
           /* ___________________________________________________________________________ */
           /* KALO ADE DISCOUNT */
@@ -1164,8 +1164,8 @@ export default {
             /* __________________________________________________________________________ */
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
-            this.service = this.totalAmount * 0.1;
-            this.totalPay = this.totalAmount + this.sst + this.service;
+            /* this.service = this.totalAmount * 0.1; */
+            this.totalPay = this.totalAmount + this.sst ;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1190,8 +1190,8 @@ export default {
             /* __________________________________________________________________________ */
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
-            this.service = this.totalAmount * 0.1;
-            this.totalPay = this.totalAmount + this.sst + this.service;
+            /* this.service = this.totalAmount * 0.1; */
+            this.totalPay = this.totalAmount + this.sst ;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1221,8 +1221,8 @@ export default {
           /* __________________________________________________________________________ */
           this.totalAmount = orderTotal1 + orderTotal;
           this.sst = this.totalAmount * 0.06;
-          this.service = this.totalAmount * 0.1;
-          this.totalPay = this.totalAmount + this.sst + this.service;
+          /* this.service = this.totalAmount * 0.1; */
+          this.totalPay = this.totalAmount + this.sst ;
           this.discount = this.orderData[0].discount;
           /* ___________________________________________________________________________ */
           /* KALO ADE DISCOUNT */
@@ -1258,8 +1258,8 @@ export default {
             /* __________________________________________________________________________ */
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
-            this.service = this.totalAmount * 0.1;
-            this.totalPay = this.totalAmount + this.sst + this.service;
+            
+            this.totalPay = this.totalAmount + this.sst;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1284,8 +1284,8 @@ export default {
             /* __________________________________________________________________________ */
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
-            this.service = this.totalAmount * 0.1;
-            this.totalPay = this.totalAmount + this.sst + this.service;
+            /* this.service = this.totalAmount * 0.1; */
+            this.totalPay = this.totalAmount + this.sst ;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1334,12 +1334,10 @@ export default {
     async sentBank() {
       if (this.bankcode != "") {
         this.total = this.totalPay.toFixed(2);
-        console.log("this.total :", this.total);
-        console.log("this.totalPay :", this.totalPay);
         this.roundNumber =
           this.total.toString().split(".")[0] +
           this.total.toString().split(".")[1];
-
+        this.service = 0.00;
         var axios = require("axios");
         var data = JSON.stringify({
           serviceCharge: this.service,
@@ -1380,6 +1378,7 @@ export default {
       var axios = require("axios");
       this.custName = localStorage.name;
       this.custPhone = localStorage.phone;
+      this.service = 0.00;
       if (this.custName == null) {
         this.custName = "Customer";
         this.custPhone = "Customer Phone";
@@ -1393,7 +1392,6 @@ export default {
         customerPhone: this.custPhone,
         MenuID: this.MenuID,
       });
-      console.log("data :", data);
       var config = {
         method: "post",
         url: "https://toyyibfnb.com/api/tbl/tblOrderPOS", /* http://localhost:3000/tbl/tblOrderPOS */ 
@@ -1406,8 +1404,6 @@ export default {
         .then(
           function (response) {
             /* :to="{ name: 'order-payment' , params:{id:  } }" */
-            console.log("OrderID :", response.data.data.order_no);
-            console.log("OrderID :", this.tableNo);
             this.$router.push({
               name: "order-table",
               params: {
@@ -1424,8 +1420,6 @@ export default {
 
     async sentPaymentLink() {
       this.total = this.totalPay.toFixed(2);
-      console.log("this.total :", this.total);
-      console.log("this.totalPay :", this.totalPay);
       this.roundNumber =
         this.total.toString().split(".")[0] +
         this.total.toString().split(".")[1];
@@ -1437,6 +1431,7 @@ export default {
         } else {
           this.name = localStorage.name;
         }
+        this.service = 0.00;
         var data = JSON.stringify({
           serviceCharge: this.service,
           discount: this.discountedP + this.discount,
@@ -1461,7 +1456,6 @@ export default {
           .then(
             function (response) {
               this.link = response.data.data2;
-              console.log(response.data.data2);
               this.modalOpen = true;
             }.bind(this)
           )

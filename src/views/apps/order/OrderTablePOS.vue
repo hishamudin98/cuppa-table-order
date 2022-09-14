@@ -35,12 +35,12 @@
 
       <div class="m-8">
         <div class="flex items-center justify-center">
-          <h4 style="font-weight: normal;">Please pay at counter </h4>
+          <h4 style="font-weight: normal">Please pay at counter</h4>
         </div>
         <hr />
         <br />
         <div class="flex items-center justify-center">
-          <h4 style="font-weight: normal;">Order No.</h4>
+          <h4 style="font-weight: normal">Order No.</h4>
         </div>
         <div class="flex items-center justify-center">
           <h4>{{ OrderID }}</h4>
@@ -48,15 +48,13 @@
         <div class="flex items-center justify-center">
           <h4>Table {{ this.table }}</h4>
         </div>
-        <br/>
+        <br />
         <div class="flex items-center justify-center">
-          <h4 style="font-weight: normal;">Thank you !</h4>
+          <h4 style="font-weight: normal">Thank you !</h4>
         </div>
         <br />
         <router-link :to="{ name: 'main' }">
-        <rs-button class="w-full" variant="primary">
-          Order Again?
-        </rs-button>
+          <rs-button class="w-full" variant="primary"> Order Again? </rs-button>
         </router-link>
       </div>
     </div>
@@ -132,38 +130,14 @@ export default {
   //TEST FARIS//
   data() {
     return {
-      name: "",
-      phone: "",
-      table: 0,
-      dataUser: "Guest",
-      guestMode: true,
       customerProceed: false,
+      ORDERID: null,
     };
   },
 
   mounted() {
-    window.onbeforeunload = function () {
-      localStorage.clear();
-    };
-
-    if (localStorage.name) {
-      this.name = localStorage.name;
-    }
-    if (localStorage.phone) {
-      this.phone = localStorage.phone;
-    }
-  },
-  computed: {
-    isDisabled() {
-      if (this.name !== "" && this.phone !== "") return false;
-      else return true;
-    },
-  },
-  watch: {
-    customerProceed() {
-      localStorage.name = this.name;
-      localStorage.phone = this.phone;
-    },
+    this.ORDERID = this.$route.params.orderID;
+    localStorage.orderid = this.ORDERID;
   },
   methods: {
     async customerAdvanced(dataUser) {
