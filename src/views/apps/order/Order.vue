@@ -953,6 +953,7 @@ export default {
             variation.value.push({
               id: 1,
               name: "hot",
+              type: "temperature",
               price: 0
             })
           }
@@ -961,6 +962,7 @@ export default {
             variation.value.push({
               id: 2,
               name: "cold",
+              type: "temperature",
               price: check
             })
           }
@@ -976,7 +978,7 @@ export default {
             custPhone: phoneCust,
             discount: discount,
             remarks: remarks,
-            menu_variants: variation.value,
+            menu_variant: variation.value,
             menu_image: product.images,
             membership_no: mmbershipNo,
           });
@@ -1020,6 +1022,7 @@ export default {
             variation.value.push({
               id: 1,
               name: "hot",
+              type: "temperature",
               price: 0
             })
           }
@@ -1028,6 +1031,7 @@ export default {
             variation.value.push({
               id: 2,
               name: "cold",
+              type: "temperature",
               price: check
             })
           }
@@ -1043,7 +1047,7 @@ export default {
             custPhone: phoneCust,
             discount: discount,
             remarks: remarks,
-            menu_variants: variation.value,
+            menu_variant: variation.value,
             menu_image: product.images,
             membership_no: mmbershipNo,
           });
@@ -1445,7 +1449,7 @@ export default {
                 custPhone: this.orderDetails[i].custPhone,
                 discount: this.orderDetails[i].discount,
                 remarks: this.orderDetails[i].remarks,
-                menu_variants: this.orderDetails[i].menu_variants,
+                menu_variant: this.orderDetails[i].menu_variants,
                 menu_image: this.orderDetails[i].menu_image,
                 membership_no: this.orderDetails[i].membership_no,
               });
