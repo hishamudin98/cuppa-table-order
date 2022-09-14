@@ -672,8 +672,7 @@
               >
                 <h4>Remarks</h4>
                 <textarea
-                  variant="primary-outline"
-                  style="width: 100%; border: solid 1px orange  font-family: ui-sans-serif"
+                  style="width: 100%; border: solid 1px orange;  font-family: ui-sans-serif"
                   v-model="remarks"
                 ></textarea>
               </div>
@@ -850,6 +849,7 @@ import RsButton from "@/components/Button.vue";
 
 import { Navigation, Scrollbar, A11y, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
+import Textarea from '@/views/ui/form/element/Textarea.vue';
 
 export default {
   name: "TableOrder",
@@ -859,6 +859,7 @@ export default {
     Swiper,
     axios,
     SwiperSlide,
+    Textarea,
   },
   setup(props) {
     const changetable = ref(false);
@@ -896,6 +897,7 @@ export default {
     const remarks = ref("");
     const variasi = ref("hot 0.00");
     const menu = ref([]);
+    const variation = ref([]);
 
     const formatPrice = (price) => {
       return parseFloat(price)
@@ -946,6 +948,22 @@ export default {
           }
           totalPrice.value = total;
         } else {
+          if(check == 0)
+          {
+            variation.value.push({
+              id: 1,
+              name: "hot",
+              price: 0
+            })
+          }
+          else
+          {
+            variation.value.push({
+              id: 2,
+              name: "cold",
+              price: check
+            })
+          }
           order.value.push({
             tableNo: table.value,
             sku: product.sku,
@@ -958,7 +976,7 @@ export default {
             custPhone: phoneCust,
             discount: discount,
             remarks: remarks,
-            menu_variants: variasi.value,
+            menu_variants: variation.value,
             menu_image: product.images,
             membership_no: mmbershipNo,
           });
@@ -997,6 +1015,22 @@ export default {
           }
           totalPrice.value = total;
         } else {
+          if(check == 0)
+          {
+            variation.value.push({
+              id: 1,
+              name: "hot",
+              price: 0
+            })
+          }
+          else
+          {
+            variation.value.push({
+              id: 2,
+              name: "cold",
+              price: check
+            })
+          }
           order.value.push({
             tableNo: table.value,
             sku: product.sku,
@@ -1009,7 +1043,7 @@ export default {
             custPhone: phoneCust,
             discount: discount,
             remarks: remarks,
-            menu_variants: variasi.value,
+            menu_variants: variation.value,
             menu_image: product.images,
             membership_no: mmbershipNo,
           });
@@ -1023,10 +1057,11 @@ export default {
         
         }
       }
+      console.log("Order :",order.value)
       quantity.value = 1;
       openModal.value = false;
       variasi.value = "hot  RM0.00";
-      
+      variation.value = [];
     };
 
     const viewDetailItem = (product) => {
@@ -1405,17 +1440,21 @@ export default {
                 menu_price: this.orderDetails[i].menu_price,
                 menu_quantity: this.orderDetails[i].menu_quantity,
                 orderType: this.orderDetails[i].orderType,
-                id: this.orderDetails[i].id,
+                menu_id: this.orderDetails[i].menu_id,
                 custName: this.orderDetails[i].custName,
                 custPhone: this.orderDetails[i].custPhone,
                 discount: this.orderDetails[i].discount,
                 remarks: this.orderDetails[i].remarks,
+                menu_variants: this.orderDetails[i].menu_variants,
+                menu_image: this.orderDetails[i].menu_image,
+                membership_no: this.orderDetails[i].membership_no,
               });
             }
             this.totalPrice = response.data.data[0].order_amount;
             this.table = this.orderDetails[0].tableNo;
-            
+            console.log("Order Back :",this.order)
           }.bind(this)
+          
         )
         .catch(function (error) {
           console.log(error);
