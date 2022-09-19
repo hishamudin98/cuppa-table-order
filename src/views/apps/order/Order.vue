@@ -672,18 +672,23 @@
               >
                 <h4>Remarks</h4>
                 <textarea
-                  style="width: 100%; border: solid 1px orange;  font-family: ui-sans-serif"
+                  style="
+                    width: 100%;
+                    border: solid 1px orange;
+                    font-family: ui-sans-serif;
+                  "
                   v-model="remarks"
                 ></textarea>
               </div>
               <div class="modal-item-type mb-6 px-2">
                 <div class="font-semibold text-lg mb-4">Order Type</div>
                 <div class="flex gap-4">
+                  
                   <!-- <rs-button  variant="primary" class="h-10">Dine-In </rs-button>
                   <rs-button variant="primary-outline" class="h-10"
                     >Takeaway</rs-button
                   > -->
-                  <rs-button id="dineIn" variant="primary" class="h-10">
+                  <rs-button id="dineIn" variant="primary" class="h-10;">
                     <input
                       class="rs-radio"
                       type="radio"
@@ -849,7 +854,7 @@ import RsButton from "@/components/Button.vue";
 
 import { Navigation, Scrollbar, A11y, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import Textarea from '@/views/ui/form/element/Textarea.vue';
+import Textarea from "@/views/ui/form/element/Textarea.vue";
 
 export default {
   name: "TableOrder",
@@ -928,11 +933,16 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      
       if (orderID.value != "") {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
-       
+        var discoutApplied = false;
+
+        if (mmbershipNo != "") {
+          discoutApplied = true;
+        } else {
+          discoutApplied = false;
+        }
 
         /* ADE ORDER ID */
         const exist = order.value.find(
@@ -948,23 +958,20 @@ export default {
           }
           totalPrice.value = total;
         } else {
-          if(check == 0)
-          {
+          if (check == 0) {
             variation.value.push({
               id: 1,
               name: "hot",
               type: "temperature",
-              price: 0
-            })
-          }
-          else
-          {
+              price: 0,
+            });
+          } else {
             variation.value.push({
               id: 2,
               name: "cold",
               type: "temperature",
-              price: check
-            })
+              price: check,
+            });
           }
           order.value.push({
             tableNo: table.value,
@@ -976,7 +983,7 @@ export default {
             menu_id: product.id,
             custName: nameCust,
             custPhone: phoneCust,
-            discount: discount,
+            discount: discoutApplied,
             remarks: remarks,
             menu_variant: variation.value,
             menu_image: product.images,
@@ -989,12 +996,10 @@ export default {
             total += parseFloat(order.value[i].menu_price) * sum;
           }
           totalPrice.value = total;
-          
         }
       } else {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
-       
 
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
@@ -1017,23 +1022,20 @@ export default {
           }
           totalPrice.value = total;
         } else {
-          if(check == 0)
-          {
+          if (check == 0) {
             variation.value.push({
               id: 1,
               name: "hot",
               type: "temperature",
-              price: 0
-            })
-          }
-          else
-          {
+              price: 0,
+            });
+          } else {
             variation.value.push({
               id: 2,
               name: "cold",
               type: "temperature",
-              price: check
-            })
+              price: check,
+            });
           }
           order.value.push({
             tableNo: table.value,
@@ -1045,7 +1047,7 @@ export default {
             menu_id: product.id,
             custName: nameCust,
             custPhone: phoneCust,
-            discount: discount,
+            discount: discoutApplied,
             remarks: remarks,
             menu_variant: variation.value,
             menu_image: product.images,
@@ -1058,10 +1060,9 @@ export default {
             total += parseFloat(order.value[i].menu_price) * sum;
           }
           totalPrice.value = total;
-        
         }
       }
-      console.log("Order :",order.value)
+      console.log("Order :", order.value);
       quantity.value = 1;
       openModal.value = false;
       variasi.value = "hot  RM0.00";
@@ -1227,7 +1228,7 @@ export default {
               this.categories.push({
                 name: response.data.data[i].category_name,
                 image: response.data.data[i].category_image,
-                id: response.data.data[i].category_id,  
+                id: response.data.data[i].category_id,
               });
             }
           }.bind(this)
@@ -1258,7 +1259,7 @@ export default {
                 };
               } else {
                 var variasi = JSON.parse(JSON.stringify(variant));
-                
+
                 variant = {
                   title: "Temperature",
                   type: "radio",
@@ -1435,7 +1436,7 @@ export default {
         .then(
           function (response) {
             this.orderDetails = JSON.parse(response.data.data[0].order_details);
-            
+
             for (let i = 0; i < this.orderDetails.length; i++) {
               this.order.push({
                 tableNo: this.orderDetails[i].tableNo,
@@ -1456,9 +1457,8 @@ export default {
             }
             this.totalPrice = response.data.data[0].order_amount;
             this.table = this.orderDetails[0].tableNo;
-            console.log("Order Back :",this.order)
+            console.log("Order Back :", this.order);
           }.bind(this)
-          
         )
         .catch(function (error) {
           console.log(error);
