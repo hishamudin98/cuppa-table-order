@@ -7,26 +7,26 @@
           border-bottom-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
         "
-        class="bg-primary-400 after:content-['']"
+        class="bg-heandshe after:content-['']"
       >
         <div class="flex justify-between items-center p-2">
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
+          <div class="bg-heandshe h-10 w-10 p-1 rounded-full">
             <img
               class="flex-1"
-              src="@/assets/images/logo/logo-white.png"
+              src="@/assets/images/logo/heandshe.jpg"
               alt=""
             />
           </div>
-          <div class="text-white">Malaya Grill Sungai Buloh</div>
+          <div class="text-white">He & She UM</div>
         </div>
         <div
           style="height: 40vh"
           class="flex flex-col justify-center items-center"
         >
-          <div class="w-70">
+          <div class="w-70"><!-- @/assets/images/illustration/eating.svg -->
             <img
               class="object-scale-down"
-              src="@/assets/images/illustration/eating.svg"
+              src="@/assets/images/logo/heandshe.jpg"
               alt=""
             />
           </div>
@@ -67,11 +67,11 @@
             class="
               p-1
               px-2
-              bg-primary-400
+              bg-heandshe
               text-white
               rounded-xl
               text-sm
-              hover:bg-primary-300
+              hover:bg-heandshe
             "
             @click="changetable ? (changetable = false) : (changetable = true)"
           >
@@ -81,7 +81,7 @@
         <div v-if="guestMode == true">
           <div class="h-full p-4">
             <rs-button
-              class="w-full mb-4"
+              class="w-full mb-4 bg-heandshe"
               @click="customerAdvanced((dataUser = 'Guest'))"
             >
               Enter Customer Details
@@ -121,7 +121,7 @@
           />
           <rs-button
             :disabled="isDisabled"
-            class="w-full"
+            class="w-full bg-heandshe"
             @click="customerAdvancedOrder(table)"
             >Proceed Order</rs-button
           >

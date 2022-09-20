@@ -1,6 +1,6 @@
 <template>
   <rs-layout>
-    <div class="bg-primary-400 after:content-[''] p-4">
+    <div class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <p class="font-semibold text-white text-lg">Receipt</p>

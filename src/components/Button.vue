@@ -21,7 +21,7 @@
         variant === 'danger',
 
       // Outline Button
-      'text-primary-400 border border-primary-400 hover:bg-primary-50 dark:hover:bg-slate-700 disabled:bg-primary-50 disabled:text-primary-100 disabled:border-primary-50 disabled:cursor-default dark:disabled:bg-slate-700 dark:disabled:text-slate-800 dark:disabled:border-slate-700':
+      'text-heandshe border border-heandshe hover:bg-primary-50 dark:hover:bg-slate-700 disabled:bg-primary-50 disabled:text-primary-100 disabled:border-primary-50 disabled:cursor-default dark:disabled:bg-slate-700 dark:disabled:text-slate-800 dark:disabled:border-slate-700':
         variant === 'primary-outline',
       'text-secondary border border-secondary hover:bg-gray-50 disabled:bg-gray-50 disabled:text-gray-100 disabled:border-gray-50 disabled:cursor-default dark:disabled:bg-slate-700 dark:disabled:text-slate-800 dark:disabled:border-slate-700':
         variant === 'secondary-outline',

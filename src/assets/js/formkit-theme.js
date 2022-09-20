@@ -17,7 +17,7 @@ const textClassification = {
     dark:formkit-invalid:border-danger
     rounded-lg mb-1
     overflow-hidden
-    focus-within:border-primary-400
+    focus-within:border-heandshe
     mb-0
   `,
   input: `

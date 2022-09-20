@@ -1,6 +1,6 @@
 <template>
   <rs-layout>
-    <div class="bg-primary-400 after:content-[''] p-4">
+    <div class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <router-link
@@ -11,7 +11,7 @@
           </router-link>
           <p class="font-semibold text-white text-lg">Order Confirmation</p>
         </div>
-        <div class="bg-white px-3 py-1 rounded-full text-primary-400">
+        <div class="bg-white px-3 py-1 rounded-full text-heandshe">
           Table #{{ this.tableNo }}
         </div>
       </div>
@@ -49,8 +49,8 @@
               <div class="product-content flex flex-col">
                 <div class="product-price flex justify-between items-center">
                   <div class="truncate">
-                    <div class="text-sm text-primary-500">
-                      {{ product.currency
+                    <div class="text-sm text-heandshe">
+                      RM {{ product.currency
                       }}<span class="text-lg">
                         {{
                           (
@@ -70,7 +70,7 @@
                       justify-center
                       h-7
                       w-7
-                      bg-primary-400
+                      bg-heandshe
                       text-primary-100
                       rounded-full
                       text-sm
@@ -120,8 +120,8 @@
                 <div class="product-content flex flex-col">
                   <div class="product-price flex justify-between items-center">
                     <div class="truncate">
-                      <div class="text-sm text-primary-500">
-                        {{ product.currency
+                      <div class="text-sm text-heandshe">
+                        RM {{ product.currency
                         }}<span class="text-lg">
                           {{
                             (
@@ -141,7 +141,7 @@
                         justify-center
                         h-7
                         w-7
-                        bg-primary-400
+                        bg-heandshe
                         text-primary-100
                         rounded-full
                         text-sm
@@ -163,14 +163,14 @@
           <div class="font-semibold">Subtotal</div>
           <div>RM {{ formatPrice(this.totalAmount) }}</div>
         </div>
-        <div class="discount flex justify-between my-2">
+       <!--  <div class="discount flex justify-between my-2">
           <div class="font-semibold">Membership Discount (7%)</div>
           <div>RM {{ formatPrice(this.discountedP) }}</div>
-        </div>
-        <div class="discount flex justify-between my-2">
+        </div> -->
+        <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Outlet Discount (10%)</div>
           <div>RM {{ formatPrice(this.outletDisc) }}</div>
-        </div>
+        </div> -->
         <div class="discount flex justify-between my-2">
           <div class="font-semibold">SST(6%)</div>
           <div class="text-red-500">RM {{ formatPrice(this.sst) }}</div>
@@ -211,7 +211,7 @@
                 @click="toggleTabs(1)"
                 :class="{
                   'text-primary bg-white': paymentMethod !== 1,
-                  'text-white bg-primary-400': paymentMethod === 1,
+                  'text-white bg-heandshe': paymentMethod === 1,
                 }"
               >
                 Online Banking (FPX)
@@ -256,7 +256,7 @@
                 @click="toggleTabs(2)"
                 :class="{
                   'text-primary bg-white': paymentMethod !== 2,
-                  'text-white bg-primary-400': paymentMethod === 2,
+                  'text-white bg-heandshe': paymentMethod === 2,
                 }"
               >
                 Kad Kredit / Debit
@@ -294,7 +294,7 @@
                 @click="toggleTabs(3)"
                 :class="{
                   'text-primary bg-white': paymentMethod !== 3,
-                  'text-white bg-primary-400': paymentMethod === 3,
+                  'text-white bg-heandshe': paymentMethod === 3,
                 }"
               >
                 Payment Link
@@ -340,7 +340,7 @@
                           "
                           @click="SetBank(val.CODE)"
                           :class="{
-                            '!bg-primary-400 text-white': bankcode === val.CODE,
+                            '!bg-heandshe text-white': bankcode === val.CODE,
                           }"
                         >
                           <img
@@ -415,7 +415,7 @@
         {{ formatPrice(Math.ceil(this.totalPay)) }}</rs-button
       > -->
       <!-- <router-link :to="{ name: 'order-confirm' }"> -->
-      <rs-button class="w-full mb-2" @click="sentPOS()"
+      <rs-button class="w-full mb-2 bg-heandshe" @click="sentPOS()"
         >Pay at counter RM {{ formatPrice(this.totalPay) }}
       </rs-button>
       <rs-button variant="primary-outline" class="w-full" @click="sentBank()">

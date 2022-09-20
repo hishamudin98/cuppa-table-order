@@ -134,7 +134,7 @@
 
     <!-- v-elseOrder Menu Page -->
     <div class="order-menu-page">
-      <div style="height: 43vh" class="bg-primary-400 after:content-[''] p-4">
+      <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-x-2">
             <!-- <vue-feather
@@ -152,11 +152,11 @@
               Hishammudin Ali
             </div>
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
-            <div class="text-white">Malaya Grill Sungai Buloh</div>
+            <div class="text-white">He & She UM</div>
             <div class="bg-black h-10 w-10 p-1 rounded-full">
               <img
                 class="flex-1"
-                src="@/assets/images/logo/logo-white.png"
+                src="@/assets/images/logo/heandshe.jpg"
                 alt=""
               />
             </div>
@@ -247,8 +247,8 @@
                   "
                 >
                   <img
-                    class="h-full w-full object-scale-down"
-                    src="https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/categoryImage/Logo+Malaya+Grill-03.png"
+                    class="h-full w-full object-scale-down rounded-full"
+                    src="@/assets/images/logo/heandshe.jpg"
                   />
                 </div>
                 <span>All Menu</span>
@@ -364,7 +364,7 @@
                     class="
                       product-discount
                       text-sm
-                      bg-primary-500
+                      bg-heandshe
                       text-white
                       absolute
                       top-3
@@ -388,7 +388,7 @@
                   <div class="product-content flex flex-col">
                     <div class="product-price flex justify-between">
                       <div class="truncate leading-tight">
-                        <div class="text-sm text-primary-500 flex items-center">
+                        <div class="text-sm text-heandshe flex items-center">
                           {{ product.currency }}
                           <span class="text-lg">
                             {{
@@ -471,7 +471,7 @@
                   justify-center
                   items-center
                   p-1
-                  bg-primary-400
+                  bg-heandshe
                   absolute
                   top-2
                   right-2
@@ -504,7 +504,7 @@
                 </div>
                 <div class="flex justify-start items-center mt-2">
                   <div class="truncate leading-tight">
-                    <div class="text-lg text-primary-500">
+                    <div class="text-lg text-heandshe">
                       {{ modalData.currency
                       }}<span class="text-xl">
                         {{
@@ -550,7 +550,10 @@
                       :disabled="isDisabled"
                       v-model="mmberShip"
                     />
-                    <rs-button @click="checkMembership()" :disabled="isDisabled"
+                    <rs-button
+                      class="bg-heandshe"
+                      @click="checkMembership()"
+                      :disabled="isDisabled"
                       >Apply</rs-button
                     >
                   </div>
@@ -622,7 +625,7 @@
                                   flex
                                   items-center
                                   justify-center
-                                  bg-primary-400
+                                  bg-heandshe
                                   text-primary-50
                                   p-1
                                   rounded-lg
@@ -644,7 +647,7 @@
                                   flex
                                   items-center
                                   justify-center
-                                  bg-primary-400
+                                  bg-heandshe
                                   text-primary-50
                                   p-1
                                   rounded-lg
@@ -678,9 +681,10 @@
               >
                 <h4>Remarks</h4>
                 <textarea
+                  class="border-heandshe"
                   style="
                     width: 100%;
-                    border: solid 1px orange;
+                    border: solid 1px;
                     font-family: ui-sans-serif;
                   "
                   v-model="remarks"
@@ -712,14 +716,14 @@
                           text-gray-600
                           bg-white
                           rounded-lg
-                          border border-orange-400
+                          border border-heandshe
                           cursor-pointer
                           dark:hover:text-gray-300
                           dark:border-gray-700
                           dark:peer-checked:text-blue-500
                           peer-checked:border-white-600
                           peer-checked:text-white
-                          peer-checked:bg-orange-400
+                          peer-checked:bg-heandshe
                           hover:text-gray-600 hover:bg-gray-100
                           dark:text-gray-400
                           dark:bg-gray-800
@@ -754,14 +758,14 @@
                           text-gray-600
                           bg-white
                           rounded-lg
-                          border border-orange-400
+                          border border-heandshe
                           cursor-pointer
                           dark:hover:text-gray-300
                           dark:border-gray-700
                           dark:peer-checked:text-blue-500
                           peer-checked:border-white-600
                           peer-checked:text-white
-                          peer-checked:bg-orange-400
+                          peer-checked:bg-heandshe
                           hover:text-gray-600 hover:bg-gray-100
                           dark:text-gray-400
                           dark:bg-gray-800
@@ -820,14 +824,7 @@
                 "
               >
                 <button
-                  class="
-                    bg-primary-400
-                    text-white
-                    w-full
-                    py-2
-                    px-4
-                    rounded-full
-                  "
+                  class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
                   @click="
                     addToCart(
                       modalData,
@@ -852,7 +849,7 @@
                       flex
                       items-center
                       justify-center
-                      bg-primary-400
+                      bg-heandshe
                       text-primary-50
                       p-1
                       rounded-lg
@@ -876,7 +873,7 @@
                       flex
                       items-center
                       justify-center
-                      bg-primary-400
+                      bg-heandshe
                       text-primary-50
                       p-1
                       rounded-lg
@@ -899,13 +896,13 @@
       >
         <button
           class="
-            bg-primary-500
+            bg-heandshe
             py-4
             px-5
             rounded-l-full
             text-white
             whitespace-nowrap
-            shadow-md shadow-primary-200
+            shadow-md shadow-heandshe
           "
         >
           RM {{ formatPrice(this.totalPrice) }}
@@ -916,13 +913,13 @@
             justify-between
             items-center
             w-full
-            bg-primary-400
+            bg-heandshe
             py-4
             px-5
             rounded-r-full
             text-white
             whitespace-nowrap
-            shadow-md shadow-primary-200
+            shadow-md shadow-heandshe
           "
           v-on:click="insertOrder(discount)"
         >
@@ -1028,16 +1025,15 @@ export default {
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
       var discoutApplied = false;
 
-        if (mmbershipNo != "") {
-          discoutApplied = true;
-        } else {
-          discoutApplied = false;
-        }
+      if (mmbershipNo != "") {
+        discoutApplied = true;
+      } else {
+        discoutApplied = false;
+      }
 
       if (orderID.value != "") {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
-        
 
         if (product.station != "1") {
           if (check == 0) {
@@ -1220,7 +1216,7 @@ export default {
           totalPrice.value = total;
         }
       }
-      
+
       picked = 1;
       quantity.value = 1;
       openModal.value = false;
@@ -1329,6 +1325,7 @@ export default {
       orderDetails: [],
       mmbershipNo: "",
       isDisabled: false,
+      variansi: [],
     };
   },
 
@@ -1371,7 +1368,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://toyyibfnb.com/api/tbl/getCategory" /*  http://localhost:3000/tbl/getCategory*/,
+        url: "http://localhost:8000/tbl/getCategory" /*  http://localhost:3000/tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1396,7 +1393,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://toyyibfnb.com/api/getMenu" /* http://localhost:3000/getMenu   */,
+        url: "http://localhost:8000/getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1414,24 +1411,37 @@ export default {
                 };
               } else {
                 var variasi = JSON.parse(JSON.stringify(variant));
-                variant = {
-                  title: "Temperature",
-                  type: "radio",
-                  data: [
-                    variasi[0].data[0].name.replace(/(?:^|\s|-)\S/g, (x) =>
-                      x.toUpperCase()
-                    ) +
-                      " ( RM" +
-                      variasi[0].data[0].price.toFixed(2) + " ) ",
-                    variasi[0].data[1].name.replace(/(?:^|\s|-)\S/g, (x) =>
-                      x.toUpperCase()
-                    ) +
-                      " ( + RM" +
-                      variasi[0].data[1].price.toFixed(2) +
-                      " )",
-                  ],
-                };
+                
+                var dataCheck = JSON.parse(JSON.stringify(variasi[0].data))
+
+                for(let j = 0; j < dataCheck.length; j++)
+                {
+                  this.variansi.push(
+                    variasi[0].data[j].name.replace(/(?:^|\s|-)\S/g, (x) =>
+                        x.toUpperCase()
+                      ) +
+                        " ( RM" +
+                        variasi[0].data[j].price.toFixed(2) +
+                        " ) ",
+                  )
+                }
+
+                  variant = {
+                    title: variasi[0].type,
+                    type: "radio",
+                    data: 
+                     /*  variasi[0].data[0].name.replace(/(?:^|\s|-)\S/g, (x) =>
+                        x.toUpperCase()
+                      ) +
+                        " ( RM" +
+                        variasi[0].data[0].price.toFixed(2) +
+                        " ) ", */
+                        this.variansi
+                    ,
+                  },
+                  this.variansi = [];
               }
+
               /* IMAGES */
               var images = JSON.parse(response.data.data[i].menu_image);
               if (images == null) {
