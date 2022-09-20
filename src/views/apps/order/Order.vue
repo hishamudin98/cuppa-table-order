@@ -1421,12 +1421,12 @@ export default {
                     variasi[0].data[0].name.replace(/(?:^|\s|-)\S/g, (x) =>
                       x.toUpperCase()
                     ) +
-                      "  RM" +
-                      variasi[0].data[0].price.toFixed(2),
+                      " ( RM" +
+                      variasi[0].data[0].price.toFixed(2) + " ) ",
                     variasi[0].data[1].name.replace(/(?:^|\s|-)\S/g, (x) =>
                       x.toUpperCase()
                     ) +
-                      " +  ( RM" +
+                      " ( + RM" +
                       variasi[0].data[1].price.toFixed(2) +
                       " )",
                   ],
