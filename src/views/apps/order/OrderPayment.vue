@@ -1079,6 +1079,7 @@ export default {
               this.totalPay = this.totalPay - this.discountedP;
             }
             this.orderno = response.data.data.order_no;
+            
           }.bind(this)
         )
         .catch(function (error) {
@@ -1341,7 +1342,7 @@ export default {
         var axios = require("axios");
         var data = JSON.stringify({
           serviceCharge: this.service,
-          discount: this.discountedP + this.discount,
+          discount: this.discountedP + this.outletDisc,
           tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
@@ -1385,13 +1386,14 @@ export default {
       }
       var data = JSON.stringify({
         serviceCharge: this.service,
-        discount: this.discountedP + this.discount,
+        discount: this.discountedP + this.outletDisc,
         tax: this.sst,
         total: this.totalPay,
         customerName: this.custName,
         customerPhone: this.custPhone,
         MenuID: this.MenuID,
       });
+      
       var config = {
         method: "post",
         url: "https://toyyibfnb.com/api/tbl/tblOrderPOS", /* http://localhost:3000/tbl/tblOrderPOS */ 
@@ -1433,7 +1435,7 @@ export default {
         this.service = 0.00;
         var data = JSON.stringify({
           serviceCharge: this.service,
-          discount: this.discountedP + this.discount,
+          discount: this.discountedP + this.outletDisc,
           tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,

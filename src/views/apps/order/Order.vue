@@ -1026,16 +1026,18 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      if (orderID.value != "") {
-        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
-        var check = parseInt(numsStr, 10);
-        var discoutApplied = false;
+      var discoutApplied = false;
 
         if (mmbershipNo != "") {
           discoutApplied = true;
         } else {
           discoutApplied = false;
         }
+
+      if (orderID.value != "") {
+        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
+        var check = parseInt(numsStr, 10);
+        
 
         if (product.station != "1") {
           if (check == 0) {
@@ -1218,7 +1220,7 @@ export default {
           totalPrice.value = total;
         }
       }
-      console.log("Order:" , order.value)
+      
       picked = 1;
       quantity.value = 1;
       openModal.value = false;
