@@ -54,10 +54,7 @@
             Table #
             <form-kit
               type="number"
-              validation="min:0"
-              :validation-messages="{
-                min: 'Please enter table number',
-              }"
+              
               :classes="{
                 input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
                 outer: 'mb-0',
@@ -219,6 +216,8 @@ export default {
   mounted() {
     if (localStorage.orderid != "") {
       this.orderid = localStorage.orderid;
+       localStorage.removeItem("name");
+       localStorage.removeItem("phone");
     }
 
     window.onbeforeunload = function () {
@@ -249,7 +248,7 @@ export default {
       if (dataUser == "Guest") this.guestMode = false;
     },
     async customerAdvancedOrder(table) {
-      if (table != 0) {
+      if (table != 0 && table > 0) {
         this.customerProceed = true;
         this.$router.push({
           name: "order",

@@ -10,12 +10,19 @@
         </div>
       </div>
     </div>
-    <div class="my-5">
-      <div class="flex justify-center items-center mb-2">
+    <div class="my-5" >
+      <div class="flex justify-center items-center mb-2" v-if="this.status == 1">
         <img
           class="w-9 h-9"
           src="https://www.pngall.com/wp-content/uploads/8/Green-Check-Mark-PNG-Image.png"
           alt="checked"
+        />
+      </div>
+      <div class="flex justify-center items-center mb-2" v-else>
+        <img
+          class="w-9 h-9"
+          src="https://www.pngall.com/wp-content/uploads/2016/04/Red-Cross-Mark-Download-PNG.png"
+          alt="cross"
         />
       </div>
       <p
@@ -36,11 +43,11 @@
           justify-center
           items-center
           font-semibold
-          text-lg text-green-500
+          text-lg text-red-500
         "
-        v-else-if="this.status == 2"
+        v-else-if="this.status == 3"
       >
-        We are experiencing some problem with your order
+        Order failed
       </p>
       <p class="flex justify-center items-center font-semibold text-2xl">
         RM {{ this.orderAmount }}
@@ -94,7 +101,8 @@
         <div class="order-wrapper flex flex-col gap-2 mb-5">
           <div class="flex justify-between items-center">
             <div>Status Payment</div>
-            <div class="font-semibold text-green-400">Success</div>
+            <div class="font-semibold text-green-400"  v-if="this.status == 1">Success</div>
+            <div class="font-semibold text-red-500"  v-else-if="this.status == 3">Failed</div>
           </div>
           <div class="flex justify-between items-center">
             <div>Transaction ID</div>

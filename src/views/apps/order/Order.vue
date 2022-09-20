@@ -547,9 +547,15 @@
                       :classes="{
                         outer: 'flex-1 mb-0',
                       }"
+                      :disabled="isDisabled"
                       v-model="mmberShip"
                     />
-                    <rs-button @click="checkMembership()">Apply</rs-button>
+                    <rs-button @click="checkMembership()" :disabled="isDisabled"
+                      >Apply</rs-button
+                    >
+                  </div>
+                  <div>
+                    <input type="hidden" v-model="modalData.station" />
                   </div>
 
                   <div v-if="modalData.variants" class="modal-item-variance">
@@ -683,12 +689,99 @@
               <div class="modal-item-type mb-6 px-2">
                 <div class="font-semibold text-lg mb-4">Order Type</div>
                 <div class="flex gap-4">
-                  
+                  <!-- LIMIT -->
+                  <ul class="grid gap-2 w-full md:grid-cols-2">
+                    <li>
+                      <input
+                        type="radio"
+                        id="dineIn"
+                        value="1"
+                        v-model="picked"
+                        name="hosting"
+                        class="hidden peer"
+                        required
+                      />
+                      <label
+                        for="dineIn"
+                        class="
+                          inline-flex
+                          justify-start
+                          items-center
+                          p-3
+                          w-full
+                          text-gray-600
+                          bg-white
+                          rounded-lg
+                          border border-orange-400
+                          cursor-pointer
+                          dark:hover:text-gray-300
+                          dark:border-gray-700
+                          dark:peer-checked:text-blue-500
+                          peer-checked:border-white-600
+                          peer-checked:text-white
+                          peer-checked:bg-orange-400
+                          hover:text-gray-600 hover:bg-gray-100
+                          dark:text-gray-400
+                          dark:bg-gray-800
+                          dark:hover:bg-gray-700
+                        "
+                      >
+                        <div class="block">
+                          <div class="w-full text-md font-semibold">
+                            Dine In
+                          </div>
+                          <div class="w-full"></div>
+                        </div>
+                      </label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        id="takeAway"
+                        value="2"
+                        v-model="picked"
+                        name="hosting"
+                        class="hidden peer"
+                      />
+                      <label
+                        for="takeAway"
+                        class="
+                          inline-flex
+                          justify-start
+                          items-center
+                          p-3
+                          w-full
+                          text-gray-600
+                          bg-white
+                          rounded-lg
+                          border border-orange-400
+                          cursor-pointer
+                          dark:hover:text-gray-300
+                          dark:border-gray-700
+                          dark:peer-checked:text-blue-500
+                          peer-checked:border-white-600
+                          peer-checked:text-white
+                          peer-checked:bg-orange-400
+                          hover:text-gray-600 hover:bg-gray-100
+                          dark:text-gray-400
+                          dark:bg-gray-800
+                          dark:hover:bg-gray-700
+                        "
+                      >
+                        <div class="block">
+                          <div class="w-full text-md font-semibold">
+                            Take Away
+                          </div>
+                          <div class="w-full"></div>
+                        </div>
+                      </label>
+                    </li>
+                  </ul>
                   <!-- <rs-button  variant="primary" class="h-10">Dine-In </rs-button>
                   <rs-button variant="primary-outline" class="h-10"
                     >Takeaway</rs-button
                   > -->
-                  <rs-button id="dineIn" variant="primary" class="h-10;">
+                  <!-- <rs-button id="dineIn" variant="primary" class="h-10;">
                     <input
                       class="rs-radio"
                       type="radio"
@@ -711,7 +804,7 @@
                       v-model="picked"
                     />
                     <label for="takeAway">Take Away</label>
-                  </rs-button>
+                  </rs-button> -->
                 </div>
               </div>
               <div
@@ -944,20 +1037,7 @@ export default {
           discoutApplied = false;
         }
 
-        /* ADE ORDER ID */
-        const exist = order.value.find(
-          (item) => item.sku === product.sku && item.orderType == picked
-        );
-        if (exist) {
-          exist.menu_quantity++;
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        } else {
+        if (product.station != "1") {
           if (check == 0) {
             variation.value.push({
               id: 1,
@@ -973,6 +1053,50 @@ export default {
               price: check,
             });
           }
+        } else {
+          variation.value = [];
+          check = 0;
+        }
+
+        /* ADE ORDER ID */
+        const exist = order.value.find(
+          (item) =>
+            item.sku === product.sku &&
+            item.orderType == picked &&
+            item.menu_price == product.price + check
+        );
+        if (exist) {
+          exist.menu_quantity++;
+          var total = 0;
+          var sum = 0;
+          for (let i = 0; i < order.value.length; i++) {
+            sum = parseInt(order.value[i].menu_quantity);
+            total += parseFloat(order.value[i].menu_price) * sum;
+          }
+          totalPrice.value = total;
+        } else {
+          /* if (product.station != "1") {
+            if (check == 0) {
+              variation.value.push({
+                id: 1,
+                name: "hot",
+                type: "temperature",
+                price: 0,
+              });
+            } else {
+              variation.value.push({
+                id: 2,
+                name: "cold",
+                type: "temperature",
+                price: check,
+              });
+            }
+          }
+          else
+          {
+            variation.value = [];
+            check = 0;
+          } */
           order.value.push({
             tableNo: table.value,
             sku: product.sku,
@@ -1009,19 +1133,7 @@ export default {
           var phoneCust = "";
         }
 
-        const exist = order.value.find(
-          (item) => item.sku === product.sku && item.orderType == picked
-        );
-        if (exist) {
-          exist.menu_quantity++;
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        } else {
+        if (product.station != "1") {
           if (check == 0) {
             variation.value.push({
               id: 1,
@@ -1037,6 +1149,50 @@ export default {
               price: check,
             });
           }
+        } else {
+          variation.value = [];
+          check = 0;
+        }
+
+        const exist = order.value.find(
+          (item) =>
+            item.sku === product.sku &&
+            item.orderType == picked &&
+            item.menu_price == product.price + check
+        );
+        if (exist) {
+          exist.menu_quantity++;
+          var total = 0;
+          var sum = 0;
+          for (let i = 0; i < order.value.length; i++) {
+            sum = parseInt(order.value[i].menu_quantity);
+            total += parseFloat(order.value[i].menu_price) * sum;
+          }
+          totalPrice.value = total;
+        } else {
+          /*  if (product.station != "1") {
+            if (check == 0) {
+              variation.value.push({
+                id: 1,
+                name: "hot",
+                type: "temperature",
+                price: 0,
+              });
+            } else {
+              variation.value.push({
+                id: 2,
+                name: "cold",
+                type: "temperature",
+                price: check,
+              });
+            }
+          }
+          else
+          {
+            variation.value = [];
+            check = 0;
+          } */
+
           order.value.push({
             tableNo: table.value,
             sku: product.sku,
@@ -1062,7 +1218,8 @@ export default {
           totalPrice.value = total;
         }
       }
-      console.log("Order :", order.value);
+      console.log("Order:" , order.value)
+      picked = 1;
       quantity.value = 1;
       openModal.value = false;
       variasi.value = "hot  RM0.00";
@@ -1169,6 +1326,7 @@ export default {
       totalPrice: 0,
       orderDetails: [],
       mmbershipNo: "",
+      isDisabled: false,
     };
   },
 
@@ -1194,12 +1352,7 @@ export default {
       this.phone = localStorage.phone;
     }
   },
-  computed: {
-    isDisabled() {
-      if (this.name !== "" && this.phone !== "") return false;
-      else return true;
-    },
-  },
+
   watch: {
     customerProceed() {
       localStorage.name = this.name;
@@ -1241,7 +1394,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://toyyibfnb.com/api/getMenu" /* http://localhost:3000/getMenu */,
+        url: "https://toyyibfnb.com/api/getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1259,17 +1412,21 @@ export default {
                 };
               } else {
                 var variasi = JSON.parse(JSON.stringify(variant));
-
                 variant = {
                   title: "Temperature",
                   type: "radio",
                   data: [
-                    variasi[0].data[0].name +
+                    variasi[0].data[0].name.replace(/(?:^|\s|-)\S/g, (x) =>
+                      x.toUpperCase()
+                    ) +
                       "  RM" +
                       variasi[0].data[0].price.toFixed(2),
-                    variasi[0].data[1].name +
-                      "  RM" +
-                      variasi[0].data[1].price.toFixed(2),
+                    variasi[0].data[1].name.replace(/(?:^|\s|-)\S/g, (x) =>
+                      x.toUpperCase()
+                    ) +
+                      " +  ( RM" +
+                      variasi[0].data[1].price.toFixed(2) +
+                      " )",
                   ],
                 };
               }
@@ -1295,6 +1452,7 @@ export default {
                 catid: response.data.data[i].menu_category,
                 /* images: [`https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${response.data.data[i].menu_code}.png`], */
                 variants: [variant],
+                station: response.data.data[i].menu_station,
               });
             }
           }.bind(this)
@@ -1370,6 +1528,7 @@ export default {
           });
       }
     },
+
     async checkMembership() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -1390,12 +1549,13 @@ export default {
               this.discount = true;
               this.mmbershipNo = this.mmberShip;
               alert("Discount Applied");
-              this.mmberShip = "";
+              this.isDisabled = true;
             } else {
               this.discount = false;
               this.mmbershipNo = "";
               alert("No Membership Found");
               this.mmberShip = "";
+              this.isDisabled = false;
             }
           }.bind(this)
         )
@@ -1457,7 +1617,6 @@ export default {
             }
             this.totalPrice = response.data.data[0].order_amount;
             this.table = this.orderDetails[0].tableNo;
-            console.log("Order Back :", this.order);
           }.bind(this)
         )
         .catch(function (error) {

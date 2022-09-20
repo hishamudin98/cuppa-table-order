@@ -211,7 +211,7 @@
             <rs-button @click="addUser()">Add User</rs-button>
           </div>
         </div>
-        <div class="h-3/6">
+        <div class="h-4/6">
           <rs-card style="padding-top: 10px">
             <div class="overflow-y-auto h-96">
               <div v-for="(user, index) in searchUsers" :key="index">

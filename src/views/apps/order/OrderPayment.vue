@@ -1317,8 +1317,8 @@ export default {
       };
       await axios(config)
         .then(
-          function (response) {
-            console.log(response.data);
+          function () {
+           
           }.bind(this)
         )
         .catch(function (error) {
@@ -1424,7 +1424,6 @@ export default {
         this.total.toString().split(".")[0] +
         this.total.toString().split(".")[1];
 
-      if (this.phone != "") {
         var axios = require("axios");
         if (localStorage.name == null) {
           this.name = "Guest " + this.tableNo;
@@ -1446,7 +1445,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url: "https://toyyibfnb.com/api/tbl/tblorderPayment" /* */,
+          url: " https://toyyibfnb.com/api/tbl/tblorderPayment" /*http://localhost:3000/tbl/tblorderPayment */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1462,9 +1461,6 @@ export default {
           .catch(function (error) {
             console.log(error);
           });
-      } else {
-        alert("Please Insert Phone Number");
-      }
     },
 
     async setAltImg(event) {

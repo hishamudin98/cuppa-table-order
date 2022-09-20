@@ -85,8 +85,8 @@ export default {
     const changetable = ref(false);
 
     const route = useRoute();
-    console.log(route.query);
-    console.log(route.params);
+    /* console.log(route.query);
+    console.log(route.params); */
     const table = ref(0);
     table.value = route.params.table;
     const branch = ref(route.query.branch);
