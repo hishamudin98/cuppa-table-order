@@ -1,6 +1,6 @@
 <template>
   <rs-layout>
-    <div class="bg-primary-400 after:content-[''] p-4">
+    <div class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <p class="font-semibold text-white text-lg">Previous Order</p>
@@ -34,7 +34,7 @@
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
       <router-link class="w-full" :to="{ name: 'main' }">
-        <rs-button class="w-full gap-x-2 mb-6" variant="primary">
+        <rs-button class="w-full gap-x-2 mb-6 bg-heandshe" >
           Back
         </rs-button>
       </router-link>
@@ -76,7 +76,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/getPreviousOrder" /*  */,
+        url: "http://localhost:8000/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },

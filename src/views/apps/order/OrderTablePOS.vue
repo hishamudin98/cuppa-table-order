@@ -7,17 +7,17 @@
           border-bottom-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
         "
-        class="bg-primary-400 after:content-['']"
+        class="bg-heandshe after:content-['']"
       >
         <div class="flex justify-between items-center p-2">
           <div class="bg-black h-10 w-10 p-1 rounded-full">
             <img
               class="flex-1"
-              src="@/assets/images/logo/logo-white.png"
+              src="@/assets/images/logo/heandshe.jpg"
               alt=""
             />
           </div>
-          <div class="text-white">Malaya Grill Sungai Buloh</div>
+          <div class="text-white">He & She UM</div>
         </div>
         <div
           style="height: 40vh"
@@ -26,7 +26,7 @@
           <div class="w-70">
             <img
               class="object-scale-down"
-              src="@/assets/images/illustration/eating.svg"
+              src="@/assets/images/logo/heandshe.jpg"
               alt=""
             />
           </div>
@@ -54,7 +54,7 @@
         </div>
         <br />
         <router-link :to="{ name: 'main' }">
-          <rs-button class="w-full" variant="primary"> Order Again? </rs-button>
+          <rs-button class="w-full bg-heandshe" > Order Again? </rs-button>
         </router-link>
       </div>
     </div>

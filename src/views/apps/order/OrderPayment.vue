@@ -1010,7 +1010,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/getOrder", /*  http://localhost:3000/tbl/getOrder*/
+        url: "http://localhost:8000/tbl/getOrder", /*  http://localhost:3000/tbl/getOrder*/
         headers: {
           "Content-Type": "application/json",
         },
@@ -1396,7 +1396,7 @@ export default {
       
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/tblOrderPOS", /* http://localhost:3000/tbl/tblOrderPOS */ 
+        url: "http://localhost:8000/tbl/tblOrderPOS", /* http://localhost:3000/tbl/tblOrderPOS */ 
         headers: {
           "Content-Type": "application/json",
         },
@@ -1447,7 +1447,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url: " https://toyyibfnb.com/api/tbl/tblorderPayment" /*http://localhost:3000/tbl/tblorderPayment */,
+          url: " http://localhost:8000/tbl/tblorderPayment" /*http://localhost:3000/tbl/tblorderPayment */,
           headers: {
             "Content-Type": "application/json",
           },

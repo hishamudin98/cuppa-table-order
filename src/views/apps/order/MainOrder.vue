@@ -81,7 +81,7 @@
         <div v-if="guestMode == true">
           <div class="h-full p-4">
             <rs-button
-              class="w-full mb-4 bg-heandshe"
+              class="w-full mb-4 bg-heandshe hover:bg-heandshe"
               @click="customerAdvanced((dataUser = 'Guest'))"
             >
               Enter Customer Details
