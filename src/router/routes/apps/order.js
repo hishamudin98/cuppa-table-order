@@ -1,5 +1,10 @@
 export default [
   {
+    path: "/orderLogin",
+    name: "orderLogin",
+    component: () => import("@/views/apps/order/orderLogin.vue"),
+  },
+  {
     path: "/main/:branchID?",
     name: "main",
     component: () => import("@/views/apps/order/MainOrder.vue"),
@@ -28,5 +33,10 @@ export default [
     path: "/order/previous/:orderID?",
     name: "order-previous",
     component: () => import("@/views/apps/order/OrderPrevious.vue"),
+  },
+  {
+    path: "/orderMembership",
+    name: "orderMembership",
+    component: () => import("@/views/apps/order/orderMembership.vue"),
   },
 ];

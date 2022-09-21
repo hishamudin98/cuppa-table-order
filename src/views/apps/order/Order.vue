@@ -177,7 +177,7 @@
                 class="w-full h-40 flex justify-center items-center rounded-xl"
               >
                 <img
-                  :src="'https://pbs.twimg.com/media/ESuQl4yUEAAxsSX?format=jpg&name=900x900'"
+                  :src="'https://pbs.twimg.com/media/D8-2w8dUIAApoHt?format=jpg&name=large'"
                 />
               </div>
             </swiper-slide>

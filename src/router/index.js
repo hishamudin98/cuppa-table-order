@@ -11,7 +11,7 @@ import appsRoute from "./routes/apps";
 import errorRoute from "./routes/error";
 
 const routes = [
-  { path: "/", redirect: { name: "main" } },
+  { path: "/", redirect: { name: "orderLogin" } },
   // ...dashboardRoute,
   ...appsRoute,
   // ...uiRoute,
