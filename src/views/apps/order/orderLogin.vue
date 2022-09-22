@@ -39,7 +39,7 @@
           <div v-if="guestMode == true">
             <div class="h-full p-4">
               <rs-button
-                class="w-full mb-4 bg-heandshe hover:bg-heandshe"
+                class="w-full bg-heandshe hover:bg-heandshe"
                 @click="customerAdvanced((dataUser = 'Guest'))"
               >
                 Enter Customer Details
@@ -59,7 +59,7 @@
                 v-if="this.orderid != null"
                 >Check Previous Order
               </rs-button>
-              <hr class="my-1" />
+              <hr v-if="this.orderid != null" class="my-1" />
               <rs-button
                 @click="customerAdvanced((dataUser = 'Guest'))"
                 class="w-full"
@@ -159,7 +159,7 @@
                 value="23:15"
               />
               <rs-button class="w-full bg-heandshe" @click="addTime()"
-                >Enter</rs-button
+                >Proceed</rs-button
               >
               <hr class="my-3" />
               <rs-button
@@ -219,7 +219,7 @@
               </button>
             </div>
             <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="addTable(table)"
-              >Enter</rs-button
+              >Proceed</rs-button
             >
             <hr class="my-3" />
             <rs-button
