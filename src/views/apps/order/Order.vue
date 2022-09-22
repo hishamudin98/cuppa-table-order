@@ -951,6 +951,7 @@
             text-white
             whitespace-nowrap
             shadow-md shadow-heandshe
+            hover:bg-heandshe
           "
           v-on:click="insertOrder(discount)"
         >

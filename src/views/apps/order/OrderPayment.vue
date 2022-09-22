@@ -16,75 +16,78 @@
         </div>
       </div>
     </div>
-
-    <div class="font-semibold text-xl mx-3 mt-5 mb-3">Dine In</div>
-    <perfect-scrollbar style="height: 17rem">
-      <div class="gap-4">
-        <rs-card
-          class="relative mb-5 cursor-pointer"
-          v-for="(product, index) in orders"
-          :key="index"
-          @click="viewDetailItem(product)"
-        >
-          <div class="flex justify-center items-center">
-            <div class="product-image relative w-30 h-30 p-4 rounded-lg">
-              <img
-                class="object-scale-down w-full"
-                :src="
-                  product.menu_image && product.menu_image.length > 0
-                    ? product.menu_image[0]
-                    : ''
-                "
-                :alt="product.menu_name"
-                style="width: 80px; height: 80px"
-                @error="setAltImg"
-              />
-            </div>
-            <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
-              <div class="product-title mt-4">
-                <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.menu_name }}
-                </span>
+    <div v-if="this.orders.length != 0">
+      <div class="font-semibold text-xl mx-3 mt-5 mb-3">Dine In</div>
+      <perfect-scrollbar style="height: 17rem">
+        <div class="gap-4">
+          <rs-card
+            class="relative mb-5 cursor-pointer"
+            v-for="(product, index) in orders"
+            :key="index"
+            @click="viewDetailItem(product)"
+          >
+            <div class="flex justify-center items-center">
+              <div class="product-image relative w-30 h-30 p-4 rounded-lg">
+                <img
+                  class="object-scale-down w-full"
+                  :src="
+                    product.menu_image && product.menu_image.length > 0
+                      ? product.menu_image[0]
+                      : ''
+                  "
+                  :alt="product.menu_name"
+                  style="width: 80px; height: 80px"
+                  @error="setAltImg"
+                />
               </div>
-              <div class="product-content flex flex-col">
-                <div class="product-price flex justify-between items-center">
-                  <div class="truncate">
-                    <div class="text-sm text-heandshe">
-                      RM {{ product.currency
-                      }}<span class="text-lg">
-                        {{
-                          (
-                            product.menu_quantity *
-                            (product.discountedPrice
-                              ? formatPrice(product.discountedPrice)
-                              : formatPrice(product.menu_price))
-                          ).toFixed(2)
-                        }}</span
-                      >
+              <div
+                class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
+              >
+                <div class="product-title mt-4">
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }}
+                  </span>
+                </div>
+                <div class="product-content flex flex-col">
+                  <div class="product-price flex justify-between items-center">
+                    <div class="truncate">
+                      <div class="text-sm text-heandshe">
+                        RM {{ product.currency
+                        }}<span class="text-lg">
+                          {{
+                            (
+                              product.menu_quantity *
+                              (product.discountedPrice
+                                ? formatPrice(product.discountedPrice)
+                                : formatPrice(product.menu_price))
+                            ).toFixed(2)
+                          }}</span
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    class="
-                      flex
-                      items-center
-                      justify-center
-                      h-7
-                      w-7
-                      bg-heandshe
-                      text-primary-100
-                      rounded-full
-                      text-sm
-                    "
-                  >
-                    x{{ product.menu_quantity }}
+                    <div
+                      class="
+                        flex
+                        items-center
+                        justify-center
+                        h-7
+                        w-7
+                        bg-heandshe
+                        text-primary-100
+                        rounded-full
+                        text-sm
+                      "
+                    >
+                      x{{ product.menu_quantity }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </rs-card>
-      </div>
-    </perfect-scrollbar>
+          </rs-card>
+        </div>
+      </perfect-scrollbar>
+    </div>
     <div v-if="this.orders2.length != 0">
       <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
       <perfect-scrollbar style="height: 17rem">
@@ -163,7 +166,7 @@
           <div class="font-semibold">Subtotal</div>
           <div>RM {{ formatPrice(this.totalAmount) }}</div>
         </div>
-       <!--  <div class="discount flex justify-between my-2">
+        <!--  <div class="discount flex justify-between my-2">
           <div class="font-semibold">Membership Discount (7%)</div>
           <div>RM {{ formatPrice(this.discountedP) }}</div>
         </div> -->
@@ -799,8 +802,7 @@
         <div></div>
         <div>
           <rs-button
-            variant="primary"
-            class="w-30%"
+            class="w-30% bg-heandshe"
             @click.stop.prevent="copyTestingCode"
           >
             Copy
@@ -1010,7 +1012,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:8000/tbl/getOrder", /*  http://localhost:3000/tbl/getOrder*/
+        url: "http://localhost:8000/tbl/getOrder" /*  http://localhost:3000/tbl/getOrder*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1019,21 +1021,20 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            
             this.orderData = JSON.parse(response.data.data.d3t4ilOrd3r);
             for (let i = 0; i < this.orderData.length; i++) {
-              var images = `https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`;
+              var images = this.orderData[i].menu_image;
               if (images == null) {
                 images = [
                   {
                     image1:
-                      " https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
+                      "https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
                   },
                 ];
               } else {
                 images = [
                   {
-                    image1: ` https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/${this.orderData[i].sku}.png`,
+                    image1: this.orderData[i].menu_image,
                   },
                 ];
               }
@@ -1065,7 +1066,7 @@ export default {
             this.totalAmount = response.data.data.am0untOrd3r;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = this.totalAmount + this.sst ;
+            this.totalPay = this.totalAmount + this.sst;
             if (this.totalAmount >= 70) {
               this.outletDisc = this.totalAmount * 0.1;
               this.totalPay = this.totalPay - this.outletDisc;
@@ -1079,7 +1080,6 @@ export default {
               this.totalPay = this.totalPay - this.discountedP;
             }
             this.orderno = response.data.data.order_no;
-            
           }.bind(this)
         )
         .catch(function (error) {
@@ -1129,7 +1129,7 @@ export default {
           this.totalAmount = orderTotal1 + orderTotal;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
-          this.totalPay = this.totalAmount + this.sst ;
+          this.totalPay = this.totalAmount + this.sst;
           this.discount = this.orderData[0].discount;
           /* ___________________________________________________________________________ */
           /* KALO ADE DISCOUNT */
@@ -1166,7 +1166,7 @@ export default {
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = this.totalAmount + this.sst ;
+            this.totalPay = this.totalAmount + this.sst;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1192,7 +1192,7 @@ export default {
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = this.totalAmount + this.sst ;
+            this.totalPay = this.totalAmount + this.sst;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1223,7 +1223,7 @@ export default {
           this.totalAmount = orderTotal1 + orderTotal;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
-          this.totalPay = this.totalAmount + this.sst ;
+          this.totalPay = this.totalAmount + this.sst;
           this.discount = this.orderData[0].discount;
           /* ___________________________________________________________________________ */
           /* KALO ADE DISCOUNT */
@@ -1259,7 +1259,7 @@ export default {
             /* __________________________________________________________________________ */
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
-            
+
             this.totalPay = this.totalAmount + this.sst;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
@@ -1286,7 +1286,7 @@ export default {
             this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = this.totalAmount + this.sst ;
+            this.totalPay = this.totalAmount + this.sst;
             this.discount = this.orderData[0].discount;
             /* ___________________________________________________________________________ */
             /* KALO ADE DISCOUNT */
@@ -1310,18 +1310,14 @@ export default {
 
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/updateOrdertbl",  /* http://localhost:3000/tbl/updateOrdertbl */
+        url: "https://toyyibfnb.com/api/tbl/updateOrdertbl" /* http://localhost:3000/tbl/updateOrdertbl */,
         headers: {
           "Content-Type": "application/json",
         },
         data: data,
       };
       await axios(config)
-        .then(
-          function () {
-           
-          }.bind(this)
-        )
+        .then(function () {}.bind(this))
         .catch(function (error) {
           console.log(error);
         });
@@ -1338,7 +1334,7 @@ export default {
         this.roundNumber =
           this.total.toString().split(".")[0] +
           this.total.toString().split(".")[1];
-        this.service = 0.00;
+        this.service = 0.0;
         var axios = require("axios");
         var data = JSON.stringify({
           serviceCharge: this.service,
@@ -1354,7 +1350,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url: "https://toyyibfnb.com/api/tbl/tblorderPayment", /*  */ 
+          url: "https://toyyibfnb.com/api/tbl/tblorderPayment" /*  */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1379,7 +1375,7 @@ export default {
       var axios = require("axios");
       this.custName = localStorage.name;
       this.custPhone = localStorage.phone;
-      this.service = 0.00;
+      this.service = 0.0;
       if (this.custName == null) {
         this.custName = "Customer";
         this.custPhone = "Customer Phone";
@@ -1393,10 +1389,10 @@ export default {
         customerPhone: this.custPhone,
         MenuID: this.MenuID,
       });
-      
+
       var config = {
         method: "post",
-        url: "http://localhost:8000/tbl/tblOrderPOS", /* http://localhost:3000/tbl/tblOrderPOS */ 
+        url: "http://localhost:8000/tbl/tblOrderPOS" /* http://localhost:3000/tbl/tblOrderPOS */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1426,43 +1422,43 @@ export default {
         this.total.toString().split(".")[0] +
         this.total.toString().split(".")[1];
 
-        var axios = require("axios");
-        if (localStorage.name == null) {
-          this.name = "Guest " + this.tableNo;
-        } else {
-          this.name = localStorage.name;
-        }
-        this.service = 0.00;
-        var data = JSON.stringify({
-          serviceCharge: this.service,
-          discount: this.discountedP + this.outletDisc,
-          tax: this.sst,
-          billName: "Order For Table " + this.tableNo,
-          billDesc: "Order For Table " + this.tableNo,
-          billAmount: parseInt(this.roundNumber),
-          billExternalReferenceNo: "Order For Table " + this.tableNo,
-          billTo: this.name,
-          billPhone: "0174842981",
-          orderNo: this.orderno,
+      var axios = require("axios");
+      if (localStorage.name == null) {
+        this.name = "Guest " + this.tableNo;
+      } else {
+        this.name = localStorage.name;
+      }
+      this.service = 0.0;
+      var data = JSON.stringify({
+        serviceCharge: this.service,
+        discount: this.discountedP + this.outletDisc,
+        tax: this.sst,
+        billName: "Order For Table " + this.tableNo,
+        billDesc: "Order For Table " + this.tableNo,
+        billAmount: parseInt(this.roundNumber),
+        billExternalReferenceNo: "Order For Table " + this.tableNo,
+        billTo: this.name,
+        billPhone: "0174842981",
+        orderNo: this.orderno,
+      });
+      var config = {
+        method: "POST",
+        url: " http://localhost:8000/tbl/tblorderPayment" /*http://localhost:3000/tbl/tblorderPayment */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.link = response.data.data2;
+            this.modalOpen = true;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
         });
-        var config = {
-          method: "POST",
-          url: " http://localhost:8000/tbl/tblorderPayment" /*http://localhost:3000/tbl/tblorderPayment */,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: data,
-        };
-        await axios(config)
-          .then(
-            function (response) {
-              this.link = response.data.data2;
-              this.modalOpen = true;
-            }.bind(this)
-          )
-          .catch(function (error) {
-            console.log(error);
-          });
     },
 
     async setAltImg(event) {

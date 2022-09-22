@@ -5,7 +5,7 @@
         <div class="flex items-center gap-x-2">
           <p class="font-semibold text-white text-lg">Receipt</p>
         </div>
-        <div class="bg-white px-3 py-1 rounded-full text-primary-400">
+        <div class="bg-white px-3 py-1 rounded-full text-heandshe">
           Table {{this.tableno}}
         </div>
       </div>
@@ -77,10 +77,10 @@
             <div class="font-semibold">Service Charges (10%)</div>
             <div class="font-semibold">RM {{(this.service).toFixed(2)}}</div>
           </div> -->
-          <div class="flex justify-between items-center">
+          <!-- <div class="flex justify-between items-center">
             <div class="font-semibold">Discount Applied</div>
             <div class="font-semibold">RM {{(this.discount).toFixed(2)}}</div>
-          </div>
+          </div> -->
           <!-- <div class="flex justify-between items-center">
             <div class="font-semibold">Infaq</div>
             <div class="font-semibold">RM10.00</div>
@@ -133,7 +133,7 @@
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
       <router-link class="w-full" :to="{ name: 'main' }">
-        <rs-button class="w-full gap-x-2 mb-6" variant="primary">
+        <rs-button class="w-full gap-x-2 mb-6 bg-heandshe hover:bg-heandshe" >
           Order Again
         </rs-button>
       </router-link>
@@ -189,7 +189,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/getOrderConfirm",  /* http://localhost:3000/tbl/getOrderConfirm */
+        url: "http://localhost:8000/tbl/getOrderConfirm",  /* http://localhost:3000/tbl/getOrderConfirm */
         headers: {
           "Content-Type": "application/json",
         },

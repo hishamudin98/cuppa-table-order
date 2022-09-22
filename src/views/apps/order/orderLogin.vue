@@ -123,7 +123,7 @@
           <!-- UBAH HARDCODE JE NI -->
           <div v-if="pickmode == true">
             <div v-if="timePicker == false">
-              <rs-button class="w-full bg-heandshe" @click="passDine()"
+              <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="passDine()"
                 >Dine In</rs-button
               >
               <hr class="my-3" />
@@ -218,7 +218,7 @@
                 Change table
               </button>
             </div>
-            <rs-button class="w-full bg-heandshe" @click="addTable(table)"
+            <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="addTable(table)"
               >Enter</rs-button
             >
             <hr class="my-3" />
