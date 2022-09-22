@@ -53,7 +53,7 @@
           <h4 style="font-weight: normal">Thank you !</h4>
         </div>
         <br />
-        <router-link :to="{ name: 'main' }">
+        <router-link :to="{ name: 'orderLogin' }">
           <rs-button class="w-full bg-heandshe" > Order Again? </rs-button>
         </router-link>
       </div>
