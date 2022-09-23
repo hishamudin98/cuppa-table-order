@@ -219,7 +219,7 @@
               </button>
             </div>
             <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="addTable(table)"
-              >Proceeds</rs-button
+              >Proceed</rs-button
             >
             <hr class="my-3" />
             <rs-button
