@@ -606,7 +606,7 @@
                                   :type="val.type"
                                   v-model="variasi2"
                                   :value="val.data"
-                                  :options="val.data"
+                                  :options="val.value"
                                   :classes="{
                                     fieldset: '!border-0 !p-0',
                                   }"
@@ -1022,7 +1022,7 @@ export default {
     const defaultCatID = ref(0);
     const mmberShip = ref(null);
     const remarks = ref("");
-    const variasi = ref("normal ( 0.00 )");
+    const variasi = ref("");
     const variasi2 = ref("");
     const menu = ref([]);
     const variation = ref([]);
@@ -1058,14 +1058,8 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      var checking2 = variasi2.value.split("(");
-      var checking = variasi.value.split("(");
       
-
       var discoutApplied = false;
-      if (variasi2.value == "") {
-        variation2.value = [];
-      }
 
       if (mmbershipNo != "") {
         discoutApplied = true;
@@ -1162,11 +1156,27 @@ export default {
           totalPrice.value = total;
         }
       } else {
-        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
-        var check = parseFloat(numsStr, 10);
+        var check = 0;
 
-        var numsStr2 = variasi2.value.replace(/[^\d.-]/g, "");
-        var check2 = parseFloat(numsStr2, 10);
+        if(variasi.value != "") /*Ade satu variation*/
+        {
+          check = variasi.value.price;
+          if(variasi2.value != "") /* Ade 2 variation */
+          {
+            variation.value.push(
+              variasi.value,
+              variasi2.value
+            )
+          }
+          else
+          {
+            variation.value.push(variasi.value)
+          }
+        }
+        else
+        {
+          variation.value.push({})
+        }
 
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
@@ -1174,24 +1184,6 @@ export default {
         } else {
           var nameCust = "";
           var phoneCust = "";
-        }
-
-        if (checking2[0] != "") {
-          variation.value.push(
-            {
-              name: checking[0],
-              price: check,
-            },
-            {
-              name: checking2[0],
-              price: check2,
-            }
-          );
-        } else if (checking[0] != "") {
-          variation.value.push({
-            name: checking[0],
-            price: check,
-          });
         }
 
         const exist = order.value.find(
@@ -1210,29 +1202,6 @@ export default {
           }
           totalPrice.value = total;
         } else {
-          /*  if (product.station != "1") {
-            if (check == 0) {
-              variation.value.push({
-                id: 1,
-                name: "hot",
-                type: "temperature",
-                price: 0,
-              });
-            } else {
-              variation.value.push({
-                id: 2,
-                name: "cold",
-                type: "temperature",
-                price: check,
-              });
-            }
-          }
-          else
-          {
-            variation.value = [];
-            check = 0;
-          } */
-
           order.value.push({
             tableNo: table.value,
             sku: product.sku,
@@ -1258,10 +1227,12 @@ export default {
           totalPrice.value = total;
         }
       }
+      console.log("Order :", order.value);
       picked = 1;
       quantity.value = 1;
       openModal.value = false;
-      variasi.value = "normal ( 0.00 )";
+      variasi.value = "";
+      variasi2.value = "";
       variation.value = [];
     };
 
@@ -1465,14 +1436,20 @@ export default {
                 if (variasi.length == 2) {
                   var dataCheck = JSON.parse(JSON.stringify(variasi[0].data));
                   for (let k = 0; k < dataCheck.length; k++) {
-                    this.variansis.push(
-                      variasi[0].data[k].name.replace(/(?:^|\s|-)\S/g, (x) =>
-                        x.toUpperCase()
-                      ) +
+                    this.variansis.push({
+                      label:
+                        variasi[0].data[k].name.replace(/(?:^|\s|-)\S/g, (x) =>
+                          x.toUpperCase()
+                        ) +
                         " ( + RM" +
                         variasi[0].data[k].price.toFixed(2) +
-                        " ) "
-                    );
+                        " ) ",
+                      value: {
+                        id: variasi[0].data[k].id,
+                        name: variasi[0].data[k].name,
+                        price: variasi[0].data[k].price,
+                      },
+                    });
                   }
                   var dataCheck2 = JSON.parse(JSON.stringify(variasi[1].data));
                   for (let m = 0; m < dataCheck2.length; m++) {
@@ -1484,7 +1461,20 @@ export default {
                         variasi[1].data[m].price.toFixed(2) +
                         " ) "
                     );
-                    this.variantsid2.push(variasi[1].data[m].id);
+                    this.variantsid2.push({
+                      label:
+                        variasi[1].data[m].name.replace(/(?:^|\s|-)\S/g, (x) =>
+                          x.toUpperCase()
+                        ) +
+                        " ( + RM" +
+                        variasi[1].data[m].price.toFixed(2) +
+                        " ) ",
+                      value: {
+                        id: variasi[1].data[m].id,
+                        name: variasi[1].data[m].name,
+                        price: variasi[1].data[m].price,
+                      },
+                    });
                   }
                   this.variansi.push({
                     title: variasi[0].type,
@@ -1498,7 +1488,6 @@ export default {
                     data: this.variansis2,
                     value: this.variantsid2,
                   });
-
                   this.variansis = [];
                   this.variansis2 = [];
                   this.variantsid2 = [];
@@ -1506,14 +1495,21 @@ export default {
                   for (let j = 0; j < variasi.length; j++) {
                     var dataCheck = JSON.parse(JSON.stringify(variasi[j].data));
                     for (let k = 0; k < dataCheck.length; k++) {
-                      this.variansis.push(
-                        variasi[j].data[k].name.replace(/(?:^|\s|-)\S/g, (x) =>
-                          x.toUpperCase()
-                        ) +
+                      this.variansis.push({
+                        label:
+                          variasi[j].data[k].name.replace(
+                            /(?:^|\s|-)\S/g,
+                            (x) => x.toUpperCase()
+                          ) +
                           " ( + RM" +
                           variasi[j].data[k].price.toFixed(2) +
-                          " ) "
-                      );
+                          " ) ",
+                        value: {
+                          id: variasi[j].data[k].id,
+                          name: variasi[j].data[k].name,
+                          price: variasi[j].data[k].price,
+                        },
+                      });
                     }
                     this.variansi.push({
                       title: variasi[j].type,
@@ -1600,10 +1596,10 @@ export default {
           discounted: discount,
           table: this.table,
         });
-
+        console.log(data);
         var config = {
           method: "post",
-          url: "http://localhost:8000/tbl/insertOrder" /* http://localhost:3000/tbl/insertOrder */,
+          url: "http://localhost:8000/tbl/insertOrder", /* http://localhost:3000/tbl/insertOrder */
           headers: {
             "Content-Type": "application/json",
           },
