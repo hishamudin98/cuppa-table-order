@@ -33,7 +33,7 @@
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
-      <router-link class="w-full" :to="{ name: 'main' }">
+      <router-link class="w-full" :to="{ name: 'orderLogin' }">
         <rs-button class="w-full gap-x-2 mb-6 bg-heandshe" >
           Back
         </rs-button>

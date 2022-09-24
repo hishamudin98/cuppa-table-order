@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/orderLogin",
+    path: "/orderLogin/:branchID?",
     name: "orderLogin",
     component: () => import("@/views/apps/order/orderLogin.vue"),
   },
@@ -35,8 +35,13 @@ export default [
     component: () => import("@/views/apps/order/OrderPrevious.vue"),
   },
   {
-    path: "/orderMembership",
+    path: "/orderMembership/:branchID?",
     name: "orderMembership",
     component: () => import("@/views/apps/order/orderMembership.vue"),
+  },
+  {
+    path: "/TakeAway/:branchID?/:orderID?/:table?",
+    name: "takeaway",
+    component: () => import("@/views/apps/order/OrderTakeAway.vue"),
   },
 ];

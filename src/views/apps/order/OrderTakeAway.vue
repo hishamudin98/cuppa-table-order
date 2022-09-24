@@ -152,7 +152,7 @@
               Hishammudin Ali
             </div>
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
-            <div class="text-white">{{this.branch_Name}}</div>
+            <div class="text-white">He & She UM</div>
             <div class="bg-black h-10 w-10 p-1 rounded-full">
               <img
                 class="flex-1"
@@ -721,125 +721,7 @@
                 ></textarea>
               </div>
               <div class="modal-item-type mb-6 px-2">
-                <div class="font-semibold text-lg mb-4">Order Type</div>
-                <div class="flex gap-4">
-                  <!-- LIMIT -->
-                  <ul class="grid gap-2 w-full md:grid-cols-2">
-                    <li>
-                      <input
-                        type="radio"
-                        id="dineIn"
-                        value="1"
-                        v-model="picked"
-                        name="hosting"
-                        class="hidden peer"
-                        required
-                      />
-                      <label
-                        for="dineIn"
-                        class="
-                          inline-flex
-                          justify-start
-                          items-center
-                          p-3
-                          w-full
-                          text-gray-600
-                          bg-white
-                          rounded-lg
-                          border border-heandshe
-                          cursor-pointer
-                          dark:hover:text-gray-300
-                          dark:border-gray-700
-                          dark:peer-checked:text-blue-500
-                          peer-checked:border-white-600
-                          peer-checked:text-white
-                          peer-checked:bg-heandshe
-                          hover:text-gray-600 hover:bg-gray-100
-                          dark:text-gray-400
-                          dark:bg-gray-800
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <div class="block">
-                          <div class="w-full text-md font-semibold">
-                            Dine In
-                          </div>
-                          <div class="w-full"></div>
-                        </div>
-                      </label>
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        id="takeAway"
-                        value="2"
-                        v-model="picked"
-                        name="hosting"
-                        class="hidden peer"
-                      />
-                      <label
-                        for="takeAway"
-                        class="
-                          inline-flex
-                          justify-start
-                          items-center
-                          p-3
-                          w-full
-                          text-gray-600
-                          bg-white
-                          rounded-lg
-                          border border-heandshe
-                          cursor-pointer
-                          dark:hover:text-gray-300
-                          dark:border-gray-700
-                          dark:peer-checked:text-blue-500
-                          peer-checked:border-white-600
-                          peer-checked:text-white
-                          peer-checked:bg-heandshe
-                          hover:text-gray-600 hover:bg-gray-100
-                          dark:text-gray-400
-                          dark:bg-gray-800
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <div class="block">
-                          <div class="w-full text-md font-semibold">
-                            Take Away
-                          </div>
-                          <div class="w-full"></div>
-                        </div>
-                      </label>
-                    </li>
-                  </ul>
-                  <!-- <rs-button  variant="primary" class="h-10">Dine-In </rs-button>
-                  <rs-button variant="primary-outline" class="h-10"
-                    >Takeaway</rs-button
-                  > -->
-                  <!-- <rs-button id="dineIn" variant="primary" class="h-10;">
-                    <input
-                      class="rs-radio"
-                      type="radio"
-                      id="dineIn"
-                      value="1"
-                      v-model="picked"
-                    />
-                    <label for="dineIn">Dine In</label>
-                  </rs-button>
-                  <rs-button
-                    id="takeAway"
-                    variant="primary-outline"
-                    class="h-10"
-                  >
-                    <input
-                      class="rs-radio"
-                      type="radio"
-                      id="takeAway"
-                      value="2"
-                      v-model="picked"
-                    />
-                    <label for="takeAway">Take Away</label>
-                  </rs-button> -->
-                </div>
+                
               </div>
               <div
                 class="
@@ -1071,24 +953,25 @@ export default {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
 
-         if(variasi.value != "") /*Ade satu variation*/
-        {
-          check = variasi.value.price;
-          if(variasi2.value != "") /* Ade 2 variation */
-          {
-            variation.value.push(
-              variasi.value,
-              variasi2.value
-            )
+        if (product.station != "1") {
+          if (check == 0) {
+            variation.value.push({
+              id: 1,
+              name: "hot",
+              type: "temperature",
+              price: 0,
+            });
+          } else {
+            variation.value.push({
+              id: 2,
+              name: "cold",
+              type: "temperature",
+              price: check,
+            });
           }
-          else
-          {
-            variation.value.push(variasi.value)
-          }
-        }
-        else
-        {
-          variation.value.push({})
+        } else {
+          variation.value = [];
+          check = 0;
         }
 
         /* ADE ORDER ID */
@@ -1178,7 +1061,7 @@ export default {
         {
           variation.value.push({})
         }
-        console.log(variation.value[0].id)
+
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
           var phoneCust = localStorage.phone;
@@ -1231,7 +1114,7 @@ export default {
         }
       }
       console.log("Order :", order.value);
-      picked = 1;
+      picked = 2;
       quantity.value = 1;
       openModal.value = false;
       variasi.value = "";
@@ -1330,7 +1213,7 @@ export default {
       name: "",
       phone: "",
       table: 0,
-      picked: "1",
+      picked: "2",
       IDMENU: 0,
       quantity: 1,
       mmberShip: "",
@@ -1346,8 +1229,6 @@ export default {
       variansis2: [],
       variansi2: [],
       variantsid2: [],
-      branch_Name:"",
-      branch: 0,
     };
   },
 
@@ -1372,9 +1253,6 @@ export default {
     if (localStorage.phone) {
       this.phone = localStorage.phone;
     }
-    if (localStorage.branch != 0) {
-      this.getOutlet(localStorage.branch);
-    }
   },
 
   watch: {
@@ -1389,30 +1267,6 @@ export default {
     },
   },
   methods: {
-     async getOutlet(branch) {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        branch_ID: branch,
-      });
-      var config = {
-        method: "post",
-        url: "http://localhost:8000/tbl/getBranch",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            this.branch_Name = response.data.data[0].outlet_name;
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
     async getCategories() {
       var axios = require("axios");
       var config = {

@@ -17,7 +17,7 @@
               alt=""
             />
           </div>
-          <div class="text-white">He & She UM</div>
+          <div class="text-white">{{ this.branch_Name }}</div>
         </div>
         <div
           style="height: 40vh"
@@ -35,201 +35,279 @@
       </div>
 
       <div class="m-8">
-        <div v-if="pickedOrderType == false">
-          <div v-if="guestMode == true">
-            <div class="h-full p-4">
-              <rs-button
-                class="w-full bg-heandshe hover:bg-heandshe"
-                @click="customerAdvanced((dataUser = 'Guest'))"
-              >
-                Enter Customer Details
-              </rs-button>
-              <hr class="my-1" />
-              <rs-button
-                @click="customerAdvancedOrder(table)"
-                class="w-full"
-                variant="primary-outline"
-                >Guest
-              </rs-button>
-              <hr class="my-1" />
-              <rs-button
-                @click="checkPreviousOrder()"
-                class="w-full"
-                variant="primary-outline"
-                v-if="this.orderid != null"
-                >Check Previous Order
-              </rs-button>
-              <hr v-if="this.orderid != null" class="my-1" />
-              <rs-button
-                @click="customerAdvanced((dataUser = 'Guest'))"
-                class="w-full"
-                variant="primary-outline"
-                >Member Login
-              </rs-button>
-              <hr class="my-1" />
-              <p class="text-center">
-                Don't have an account?<router-link
-                  :to="{ name: 'orderMembership' }"
-                >
-                  <a
-                    href="#"
-                    class="
-                      underline
-                      text-blue-600
-                      hover:text-blue-800
-                      visited:text-purple-600
-                    "
-                  >
-                    Sign Up</a
-                  ></router-link
-                >
-              </p>
-              <hr class="my-1" />
-              <!-- customerProceed = true -->
-            </div>
-          </div>
-          <div v-else>
-            <form-kit
-              type="text"
-              placeholder="Enter your name"
-              validation="required"
-              :validation-messages="{
-                required: 'Please enter a name',
-              }"
-              v-model="name"
-            />
-            <form-kit
-              type="number"
-              placeholder="Enter your phone number"
-              v-model="phone"
-            />
+        <div v-if="LoginType == false">
+          <!-- PILIH LOGIN TYPE -->
+          <div class="h-full p-4">
             <rs-button
-              :disabled="isDisabled"
-              class="w-full bg-heandshe"
-              @click="customerAdvancedOrder()"
-              >Proceed</rs-button
+              class="w-full bg-heandshe hover:bg-heandshe"
+              @click="CustomerDetails()"
             >
-            <hr class="my-3" />
+              Enter Customer Details
+            </rs-button>
+            <hr class="my-1" />
             <rs-button
+              @click="checkPreviousOrder()"
               class="w-full"
               variant="primary-outline"
-              @click="guestMode = true"
-            >
-              Back
+              v-if="this.orderid != null"
+              >Check Previous Order
             </rs-button>
+            <hr v-if="this.orderid != null" class="my-1" />
+            <rs-button
+              @click="memberLogin()"
+              class="w-full"
+              variant="primary-outline"
+              >Member Login
+            </rs-button>
+            <hr class="my-1" />
+            <p class="text-center">
+              Don't have an account?<router-link
+                :to="{ name: 'orderMembership' ,  params: { branchID: this.branch } }"
+              >
+                <a
+                  href="#"
+                  class="
+                    underline
+                    text-blue-600
+                    hover:text-blue-800
+                    visited:text-purple-600
+                  "
+                >
+                  Sign Up</a
+                ></router-link
+              >
+            </p>
+            <hr class="my-1" />
           </div>
         </div>
-        <div v-else>
-          <!-- UBAH HARDCODE JE NI -->
-          <div v-if="pickmode == true">
-            <div v-if="timePicker == false">
-              <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="passDine()"
-                >Dine In</rs-button
-              >
-              <hr class="my-3" />
-              <rs-button
-                class="w-full"
-                variant="primary-outline"
-                @click="pickTime()"
-              >
-                Take Away
-              </rs-button>
-              <hr class="my-3" />
-              <rs-button
-                class="w-full"
-                variant="primary-outline"
-                @click="pickTime()"
-              >
-                Pre Order
-              </rs-button>
-              <hr class="my-3" />
-              <rs-button
-                class="w-full"
-                variant="primary-outline"
-                @click="BackMain()"
-              >
-                Back
-              </rs-button>
-            </div>
-            <div v-else>
-              <FormKit
-                type="time"
-                label="Expected Pickup time"
-                v-model="timer"
-                value="23:15"
+        <div v-if="custLogin == true">
+          <!-- LOGIN CUSTOMER -->
+          <form-kit
+            type="text"
+            placeholder="Enter your name"
+            validation="required"
+            :validation-messages="{
+              required: 'Please enter a name',
+            }"
+            v-model="name"
+          />
+          <form-kit
+            type="number"
+            placeholder="Enter your phone number"
+            v-model="phone"
+          />
+          <rs-button
+            :disabled="isDisabled"
+            class="w-full bg-heandshe hover:bg-heandshe"
+            @click="orderType()"
+            >Proceed</rs-button
+          >
+          <hr class="my-3" />
+          <rs-button
+            class="w-full bg-heandshe hover:bg-heandshe"
+            @click="custCloseLogin()"
+          >
+            Back
+          </rs-button>
+        </div>
+        <div v-if="mmberLogin == true">
+          <form-kit
+            type="text"
+            placeholder="Enter your Email"
+            validation="required"
+            :validation-messages="{
+              required: 'Please enter a Email',
+            }"
+            v-model="username"
+          />
+          <form-kit
+            type="number"
+            placeholder="Enter your password"
+            :validation-messages="{
+              required: 'Please enter a password',
+            }"
+            v-model="password"
+          />
+          <rs-button
+            :disabled="isDisabled2"
+            class="w-full bg-heandshe hover:bg-heandshe"
+            @click="checkMember()"
+            >Proceed</rs-button
+          >
+          <hr class="my-3" />
+          <rs-button
+            class="w-full bg-heandshe hover:bg-heandshe"
+            @click="mmberLoginClose()"
+          >
+            Back
+          </rs-button>
+        </div>
+        <div v-if="pickOrdertype == true">
+          <rs-button
+            class="w-full bg-heandshe hover:bg-heandshe"
+            @click="pickTable()"
+            >Dine In</rs-button
+          >
+          <hr class="my-2" />
+          <rs-button
+            class="w-full"
+            variant="primary-outline"
+            @click="pickTime()"
+          >
+            Take Away
+          </rs-button>
+          <hr class="my-2" />
+          <hr class="my-2" />
+          <rs-button
+            class="w-full"
+            variant="primary-outline"
+            @click="pickComeTime()"
+          >
+            Pre-order
+          </rs-button>
+        </div>
+        <div v-if="picktable == true">
+          <div
+            class="
+              order-table-number
+              flex
+              items-center
+              justify-center
+              font-semibold
+              text-2xl
+              md:text-3xl
+              mb-4
+              gap-x-2
+            "
+          >
+            <span v-if="changetable == false"
+              >Table #{{ table ? table : "0" }}</span
+            >
+            <div v-else class="flex justify-center items-center">
+              Table #
+              <form-kit
+                type="number"
+                :classes="{
+                  input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
+                  outer: 'mb-0',
+                }"
+                v-model.number="table"
+                @keydown="nameKeydown($event)"
               />
-              <rs-button class="w-full bg-heandshe" @click="addTime()"
-                >Proceed</rs-button
-              >
-              <hr class="my-3" />
-              <rs-button
-                class="w-full"
-                variant="primary-outline"
-                @click="BackMain()"
-              >
-                Back
-              </rs-button>
             </div>
-          </div>
-          <div v-if="picktable == true">
-            <div
+            <button
               class="
-                order-table-number
-                flex
-                items-center
-                justify-center
-                font-semibold
-                text-2xl
-                md:text-3xl
-                mb-4
-                gap-x-2
+                p-1
+                px-2
+                bg-heandshe
+                text-white
+                rounded-xl
+                text-sm
+                hover:bg-heandshe
+              "
+              @click="
+                changetable ? (changetable = false) : (changetable = true)
               "
             >
-              <span v-if="changetable == false"
-                >Table #{{ table ? table : "0" }}</span
-              >
-              <div v-else class="flex justify-center items-center">
-                Table #
-                <form-kit
-                  type="number"
-                  :classes="{
-                    input:
-                      'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
-                    outer: 'mb-0',
-                  }"
-                  v-model.number="table"
-                  @keydown="nameKeydown($event)"
-                />
-              </div>
-              <button
-                class="
-                  p-1
-                  px-2
-                  bg-heandshe
-                  text-white
-                  rounded-xl
-                  text-sm
-                  hover:bg-heandshe
-                "
-                @click="
-                  changetable ? (changetable = false) : (changetable = true)
-                "
-              >
-                Change table
-              </button>
-            </div>
-            <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="addTable(table)"
-              >Proceed</rs-button
-            >
-            <hr class="my-3" />
-            <rs-button
-              class="w-full"
-              variant="primary-outline"
-              @click="BackMain()"
-            >
-              Back
-            </rs-button>
+              Change table
+            </button>
           </div>
+          <rs-button
+            class="w-full bg-heandshe hover:bg-heandshe"
+            @click="pickOrder(table)"
+            >Proceed</rs-button
+          >
+          <hr class="my-3" />
+          <rs-button
+            class="w-full"
+            variant="primary-outline"
+            @click="closetable()"
+          >
+            Back
+          </rs-button>
+        </div>
+        <div v-if="picktimer == true">
+          <FormKit
+            type="time"
+            label="Expected Pickup time"
+            v-model="timer"
+            value="23:15"
+          />
+          <rs-button class="w-full bg-heandshe" @click="addTime()"
+            >Proceed</rs-button
+          >
+          <hr class="my-3" />
+          <rs-button
+            class="w-full"
+            variant="primary-outline"
+            @click="backOrdertype()"
+          >
+            Back
+          </rs-button>
+        </div>
+        <div v-if="preordertime == true">
+          <div
+            class="
+              order-table-number
+              flex
+              items-center
+              justify-center
+              font-semibold
+              text-2xl
+              md:text-3xl
+              mb-4
+              gap-x-2
+            "
+          >
+            <span v-if="changetable == false"
+              >Table #{{ table ? table : "0" }}</span
+            >
+            <div v-else class="flex justify-center items-center">
+              Table #
+              <form-kit
+                type="number"
+                :classes="{
+                  input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
+                  outer: 'mb-0',
+                }"
+                v-model.number="table2"
+                @keydown="nameKeydown($event)"
+              />
+            </div>
+            <button
+              class="
+                p-1
+                px-2
+                bg-heandshe
+                text-white
+                rounded-xl
+                text-sm
+                hover:bg-heandshe
+              "
+              @click="
+                changetable ? (changetable = false) : (changetable = true)
+              "
+            >
+              Change table
+            </button>
+          </div>
+          <FormKit
+            type="time"
+            label="Expected come time"
+            v-model="timer2"
+            value="23:15"
+          />
+          <rs-button class="w-full bg-heandshe" @click="preorderCheck(table2)"
+            >Proceed</rs-button
+          >
+          <hr class="my-3" />
+          <rs-button
+            class="w-full"
+            variant="primary-outline"
+            @click="backOrdertype2()"
+          >
+            Back
+          </rs-button>
         </div>
       </div>
     </div>
@@ -246,6 +324,7 @@ import RsButton from "@/components/Button.vue";
 
 import { Navigation, Scrollbar, A11y, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
+import moment from 'moment';
 
 export default {
   name: "TableOrder",
@@ -262,7 +341,8 @@ export default {
     const route = useRoute();
     const table = ref(0);
     table.value = route.query.table;
-    const branch = ref(route.query.branch);
+    const branch = ref(route.params.branchID);
+    
 
     const customerData = ref({
       name: "",
@@ -292,7 +372,7 @@ export default {
       changetable,
       customerData,
       customerProceed,
-
+      branch,
       modules: [Navigation, Autoplay, Scrollbar, A11y],
     };
   },
@@ -300,18 +380,37 @@ export default {
   //TEST FARIS//
   data() {
     return {
+      LoginType: false,
+      custLogin: false,
+      pickOrdertype: false,
+      picktable: false,
+      mmberLogin: false,
+      picktimer: false,
+      customerProceed: false,
+      preordertime: false,
+
+      /* DATA NULL */
       name: "",
       phone: "",
+      username: "",
+      password: "",
+      timestamp: "",
       timer: "",
+      timer2: "",
+      table2: "",
       table: 0,
+      orderid: null,
+      branch: 0,
+      branch_Name: "",
+
+      /* LAMA DATA RETURN */
+
       dataUser: "Guest",
       guestMode: true,
-      customerProceed: false,
-      orderid: null,
       pickmode: false,
       pickedOrderType: false,
       timePicker: false,
-      picktable: false,
+      
     };
   },
 
@@ -320,6 +419,8 @@ export default {
       this.orderid = localStorage.orderid;
       localStorage.removeItem("name");
       localStorage.removeItem("phone");
+      localStorage.removeItem("time");
+      localStorage.removeItem("mmberno");
     }
 
     window.onbeforeunload = function () {
@@ -332,10 +433,24 @@ export default {
     if (localStorage.phone) {
       this.phone = localStorage.phone;
     }
+    this.branch = this.$route.params.branchID;
+    if (this.branch != 0 && this.branch != undefined) {
+      this.getOutlet(this.branch);
+    }
+    else if(localStorage.branch != 0)
+    {
+      this.getOutlet(localStorage.branch);
+    }
+
+    this.getNow();
   },
   computed: {
     isDisabled() {
       if (this.name !== "" && this.phone !== "") return false;
+      else return true;
+    },
+    isDisabled2() {
+      if (this.username !== "" && this.password !== "") return false;
       else return true;
     },
   },
@@ -346,31 +461,206 @@ export default {
     },
   },
   methods: {
+    async CustomerDetails() {
+      this.LoginType = true; /* TUTUP PILIH LOGIN */
+      this.custLogin = true;
+    },
+
+    async custCloseLogin() {
+      this.LoginType = false;
+      this.custLogin = false;
+    },
+
+    async memberLogin() {
+      this.LoginType = true;
+      this.mmberLogin = true;
+    },
+
+    async mmberLoginClose() {
+      this.LoginType = false;
+      this.mmberLogin = false;
+    },
+
+    async orderType() {
+      this.custLogin = false;
+      this.mmberLogin = false;
+      this.pickOrdertype = true;
+      if (this.name != null && localStorage.name == null) {
+        localStorage.name = this.name;
+        localStorage.phone = this.phone;
+        localStorage.branch = this.branch;
+      }
+    },
+
+    async checkMember() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        username: this.username,
+        password: this.password,
+      });
+      var config = {
+        method: "post",
+        url: "http://localhost:8000/tbl/getMemberLogin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            if (response.data.status == 200) {
+              localStorage.mmberno = response.data.data[0].member_no;
+              localStorage.name = response.data.data[0].full_name;
+              localStorage.phone = response.data.data[0].phone_no;
+
+              this.orderType();
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async pickTable() {
+      this.pickOrdertype = false;
+      this.picktable = true;
+    },
+
+    async closetable() {
+      this.pickOrdertype = true;
+      this.picktable = false;
+    },
+
+    async pickTime() {
+      this.pickOrdertype = false;
+      this.picktimer = true;
+    },
+
+    async pickComeTime() {
+      this.pickOrdertype = false;
+      this.preordertime = true;
+    },
+
+    async backOrdertype() {
+      this.pickOrdertype = true;
+      this.picktimer = false;
+    },
+
+    async backOrdertype2() {
+      this.pickOrdertype = true;
+      this.preordertime = false;
+    },
+
+    /* NI UNTUK MASUK SEBELUM ORDER */
+    getNow: function () {
+      const today = new Date();
+      const time = today.getHours() + ":" + today.getMinutes();
+      const dateTime = time;
+      this.timestamp = dateTime;
+      
+    },
+
+    async preorderCheck(table2) {
+      const today = moment();
+      if (this.timer2 < today.format("HH:mm")) {
+        alert("Please pick a valid time");
+      } else {
+        if (this.timer2 < "10:30" || this.timer2 > "20:00") {
+          alert("Outside Working Hours");
+        } else {
+          if (table2 != 0 && table2 > 0 && table2 < 30) {
+            localStorage.time = this.timer2;
+            this.customerProceed = true;
+            this.$router.push({
+              name: "order",
+              params: { branchID: this.branch, orderID: "", table: table2 },
+            });
+          } else {
+            alert("Please Enter a valid table number");
+          }
+        }
+      }
+    },
+    async addTime() {
+      const today = moment();
+      if (this.timer <= today.format("HH:mm")) {
+        alert("Please pick a valid time");
+      } else {
+        if (this.timer < "10:30" || this.timer > "20:00") {
+          alert("Outside Working Hours");
+        } else {
+           localStorage.time = this.timer;
+           localStorage.branch = this.branch
+            this.customerProceed = true;
+            this.$router.push({
+              name: "takeaway",
+              params: { branchID: this.branch, orderID: "", table: 0 },
+            }); 
+        }
+      }
+    },
+    async pickOrder(table) {
+      if (table != 0 && table > 0 && table < 30) {
+        this.customerProceed = true;
+        localStorage.branch = this.branch;
+        this.$router.push({
+          name: "order",
+          params: { branchID: this.branch, orderID: "", table: table },
+        });
+      } else {
+        alert("Please Enter a valid table number");
+      }
+    },
+
+    /* METHOD LAMA */
+    async getOutlet(branch) {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        branch_ID: branch,
+      });
+      var config = {
+        method: "post",
+        url: "http://localhost:8000/tbl/getBranch",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.branch_Name = response.data.data[0].outlet_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     async customerAdvanced(dataUser) {
       if (dataUser == "Guest") this.guestMode = false;
-    },
-    async pickTime() {
-      this.timePicker = true;
     },
     async passDine() {
       this.picktable = true;
       this.pickmode = false;
     },
-    async addTime() {
+    /* async addTime() {
       localStorage.time = this.timer;
       this.customerProceed = true;
       this.$router.push({
         name: "order",
-        params: { branchID: "", orderID: "", table: 0 },
+        params: { branchID: this.branch, orderID: "", table: 0 },
       });
-    },
+    }, */
 
     async addTable(table) {
       if (table != 0 && table > 0) {
         this.customerProceed = true;
+        localStorage.branch = this.branch;
         this.$router.push({
           name: "order",
-          params: { branchID: "", orderID: "", table: table },
+          params: { branchID: this.branch, orderID: "", table: table },
         });
       } else {
         alert("Please Enter a valid table number");
@@ -380,6 +670,7 @@ export default {
       localStorage.clear();
       this.pickedOrderType = false;
       this.guestMode = true;
+      this.picktable = false;
     },
     async customerAdvancedOrder() {
       this.pickmode = true;
