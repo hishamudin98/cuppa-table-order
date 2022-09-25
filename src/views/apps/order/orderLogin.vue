@@ -500,7 +500,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:8000/tbl/getMemberLogin",
+        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getMemberLogin",
         headers: {
           "Content-Type": "application/json",
         },
@@ -622,7 +622,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:8000/tbl/getBranch",
+        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },

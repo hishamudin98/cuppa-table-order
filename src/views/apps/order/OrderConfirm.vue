@@ -189,7 +189,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:8000/tbl/getOrderConfirm",  /* http://localhost:3000/tbl/getOrderConfirm */
+        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getOrderConfirm",  /* http://localhost:3000/tbl/getOrderConfirm */
         headers: {
           "Content-Type": "application/json",
         },
