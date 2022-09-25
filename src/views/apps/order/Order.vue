@@ -152,7 +152,7 @@
               Hishammudin Ali
             </div>
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
-            <div class="text-white">{{this.branch_Name}}</div>
+            <div class="text-white">{{ this.branch_Name }}</div>
             <div class="bg-black h-10 w-10 p-1 rounded-full">
               <img
                 class="flex-1"
@@ -1058,7 +1058,6 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      
       var discoutApplied = false;
 
       if (mmbershipNo != "") {
@@ -1071,24 +1070,17 @@ export default {
         var numsStr = variasi.value.replace(/[^\d.-]/g, "");
         var check = parseInt(numsStr, 10);
 
-         if(variasi.value != "") /*Ade satu variation*/
-        {
+        if (variasi.value != "") {
+          /*Ade satu variation*/
           check = variasi.value.price;
-          if(variasi2.value != "") /* Ade 2 variation */
-          {
-            variation.value.push(
-              variasi.value,
-              variasi2.value
-            )
+          if (variasi2.value != "") {
+            /* Ade 2 variation */
+            variation.value.push(variasi.value, variasi2.value);
+          } else {
+            variation.value.push(variasi.value);
           }
-          else
-          {
-            variation.value.push(variasi.value)
-          }
-        }
-        else
-        {
-          variation.value.push({})
+        } else {
+          variation.value.push({});
         }
 
         /* ADE ORDER ID */
@@ -1097,8 +1089,10 @@ export default {
             item.sku === product.sku &&
             item.orderType == picked &&
             item.menu_price == product.price + check &&
-            item.menu_variant.some(data => data.id === variation.value[0].id)&&
-            item.menu_variant.some(data => data.id === variation.value[1].id)
+            item.menu_variant.some(
+              (data) => data.id === variation.value[0].id
+            ) &&
+            item.menu_variant.some((data) => data.id === variation.value[1].id)
         );
         if (exist) {
           exist.menu_quantity++;
@@ -1159,26 +1153,19 @@ export default {
       } else {
         var check = 0;
 
-        if(variasi.value != "") /*Ade satu variation*/
-        {
+        if (variasi.value != "") {
+          /*Ade satu variation*/
           check = variasi.value.price;
-          if(variasi2.value != "") /* Ade 2 variation */
-          {
-            variation.value.push(
-              variasi.value,
-              variasi2.value
-            )
+          if (variasi2.value != "") {
+            /* Ade 2 variation */
+            variation.value.push(variasi.value, variasi2.value);
+          } else {
+            variation.value.push(variasi.value);
           }
-          else
-          {
-            variation.value.push(variasi.value)
-          }
+        } else {
+          variation.value.push({});
         }
-        else
-        {
-          variation.value.push({})
-        }
-        console.log(variation.value[0].id)
+        console.log(variation.value[0].id);
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
           var phoneCust = localStorage.phone;
@@ -1192,8 +1179,10 @@ export default {
             item.sku === product.sku &&
             item.orderType == picked &&
             item.menu_price == product.price + check &&
-            item.menu_variant.some(data => data.id === variation.value[0].id)&&
-            item.menu_variant.some(data => data.id === variation.value[1].id)
+            item.menu_variant.some(
+              (data) => data.id === variation.value[0].id
+            ) &&
+            item.menu_variant.some((data) => data.id === variation.value[1].id)
         );
         if (exist) {
           exist.menu_quantity++;
@@ -1346,8 +1335,9 @@ export default {
       variansis2: [],
       variansi2: [],
       variantsid2: [],
-      branch_Name:"",
+      branch_Name: "",
       branch: 0,
+      orderNo: 0,
     };
   },
 
@@ -1356,16 +1346,17 @@ export default {
     this.getMenu();
     this.orderID = this.$route.params.orderID;
     this.table = this.$route.params.table;
-    if (this.orderID != "") {
+    this.orderNo = this.orderID;
+    if(this.orderNo != "")
+    {
+      this.orderNo = localStorage.orderID;
+    }
+    if (this.orderNo != "") {
       this.getOrderID();
     }
   },
 
   mounted() {
-    window.onbeforeunload = function () {
-      localStorage.clear();
-    };
-
     if (localStorage.name) {
       this.name = localStorage.name;
     }
@@ -1389,7 +1380,7 @@ export default {
     },
   },
   methods: {
-     async getOutlet(branch) {
+    async getOutlet(branch) {
       var axios = require("axios");
       var data = JSON.stringify({
         branch_ID: branch,
@@ -1588,16 +1579,15 @@ export default {
     },
 
     async insertOrder(discount) {
-      if (this.orderID != "") {
+      if (this.orderNo != "") {
         var axios = require("axios");
         var data = JSON.stringify({
           order: this.order,
           total: this.totalPrice,
           discounted: discount,
-          orderID: this.orderID,
+          orderID: this.orderNo,
           table: this.table,
         });
-
         var config = {
           method: "post",
           url: "https://toyyibfnb.com/api/tbl/updateOrdertbl" /* http://localhost:3000/tbl/updateOrdertbl*/,
@@ -1610,6 +1600,7 @@ export default {
           .then(
             function (response) {
               this.IDMENU = response.data.data;
+              localStorage.orderID = this.IDMENU;
               /* :to="{ name: 'order-payment' , params:{id:  } }" */
               this.$router.push({
                 name: "order-payment",
@@ -1628,10 +1619,10 @@ export default {
           time: localStorage.time,
           table: this.table,
         });
-        console.log(data);
+        localStorage.order = this.order;
         var config = {
           method: "post",
-          url: "http://localhost:8000/tbl/insertOrder", /* http://localhost:3000/tbl/insertOrder */
+          url: "http://localhost:8000/tbl/insertOrder" /* http://localhost:3000/tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1641,6 +1632,7 @@ export default {
           .then(
             function (response) {
               this.IDMENU = response.data.data;
+              localStorage.orderID = this.IDMENU;
               /* :to="{ name: 'order-payment' , params:{id:  } }" */
               this.$router.push({
                 name: "order-payment",
@@ -1707,11 +1699,11 @@ export default {
     async getOrderID() {
       var axios = require("axios");
       var data = JSON.stringify({
-        orderID: this.orderID,
+        orderID: this.orderNo,
       });
       var config = {
         method: "post",
-        url: "https://toyyibfnb.com/api/tbl/getOrderCart" /* http://localhost:3000/tbl/getOrderCart */,
+        url: "http://localhost:8000/tbl/getOrderCart" /* http://localhost:3000/tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1721,7 +1713,6 @@ export default {
         .then(
           function (response) {
             this.orderDetails = JSON.parse(response.data.data[0].order_details);
-
             for (let i = 0; i < this.orderDetails.length; i++) {
               this.order.push({
                 tableNo: this.orderDetails[i].tableNo,

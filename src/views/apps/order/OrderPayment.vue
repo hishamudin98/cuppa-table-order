@@ -441,7 +441,7 @@
                 justify-center
                 items-center
                 p-1
-                bg-primary-400
+                bg-heandshe
                 absolute
                 top-2
                 right-2
@@ -462,8 +462,8 @@
                 alt=""
               />
               <rs-button
-                class="absolute bottom-2 right-2 py-1 !px-4"
-                variant="primary"
+                class="absolute bottom-2 right-2 py-1 !px-4 bg-heandshe"
+                
               >
                 RM
                 {{
@@ -617,7 +617,7 @@
               "
             >
               <button
-                class="bg-primary-400 text-white w-full py-2 px-4 rounded-full"
+                class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
                 @click="addToCart(modalData)"
               >
                 Save to Cart - RM
@@ -633,7 +633,7 @@
                     flex
                     items-center
                     justify-center
-                    bg-primary-400
+                    bg-heandshe
                     text-primary-50
                     p-1
                     rounded-lg
@@ -648,7 +648,7 @@
                     flex
                     items-center
                     justify-center
-                    bg-primary-400
+                    bg-heandshe
                     text-primary-50
                     p-1
                     rounded-lg
