@@ -62,7 +62,10 @@
             <hr class="my-1" />
             <p class="text-center">
               Don't have an account?<router-link
-                :to="{ name: 'orderMembership' ,  params: { branchID: this.branch } }"
+                :to="{
+                  name: 'orderMembership',
+                  params: { branchID: this.branch },
+                }"
               >
                 <a
                   href="#"
@@ -324,7 +327,8 @@ import RsButton from "@/components/Button.vue";
 
 import { Navigation, Scrollbar, A11y, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import moment from 'moment';
+import moment from "moment";
+import QrcodeVue from "qrcode.vue";
 
 export default {
   name: "TableOrder",
@@ -334,6 +338,7 @@ export default {
     Swiper,
     axios,
     SwiperSlide,
+    QrcodeVue,
   },
   setup(props) {
     const changetable = ref(false);
@@ -342,7 +347,6 @@ export default {
     const table = ref(0);
     table.value = route.query.table;
     const branch = ref(route.params.branchID);
-    
 
     const customerData = ref({
       name: "",
@@ -402,6 +406,8 @@ export default {
       orderid: null,
       branch: 0,
       branch_Name: "",
+      value: "https://example.com",
+      size: 300,
 
       /* LAMA DATA RETURN */
 
@@ -410,7 +416,6 @@ export default {
       pickmode: false,
       pickedOrderType: false,
       timePicker: false,
-      
     };
   },
 
@@ -436,9 +441,7 @@ export default {
     this.branch = this.$route.params.branchID;
     if (this.branch != 0 && this.branch != undefined) {
       this.getOutlet(this.branch);
-    }
-    else if(localStorage.branch != 0)
-    {
+    } else if (localStorage.branch != 0) {
       this.getOutlet(localStorage.branch);
     }
 
@@ -500,7 +503,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getMemberLogin",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "tbl/getMemberLogin",
         headers: {
           "Content-Type": "application/json",
         },
@@ -559,7 +562,6 @@ export default {
       const time = today.getHours() + ":" + today.getMinutes();
       const dateTime = time;
       this.timestamp = dateTime;
-      
     },
 
     async preorderCheck(table2) {
@@ -591,13 +593,13 @@ export default {
         if (this.timer < "10:30" || this.timer > "20:00") {
           alert("Outside Working Hours");
         } else {
-           localStorage.time = this.timer;
-           localStorage.branch = this.branch
-            this.customerProceed = true;
-            this.$router.push({
-              name: "takeaway",
-              params: { branchID: this.branch, orderID: "", table: 0 },
-            }); 
+          localStorage.time = this.timer;
+          localStorage.branch = this.branch;
+          this.customerProceed = true;
+          this.$router.push({
+            name: "takeaway",
+            params: { branchID: this.branch, orderID: "", table: 0 },
+          });
         }
       }
     },
@@ -622,7 +624,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },
