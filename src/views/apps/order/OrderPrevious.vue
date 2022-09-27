@@ -76,7 +76,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },

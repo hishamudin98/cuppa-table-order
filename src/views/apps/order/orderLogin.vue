@@ -500,7 +500,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getMemberLogin",
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getMemberLogin",
         headers: {
           "Content-Type": "application/json",
         },
@@ -622,7 +622,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },

@@ -1271,7 +1271,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getCategory" /*  http://localhost:3000/tbl/getCategory*/,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1296,7 +1296,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: "https://stg-heandshe.toyyibfnb.com/api/getMenu" /* http://localhost:3000/getMenu   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1454,7 +1454,7 @@ export default {
 
         var config = {
           method: "post",
-          url: "https://stg-heandshe.toyyibfnb.com/api/tbl/updateOrdertbl" /* http://localhost:3000/tbl/updateOrdertbl*/,
+          url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1485,7 +1485,7 @@ export default {
         console.log(data);
         var config = {
           method: "post",
-          url: "https://stg-heandshe.toyyibfnb.com/api/tbl/insertOrder", /* http://localhost:3000/tbl/insertOrder */
+          url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/insertOrder", /* http://localhost:3000tbl/insertOrder */
           headers: {
             "Content-Type": "application/json",
           },
@@ -1515,7 +1515,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getMembership" /* http://localhost:3000/tbl/getMembership */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1565,7 +1565,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/getOrderCart" /* http://localhost:3000/tbl/getOrderCart */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",
         },

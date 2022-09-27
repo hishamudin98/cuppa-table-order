@@ -123,7 +123,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "https://stg-heandshe.toyyibfnb.com/api/tbl/insertMember",  /* http://localhost:3000/tbl/getOrderConfirm */
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/insertMember",  /* http://localhost:3000tbl/getOrderConfirm */
         headers: {
           "Content-Type": "application/json",
         },
