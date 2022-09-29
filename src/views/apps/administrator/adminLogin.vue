@@ -7,7 +7,7 @@
           border-bottom-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
         "
-        class="bg-primary-400 after:content-['']"
+        class="bg-heandshe after:content-['']"
       >
         <div class="flex justify-between items-center p-2"></div>
         <div
@@ -17,7 +17,7 @@
           <div class="w-70 bg-black rounded-full">
             <img
               class="object-scale-down"
-              src="@/assets/images/logo/logo-white.png"
+              src="@/assets/images/logo/heandshe.jpg"
               alt=""
             />
           </div>
@@ -40,7 +40,7 @@
             placeholder="Enter your password"
             v-model="password"
           />
-          <rs-button class="w-full" @click="login()">Login</rs-button>
+          <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="login()">Login</rs-button>
         </div>
       </div>
     </div>
@@ -102,7 +102,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/admin/login" /*  */,
+        url: "http://localhost:8000/admin/login" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -111,7 +111,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log(response.data);
+          
             if (response.data.message == "Success") {
               this.$router.push({
                 name: "dashboard",

@@ -42,7 +42,7 @@
               class="w-full bg-heandshe hover:bg-heandshe"
               @click="CustomerDetails()"
             >
-              Enter Customer Details
+              Guest
             </rs-button>
             <hr class="my-1" />
             <rs-button
@@ -124,11 +124,12 @@
             v-model="username"
           />
           <form-kit
-            type="number"
+            type="password"
             placeholder="Enter your password"
             :validation-messages="{
               required: 'Please enter a password',
             }"
+            validation-visibility="live"
             v-model="password"
           />
           <rs-button
@@ -139,7 +140,8 @@
           >
           <hr class="my-3" />
           <rs-button
-            class="w-full bg-heandshe hover:bg-heandshe"
+            class="w-full"
+            variant="primary-outline"
             @click="mmberLoginClose()"
           >
             Back
@@ -503,7 +505,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "tbl/getMemberLogin",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getMemberLogin",
         headers: {
           "Content-Type": "application/json",
         },
@@ -518,6 +520,10 @@ export default {
               localStorage.phone = response.data.data[0].phone_no;
 
               this.orderType();
+            }
+            else
+            {
+              alert(response.data.message)
             }
           }.bind(this)
         )
@@ -624,7 +630,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },

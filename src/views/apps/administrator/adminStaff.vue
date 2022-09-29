@@ -69,7 +69,6 @@
                     </router-link>
                   </li>
                   <li>
-                    <router-link :to="{ name: 'admin-staff' }">
                     <a
                       href="#"
                       class="
@@ -87,7 +86,6 @@
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
                     </a>
-                    </router-link>
                   </li>
                   <li>
                     <a
@@ -200,7 +198,7 @@
             <div class="inline-block w-1/2 pr-10 h-2/4">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
-                  <strong>Number of active users</strong>
+                  <strong>Number of active staff</strong>
                 </div>
                 <hr />
                 <div class="text-center py-8">64 Active Users</div>
@@ -209,7 +207,7 @@
             <div class="inline-block w-1/2 pr-10 pb-2">
               <rs-card>
                 <div class="text-center pt-10">
-                  <strong>Number of users by Outlet</strong>
+                  <strong>Number of staff by Outlet</strong>
                 </div>
                 <hr />
                 <div class="text-center py-8">10 Active Users</div></rs-card
@@ -223,7 +221,7 @@
                 <FormKit
                   v-model="search"
                   id="search-sticky"
-                  placeholder="Search for a user..."
+                  placeholder="Search for a staff..."
                   type="search"
                   :classes="{
                     inner:
@@ -237,7 +235,7 @@
                 <rs-button
                   @click="addUser()"
                   class="bg-heandshe hover:bg-heandshe"
-                  >Add User</rs-button
+                  >Add Staff</rs-button
                 >
               </div>
             </div>
@@ -245,7 +243,7 @@
               <rs-card style="padding-top: 10px">
                 <div class="overflow-y-auto h-96">
                   <div v-for="(user, index) in searchUsers" :key="index">
-                    <rs-card class="mb-5">
+                    <rs-card class="mb-5" @click="staffSelect(user)">
                       <div
                         class="
                           product-content-wrapper
@@ -313,15 +311,83 @@
       </div>
     </div>
 
-    <rs-modal title="Add User" v-model="modalPOS" position="middle" size="full">
+    <rs-modal title="Staff" v-model="selectStaff" position="middle" size="full">
+      <FormKit
+        label="Fullname"
+        type="text"
+        :value="users1.user_name"
+        readonly
+      />
+      <FormKit
+        label="Phone No."
+        type="number"
+        :value="users1.user_phone"
+        readonly
+      />
+      <FormKit label="Email" type="email" :value="users1.user_email" readonly />
+      <FormKit
+        label="Password No."
+        type="text"
+        :value="users1.user_password"
+        readonly
+      />
+      <FormKit
+        label="Pin Code"
+        help="for POS system login"
+        type="number"
+        :value="users1.user_pincode"
+        readonly
+      />
+      <FormKit
+        label="Address"
+        type="textarea"
+        :value="users1.user_address"
+        readonly
+      />
+      <FormKit
+        label="Date of Birth."
+        type="text"
+        :value="users1.dob"
+        readonly
+      />
+      <FormKit
+        label="Position"
+        type="text"
+        :value="users1.user_position"
+        readonly
+      /> </rs-modal
+    ><!-- SELECT -->
+
+    <rs-modal
+      title="Add Staff"
+      v-model="modalPOS"
+      position="middle"
+      size="full"
+    >
       <FormKit label="Fullname" type="text" v-model="fullname" />
       <FormKit label="Phone No." type="number" v-model="phone" />
       <FormKit label="Email" type="email" v-model="email" />
+      <FormKit label="Password No." type="password" v-model="password" />
+      <FormKit
+        label="Pin Code"
+        help="for POS system login"
+        type="number"
+        v-model="pincode"
+      />
       <FormKit label="Address" type="textarea" v-model="address" />
-      <rs-button style="float: right" @click="insertUser()"> Save </rs-button>
-    </rs-modal>
+      <FormKit label="Date of Birth." type="date" v-model="dob" />
+      <FormKit
+        type="select"
+        label="Staff Position"
+        :options="staffPosition"
+        v-model="position"
+      />
+      <rs-button style="float: right" @click="insertUser()">
+        Save
+      </rs-button> </rs-modal
+    ><!-- INSERT -->
     <rs-modal
-      title="Edit User"
+      title="Edit Staff"
       v-model="modalEdit"
       position="middle"
       size="full"
@@ -329,11 +395,29 @@
       <FormKit label="Fullname" type="text" v-model="users1.user_name" />
       <FormKit label="Phone No." type="number" v-model="users1.user_phone" />
       <FormKit label="Email" type="email" v-model="users1.user_email" />
+      <FormKit
+        label="Password No."
+        type="password"
+        v-model="users1.user_password"
+      />
+      <FormKit
+        label="Pin Code"
+        help="for POS system login"
+        type="number"
+        v-model="users1.user_pincode"
+      />
       <FormKit label="Address" type="textarea" v-model="address" />
+      <FormKit label="Date of Birth." type="date" v-model="users1.user_dob" />
+      <FormKit
+        type="select"
+        label="Staff Position"
+        :options="staffPosition"
+        v-model="users1.user_position"
+      />
       <rs-button style="float: right" @click="updateUser(users1)">
         Save
-      </rs-button>
-    </rs-modal>
+      </rs-button> </rs-modal
+    ><!-- EDIT -->
     <rs-modal
       title="Delete User"
       v-model="modalDelete"
@@ -355,8 +439,8 @@
         @click="UserDelete(users1)"
       >
         Yes
-      </rs-button>
-    </rs-modal>
+      </rs-button> </rs-modal
+    ><!-- DELETE -->
   </rs-layout>
 </template>
 <script>
@@ -391,23 +475,65 @@ export default {
   },
   data() {
     return {
+      staffPosition: [],
+      /* DATA V-MODEL */
       staffid: "",
       staffName: "",
-      modalPOS: false,
+
       fullname: "",
       phone: null,
       email: "",
       address: "",
-      modalEdit: false,
-      users1: "",
+      password: "",
+      pincode: "",
+      dob: "",
+      position: "",
+
+      /* MODAL SHOW */
       modalDelete: false,
+      modalPOS: false,
+      modalEdit: false,
+      selectStaff: false,
+      users1: "",
     };
   },
   async created() {
     this.getdata();
     this.getuser();
+    this.getPosition();
   },
   methods: {
+    async staffSelect(user) {
+      this.users1 = user;
+      this.selectStaff = true;
+    },
+
+    async getPosition() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getPosition" /*  */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.staffPosition.push({
+                label: response.data.data[i].pos_name,
+                value: response.data.data[i].pos_id,
+              });
+            }
+            console.log(this.staffPosition);
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -434,12 +560,16 @@ export default {
 
     async getuser() {
       var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
       var config = {
-        method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getUser" /*   */,
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
+        data: data,
       };
       await axios(config)
         .then(
@@ -450,6 +580,12 @@ export default {
                 user_name: response.data.data[i].user_name,
                 user_phone: response.data.data[i].user_phone,
                 user_email: response.data.data[i].user_email,
+                user_password: response.data.data[i].user_password,
+                user_no: response.data.data[i].user_no,
+                user_pincode: response.data.data[i].user_pincode,
+                user_address: response.data.data[i].user_address,
+                user_dob: response.data.data[i].user_dob,
+                user_position: response.data.data[i].user_position,
               });
             }
           }.bind(this)
@@ -476,7 +612,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteUser" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteStaff" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -508,10 +644,14 @@ export default {
         user_email: users.user_email,
         user_id: users.user_id,
         address: this.address,
+        password: this.password,
+        pincode: this.pincode,
+        dob: this.dob,
+        position: this.position,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateUser" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateStaff" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -546,10 +686,15 @@ export default {
         phone: this.phone,
         email: this.email,
         address: this.address,
+        password: this.password,
+        pincode: this.pincode,
+        dob: this.dob,
+        position: this.position,
+        staffid: localStorage.staff,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertUser",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
         headers: {
           "Content-Type": "application/json",
         },

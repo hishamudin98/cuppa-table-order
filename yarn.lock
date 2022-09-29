@@ -1962,7 +1962,7 @@
   dependencies:
     "@vue/shared" "3.2.39"
 
-"@vue/runtime-core@3.2.39", "@vue/runtime-core@latest":
+"@vue/runtime-core@3.2.39":
   "integrity" "sha512-xKH5XP57JW5JW+8ZG1khBbuLakINTgPuINKL01hStWLTTGFOrM49UfCFXBcFvWmSbci3gmJyLl2EAzCaZWsx8g=="
   "resolved" "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.2.39.tgz"
   "version" "3.2.39"
@@ -1970,7 +1970,7 @@
     "@vue/reactivity" "3.2.39"
     "@vue/shared" "3.2.39"
 
-"@vue/runtime-dom@3.2.39", "@vue/runtime-dom@latest":
+"@vue/runtime-dom@3.2.39":
   "integrity" "sha512-4G9AEJP+sLhsqf5wXcyKVWQKUhI+iWfy0hWQgea+CpaTD7BR0KdQzvoQdZhwCY6B3oleSyNLkLAQwm0ya/wNoA=="
   "resolved" "https://registry.npmjs.org/@vue/runtime-dom/-/runtime-dom-3.2.39.tgz"
   "version" "3.2.39"
@@ -2822,7 +2822,7 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
-"chart.js@^3.7.1", "chart.js@=> ^3.1.0":
+"chart.js@^3.9.1":
   "integrity" "sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w=="
   "resolved" "https://registry.npmjs.org/chart.js/-/chart.js-3.9.1.tgz"
   "version" "3.9.1"
@@ -3427,7 +3427,7 @@
   dependencies:
     "css-tree" "^1.1.2"
 
-"csstype@^2.6.8", "csstype@latest":
+"csstype@^2.6.8":
   "integrity" "sha512-Z1PhmomIfypOpoMjRQB70jfvy/wxT50qW08YXO5lMIJkrdq4yOTR+AW7FqutScmB9NkLwxo+jU+kZLbofZZq/w=="
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-2.6.21.tgz"
   "version" "2.6.21"
@@ -5436,11 +5436,6 @@
   "version" "5.0.0"
   dependencies:
     "p-locate" "^4.1.0"
-
-"lodash-es@latest":
-  "integrity" "sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw=="
-  "resolved" "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz"
-  "version" "4.17.21"
 
 "lodash.debounce@^4.0.8":
   "integrity" "sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow=="
@@ -8385,16 +8380,6 @@
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
 
-"vue-chart-3@^3.1.8":
-  "integrity" "sha512-zX5ajjQi/PocEqLETlej3vp92q/tnI/Fvu2RVb++Kap8qOrXu6PXCpodi73BFrWzEGZIAnqoUxC3OIkRWD657g=="
-  "resolved" "https://registry.npmjs.org/vue-chart-3/-/vue-chart-3-3.1.8.tgz"
-  "version" "3.1.8"
-  dependencies:
-    "@vue/runtime-core" "latest"
-    "@vue/runtime-dom" "latest"
-    "csstype" "latest"
-    "lodash-es" "latest"
-
 "vue-cli-plugin-i18n@^2.3.1":
   "integrity" "sha512-1bNVZtLIAL9Pge8hiw986vixofyqF/tlgsqe4fF5JWn9c8xhsqVugEBuUeaYxevrE9efhhFk9mRmEDwBwQnbNg=="
   "resolved" "https://registry.npmjs.org/vue-cli-plugin-i18n/-/vue-cli-plugin-i18n-2.3.1.tgz"
@@ -8536,7 +8521,7 @@
   "resolved" "https://registry.npmjs.org/vue-toastification/-/vue-toastification-2.0.0-rc.5.tgz"
   "version" "2.0.0-rc.5"
 
-"vue@*", "vue@^2 || ^3.2.13", "vue@^3.0.0", "vue@^3.0.0 || ^2.6.0", "vue@^3.0.0-beta.1", "vue@^3.0.11", "vue@^3.0.2", "vue@^3.0.5", "vue@^3.1.0", "vue@^3.2.0", "vue@^3.2.1", "vue@> 3.0.0", "vue@>= 3", "vue@>= 3.0.0 < 4", "vue@>=3", "vue@>=3.2.0", "vue@3", "vue@3.2.39", "vue@3.x":
+"vue@*", "vue@^2 || ^3.2.13", "vue@^3.0.0", "vue@^3.0.0 || ^2.6.0", "vue@^3.0.0-beta.1", "vue@^3.0.11", "vue@^3.0.2", "vue@^3.0.5", "vue@^3.1.0", "vue@^3.2.0", "vue@^3.2.1", "vue@> 3.0.0", "vue@>= 3.0.0 < 4", "vue@>=3", "vue@>=3.2.0", "vue@3", "vue@3.2.39", "vue@3.x":
   "integrity" "sha512-tRkguhRTw9NmIPXhzk21YFBqXHT2t+6C6wPOgQ50fcFVWnPdetmRqbmySRHznrYjX2E47u0cGlKGcxKZJ38R/g=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.39.tgz"
   "version" "3.2.39"

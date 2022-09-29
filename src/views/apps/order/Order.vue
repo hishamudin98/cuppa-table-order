@@ -1165,7 +1165,7 @@ export default {
         } else {
           variation.value.push({});
         }
-        console.log(variation.value[0].id);
+      
         if (localStorage.name != "") {
           var nameCust = localStorage.name;
           var phoneCust = localStorage.phone;
@@ -1219,7 +1219,7 @@ export default {
           totalPrice.value = total;
         }
       }
-      console.log("Order :", order.value);
+    
       picked = 1;
       quantity.value = 1;
       openModal.value = false;
@@ -1387,7 +1387,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },
@@ -1408,11 +1408,12 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
       };
+      console.log(config)
       await axios(config)
         .then(
           function (response) {
@@ -1433,7 +1434,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"getMenu" /* http://localhost:3000/getMenu   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"/getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1590,7 +1591,7 @@ export default {
         });
         var config = {
           method: "post",
-          url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
+          url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1622,7 +1623,7 @@ export default {
         localStorage.order = this.order;
         var config = {
           method: "post",
-          url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
+          url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1653,7 +1654,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1703,7 +1704,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",
         },

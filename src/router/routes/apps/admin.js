@@ -14,6 +14,11 @@ export default [
       name: "admin-user",
       component: () => import("@/views/apps/administrator/adminUser.vue"),
     },
+    {
+      path: "/admin/staff",
+      name: "admin-staff",
+      component: () => import("@/views/apps/administrator/adminStaff.vue"),
+    },
     /*{
       path: "/order/confirm",
       name: "order-confirm",

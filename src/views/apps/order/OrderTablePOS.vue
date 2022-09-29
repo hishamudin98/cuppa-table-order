@@ -23,12 +23,15 @@
           style="height: 40vh"
           class="flex flex-col justify-center items-center"
         >
-          <div class="w-70">
-            <img
+          <div class="w-70 items-center">
+            <!-- <img
               class="object-scale-down"
               src="@/assets/images/logo/heandshe.jpg"
               alt=""
-            />
+            /> -->
+            <center>
+              <qrcode-vue :value="this.value" :size="size" level="L" />
+            </center>
           </div>
         </div>
       </div>
@@ -54,7 +57,7 @@
         </div>
         <br />
         <router-link :to="{ name: 'orderLogin' }">
-          <rs-button class="w-full bg-heandshe" > Order Again? </rs-button>
+          <rs-button class="w-full bg-heandshe"> Order Again? </rs-button>
         </router-link>
       </div>
     </div>
@@ -65,6 +68,7 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
+import QrcodeVue from "qrcode.vue";
 
 import RsModal from "@/components/Modal.vue";
 import RsButton from "@/components/Button.vue";
@@ -80,6 +84,7 @@ export default {
     Swiper,
     axios,
     SwiperSlide,
+    QrcodeVue,
   },
   setup(props) {
     const changetable = ref(false);
@@ -132,12 +137,15 @@ export default {
     return {
       customerProceed: false,
       ORDERID: null,
+      value: "",
+      size: 200,
     };
   },
 
   mounted() {
     this.ORDERID = this.$route.params.orderID;
     localStorage.orderid = this.ORDERID;
+    this.value = this.ORDERID;
   },
   methods: {
     async customerAdvanced(dataUser) {

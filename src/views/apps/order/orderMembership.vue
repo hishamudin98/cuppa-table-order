@@ -132,7 +132,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log(response.data)
+           
             if(response.data.status == 200)
             {
               alert("Register Successfully")
