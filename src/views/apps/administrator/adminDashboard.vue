@@ -88,6 +88,7 @@
               </router-link>
             </li>
             <li>
+              <router-link :to="{ name: 'admin-menu' }">
               <a
                 href="#"
                 class="
@@ -105,6 +106,7 @@
               >
                 <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
               </a>
+              </router-link>
             </li>
             <li>
               <a

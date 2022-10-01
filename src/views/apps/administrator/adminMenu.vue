@@ -70,45 +70,44 @@
                   </li>
                   <li>
                     <router-link :to="{ name: 'admin-staff' }">
-                    <a
-                      href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        bg-gray-300
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
-                    >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
-                    </a>
+                      <a
+                        href="#"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
+                      >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
+                      </a>
                     </router-link>
                   </li>
                   <li>
                     <router-link :to="{ name: 'admin-menu' }">
-                    <a
-                      href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
-                    >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
-                    </a>
+                      <a
+                        href="#"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
+                      >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
+                      </a>
                     </router-link>
                   </li>
                   <li>
@@ -203,19 +202,19 @@
             <div class="inline-block w-1/2 pr-10 h-2/4">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
-                  <strong>Number of active staff</strong>
+                  <strong>Number of active Menu</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">64 Active Users</div>
+                <div class="text-center py-8">60 Active Menu</div>
               </rs-card>
             </div>
             <div class="inline-block w-1/2 pr-10 pb-2">
               <rs-card>
                 <div class="text-center pt-10">
-                  <strong>Number of staff by Outlet</strong>
+                  <strong>Number of Menu by Outlet</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">10 Active Users</div></rs-card
+                <div class="text-center py-8">43 Active Menu</div></rs-card
               >
             </div>
           </div>
@@ -226,7 +225,7 @@
                 <FormKit
                   v-model="search"
                   id="search-sticky"
-                  placeholder="Search for a staff..."
+                  placeholder="Search for Menu..."
                   type="search"
                   :classes="{
                     inner:
@@ -240,7 +239,7 @@
                 <rs-button
                   @click="addUser()"
                   class="bg-heandshe hover:bg-heandshe"
-                  >Add Staff</rs-button
+                  >Add Menu</rs-button
                 >
               </div>
             </div>
@@ -260,7 +259,7 @@
                         <div class="product-title mt-4">
                           <span
                             class="block text-base font-semibold line-clamp-2"
-                            >{{ user.user_name }}
+                            >{{ user.name }}
                           </span>
                         </div>
                         <div class="product-content flex flex-col">
@@ -274,10 +273,10 @@
                           >
                             <div class="truncate">
                               <div class="text-sm text-black-500">
-                                {{ user.user_email }}
+                                {{ user.code }}
                               </div>
                               <div class="text-sm text-black-500">
-                                {{ user.user_phone }}
+                                RM {{ formatPrice(user.price) }}
                               </div>
                             </div>
                             <div style="padding-bottom: 2%">
@@ -316,25 +315,32 @@
       </div>
     </div>
 
-    <rs-modal title="Staff" v-model="selectStaff" position="middle" size="full">
+    <rs-modal title="Menu" v-model="selectStaff" position="middle" size="md">
+      <FormKit label="Menu Name" type="text" :value="users1.name" readonly />
+      <FormKit label="Menu Code" type="text" :value="users1.code" readonly />
       <FormKit
-        label="Fullname"
+        label="Price ( RM )"
         type="text"
-        :value="users1.user_name"
+        :value="formatPrice(users1.price)"
         readonly
       />
-      <FormKit
-        label="Phone No."
-        type="number"
-        :value="users1.user_phone"
-        readonly
+      <div v-for="(variant, index) in users1.variants" :key="index">
+        <FormKit
+        v-if="users1.variant != null && users1.variant != undefined"
+        label="Variant"
+        type="radio"
+        :value="users1.variants"
+        :options="users1.variants"
       />
-      <FormKit label="Email" type="email" :value="users1.user_email" readonly />
-      <FormKit
-        label="Password."
-        type="text"
-        :value="users1.user_password"
-        readonly
+      </div>
+      
+
+      <!-- <FormKit
+        v-if="users1.variant != null && users1.variant != undefined"
+        label="Variant"
+        type="radio"
+        :value="users1.data"
+        :options="users1.data"
       />
       <FormKit
         label="Pin Code"
@@ -342,25 +348,7 @@
         type="number"
         :value="users1.user_pincode"
         readonly
-      />
-      <FormKit
-        label="Address"
-        type="textarea"
-        :value="users1.user_address"
-        readonly
-      />
-      <FormKit
-        label="Date of Birth."
-        type="text"
-        :value="users1.dob"
-        readonly
-      />
-      <FormKit
-        label="Position"
-        type="text"
-        :value="users1.user_position"
-        readonly
-      /> </rs-modal
+      /> --> </rs-modal
     ><!-- SELECT -->
 
     <rs-modal
@@ -372,7 +360,7 @@
       <FormKit label="Fullname" type="text" v-model="fullname" />
       <FormKit label="Phone No." type="number" v-model="phone" />
       <FormKit label="Email" type="email" v-model="email" />
-      <FormKit label="Password " type="password" v-model="password" />
+      <FormKit label="Password No." type="password" v-model="password" />
       <FormKit
         label="Pin Code"
         help="for POS system login"
@@ -465,17 +453,22 @@ export default {
     const searchUsers = computed(() => {
       return users.value.filter((user) => {
         return (
-          user.user_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1 ||
-          user.user_email.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1
+          user.name.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
+          user.code.toLowerCase().indexOf(search.value.toLowerCase()) != -1
         );
       });
     });
+    const formatPrice = (price) => {
+      return parseFloat(price)
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     return {
       search,
       searchUsers,
       users,
+      formatPrice,
     };
   },
   data() {
@@ -493,6 +486,7 @@ export default {
       pincode: "",
       dob: "",
       position: "",
+      variansi: [],
 
       /* MODAL SHOW */
       modalDelete: false,
@@ -504,7 +498,7 @@ export default {
   },
   async created() {
     this.getdata();
-    this.getuser();
+    this.getMenu();
     this.getPosition();
   },
   methods: {
@@ -531,7 +525,6 @@ export default {
                 value: response.data.data[i].pos_id,
               });
             }
-            console.log(this.staffPosition);
           }.bind(this)
         )
         .catch(function (error) {
@@ -563,36 +556,49 @@ export default {
         });
     },
 
-    async getuser() {
+    async getMenu() {
       var axios = require("axios");
-      var data = JSON.stringify({
-        staffid: localStorage.staff,
-      });
       var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
-        data: data,
       };
       await axios(config)
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
+              /* VARIATION */
+              var variant = JSON.parse(response.data.data[i].menu_variant);
+              if (variant == null) {
+                this.variansi = "";
+              } else {
+                
+                for (let j = 0; j < variant.length; j++) {
+                    this.variansi.push(
+                        {
+                            label: variant[j].data
+                        }
+                    )
+                }
+              }
+              /* VARIATION */
               this.users.push({
-                user_id: response.data.data[i].user_id,
-                user_name: response.data.data[i].user_name,
-                user_phone: response.data.data[i].user_phone,
-                user_email: response.data.data[i].user_email,
-                user_password: response.data.data[i].user_password,
-                user_no: response.data.data[i].user_no,
+                menuid: response.data.data[i].menu_id,
+                name: response.data.data[i].menu_name,
+                price: response.data.data[i].menu_price,
+                code: response.data.data[i].menu_code,
+                category: response.data.data[i].menu_category,
+                variants: this.variansi /*
                 user_pincode: response.data.data[i].user_pincode,
                 user_address: response.data.data[i].user_address,
                 user_dob: response.data.data[i].user_dob,
-                user_position: response.data.data[i].user_position,
+                user_position: response.data.data[i].user_position, */,
               });
+              this.variansi = [];
             }
+            console.log(this.users)
           }.bind(this)
         )
         .catch(function (error) {

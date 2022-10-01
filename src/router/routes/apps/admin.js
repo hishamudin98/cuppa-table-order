@@ -19,12 +19,12 @@ export default [
       name: "admin-staff",
       component: () => import("@/views/apps/administrator/adminStaff.vue"),
     },
-    /*{
-      path: "/order/confirm",
-      name: "order-confirm",
-      component: () => import("@/views/apps/order/OrderConfirm.vue"),
-    },
     {
+      path: "/admin/menu",
+      name: "admin-menu",
+      component: () => import("@/views/apps/administrator/adminMenu.vue"),
+    },
+    /*{
       path: "/order/table/:orderID?/:table?",
       name: "order-table",
       component: () => import("@/views/apps/order/OrderTablePOS.vue"),

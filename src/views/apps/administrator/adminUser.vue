@@ -56,6 +56,7 @@
                           items-center
                           p-2
                           text-base
+                          bg-gray-300
                           font-normal
                           text-gray-900
                           rounded-lg
@@ -70,43 +71,45 @@
                   </li>
                   <li>
                     <router-link :to="{ name: 'admin-staff' }">
-                    <a
-                      href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
-                    >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
-                    </a>
+                      <a
+                        href="#"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
+                      >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
+                      </a>
                     </router-link>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
-                    >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
-                    </a>
+                    <router-link :to="{ name: 'admin-menu' }">
+                      <a
+                        href="#"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
+                      >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
+                      </a>
+                    </router-link>
                   </li>
                   <li>
                     <a
@@ -195,9 +198,9 @@
             </aside>
           </div>
         </div>
-        <div class="w-full flex flex-col">
-          <div class="w-full flex flex-row mb-64">
-            <div class="inline-block w-1/2 pr-10 h-2/4">
+        <div class="w-full h-1/4 flex flex-col">
+          <div class="w-full flex flex-row mb-1">
+            <div class="inline-block w-1/2 pr-10">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Number of active users</strong>
@@ -219,7 +222,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-10">
+              <div class="w-11/12 h-1">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -241,10 +244,54 @@
                 >
               </div>
             </div>
-            <div class="h-4/6">
+            <div class="">
               <rs-card style="padding-top: 10px">
-                <div class="overflow-y-auto h-96">
-                  <div v-for="(user, index) in searchUsers" :key="index">
+                <div>
+                  <div>
+                    <DataTable
+                      :value="searchUsers"
+                      :paginator="true"
+                      :rows="10"
+                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                      :rowsPerPageOptions="[10, 20, 50]"
+                      responsiveLayout="scroll"
+                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                    >
+                      <Column field="user_name" header="Name"></Column>
+                      <Column field="user_phone" header="Phone no."></Column>
+                      <Column field="user_email" header="Email"></Column>
+                      <Column :exportable="false" style="min-width: 8rem">
+                        <template #body="searchUsers">
+                          <Button
+                            icon="pi pi-pencil"
+                            class="p-button-rounded p-button-success mr-2"
+                            @click="editUser(searchUsers)"
+                          />
+                          <Button
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-warning"
+                            @click="deleteUser(searchUsers)"
+                          />
+                        </template>
+                      </Column>
+                      <template #paginatorstart>
+                        <Button
+                          type="button"
+                          icon="pi pi-refresh"
+                          class="p-button-text"
+                        />
+                      </template>
+                      <template #paginatorend>
+                        <Button
+                          type="button"
+                          icon="pi pi-cloud"
+                          class="p-button-text"
+                        />
+                      </template>
+                    </DataTable>
+                  </div>
+                  <!-- class="overflow-y-auto h-96 " -->
+                  <!-- <div v-for="(user, index) in searchUsers" :key="index">
                     <rs-card class="mb-5">
                       <div
                         class="
@@ -301,7 +348,248 @@
                         </div>
                       </div>
                     </rs-card>
-                  </div>
+                  </div> -->
+                  <!-- <table
+                    class="
+                      w-full
+                      text-sm text-left text-gray-500
+                      dark:text-gray-400
+                    "
+                    id="example"
+                  >
+                    <thead
+                      class="
+                        text-xs text-gray-700
+                        uppercase
+                        bg-gray-50
+                        dark:bg-gray-700 dark:text-gray-400
+                      "
+                    >
+                      <tr>
+                        <th scope="col" class="py-3 px-6">Name</th>
+                        <th scope="col" class="py-3 px-6">Phone no.</th>
+                        <th scope="col" class="py-3 px-6">Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        class="
+                          bg-white
+                          border-b
+                          dark:bg-gray-800 dark:border-gray-700
+                          hover:bg-gray-50
+                          dark:hover:bg-gray-600
+                        "
+                        v-for="(user, index) in searchUsers"
+                        :key="index"
+                      >
+                        <th
+                          scope="row"
+                          class="
+                            py-4
+                            px-6
+                            font-medium
+                            text-gray-900
+                            whitespace-nowrap
+                            dark:text-white
+                          "
+                        >
+                          {{ user.user_name }}
+                        </th>
+                        <td class="py-4 px-6">{{ user.user_email }}</td>
+                        <td class="py-4 px-6">{{ user.user_phone }}</td>
+                      </tr>
+                    </tbody>
+                  </table> -->
+                  <!-- <nav
+                  class="flex justify-between items-center pt-4"
+                  aria-label="Table navigation"
+                >
+                  <span
+                    class="text-sm font-normal text-gray-500 dark:text-gray-400"
+                    >Showing
+                    <span class="font-semibold text-gray-900 dark:text-white"
+                      >1-10</span
+                    >
+                    of
+                    <span class="font-semibold text-gray-900 dark:text-white">{{
+                      this.totalData
+                    }}</span></span
+                  >
+                  <ul class="inline-flex items-center -space-x-px">
+                    <li>
+                      <a
+                        href="#"
+                        class="
+                          block
+                          py-2
+                          px-3
+                          ml-0
+                          leading-tight
+                          text-gray-500
+                          bg-white
+                          rounded-l-lg
+                          border border-gray-300
+                          hover:bg-gray-100 hover:text-gray-700
+                          dark:bg-gray-800
+                          dark:border-gray-700
+                          dark:text-gray-400
+                          dark:hover:bg-gray-700
+                          dark:hover:text-white
+                        "
+                      >
+                        <span class="sr-only">Previous</span>
+                        <svg
+                          class="w-5 h-5"
+                          aria-hidden="true"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="
+                          py-2
+                          px-3
+                          leading-tight
+                          text-gray-500
+                          bg-white
+                          border border-gray-300
+                          hover:bg-gray-100 hover:text-gray-700
+                          dark:bg-gray-800
+                          dark:border-gray-700
+                          dark:text-gray-400
+                          dark:hover:bg-gray-700
+                          dark:hover:text-white
+                        "
+                        >1</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="
+                          py-2
+                          px-3
+                          leading-tight
+                          text-gray-500
+                          bg-white
+                          border border-gray-300
+                          hover:bg-gray-100 hover:text-gray-700
+                          dark:bg-gray-800
+                          dark:border-gray-700
+                          dark:text-gray-400
+                          dark:hover:bg-gray-700
+                          dark:hover:text-white
+                        "
+                        >2</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        aria-current="page"
+                        class="
+                          z-10
+                          py-2
+                          px-3
+                          leading-tight
+                          text-blue-600
+                          bg-blue-50
+                          border border-blue-300
+                          hover:bg-blue-100 hover:text-blue-700
+                          dark:border-gray-700 dark:bg-gray-700 dark:text-white
+                        "
+                        >3</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="
+                          py-2
+                          px-3
+                          leading-tight
+                          text-gray-500
+                          bg-white
+                          border border-gray-300
+                          hover:bg-gray-100 hover:text-gray-700
+                          dark:bg-gray-800
+                          dark:border-gray-700
+                          dark:text-gray-400
+                          dark:hover:bg-gray-700
+                          dark:hover:text-white
+                        "
+                        >...</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="
+                          py-2
+                          px-3
+                          leading-tight
+                          text-gray-500
+                          bg-white
+                          border border-gray-300
+                          hover:bg-gray-100 hover:text-gray-700
+                          dark:bg-gray-800
+                          dark:border-gray-700
+                          dark:text-gray-400
+                          dark:hover:bg-gray-700
+                          dark:hover:text-white
+                        "
+                        >100</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="
+                          block
+                          py-2
+                          px-3
+                          leading-tight
+                          text-gray-500
+                          bg-white
+                          rounded-r-lg
+                          border border-gray-300
+                          hover:bg-gray-100 hover:text-gray-700
+                          dark:bg-gray-800
+                          dark:border-gray-700
+                          dark:text-gray-400
+                          dark:hover:bg-gray-700
+                          dark:hover:text-white
+                        "
+                      >
+                        <span class="sr-only">Next</span>
+                        <svg
+                          class="w-5 h-5"
+                          aria-hidden="true"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                      </a>
+                    </li>
+                  </ul>
+                </nav> -->
                 </div>
               </rs-card>
             </div>
@@ -363,11 +651,21 @@
 import { ref, computed } from "vue";
 import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Button from "primevue/button";
+import "primevue/resources/themes/saga-blue/theme.css";
+import "primevue/resources/primevue.min.css";
+import "primeicons/primeicons.css";
+
 export default {
   name: "AdminDashboard",
   components: {
     RsButton,
     RsModal,
+    DataTable,
+    Column,
+    Button,
   },
   setup() {
     const users = ref([]);
@@ -401,12 +699,15 @@ export default {
       modalEdit: false,
       users1: "",
       modalDelete: false,
+      totalData: 0,
+      /* BARU */
     };
   },
   async created() {
     this.getdata();
     this.getuser();
   },
+
   methods: {
     async getdata() {
       var axios = require("axios");
@@ -452,6 +753,8 @@ export default {
                 user_email: response.data.data[i].user_email,
               });
             }
+
+            this.totalData = this.users.length;
           }.bind(this)
         )
         .catch(function (error) {
@@ -460,12 +763,13 @@ export default {
     },
 
     async editUser(user) {
-      this.users1 = user;
+      
+      this.users1 = user.data;
       this.modalEdit = true;
     },
 
     async deleteUser(user) {
-      this.users1 = user;
+      this.users1 = user.data;
       this.modalDelete = true;
     },
 
