@@ -1347,6 +1347,7 @@ export default {
           billTo: localStorage.name,
           billPhone: localStorage.phone,
           orderNo: this.orderno,
+          branch: localStorage.branch,
         });
         var config = {
           method: "POST",
@@ -1440,6 +1441,7 @@ export default {
         billTo: this.name,
         billPhone: "0174842981",
         orderNo: this.orderno,
+        branch: localStorage.branch,
       });
       var config = {
         method: "POST",

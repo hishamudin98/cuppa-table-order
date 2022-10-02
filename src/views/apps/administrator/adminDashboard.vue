@@ -68,44 +68,44 @@
             </li>
             <li>
               <router-link :to="{ name: 'admin-staff' }">
-              <a
-                href="#"
-                class="
-                  flex
-                  items-center
-                  p-2
-                  text-base
-                  font-normal
-                  text-gray-900
-                  rounded-lg
-                  dark:text-white
-                  hover:bg-gray-300
-                  dark:hover:bg-gray-700
-                "
-              >
-                <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
-              </a>
+                <a
+                  href="#"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    text-base
+                    font-normal
+                    text-gray-900
+                    rounded-lg
+                    dark:text-white
+                    hover:bg-gray-300
+                    dark:hover:bg-gray-700
+                  "
+                >
+                  <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
+                </a>
               </router-link>
             </li>
             <li>
               <router-link :to="{ name: 'admin-menu' }">
-              <a
-                href="#"
-                class="
-                  flex
-                  items-center
-                  p-2
-                  text-base
-                  font-normal
-                  text-gray-900
-                  rounded-lg
-                  dark:text-white
-                  hover:bg-gray-300
-                  dark:hover:bg-gray-700
-                "
-              >
-                <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
-              </a>
+                <a
+                  href="#"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    text-base
+                    font-normal
+                    text-gray-900
+                    rounded-lg
+                    dark:text-white
+                    hover:bg-gray-300
+                    dark:hover:bg-gray-700
+                  "
+                >
+                  <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
+                </a>
               </router-link>
             </li>
             <li>
@@ -166,6 +166,95 @@
               </a>
             </li>
             <li>
+              <div>
+                <a
+                  href="#"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    text-base
+                    font-normal
+                    text-gray-900
+                    rounded-lg
+                    dark:text-white
+                    hover:bg-gray-300
+                    dark:hover:bg-gray-700
+                  "
+                  @click="triggerDropdown()"
+                >
+                  <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
+                </a>
+              </div>
+              <div v-if="this.show == true">
+                <ul>
+                  <li>
+                    <a
+                      href="#"
+                      class="
+                        flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
+                      ><span class="flex-1 ml-3 whitespace-nowrap"
+                        >Report Transaction</span
+                      >
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="
+                        flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
+                      ><span class="flex-1 ml-3 whitespace-nowrap"
+                        >Report Shift</span
+                      >
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="
+                        flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
+                      ><span class="flex-1 ml-3 whitespace-nowrap"
+                        >Report Refund</span
+                      >
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
               <router-link :to="{ name: 'login' }">
                 <a
                   href="#"
@@ -190,15 +279,15 @@
         </div>
       </aside>
     </div>
-    <div class="inline-block pt-4 w-5/6 ">
+    <div class="inline-block pt-4 w-5/6">
       <div class="inline-block w-1/2 pr-10">
-        <rs-card >
+        <rs-card>
           <canvas id="myChart" width="700" height="300"></canvas>
-          </rs-card>
+        </rs-card>
       </div>
 
       <div class="inline-block w-1/2 pr-10">
-        <rs-card >
+        <rs-card>
           <canvas id="myChart1" width="700" height="300"></canvas>
         </rs-card>
       </div>
@@ -220,6 +309,7 @@ export default {
     return {
       staffid: "",
       staffName: "",
+      show: false,
     };
   },
   async created() {
@@ -302,6 +392,16 @@ export default {
   },
 
   methods: {
+    async triggerDropdown() {
+      if(this.show == false)
+      {
+        this.show = true
+      }
+      else
+      {
+        this.show = false
+      }
+    },
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({

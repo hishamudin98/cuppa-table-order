@@ -24,12 +24,12 @@ export default [
       name: "admin-menu",
       component: () => import("@/views/apps/administrator/adminMenu.vue"),
     },
-    /*{
-      path: "/order/table/:orderID?/:table?",
-      name: "order-table",
-      component: () => import("@/views/apps/order/OrderTablePOS.vue"),
-    },
     {
+      path: "/admin/report",
+      name: "admin-report",
+      component: () => import("@/views/apps/administrator/adminReports.vue"),
+    },
+    /*{
       path: "/order/previous/:orderID?",
       name: "order-previous",
       component: () => import("@/views/apps/order/OrderPrevious.vue"),

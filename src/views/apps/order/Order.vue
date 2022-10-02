@@ -1588,6 +1588,7 @@ export default {
           discounted: discount,
           orderID: this.orderNo,
           table: this.table,
+          
         });
         var config = {
           method: "post",
@@ -1619,6 +1620,7 @@ export default {
           total: this.totalPrice,
           time: localStorage.time,
           table: this.table,
+          branch: localStorage.branch,
         });
         localStorage.order = this.order;
         var config = {

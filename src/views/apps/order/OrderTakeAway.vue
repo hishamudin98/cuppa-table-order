@@ -1481,6 +1481,7 @@ export default {
           total: this.totalPrice,
           time: localStorage.time,
           table: this.table,
+          branch: localStorage.branch,
         });
        
         var config = {

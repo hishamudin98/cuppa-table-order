@@ -102,7 +102,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:8000/admin/login" /*  */,
+        url: "http://localhost:3000/admin/login" /*  */,
         headers: {
           "Content-Type": "application/json",
         },

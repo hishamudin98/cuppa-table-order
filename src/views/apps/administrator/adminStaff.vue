@@ -245,7 +245,50 @@
               </div>
             </div>
             <div class="h-4/6">
-              <rs-card style="padding-top: 10px">
+             <div>
+                    <DataTable
+                      :value="searchUsers"
+                      :paginator="true"
+                      :rows="10"
+                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                      :rowsPerPageOptions="[10, 20, 50]"
+                      responsiveLayout="scroll"
+                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                    >
+                      <Column field="user_name" header="Name"></Column>
+                      <Column field="user_phone" header="Phone no."></Column>
+                      <Column field="user_email" header="Email"></Column>
+                      <Column :exportable="false" style="min-width: 8rem">
+                        <template #body="searchUsers">
+                          <Button
+                            icon="pi pi-pencil"
+                            class="p-button-rounded p-button-success mr-2"
+                            @click="editUser(searchUsers)"
+                          />
+                          <Button
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-warning"
+                            @click="deleteUser(searchUsers)"
+                          />
+                        </template>
+                      </Column>
+                      <template #paginatorstart>
+                        <Button
+                          type="button"
+                          icon="pi pi-refresh"
+                          class="p-button-text"
+                        />
+                      </template>
+                      <template #paginatorend>
+                        <Button
+                          type="button"
+                          icon="pi pi-cloud"
+                          class="p-button-text"
+                        />
+                      </template>
+                    </DataTable>
+                  </div>
+              <!-- <rs-card style="padding-top: 10px">
                 <div class="overflow-y-auto h-96">
                   <div v-for="(user, index) in searchUsers" :key="index">
                     <rs-card class="mb-5" @click="staffSelect(user)">
@@ -306,7 +349,7 @@
                     </rs-card>
                   </div>
                 </div>
-              </rs-card>
+              </rs-card> -->
             </div>
 
             <!-- UNTUK ATAS BAWAH -->
@@ -384,7 +427,7 @@
       <FormKit
         type="select"
         label="Staff Position"
-        :options="staffPosition"
+        :options="this.staffPosition"
         v-model="position"
       />
       <rs-button style="float: right" @click="insertUser()">
@@ -411,12 +454,12 @@
         type="number"
         v-model="users1.user_pincode"
       />
-      <FormKit label="Address" type="textarea" v-model="address" />
+      <FormKit label="Address" type="textarea" v-model="users1.user_address" />
       <FormKit label="Date of Birth." type="date" v-model="users1.user_dob" />
       <FormKit
         type="select"
         label="Staff Position"
-        :options="staffPosition"
+        :options="this.staffPosition"
         v-model="users1.user_position"
       />
       <rs-button style="float: right" @click="updateUser(users1)">
@@ -452,11 +495,21 @@
 import { ref, computed } from "vue";
 import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Button from "primevue/button";
+import "primevue/resources/themes/saga-blue/theme.css";
+import "primevue/resources/primevue.min.css";
+import "primeicons/primeicons.css";
+
 export default {
   name: "AdminDashboard",
   components: {
     RsButton,
     RsModal,
+     DataTable,
+    Column,
+    Button,
   },
   setup() {
     const users = ref([]);
@@ -531,7 +584,6 @@ export default {
                 value: response.data.data[i].pos_id,
               });
             }
-            console.log(this.staffPosition);
           }.bind(this)
         )
         .catch(function (error) {
@@ -601,7 +653,7 @@ export default {
     },
 
     async editUser(user) {
-      this.users1 = user;
+      this.users1 = user.data;
       this.modalEdit = true;
     },
 
@@ -648,12 +700,13 @@ export default {
         user_phone: users.user_phone,
         user_email: users.user_email,
         user_id: users.user_id,
-        address: this.address,
-        password: this.password,
-        pincode: this.pincode,
-        dob: this.dob,
-        position: this.position,
+        address: users.address,
+        password: users.user_password,
+        pincode: users.user_pincode,
+        dob: users.user_dob,
+        position: users.user_position,
       });
+      console.log(data)
       var config = {
         method: "post",
         url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateStaff" /*  */,
@@ -665,6 +718,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
+            console.log(response)
             if (response.data.status == "Success") {
               this.modalEdit = false;
               alert(response.data.message);
@@ -697,6 +751,7 @@ export default {
         position: this.position,
         staffid: localStorage.staff,
       });
+      console.log("Insert data :", data)
       var config = {
         method: "post",
         url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
