@@ -63,7 +63,7 @@
                         dark:hover:bg-gray-700
                       "
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap">User</span>
+                      <span class="flex-1 ml-3 whitespace-nowrap">Membership</span>
                     </a>
                   </router-link>
                 </li>
@@ -108,27 +108,6 @@
                       <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                     </a>
                   </router-link>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="
-                      flex
-                      items-center
-                      p-2
-                      text-base
-                      font-normal
-                      text-gray-900
-                      rounded-lg
-                      dark:text-white
-                      hover:bg-gray-300
-                      dark:hover:bg-gray-700
-                    "
-                  >
-                    <span class="flex-1 ml-3 whitespace-nowrap"
-                      >Membership</span
-                    >
-                  </a>
                 </li>
                 <li>
                   <div>
