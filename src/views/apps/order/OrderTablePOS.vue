@@ -17,7 +17,7 @@
               alt=""
             />
           </div>
-          <div class="text-white">He & She UM</div>
+          <div class="text-white">{{this.branch_Name}}</div>
         </div>
         <div
           style="height: 40vh"
@@ -56,7 +56,7 @@
           <h4 style="font-weight: normal">Thank you !</h4>
         </div>
         <br />
-        <router-link :to="{ name: 'orderLogin' }">
+        <router-link :to="{ name: 'orderLogin' , params: { branchID: this.branch } }">
           <rs-button class="w-full bg-heandshe"> Order Again? </rs-button>
         </router-link>
       </div>
@@ -139,15 +139,45 @@ export default {
       ORDERID: null,
       value: "",
       size: 200,
+      branch: 0,
+      branch_Name: "",
     };
   },
-
-  mounted() {
+  async created() {
     this.ORDERID = this.$route.params.orderID;
     localStorage.orderid = this.ORDERID;
     this.value = this.ORDERID;
+    this.branch = localStorage.branch;
+    if(this.branch != "")
+    {
+      this.getOutlet(this.branch)
+    }
   },
+
   methods: {
+     async getOutlet(branch) {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        branch_ID: branch,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.branch_Name = response.data.data[0].outlet_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     async customerAdvanced(dataUser) {
       if (dataUser == "Guest") this.guestMode = false;
     },

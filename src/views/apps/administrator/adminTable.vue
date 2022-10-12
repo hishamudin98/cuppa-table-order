@@ -23,7 +23,7 @@
         <!-- UNTUK SEBELAH2 -->
         <div>
           <div class="w-64">
-          <aside aria-label="Sidebar">
+            <aside aria-label="Sidebar">
             <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
               <ul class="space-y-2">
                 <li>
@@ -325,33 +325,24 @@
         </div>
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-1">
-            <div class="inline-block w-1/2 pr-10">
+            <div class="inline-block w-full pr-10">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
-                  <strong>Number of active users</strong>
+                  <strong>Number of active tables</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">64 Active Users</div>
+                <div class="text-center py-8">4 Active tables</div>
               </rs-card>
-            </div>
-            <div class="inline-block w-1/2 pr-10 pb-2">
-              <rs-card>
-                <div class="text-center pt-10">
-                  <strong>Number of users by Outlet</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">10 Active Users</div></rs-card
-              >
             </div>
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-1">
+              <div class="w-11/12 h-10">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
-                  placeholder="Search for a user..."
+                  placeholder="Search for a table..."
                   type="search"
                   :classes="{
                     inner:
@@ -363,60 +354,62 @@
               </div>
               <div class="w-1/12" style="padding-top: 10px">
                 <rs-button
-                  @click="addUser()"
+                  @click="addTable()"
                   class="bg-heandshe hover:bg-heandshe"
-                  >Add User</rs-button
+                  >Add Table</rs-button
                 >
               </div>
             </div>
-            <div class="">
-              <rs-card style="padding-top: 10px">
-                <div>
-                  <div>
-                    <DataTable
-                      :value="searchUsers"
-                      :paginator="true"
-                      :rows="10"
-                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                      :rowsPerPageOptions="[10, 20, 50]"
-                      responsiveLayout="scroll"
-                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                    >
-                      <Column field="user_name" header="Name"></Column>
-                      <Column field="user_phone" header="Phone no."></Column>
-                      <Column field="user_email" header="Email"></Column>
-                      <Column :exportable="false" style="min-width: 8rem">
-                        <template #body="searchUsers">
-                          <Button
-                            icon="pi pi-pencil"
-                            class="p-button-rounded p-button-success mr-2"
-                            @click="editUser(searchUsers)"
-                          />
-                          <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-warning"
-                            @click="deleteUser(searchUsers)"
-                          />
-                        </template>
-                      </Column>
-                      <template #paginatorstart>
-                        <Button
-                          type="button"
-                          icon="pi pi-refresh"
-                          class="p-button-text"
-                        />
-                      </template>
-                      <template #paginatorend>
-                        <Button
-                          type="button"
-                          icon="pi pi-cloud"
-                          class="p-button-text"
-                        />
-                      </template>
-                    </DataTable>
-                  </div>
-                </div>
-              </rs-card>
+            <div class="h-4/6">
+              <div>
+                <DataTable
+                  :value="searchTables"
+                  :paginator="true"
+                  :rows="10"
+                  paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                  :rowsPerPageOptions="[10, 20, 50]"
+                  responsiveLayout="scroll"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                >
+                  <Column field="outletTID" header="No"></Column>
+                  <Column field="outletTNAME" header="Table Name"></Column>
+                  <Column field="outletTSTATUS" header="Table Status"></Column>
+                  <Column field="outletTTYPE" header="Table Type"></Column>
+                  <Column :exportable="false" style="min-width: 8rem">
+                    <template #body="searchTables">
+                      <Button
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2"
+                        @click="editTable(searchTables)"
+                      />
+                      <Button
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        @click="deleteTable(searchTables)"
+                      />
+                      <Button
+                        icon="pi pi-qrcode"
+                        class="p-button-rounded p-button-success"
+                        @click="print(searchTables)"
+                      />
+                    </template>
+                  </Column>
+                  <template #paginatorstart>
+                    <Button
+                      type="button"
+                      icon="pi pi-refresh"
+                      class="p-button-text"
+                    />
+                  </template>
+                  <template #paginatorend>
+                    <Button
+                      type="button"
+                      icon="pi pi-cloud"
+                      class="p-button-text"
+                    />
+                  </template>
+                </DataTable>
+              </div>
             </div>
 
             <!-- UNTUK ATAS BAWAH -->
@@ -425,51 +418,69 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
-
-    <rs-modal title="Add User" v-model="modalPOS" position="middle" size="full">
-      <FormKit label="Fullname" type="text" v-model="fullname" />
-      <FormKit label="Phone No." type="number" v-model="phone" />
-      <FormKit label="Email" type="email" v-model="email" />
-      <FormKit label="Address" type="textarea" v-model="address" />
-      <rs-button style="float: right" @click="insertUser()"> Save </rs-button>
+    <!-- QR CODE -->
+    <rs-modal title="QR CODE" v-model="qrcode" position="middle" size="md">
+      <div class="mb-10">
+         <center>
+              <h1>{{this.printName}}</h1>
+              <br />
+              <qrcode-vue :value="this.value" :size="size" level="L" />
+            </center>
+      </div>
+      <div>
+        <vue3-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="false"
+          :paginate-elements-by-height="1400"
+          :filename = this.printName
+          :pdf-quality="2"
+          :manual-pagination="false"
+          pdf-format="a4"
+          pdf-orientation="portrait"
+          pdf-content-width="800px"
+          @hasStartedGeneration="hasStartedGeneration()"
+          @hasGenerated="hasGenerated($event)"
+          ref="html2Pdf"
+        >
+          <template v-slot:pdf-content>
+            <center>
+              <h1>{{this.printName}}</h1>
+              <br />
+              <qrcode-vue :value="this.value" :size="size" level="L" />
+            </center>
+          </template>
+        </vue3-html2pdf>
+      </div>
+      <div>
+        <rs-button
+          class="bg-heandshe hover:bg-heandshe w-full"
+          
+          @click="generateReport()"
+          >Print PDF</rs-button
+        >
+      </div>
     </rs-modal>
+    <!-- QR CODE -->
+    <!-- ADD TABLES -->
     <rs-modal
-      title="Edit User"
-      v-model="modalEdit"
+      title="Add Table"
+      v-model="tableADD"
       position="middle"
       size="full"
     >
-      <FormKit label="Fullname" type="text" v-model="users1.user_name" />
-      <FormKit label="Phone No." type="number" v-model="users1.user_phone" />
-      <FormKit label="Email" type="email" v-model="users1.user_email" />
-      <FormKit label="Address" type="textarea" v-model="address" />
-      <rs-button style="float: right" @click="updateUser(users1)">
-        Save
-      </rs-button>
+      <FormKit label="Table No" type="number" v-model="tableno" />
+      <FormKit label="Table Name" type="text" v-model="tablename" />
+      <FormKit
+        v-model="tableRefNo"
+        type="radio"
+        label="Drive In or Dine In"
+        :options="['Drive In', 'Dine In']"
+      />
+      <rs-button style="float: right" @click="insertTable()"> Save </rs-button>
     </rs-modal>
-    <rs-modal
-      title="Delete User"
-      v-model="modalDelete"
-      position="middle"
-      size="full"
-    >
-      <p>Are you sure you want to delete this user?</p>
-      <rs-button
-        style="float: right"
-        class="bg-heandshe hover:bg-heandshe"
-        @click="this.modalDelete = false"
-      >
-        No
-      </rs-button>
-      <rs-button
-        style="float: right"
-        class="mx-1"
-        variant="danger"
-        @click="UserDelete(users1)"
-      >
-        Yes
-      </rs-button>
-    </rs-modal>
+    <!-- ADD TABLES -->
   </rs-layout>
 </template>
 <script>
@@ -482,6 +493,8 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
+import QrcodeVue from "qrcode.vue";
+import Vue3Html2pdf from "vue3-html2pdf";
 
 export default {
   name: "AdminDashboard",
@@ -491,56 +504,62 @@ export default {
     DataTable,
     Column,
     Button,
+    QrcodeVue,
+    Vue3Html2pdf,
   },
   setup() {
-    const users = ref([]);
+    const tables = ref([]);
     const search = ref("");
 
-    const searchUsers = computed(() => {
-      return users.value.filter((user) => {
+    const searchTables = computed(() => {
+      return tables.value.filter((table) => {
         return (
-          user.user_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+          table.outletTNAME.toLowerCase().indexOf(search.value.toLowerCase()) !=
             -1 ||
-          user.user_email.toLowerCase().indexOf(search.value.toLowerCase()) !=
+          table.outletTNAME.toLowerCase().indexOf(search.value.toLowerCase()) !=
             -1
         );
       });
     });
     return {
       search,
-      searchUsers,
-      users,
+      searchTables,
+      tables,
     };
   },
   data() {
     return {
+      staffPosition: [],
+      /* DATA V-MODEL */
       staffid: "",
       staffName: "",
-      modalPOS: false,
-      fullname: "",
-      phone: null,
-      email: "",
-      address: "",
-      modalEdit: false,
-      users1: "",
-      modalDelete: false,
-      totalData: 0,
+      value: "",
+      size: 300,
+      /* TABLE DATA V-MODAL */
+      tableno: "",
+      tablename: "",
+      tableRefNo: "",
+      printName: "",
+      /* MODAL SHOW */
       show: false,
+      status: null,
+      tableADD: false,
       outletDrop: false,
-      /* BARU */
+      qrcode: false,
     };
   },
+
   async created() {
     this.staffid = localStorage.staff;
     window.addEventListener("beforeunload", () => {
       localStorage.setItem("staff", this.staffid);
     });
     this.getdata();
-    this.getuser();
+    this.getTable();
   },
 
   methods: {
-     async dropdownOutlet(){
+    async dropdownOutlet() {
       if (this.outletDrop == false) {
         this.outletDrop = true;
       } else {
@@ -553,6 +572,18 @@ export default {
       } else {
         this.show = false;
       }
+    },
+    async print(data) {
+      this.value =
+        "https://stg-heandshe.toyyibfnb.com/orderLogin/" +
+        localStorage.branch +
+        "/" +
+        data.data.outletTID;
+      this.printName = data.data.outletTNAME;
+      this.qrcode = true;
+    },
+    async generateReport() {
+      this.$refs.html2Pdf.generatePdf();
     },
     async getdata() {
       var axios = require("axios");
@@ -567,11 +598,12 @@ export default {
         },
         data: data,
       };
-      
       await axios(config)
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+            this.outletid = response.data.data[0].outlet_id;
+            localStorage.branch = this.outletid;
           }.bind(this)
         )
         .catch(function (error) {
@@ -579,29 +611,35 @@ export default {
         });
     },
 
-    async getuser() {
+    async getTable() {
       var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
       var config = {
-        method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getUser" /*   */,
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTable" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
+        data: data,
       };
-      console.log(config)
       await axios(config)
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
-              this.users.push({
-                user_id: response.data.data[i].user_id,
-                user_name: response.data.data[i].user_name,
-                user_phone: response.data.data[i].user_phone,
-                user_email: response.data.data[i].user_email,
+              if (response.data.data[i].outlet_tableStatus == 1) {
+                this.status = "ACTIVE";
+              } else {
+                this.status = "INACTIVE";
+              }
+              this.tables.push({
+                outletTID: response.data.data[i].outlet_tableID,
+                outletTNAME: response.data.data[i].outlet_tableName,
+                outletTTYPE: response.data.data[i].outlet_tableType,
+                outletTSTATUS: this.status,
               });
             }
-
-            this.totalData = this.users.length;
           }.bind(this)
         )
         .catch(function (error) {
@@ -609,25 +647,22 @@ export default {
         });
     },
 
-    async editUser(user) {
-      
-      this.users1 = user.data;
-      this.modalEdit = true;
+    /* ADD , UPDATE & DELETE FUNCTION */
+    /* ADD */
+    async addTable() {
+      this.tableADD = true;
     },
-
-    async deleteUser(user) {
-      this.users1 = user.data;
-      this.modalDelete = true;
-    },
-
-    async UserDelete(users) {
+    async insertTable() {
       var axios = require("axios");
       var data = JSON.stringify({
-        user_id: users.user_id,
+        tableNo: this.tableno,
+        tableName: this.tablename,
+        tableRefNo: this.tableRefNo,
+        staffid: localStorage.staff,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteUser" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertTable" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -636,93 +671,18 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == "Success") {
-              this.modalDelete = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
+            console.log(response.data);
+            alert(response.data.message);
+            this.tableADD = false;
+            this.tables.splice(0);
+            this.getTable();
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
         });
     },
-
-    async updateUser(users) {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        user_name: users.user_name,
-        user_phone: users.user_phone,
-        user_email: users.user_email,
-        user_id: users.user_id,
-        address: this.address,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateUser" /*  */,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalEdit = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    async addUser() {
-      this.modalPOS = true;
-    },
-
-    async insertUser() {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        fullname: this.fullname,
-        phone: this.phone,
-        email: this.email,
-        address: this.address,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertUser",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalPOS = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
+    /* ADD */
   },
 };
 </script>

@@ -25,6 +25,7 @@ import Maska from "maska";
 import vSelect from "vue-select";
 import Toast from "vue-toastification";
 import { SetupCalendar } from "v-calendar";
+import PrimeVue from 'primevue/config';
 
 
 
@@ -78,6 +79,7 @@ app.use(VueClickAway);
 app.use(Maska);
 app.use(Toast, options);
 app.use(SetupCalendar, {});
+app.use(PrimeVue);
 
 
 app.component("country-flag", CountryFlag);

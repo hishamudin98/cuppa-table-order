@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/orderLogin/:branchID?",
+    path: "/orderLogin/:branchID?/:table?",
     name: "orderLogin",
     component: () => import("@/views/apps/order/orderLogin.vue"),
   },
@@ -10,7 +10,7 @@ export default [
     component: () => import("@/views/apps/order/MainOrder.vue"),
   },
   {
-    path: "/order/:branchID?/:orderID?/:table?",
+    path: "/order/:branchID?/:table?/:orderID?",
     name: "order",
     component: () => import("@/views/apps/order/Order.vue"),
   },
@@ -25,7 +25,7 @@ export default [
     component: () => import("@/views/apps/order/OrderConfirm.vue"),
   },
   {
-    path: "/order/table/:orderID?/:table?",
+    path: "/order/table/:orderID?/:table?/:branch?",
     name: "order-table",
     component: () => import("@/views/apps/order/OrderTablePOS.vue"),
   },
@@ -40,7 +40,7 @@ export default [
     component: () => import("@/views/apps/order/orderMembership.vue"),
   },
   {
-    path: "/TakeAway/:branchID?/:orderID?/:table?",
+    path: "/TakeAway/:branchID?/:table?/:orderID?",
     name: "takeaway",
     component: () => import("@/views/apps/order/OrderTakeAway.vue"),
   },

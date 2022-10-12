@@ -23,53 +23,11 @@
         <!-- UNTUK SEBELAH2 -->
         <div>
           <div class="w-64">
-            <aside aria-label="Sidebar">
-              <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
-                <ul class="space-y-2">
-                  <li>
-                    <router-link :to="{ name: 'dashboard' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="ml-3">Dashboard</span>
-                      </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'admin-user' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap">User</span>
-                      </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'admin-staff' }">
+          <aside aria-label="Sidebar">
+            <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
+              <ul class="space-y-2">
+                <li>
+                  <router-link :to="{ name: 'dashboard' }">
                     <a
                       href="#"
                       class="
@@ -77,7 +35,49 @@
                         items-center
                         p-2
                         text-base
+                        font-normal
                         bg-gray-300
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
+                    >
+                      <span class="ml-3">Dashboard</span>
+                    </a>
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'admin-user' }">
+                    <a
+                      href="#"
+                      class="
+                        flex
+                        items-center
+                        p-2
+                        text-base
+                        font-normal
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
+                    >
+                      <span class="flex-1 ml-3 whitespace-nowrap">User</span>
+                    </a>
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'admin-staff' }">
+                    <a
+                      href="#"
+                      class="
+                        flex
+                        items-center
+                        p-2
+                        text-base
                         font-normal
                         text-gray-900
                         rounded-lg
@@ -88,10 +88,10 @@
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
                     </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'admin-menu' }">
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'admin-menu' }">
                     <a
                       href="#"
                       class="
@@ -109,30 +109,31 @@
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                     </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
+                  </router-link>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="
+                      flex
+                      items-center
+                      p-2
+                      text-base
+                      font-normal
+                      text-gray-900
+                      rounded-lg
+                      dark:text-white
+                      hover:bg-gray-300
+                      dark:hover:bg-gray-700
+                    "
+                  >
+                    <span class="flex-1 ml-3 whitespace-nowrap"
+                      >Membership</span
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap"
-                        >Membership</span
-                      >
-                    </a>
-                  </li>
-                  <li>
+                  </a>
+                </li>
+                <li>
+                  <div>
                     <a
                       href="#"
                       class="
@@ -147,11 +148,157 @@
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
                       "
+                      @click="dropdownOutlet()"
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
                     </a>
-                  </li>
-                  <li>
+                  </div>
+                  <div v-if="this.outletDrop == true">
+                    <ul>
+                      <li>
+                        <router-link :to="{ name: 'admin-table' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Table Management</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                      <li>
+                        <router-link :to="{ name: 'admin-report-s' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Counter Management</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <a
+                      href="#"
+                      class="
+                        flex
+                        items-center
+                        p-2
+                        text-base
+                        font-normal
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
+                      @click="triggerDropdown()"
+                    >
+                      <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
+                    </a>
+                  </div>
+                  <div v-if="this.show == true">
+                    <ul>
+                      <li>
+                        <router-link :to="{ name: 'admin-report-t' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Report Transaction</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                      <li>
+                        <router-link :to="{ name: 'admin-report-s' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Report Shift</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          class="
+                            flex
+                            items-center
+                            p-3
+                            ml-2
+                            text-sm
+                            font-sm
+                            text-gray-900
+                            rounded-lg
+                            dark:text-white
+                            hover:bg-gray-300
+                            dark:hover:bg-gray-700
+                          "
+                          ><span class="flex-1 ml-3 whitespace-nowrap"
+                            >Report Refund</span
+                          >
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'login' }">
                     <a
                       href="#"
                       class="
@@ -167,35 +314,13 @@
                         dark:hover:bg-gray-700
                       "
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Counter</span>
+                      <span class="flex-1 ml-3 whitespace-nowrap">Log Out</span>
                     </a>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'login' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Log Out</span
-                        >
-                      </a>
-                    </router-link>
-                  </li>
-                </ul>
-              </div>
-            </aside>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </aside>
           </div>
         </div>
         <div class="w-full flex flex-col">
@@ -245,49 +370,49 @@
               </div>
             </div>
             <div class="h-4/6">
-             <div>
-                    <DataTable
-                      :value="searchUsers"
-                      :paginator="true"
-                      :rows="10"
-                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                      :rowsPerPageOptions="[10, 20, 50]"
-                      responsiveLayout="scroll"
-                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                    >
-                      <Column field="user_name" header="Name"></Column>
-                      <Column field="user_phone" header="Phone no."></Column>
-                      <Column field="user_email" header="Email"></Column>
-                      <Column :exportable="false" style="min-width: 8rem">
-                        <template #body="searchUsers">
-                          <Button
-                            icon="pi pi-pencil"
-                            class="p-button-rounded p-button-success mr-2"
-                            @click="editUser(searchUsers)"
-                          />
-                          <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-warning"
-                            @click="deleteUser(searchUsers)"
-                          />
-                        </template>
-                      </Column>
-                      <template #paginatorstart>
-                        <Button
-                          type="button"
-                          icon="pi pi-refresh"
-                          class="p-button-text"
-                        />
-                      </template>
-                      <template #paginatorend>
-                        <Button
-                          type="button"
-                          icon="pi pi-cloud"
-                          class="p-button-text"
-                        />
-                      </template>
-                    </DataTable>
-                  </div>
+              <div>
+                <DataTable
+                  :value="searchUsers"
+                  :paginator="true"
+                  :rows="10"
+                  paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                  :rowsPerPageOptions="[10, 20, 50]"
+                  responsiveLayout="scroll"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                >
+                  <Column field="user_name" header="Name"></Column>
+                  <Column field="user_phone" header="Phone no."></Column>
+                  <Column field="user_email" header="Email"></Column>
+                  <Column :exportable="false" style="min-width: 8rem">
+                    <template #body="searchUsers">
+                      <Button
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2"
+                        @click="editUser(searchUsers)"
+                      />
+                      <Button
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        @click="deleteUser(searchUsers)"
+                      />
+                    </template>
+                  </Column>
+                  <template #paginatorstart>
+                    <Button
+                      type="button"
+                      icon="pi pi-refresh"
+                      class="p-button-text"
+                    />
+                  </template>
+                  <template #paginatorend>
+                    <Button
+                      type="button"
+                      icon="pi pi-cloud"
+                      class="p-button-text"
+                    />
+                  </template>
+                </DataTable>
+              </div>
               <!-- <rs-card style="padding-top: 10px">
                 <div class="overflow-y-auto h-96">
                   <div v-for="(user, index) in searchUsers" :key="index">
@@ -507,7 +632,7 @@ export default {
   components: {
     RsButton,
     RsModal,
-     DataTable,
+    DataTable,
     Column,
     Button,
   },
@@ -553,14 +678,34 @@ export default {
       modalEdit: false,
       selectStaff: false,
       users1: "",
+      show: false,
+      outletDrop: false,
     };
   },
   async created() {
+    this.staffid = localStorage.staff;
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("staff", this.staffid);
+    });
     this.getdata();
     this.getuser();
     this.getPosition();
   },
   methods: {
+    async dropdownOutlet(){
+      if (this.outletDrop == false) {
+        this.outletDrop = true;
+      } else {
+        this.outletDrop = false;
+      }
+    },
+    async triggerDropdown() {
+      if (this.show == false) {
+        this.show = true;
+      } else {
+        this.show = false;
+      }
+    },
     async staffSelect(user) {
       this.users1 = user;
       this.selectStaff = true;
@@ -590,7 +735,6 @@ export default {
           console.log(error);
         });
     },
-
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -706,7 +850,7 @@ export default {
         dob: users.user_dob,
         position: users.user_position,
       });
-      console.log(data)
+      console.log(data);
       var config = {
         method: "post",
         url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateStaff" /*  */,
@@ -718,7 +862,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log(response)
+            console.log(response);
             if (response.data.status == "Success") {
               this.modalEdit = false;
               alert(response.data.message);
@@ -751,7 +895,7 @@ export default {
         position: this.position,
         staffid: localStorage.staff,
       });
-      console.log("Insert data :", data)
+      console.log("Insert data :", data);
       var config = {
         method: "post",
         url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",

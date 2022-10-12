@@ -324,57 +324,52 @@
           </div>
         </div>
         <div class="w-full h-1/4 flex flex-col">
-          <div class="w-full flex flex-row mb-1">
+          <div class="w-full flex flex-row mb-0">
             <div class="inline-block w-1/2 pr-10">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
-                  <strong>Number of active users</strong>
+                  <strong>Total of Shift by outlet </strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">64 Active Users</div>
+                <div class="text-center py-8">{{ this.totalData }} shifts</div>
               </rs-card>
             </div>
-            <div class="inline-block w-1/2 pr-10 pb-2">
+            <div class="inline-block w-1/2 pr-10">
               <rs-card>
-                <div class="text-center pt-10">
-                  <strong>Number of users by Outlet</strong>
+                <div class="text-center pt-10 pb-2">
+                  <strong>Shift Net Sales ( RM )</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">10 Active Users</div></rs-card
-              >
+                <div class="text-center py-8">
+                  {{ formatPrice(this.sumShifts) }}
+                </div>
+              </rs-card>
             </div>
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
-            <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-1">
+            <div style="display: flex; flex-direction: row; padding-top: 10px">
+              <div class="w-full h-1">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
-                  placeholder="Search for a user..."
+                  placeholder="Search for a staff..."
                   type="search"
                   :classes="{
                     inner:
                       'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
                     outer: 'flex-1 mb-0',
-                    input: 'h-12',
+                    input: 'h-10',
                   }"
                 />
               </div>
-              <div class="w-1/12" style="padding-top: 10px">
-                <rs-button
-                  @click="addUser()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Add User</rs-button
-                >
-              </div>
             </div>
             <div class="">
-              <rs-card style="padding-top: 10px">
+              <rs-card style="margin-top: 40px">
                 <div>
                   <div>
                     <DataTable
-                      :value="searchUsers"
+                      :value="searchShift"
                       :paginator="true"
                       :rows="10"
                       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
@@ -382,23 +377,28 @@
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
-                      <Column field="user_name" header="Name"></Column>
-                      <Column field="user_phone" header="Phone no."></Column>
-                      <Column field="user_email" header="Email"></Column>
-                      <Column :exportable="false" style="min-width: 8rem">
-                        <template #body="searchUsers">
-                          <Button
-                            icon="pi pi-pencil"
-                            class="p-button-rounded p-button-success mr-2"
-                            @click="editUser(searchUsers)"
-                          />
-                          <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-warning"
-                            @click="deleteUser(searchUsers)"
-                          />
-                        </template>
-                      </Column>
+                      <Column field="shift_start" header="Shift Start Date"></Column>
+                      <Column
+                        field="shift_end"
+                        header="Shift End Date"
+                      ></Column>
+                      <Column
+                        field="shift_staff"
+                        header="Shift Staff Name"
+                      ></Column>
+                      <Column
+                        field="shift_gross"
+                        header="Shift Gross Sales"
+                      ></Column>
+                      <Column
+                        field="shift_net"
+                        header="Shift Net Sales"
+                      ></Column>
+                      <Column
+                        field="shift_refund"
+                        header="Shift Refund Sales"
+                      ></Column>
+
                       <template #paginatorstart>
                         <Button
                           type="button"
@@ -425,122 +425,71 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
-
-    <rs-modal title="Add User" v-model="modalPOS" position="middle" size="full">
-      <FormKit label="Fullname" type="text" v-model="fullname" />
-      <FormKit label="Phone No." type="number" v-model="phone" />
-      <FormKit label="Email" type="email" v-model="email" />
-      <FormKit label="Address" type="textarea" v-model="address" />
-      <rs-button style="float: right" @click="insertUser()"> Save </rs-button>
-    </rs-modal>
-    <rs-modal
-      title="Edit User"
-      v-model="modalEdit"
-      position="middle"
-      size="full"
-    >
-      <FormKit label="Fullname" type="text" v-model="users1.user_name" />
-      <FormKit label="Phone No." type="number" v-model="users1.user_phone" />
-      <FormKit label="Email" type="email" v-model="users1.user_email" />
-      <FormKit label="Address" type="textarea" v-model="address" />
-      <rs-button style="float: right" @click="updateUser(users1)">
-        Save
-      </rs-button>
-    </rs-modal>
-    <rs-modal
-      title="Delete User"
-      v-model="modalDelete"
-      position="middle"
-      size="full"
-    >
-      <p>Are you sure you want to delete this user?</p>
-      <rs-button
-        style="float: right"
-        class="bg-heandshe hover:bg-heandshe"
-        @click="this.modalDelete = false"
-      >
-        No
-      </rs-button>
-      <rs-button
-        style="float: right"
-        class="mx-1"
-        variant="danger"
-        @click="UserDelete(users1)"
-      >
-        Yes
-      </rs-button>
-    </rs-modal>
   </rs-layout>
 </template>
 <script>
 import { ref, computed } from "vue";
-import RsButton from "@/components/Button.vue";
-import RsModal from "@/components/Modal.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
+import moment from "moment";
 
 export default {
   name: "AdminDashboard",
   components: {
-    RsButton,
-    RsModal,
     DataTable,
     Column,
     Button,
   },
   setup() {
-    const users = ref([]);
+    const shift = ref([]);
     const search = ref("");
 
-    const searchUsers = computed(() => {
-      return users.value.filter((user) => {
+    const searchShift = computed(() => {
+      return shift.value.filter((shifts) => {
         return (
-          user.user_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+          shifts.shift_staff.toLowerCase().indexOf(search.value.toLowerCase()) !=
             -1 ||
-          user.user_email.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1
+          shifts.shift_staff
+            .toLowerCase()
+            .indexOf(search.value.toLowerCase()) != -1
         );
       });
     });
+    const formatPrice = (price) => {
+      return parseFloat(price)
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     return {
       search,
-      searchUsers,
-      users,
+      searchShift,
+      shift,
+      formatPrice,
     };
   },
   data() {
     return {
       staffid: "",
       staffName: "",
-      modalPOS: false,
-      fullname: "",
-      phone: null,
-      email: "",
-      address: "",
-      modalEdit: false,
-      users1: "",
-      modalDelete: false,
       totalData: 0,
       show: false,
       outletDrop: false,
+      sumShifts: 0,
       /* BARU */
     };
   },
   async created() {
-    this.staffid = localStorage.staff;
-    window.addEventListener("beforeunload", () => {
-      localStorage.setItem("staff", this.staffid);
-    });
     this.getdata();
-    this.getuser();
+    this.getShifts();
   },
 
   methods: {
-     async dropdownOutlet(){
+    async dropdownOutlet(){
       if (this.outletDrop == false) {
         this.outletDrop = true;
       } else {
@@ -567,7 +516,7 @@ export default {
         },
         data: data,
       };
-      
+
       await axios(config)
         .then(
           function (response) {
@@ -579,144 +528,36 @@ export default {
         });
     },
 
-    async getuser() {
+    async getShifts() {
       var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
       var config = {
-        method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getUser" /*   */,
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getShift" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
+        data: data,
       };
-      console.log(config)
       await axios(config)
         .then(
           function (response) {
-            for (let i = 0; i < response.data.data.length; i++) {
-              this.users.push({
-                user_id: response.data.data[i].user_id,
-                user_name: response.data.data[i].user_name,
-                user_phone: response.data.data[i].user_phone,
-                user_email: response.data.data[i].user_email,
+            console.log("SEBELUM :", response.data.data.Shift_det.length)
+            for (let i = 0; i < response.data.data.Shift_det.length; i++) {
+              this.shift.push({
+                shift_net: response.data.data.Shift_det[i].shift_netSales,
+                shift_start: moment(response.data.data.Shift_det[i].shift_start).format("DD-MM-YYYY HH:mm a"),
+                shift_end: moment(response.data.data.Shift_det[i].shift_end).format("DD-MM-YYYY HH:mm a"),
+                shift_gross: response.data.data.Shift_det[i].shift_grossSales,
+                shift_refund: response.data.data.Shift_det[i].shift_refund,
+                shift_staff: response.data.data.Shift_det[i].staff_name
               });
             }
-
-            this.totalData = this.users.length;
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    async editUser(user) {
-      
-      this.users1 = user.data;
-      this.modalEdit = true;
-    },
-
-    async deleteUser(user) {
-      this.users1 = user.data;
-      this.modalDelete = true;
-    },
-
-    async UserDelete(users) {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        user_id: users.user_id,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteUser" /*  */,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalDelete = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    async updateUser(users) {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        user_name: users.user_name,
-        user_phone: users.user_phone,
-        user_email: users.user_email,
-        user_id: users.user_id,
-        address: this.address,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateUser" /*  */,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalEdit = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    async addUser() {
-      this.modalPOS = true;
-    },
-
-    async insertUser() {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        fullname: this.fullname,
-        phone: this.phone,
-        email: this.email,
-        address: this.address,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertUser",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalPOS = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
+            this.totalData = this.shift.length;
+            
+            this.sumShifts = response.data.data.Shift_sum[0].sums
           }.bind(this)
         )
         .catch(function (error) {

@@ -132,9 +132,20 @@
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
-      <router-link class="w-full" :to="{ name: 'orderLogin' }">
+      <router-link class="w-full" :to="{ name: 'orderLogin', params: {branchID: this.branch } }">
         <rs-button class="w-full gap-x-2 mb-6 bg-heandshe hover:bg-heandshe" >
           Order Again
+        </rs-button>
+      </router-link>
+    </div>
+    <div class="flex flex-col items-center justify-center gap-3 mx-4" v-if="this.status == 3">
+      <!-- <rs-button class="w-full gap-x-2">
+        Print Receipt
+        <vue-feather type="bookmark"></vue-feather>
+      </rs-button> -->
+      <router-link class="w-full" :to="{ name: 'orderLogin' }">
+        <rs-button class="w-full gap-x-2 mb-6" variant="primary-outline" >
+          Try pay at counter
         </rs-button>
       </router-link>
     </div>
@@ -172,6 +183,7 @@ export default {
       date: null,
       time: null,
       status:0,
+      branch:0,
     };
   },
   async created() {
@@ -218,6 +230,8 @@ export default {
             this.transacno = response.data.data[0].transac_no;
             this.date = moment(response.data.data[0].order_date).format("DD-MM-YYYY")
             this.time = moment(response.data.data[0].order_date).format("HH:mm:ss")
+            localStorage.branch = response.data.data[0].outled_id;
+            this.branch = response.data.data[0].outled_id;
           }.bind(this)
         )
         .catch(function (error) {

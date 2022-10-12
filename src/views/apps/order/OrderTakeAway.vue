@@ -584,6 +584,7 @@
                           :classes="{
                             fieldset: '!border-0 !p-0',
                           }"
+                          :checked="papar(variasi)"
                         />
                         <div
                           v-if="modalData.variants2"
@@ -748,6 +749,7 @@
                       variasi2
                     )
                   "
+                  :disabled="isdisabled"
                 >
                   Add to Cart - RM
                   {{
@@ -837,7 +839,7 @@
           "
           v-on:click="insertOrder(discount)"
         >
-          <div>Confirm Order ({{ order.length }})</div>
+          <div>Submit Order ({{ order.length }})</div>
           <vue-feather type="shopping-cart"></vue-feather>
         </rs-button>
       </div>
@@ -940,180 +942,134 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      
-      var discoutApplied = false;
-
+     var exist = "";
+      var check = 0;
+      /* CHECK FOR NAME AND PHONE NUMBER */
+      if (localStorage.name != "") {
+        var nameCust = localStorage.name;
+        var phoneCust = localStorage.phone;
+      } else {
+        var nameCust = "";
+        var phoneCust = "";
+      }
+      /* CHECK FOR MEMBERSHIP APPLIED */
       if (mmbershipNo != "") {
-        discoutApplied = true;
+        var discoutApplied = true;
       } else {
-        discoutApplied = false;
+        var discoutApplied = false;
       }
 
-      if (orderID.value != "") {
-        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
-        var check = parseInt(numsStr, 10);
-
-        if (product.station != "1") {
-          if (check == 0) {
-            variation.value.push({
-              id: 1,
-              name: "hot",
-              type: "temperature",
-              price: 0,
-            });
-          } else {
-            variation.value.push({
-              id: 2,
-              name: "cold",
-              type: "temperature",
-              price: check,
-            });
-          }
-        } else {
-          variation.value = [];
-          check = 0;
-        }
-
-        /* ADE ORDER ID */
-        const exist = order.value.find(
-          (item) =>
-            item.sku === product.sku &&
-            item.orderType == picked &&
-            item.menu_price == product.price + check &&
-            item.menu_variant.some(data => data.id === variation.value[0].id)&&
-            item.menu_variant.some(data => data.id === variation.value[1].id)
-        );
-        if (exist) {
-          exist.menu_quantity++;
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        } else {
-          /* if (product.station != "1") {
-            if (check == 0) {
-              variation.value.push({
-                id: 1,
-                name: "hot",
-                type: "temperature",
-                price: 0,
-              });
-            } else {
-              variation.value.push({
-                id: 2,
-                name: "cold",
-                type: "temperature",
-                price: check,
-              });
-            }
-          }
-          else
-          {
-            variation.value = [];
-            check = 0;
-          } */
-          order.value.push({
-            tableNo: table.value,
-            sku: product.sku,
-            menu_name: product.name,
-            menu_price: product.price + check,
-            menu_quantity: quantity.value,
-            orderType: picked,
-            menu_id: product.id,
-            custName: nameCust,
-            custPhone: phoneCust,
-            discount: discoutApplied,
-            remarks: remarks,
-            menu_variant: variation.value,
-            menu_image: product.images,
-            membership_no: mmbershipNo,
-          });
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        }
+      if (variasi.value == "") {
+        
       } else {
-        var check = 0;
-
-        if(variasi.value != "") /*Ade satu variation*/
-        {
+        if (variasi2.value == "") {
+          variation.value.push(variasi.value);
           check = variasi.value.price;
-          if(variasi2.value != "") /* Ade 2 variation */
-          {
-            variation.value.push(
-              variasi.value,
-              variasi2.value
-            )
-          }
-          else
-          {
-            variation.value.push(variasi.value)
-          }
-        }
-        else
-        {
-          variation.value.push({})
-        }
-
-        if (localStorage.name != "") {
-          var nameCust = localStorage.name;
-          var phoneCust = localStorage.phone;
         } else {
-          var nameCust = "";
-          var phoneCust = "";
-        }
-
-        const exist = order.value.find(
-          (item) =>
-            item.sku === product.sku &&
-            item.orderType == picked &&
-            item.menu_price == product.price + check &&
-            item.menu_variant.some(data => data.id === variation.value[0].id)&&
-            item.menu_variant.some(data => data.id === variation.value[1].id)
-        );
-        if (exist) {
-          exist.menu_quantity++;
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        } else {
-          order.value.push({
-            tableNo: table.value,
-            sku: product.sku,
-            menu_name: product.name,
-            menu_price: product.price + check,
-            menu_quantity: quantity.value,
-            orderType: picked,
-            menu_id: product.id,
-            custName: nameCust,
-            custPhone: phoneCust,
-            discount: discoutApplied,
-            remarks: remarks,
-            menu_variant: variation.value,
-            menu_image: product.images,
-            membership_no: mmbershipNo,
-          });
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
+          variation.value.push(variasi.value, variasi2.value);
         }
       }
-      
+      /* CHECK EXIST */
+      if (orderID.value == "") {
+        if (variasi.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check
+          );
+        }
+        else if (variasi2.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              )
+          );
+        } else {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              ) &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[1].id
+              )
+          );
+        }
+      } else {
+        if (variasi.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check
+          );
+        } else if (variasi2.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              )
+          );
+        } else {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              ) &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[1].id
+              )
+          );
+        }
+      }
+      if (exist) {
+        exist.menu_quantity++;
+        var total = 0;
+        var sum = 0;
+        for (let i = 0; i < order.value.length; i++) {
+          sum = parseInt(order.value[i].menu_quantity);
+          total += parseFloat(order.value[i].menu_price) * sum;
+        }
+        totalPrice.value = total;
+      } else {
+        order.value.push({
+          tableNo: table.value,
+          sku: product.sku,
+          menu_name: product.name,
+          menu_price: product.price + check,
+          menu_quantity: quantity.value,
+          orderType: picked,
+          menu_id: product.id,
+          custName: nameCust,
+          custPhone: phoneCust,
+          discount: discoutApplied,
+          remarks: remarks,
+          menu_variant: variation.value,
+          menu_image: product.images,
+          membership_no: mmbershipNo,
+        });
+        var total = 0;
+        var sum = 0;
+        for (let i = 0; i < order.value.length; i++) {
+          sum = parseInt(order.value[i].menu_quantity);
+          total += parseFloat(order.value[i].menu_price) * sum;
+        }
+        totalPrice.value = total;
+      }
       picked = 2;
       quantity.value = 1;
       openModal.value = false;
@@ -1152,7 +1108,7 @@ export default {
     }
 
     const searchMenus = computed(() => {
-      if (defaultCatID.value === 0) {
+     if (defaultCatID.value === 0) {
         return menus.value.filter((product) => {
           return (
             product.name.toLowerCase().indexOf(search.value.toLowerCase()) !=
@@ -1161,17 +1117,27 @@ export default {
           );
         });
       } else {
-        menu.value = [];
-        let MenuFilter = menus.value.filter((product) => {
-          let categoryParsed = JSON.parse(product.catid);
-          let result = categoryParsed.map((category) => {
-            if (category.category_id === defaultCatID.value) {
-              menu.value.push(product);
-            }
+        if (search.value == "") {
+          menu.value = [];
+          let MenuFilter = menus.value.filter((product) => {
+            let categoryParsed = JSON.parse(product.catid);
+            let result = categoryParsed.map((categories) => {
+              if (categories.category_id === defaultCatID.value) {
+                menu.value.push(product);
+              }
+            });
           });
-        });
-
-        return menu.value;
+          return menu.value;
+        } else {
+          return menu.value.filter((product) => {
+            return (
+              product.name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                -1 ||
+              product.sku.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                -1
+            );
+          });
+        }
       }
     });
 
@@ -1229,6 +1195,13 @@ export default {
       variansis2: [],
       variansi2: [],
       variantsid2: [],
+      branch_Name: "",
+      branch: 0,
+      orderNo: 0,
+      getVariantdata: [],
+      orderArray: [],
+      isdisabled: false,
+      time: null,
     };
   },
 
@@ -1237,22 +1210,35 @@ export default {
     this.getMenu();
     this.orderID = this.$route.params.orderID;
     this.table = this.$route.params.table;
-    if (this.orderID != "") {
+    this.time = localStorage.time;
+    this.orderNo = this.orderID;
+    if (this.orderNo != "") {
+      this.orderNo = localStorage.orderID;
+    }
+    if (this.orderNo != "") {
       this.getOrderID();
     }
-  },
-
-  mounted() {
-    window.onbeforeunload = function () {
-      localStorage.clear();
-    };
-
     if (localStorage.name) {
       this.name = localStorage.name;
     }
     if (localStorage.phone) {
       this.phone = localStorage.phone;
     }
+    if (this.branch != "") {
+      this.getOutlet(this.branch);
+    }
+    if(localStorage.order != "" && localStorage.order != undefined)
+    {
+      this.orderArray = localStorage.order;
+    }
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("name", this.name);
+      localStorage.setItem("phone", this.phone);
+      localStorage.setItem("branch", this.$route.params.branchID);
+      localStorage.setItem("orderID", this.orderID);
+      localStorage.setItem("order", this.orderArray);
+      localStorage.setItem("time", this.time);
+    });
   },
 
   watch: {
@@ -1267,6 +1253,30 @@ export default {
     },
   },
   methods: {
+     async getOutlet(branch) {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        branch_ID: branch,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.branch_Name = response.data.data[0].outlet_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     async getCategories() {
       var axios = require("axios");
       var config = {
@@ -1422,7 +1432,7 @@ export default {
                 description: response.data.data[i].menu_desc,
                 price: response.data.data[i].menu_price,
                 currency: "RM",
-                store: "Malaya Grill",
+                store: "He & She",
                 images: images[0].image1,
                 id: response.data.data[i].menu_id,
                 catid: response.data.data[i].menu_category,
@@ -1576,8 +1586,12 @@ export default {
         .then(
           function (response) {
             this.orderDetails = JSON.parse(response.data.data[0].order_details);
-
             for (let i = 0; i < this.orderDetails.length; i++) {
+              if (this.orderDetails[i].menu_variants == undefined) {
+                this.getVariantdata = {};
+              } else {
+                this.getVariantdata = this.orderDetails[i].menu_variants;
+              }
               this.order.push({
                 tableNo: this.orderDetails[i].tableNo,
                 sku: this.orderDetails[i].sku,
@@ -1590,7 +1604,7 @@ export default {
                 custPhone: this.orderDetails[i].custPhone,
                 discount: this.orderDetails[i].discount,
                 remarks: this.orderDetails[i].remarks,
-                menu_variant: this.orderDetails[i].menu_variants,
+                menu_variant: this.getVariantdata,
                 menu_image: this.orderDetails[i].menu_image,
                 membership_no: this.orderDetails[i].membership_no,
               });
@@ -1602,6 +1616,17 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    async papar(variasi)
+    {
+      if(variasi == "")
+      {
+        this.isdisabled = true;
+      }
+      else
+      {
+        this.isdisabled = false
+      }
     },
   },
 };

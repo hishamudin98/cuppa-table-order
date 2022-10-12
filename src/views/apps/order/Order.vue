@@ -1,157 +1,18 @@
 <template>
   <rs-layout>
-    <!-- Get Customer and Phone -->
-    <!-- <div v-if="customerProceed == false" class="order-customer">
-      <div
-        style="
-          height: 56vh;
-          border-bottom-left-radius: 2rem;
-          border-bottom-right-radius: 2rem;
-        "
-        class="bg-primary-400 after:content-['']"
-      >
-        <div class="flex justify-between items-center p-2">
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/logo-white.png"
-              alt=""
-            />
-          </div>
-          <div class="text-white">Malaya Grill Sungai Buloh </div>
-        </div>
-        <div
-          style="height: 40vh"
-          class="flex flex-col justify-center items-center"
-        >
-          <div class="w-70">
-            <img
-              class="object-scale-down"
-              src="@/assets/images/illustration/eating.svg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="m-8">
-        <div
-          class="
-            order-table-number
-            flex
-            items-center
-            justify-center
-            font-semibold
-            text-2xl
-            md:text-3xl
-            mb-4
-            gap-x-2
-          "
-        >
-          <span v-if="changetable == false"
-            >Table #{{ table ? table : "0" }}</span
-          >
-          <div v-else class="flex justify-center items-center">
-            Table #
-            <form-kit
-              type="number"
-              validation="min:0"
-              :validation-messages="{
-                min: 'Please enter table number',
-              }"
-              :classes="{
-                input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
-                outer: 'mb-0',
-              }"
-              v-model.number="table"
-              @keydown="nameKeydown($event)"
-            />
-          </div>
-          <button
-            class="
-              p-1
-              px-2
-              bg-primary-400
-              text-white
-              rounded-xl
-              text-sm
-              hover:bg-primary-300
-            "
-            @click="changetable ? (changetable = false) : (changetable = true)"
-          >
-            Change table
-          </button>
-        </div>
-        <div v-if="guestMode == true">
-          <div class="h-full p-4">
-            <rs-button
-              class="w-full mb-4"
-              @click="customerAdvanced((dataUser = 'Guest'))"
-            >
-              Enter Customer Details
-            </rs-button>
-            <hr class="my-6" />
-            <rs-button
-              @click="customerAdvancedOrder(table)"
-              class="w-full"
-              variant="primary-outline"
-              >Guest
-            </rs-button>
-          </div>
-        </div>
-        <div v-else>
-          <form-kit
-            type="text"
-            placeholder="Enter your name"
-            validation="required"
-            :validation-messages="{
-              required: 'Please enter a name',
-            }"
-            v-model="name"
-          />
-          <form-kit
-            type="number"
-            placeholder="Enter your phone number"
-            v-model="phone"
-          />
-          <rs-button
-            :disabled="isDisabled"
-            class="w-full"
-            @click="customerAdvancedOrder(table)"
-            >Proceed Order</rs-button
-          >
-          <hr class="my-3" />
-          <rs-button
-            class="w-full"
-            variant="primary-outline"
-            @click="guestMode = true"
-          >
-            Back
-          </rs-button>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- v-elseOrder Menu Page -->
+   
     <div class="order-menu-page">
       <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-x-2">
-            <!-- <vue-feather
-              class="text-white"
-              type="chevron-left"
-              @click="customerProceed = false"
-            ></vue-feather> -->
+           
             <div class="welcome text-lg font-semibold text-white">
               Table #{{ this.table }}
             </div>
           </div>
 
           <div class="flex gap-x-2 items-center">
-            <!-- <div class="text-white" v-if="guestMode == false">
-              Hishammudin Ali
-            </div>
-            <div class="text-white" v-if="guestMode == true">Guest</div> -->
+           
             <div class="text-white">{{ this.branch_Name }}</div>
             <div class="bg-black h-10 w-10 p-1 rounded-full">
               <img
@@ -569,8 +430,8 @@
                       <div class="font-semibold text-lg mb-4">
                         {{ val.title }}
                         <span
-                          class="text-gray-400 font-normal text-sm"
-                          v-if="val.required"
+                          class="text-red-500 font-normal text-sm"
+                          v-if="isdisabled == true"
                           >(required)</span
                         >
                       </div>
@@ -584,6 +445,7 @@
                           :classes="{
                             fieldset: '!border-0 !p-0',
                           }"
+                          :checked="papar(variasi)"
                         />
                         <div
                           v-if="modalData.variants2"
@@ -596,8 +458,8 @@
                             <div class="font-semibold text-lg mb-4">
                               {{ val.title }}
                               <span
-                                class="text-gray-400 font-normal text-sm"
-                                v-if="val.required"
+                                class="text-red font-normal text-sm"
+                                v-if="isdisabled == true"
                                 >(required)</span
                               >
                               <div class="variant-choice">
@@ -610,6 +472,7 @@
                                   :classes="{
                                     fieldset: '!border-0 !p-0',
                                   }"
+                                  required
                                 />
                               </div>
                             </div>
@@ -866,6 +729,7 @@
                       variasi2
                     )
                   "
+                  :disabled="isdisabled"
                 >
                   Add to Cart - RM
                   {{
@@ -955,7 +819,7 @@
           "
           v-on:click="insertOrder(discount)"
         >
-          <div>Confirm Order ({{ order.length }})</div>
+          <div>Submit Order ({{ order.length }})</div>
           <vue-feather type="shopping-cart"></vue-feather>
         </rs-button>
       </div>
@@ -1058,168 +922,135 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-      var discoutApplied = false;
-
-      if (mmbershipNo != "") {
-        discoutApplied = true;
-      } else {
-        discoutApplied = false;
-      }
-
-      if (orderID.value != "") {
-        var numsStr = variasi.value.replace(/[^\d.-]/g, "");
-        var check = parseInt(numsStr, 10);
-
-        if (variasi.value != "") {
-          /*Ade satu variation*/
-          check = variasi.value.price;
-          if (variasi2.value != "") {
-            /* Ade 2 variation */
-            variation.value.push(variasi.value, variasi2.value);
-          } else {
-            variation.value.push(variasi.value);
-          }
-        } else {
-          variation.value.push({});
-        }
-
-        /* ADE ORDER ID */
-        const exist = order.value.find(
-          (item) =>
-            item.sku === product.sku &&
-            item.orderType == picked &&
-            item.menu_price == product.price + check &&
-            item.menu_variant.some(
-              (data) => data.id === variation.value[0].id
-            ) &&
-            item.menu_variant.some((data) => data.id === variation.value[1].id)
-        );
-        if (exist) {
-          exist.menu_quantity++;
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        } else {
-          /* if (product.station != "1") {
-            if (check == 0) {
-              variation.value.push({
-                id: 1,
-                name: "hot",
-                type: "temperature",
-                price: 0,
-              });
-            } else {
-              variation.value.push({
-                id: 2,
-                name: "cold",
-                type: "temperature",
-                price: check,
-              });
-            }
-          }
-          else
-          {
-            variation.value = [];
-            check = 0;
-          } */
-          order.value.push({
-            tableNo: table.value,
-            sku: product.sku,
-            menu_name: product.name,
-            menu_price: product.price + check,
-            menu_quantity: quantity.value,
-            orderType: picked,
-            menu_id: product.id,
-            custName: nameCust,
-            custPhone: phoneCust,
-            discount: discoutApplied,
-            remarks: remarks,
-            menu_variant: variation.value,
-            menu_image: product.images,
-            membership_no: mmbershipNo,
-          });
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
-        }
-      } else {
-        var check = 0;
-
-        if (variasi.value != "") {
-          /*Ade satu variation*/
-          check = variasi.value.price;
-          if (variasi2.value != "") {
-            /* Ade 2 variation */
-            variation.value.push(variasi.value, variasi2.value);
-          } else {
-            variation.value.push(variasi.value);
-          }
-        } else {
-          variation.value.push({});
-        }
       
-        if (localStorage.name != "") {
-          var nameCust = localStorage.name;
-          var phoneCust = localStorage.phone;
-        } else {
-          var nameCust = "";
-          var phoneCust = "";
-        }
+      var exist = "";
+      var check = 0;
+      /* CHECK FOR NAME AND PHONE NUMBER */
+      if (localStorage.name != "") {
+        var nameCust = localStorage.name;
+        var phoneCust = localStorage.phone;
+      } else {
+        var nameCust = "";
+        var phoneCust = "";
+      }
+      /* CHECK FOR MEMBERSHIP APPLIED */
+      if (mmbershipNo != "") {
+        var discoutApplied = true;
+      } else {
+        var discoutApplied = false;
+      }
 
-        const exist = order.value.find(
-          (item) =>
-            item.sku === product.sku &&
-            item.orderType == picked &&
-            item.menu_price == product.price + check &&
-            item.menu_variant.some(
-              (data) => data.id === variation.value[0].id
-            ) &&
-            item.menu_variant.some((data) => data.id === variation.value[1].id)
-        );
-        if (exist) {
-          exist.menu_quantity++;
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
+      if (variasi.value == "") {
+        
+      } else {
+        if (variasi2.value == "") {
+          variation.value.push(variasi.value);
+          check = variasi.value.price;
         } else {
-          order.value.push({
-            tableNo: table.value,
-            sku: product.sku,
-            menu_name: product.name,
-            menu_price: product.price + check,
-            menu_quantity: quantity.value,
-            orderType: picked,
-            menu_id: product.id,
-            custName: nameCust,
-            custPhone: phoneCust,
-            discount: discoutApplied,
-            remarks: remarks,
-            menu_variant: variation.value,
-            menu_image: product.images,
-            membership_no: mmbershipNo,
-          });
-          var total = 0;
-          var sum = 0;
-          for (let i = 0; i < order.value.length; i++) {
-            sum = parseInt(order.value[i].menu_quantity);
-            total += parseFloat(order.value[i].menu_price) * sum;
-          }
-          totalPrice.value = total;
+          variation.value.push(variasi.value, variasi2.value);
         }
       }
-    
+      /* CHECK EXIST */
+      if (orderID.value == "") {
+        if (variasi.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check
+          );
+        }
+        else if (variasi2.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              )
+          );
+        } else {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              ) &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[1].id
+              )
+          );
+        }
+      } else {
+        if (variasi.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check
+          );
+        } else if (variasi2.value == "") {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              )
+          );
+        } else {
+          exist = order.value.find(
+            (item) =>
+              item.sku === product.sku &&
+              item.orderType == picked &&
+              item.menu_price == product.price + check &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[0].id
+              ) &&
+              item.menu_variant.find(
+                (variant) => variant.id == variation.value[1].id
+              )
+          );
+        }
+      }
+      if (exist) {
+        exist.menu_quantity++;
+        var total = 0;
+        var sum = 0;
+        for (let i = 0; i < order.value.length; i++) {
+          sum = parseInt(order.value[i].menu_quantity);
+          total += parseFloat(order.value[i].menu_price) * sum;
+        }
+        totalPrice.value = total;
+      } else {
+        order.value.push({
+          tableNo: table.value,
+          sku: product.sku,
+          menu_name: product.name,
+          menu_price: product.price + check,
+          menu_quantity: quantity.value,
+          orderType: picked,
+          menu_id: product.id,
+          custName: nameCust,
+          custPhone: phoneCust,
+          discount: discoutApplied,
+          remarks: remarks,
+          menu_variant: variation.value,
+          menu_image: product.images,
+          membership_no: mmbershipNo,
+        });
+        var total = 0;
+        var sum = 0;
+        for (let i = 0; i < order.value.length; i++) {
+          sum = parseInt(order.value[i].menu_quantity);
+          total += parseFloat(order.value[i].menu_price) * sum;
+        }
+        totalPrice.value = total;
+      }
       picked = 1;
       quantity.value = 1;
       openModal.value = false;
@@ -1267,17 +1098,27 @@ export default {
           );
         });
       } else {
-        menu.value = [];
-        let MenuFilter = menus.value.filter((product) => {
-          let categoryParsed = JSON.parse(product.catid);
-          let result = categoryParsed.map((category) => {
-            if (category.category_id === defaultCatID.value) {
-              menu.value.push(product);
-            }
+        if (search.value == "") {
+          menu.value = [];
+          let MenuFilter = menus.value.filter((product) => {
+            let categoryParsed = JSON.parse(product.catid);
+            let result = categoryParsed.map((categories) => {
+              if (categories.category_id === defaultCatID.value) {
+                menu.value.push(product);
+              }
+            });
           });
-        });
-
-        return menu.value;
+          return menu.value;
+        } else {
+          return menu.value.filter((product) => {
+            return (
+              product.name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                -1 ||
+              product.sku.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                -1
+            );
+          });
+        }
       }
     });
 
@@ -1338,6 +1179,9 @@ export default {
       branch_Name: "",
       branch: 0,
       orderNo: 0,
+      getVariantdata: [],
+      orderArray: [],
+      isdisabled: false,
     };
   },
 
@@ -1346,26 +1190,34 @@ export default {
     this.getMenu();
     this.orderID = this.$route.params.orderID;
     this.table = this.$route.params.table;
+    this.branch = this.$route.params.branchID;
     this.orderNo = this.orderID;
-    if(this.orderNo != "")
-    {
+    if (this.orderNo != "") {
       this.orderNo = localStorage.orderID;
     }
     if (this.orderNo != "") {
       this.getOrderID();
     }
-  },
-
-  mounted() {
     if (localStorage.name) {
       this.name = localStorage.name;
     }
     if (localStorage.phone) {
       this.phone = localStorage.phone;
     }
-    if (localStorage.branch != 0) {
-      this.getOutlet(localStorage.branch);
+    if (this.branch != "") {
+      this.getOutlet(this.branch);
     }
+    if(localStorage.order != "" && localStorage.order != undefined)
+    {
+      this.orderArray = localStorage.order;
+    }
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("name", this.name);
+      localStorage.setItem("phone", this.phone);
+      localStorage.setItem("branch", this.$route.params.branchID);
+      localStorage.setItem("orderID", this.orderID);
+      localStorage.setItem("order", this.orderArray);
+    });
   },
 
   watch: {
@@ -1387,7 +1239,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },
@@ -1408,12 +1260,14 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
       };
-      console.log(config)
+
       await axios(config)
         .then(
           function (response) {
@@ -1434,7 +1288,9 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/getMenu" /* http://localhost:3000/getMenu   */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1560,7 +1416,7 @@ export default {
                 description: response.data.data[i].menu_desc,
                 price: response.data.data[i].menu_price,
                 currency: "RM",
-                store: "Malaya Grill",
+                store: "He & She",
                 images: images[0].image1,
                 id: response.data.data[i].menu_id,
                 catid: response.data.data[i].menu_category,
@@ -1588,11 +1444,12 @@ export default {
           discounted: discount,
           orderID: this.orderNo,
           table: this.table,
-          
         });
         var config = {
           method: "post",
-          url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
+          url:
+            process.env.VUE_APP_FNB_URL_LOCAL +
+            "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1625,7 +1482,9 @@ export default {
         localStorage.order = this.order;
         var config = {
           method: "post",
-          url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
+          url:
+            process.env.VUE_APP_FNB_URL_LOCAL +
+            "/tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1656,7 +1515,9 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1706,7 +1567,9 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1717,6 +1580,11 @@ export default {
           function (response) {
             this.orderDetails = JSON.parse(response.data.data[0].order_details);
             for (let i = 0; i < this.orderDetails.length; i++) {
+              if (this.orderDetails[i].menu_variants == undefined) {
+                this.getVariantdata = {};
+              } else {
+                this.getVariantdata = this.orderDetails[i].menu_variants;
+              }
               this.order.push({
                 tableNo: this.orderDetails[i].tableNo,
                 sku: this.orderDetails[i].sku,
@@ -1729,7 +1597,7 @@ export default {
                 custPhone: this.orderDetails[i].custPhone,
                 discount: this.orderDetails[i].discount,
                 remarks: this.orderDetails[i].remarks,
-                menu_variant: this.orderDetails[i].menu_variants,
+                menu_variant: this.getVariantdata,
                 menu_image: this.orderDetails[i].menu_image,
                 membership_no: this.orderDetails[i].membership_no,
               });
@@ -1742,6 +1610,17 @@ export default {
           console.log(error);
         });
     },
+    async papar(variasi)
+    {
+      if(variasi == "")
+      {
+        this.isdisabled = true;
+      }
+      else
+      {
+        this.isdisabled = false
+      }
+    }
   },
 };
 </script>

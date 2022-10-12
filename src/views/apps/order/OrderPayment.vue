@@ -2,10 +2,19 @@
   <rs-layout>
     <div class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
+        <div class="flex items-center gap-x-2" v-if="this.time == null">
           <router-link
             class="flex items-center justify-center"
-            :to="{ name: 'order', params: { orderID: this.MenuID } }"
+            :to="{ name: 'order', params: {branchID: this.branch , table: this.tableNo , orderID: this.MenuID } }"
+          >
+            <vue-feather class="text-white" type="chevron-left"></vue-feather>
+          </router-link>
+          <p class="font-semibold text-white text-lg">Order Confirmation</p>
+        </div>
+        <div class="flex items-center gap-x-2" v-else>
+          <router-link
+            class="flex items-center justify-center"
+            :to="{ name: 'takeaway', params: {branchID: this.branch , table: this.tableNo , orderID: this.MenuID } }"
           >
             <vue-feather class="text-white" type="chevron-left"></vue-feather>
           </router-link>
@@ -194,7 +203,7 @@
       </rs-card>
 
       <div class="text-base font-semibold">Payment Type</div>
-      <div class="flex mb-6">
+      <div class="flex mb-2">
         <div class="w-full">
           <ul class="flex mb-0 list-none pt-4 pb-3 flex-col">
             <li
@@ -235,15 +244,7 @@
               </a>
             </li>
             <li
-              class="
-                -mb-px
-                mr-2
-                last:mr-0
-                flex-auto
-                text-left
-                sm:text-center
-                relative
-              "
+              class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
             >
               <a
                 class="
@@ -361,6 +362,13 @@
                         </button>
                       </div>
                     </div>
+                    <br />
+                    <rs-button
+                      class="w-full bg-heandshe hover:bg-heandshe"
+                      @click="sentBank()"
+                    >
+                      Pay Online RM {{ formatPrice(this.totalPay) }}
+                    </rs-button>
                   </div>
                   <div
                     :class="{
@@ -418,12 +426,18 @@
         {{ formatPrice(Math.ceil(this.totalPay)) }}</rs-button
       > -->
       <!-- <router-link :to="{ name: 'order-confirm' }"> -->
-      <rs-button class="w-full mb-2 bg-heandshe" @click="sentPOS()"
+      <hr class="my-1" />
+      <center>OR</center>
+      <hr class="mb-4" />
+      <rs-button
+        class="w-full my-2"
+        variant="primary-outline"
+        @click="sentPOS()"
         >Pay at counter RM {{ formatPrice(this.totalPay) }}
       </rs-button>
-      <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
+      <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
         Pay Online RM {{ formatPrice(this.totalPay) }}
-      </rs-button>
+      </rs-button> -->
       <!-- </router-link> -->
     </div>
     <rs-modal
@@ -463,7 +477,6 @@
               />
               <rs-button
                 class="absolute bottom-2 right-2 py-1 !px-4 bg-heandshe"
-                
               >
                 RM
                 {{
@@ -783,32 +796,24 @@
       position="middle"
       size="full"
     >
-      <div class="grid grid-cols-3 gap-5 content-center ...">
-        <!-- <div>{{ this.link }}</div>
-        <div></div>
+      <div>
         <div>
-          <rs-button
-            variant="primary-outline"
-            class="w-30%"
-            @click="sentBank()"
-          >
-            Copy
-          </rs-button>
-        </div> -->
-        <div>{{ this.link }}</div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div>
-          <rs-button
-            class="w-30% bg-heandshe"
-            @click.stop.prevent="copyTestingCode"
-          >
-            Copy
-          </rs-button>
+          <center>
+            <qrcode-vue :value="this.value" :size="size" level="L" />
+          </center>
         </div>
-        <input type="hidden" id="testing-code" :value="this.link" />
+        <div class="my-4 text-center">
+          <div>{{ this.link }}</div>
+          <input type="hidden" id="testing-code" :value="this.link" />
+          <div class="mt-4">
+            <rs-button
+              class="w-full bg-heandshe"
+              @click.stop.prevent="copyTestingCode"
+            >
+              Copy
+            </rs-button>
+          </div>
+        </div>
       </div>
     </rs-modal>
     <rs-modal
@@ -835,12 +840,15 @@ import { FreeMode } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { useRoute } from "vue-router";
 
+import QrcodeVue from "qrcode.vue";
+
 export default {
   components: {
     RsModal,
     RsButton,
     Swiper,
     SwiperSlide,
+    QrcodeVue,
   },
   setup() {
     const getBankCode = ref("");
@@ -993,11 +1001,17 @@ export default {
       custName: "",
       custPhone: "",
       modalPOS: false,
+      value: "",
+      size: 200,
+      branch: 0,
+      time: null,
     };
   },
 
   async created() {
     this.getOrder();
+    this.branch = localStorage.branch;
+    this.time = localStorage.time;
   },
 
   methods: {
@@ -1012,7 +1026,9 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getOrder" /*  http://localhost:3000tbl/getOrder*/,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/getOrder" /*  http://localhost:3000tbl/getOrder*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1310,7 +1326,9 @@ export default {
 
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1351,7 +1369,8 @@ export default {
         });
         var config = {
           method: "POST",
-          url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/tblorderPayment" /*  */,
+          url:
+            process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/tblorderPayment" /*  */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1393,7 +1412,9 @@ export default {
 
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/tblOrderPOS" /* http://localhost:3000tbltblOrderPOS */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/tblOrderPOS" /* http://localhost:3000tbltblOrderPOS */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1408,6 +1429,7 @@ export default {
               params: {
                 orderID: response.data.data.order_no,
                 table: this.tableNo,
+                branch: localStorage.branch,
               },
             });
           }.bind(this)
@@ -1445,7 +1467,9 @@ export default {
       });
       var config = {
         method: "POST",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/tblorderPayment" /*http://localhost:3000tbltblorderPayment */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/tblorderPayment" /*http://localhost:3000tbltblorderPayment */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1455,6 +1479,7 @@ export default {
         .then(
           function (response) {
             this.link = response.data.data2;
+            this.value = this.link;
             this.modalOpen = true;
           }.bind(this)
         )

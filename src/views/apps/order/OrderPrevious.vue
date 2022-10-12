@@ -33,7 +33,7 @@
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
-      <router-link class="w-full" :to="{ name: 'orderLogin' }">
+      <router-link class="w-full" :to="{ name: 'orderLogin' , params: { branchID: this.branch } }">
         <rs-button class="w-full gap-x-2 mb-6 bg-heandshe" >
           Back
         </rs-button>
@@ -62,11 +62,13 @@ export default {
       orderID: null,
       orderamount: null,
       order_type: "",
+      branch: 0,
     };
   },
   async created() {
     this.orderID = this.$route.params.orderID;
     this.getPreviousOrder();
+    this.branch = localStorage.branch;
   },
   methods: {
     async getPreviousOrder() {
@@ -76,7 +78,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },

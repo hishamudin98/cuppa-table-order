@@ -94,9 +94,16 @@
             }"
             v-model="name"
           />
-          <form-kit
-            type="number"
-            placeholder="Enter your phone number"
+          <FormKit
+            type="tel"
+            label="Phone number"
+            placeholder="01xxxxxxxx"
+            validation="matches:/^[0-9]{10}$/"
+            :validation-messages="{
+              matches: 'Phone number must be in the format 01xxxxxxxx',
+            }"
+            @keypress="onlyNumber"
+            validation-visibility="dirty"
             v-model="phone"
           />
           <rs-button
@@ -107,7 +114,8 @@
           >
           <hr class="my-3" />
           <rs-button
-            class="w-full bg-heandshe hover:bg-heandshe"
+            class="w-full"
+            variant="primary-outline"
             @click="custCloseLogin()"
           >
             Back
@@ -168,7 +176,7 @@
             variant="primary-outline"
             @click="pickComeTime()"
           >
-            Pre-order
+            Book a Table
           </rs-button>
         </div>
         <div v-if="picktable == true">
@@ -185,8 +193,8 @@
               gap-x-2
             "
           >
-            <span v-if="changetable == false"
-              >Table #{{ table ? table : "0" }}</span
+             <span v-if="changetable == false"
+              >Table #{{ this.table ? this.table : "0" }}</span
             >
             <div v-else class="flex justify-center items-center">
               Table #
@@ -196,8 +204,8 @@
                   input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
                   outer: 'mb-0',
                 }"
-                v-model.number="table"
-                @keydown="nameKeydown($event)"
+                v-model.number="this.table"
+                @keypress="onlyNumber"
               />
             </div>
             <button
@@ -216,10 +224,16 @@
             >
               Change table
             </button>
+            <!-- <FormKit
+              type="select"
+              label="Table Number"
+              name="small_country"
+              :options="['Monaco', 'Vatican City', 'Maldives', 'Tuvalu']"
+            /> -->
           </div>
           <rs-button
             class="w-full bg-heandshe hover:bg-heandshe"
-            @click="pickOrder(table)"
+            @click="pickOrder(this.table)"
             >Proceed</rs-button
           >
           <hr class="my-3" />
@@ -276,7 +290,7 @@
                   outer: 'mb-0',
                 }"
                 v-model.number="table2"
-                @keydown="nameKeydown($event)"
+                @keypress="onlyNumber"
               />
             </div>
             <button
@@ -298,7 +312,7 @@
           </div>
           <FormKit
             type="time"
-            label="Expected come time"
+            label="Expected arrival time"
             v-model="timer2"
             value="23:15"
           />
@@ -346,9 +360,10 @@ export default {
     const changetable = ref(false);
 
     const route = useRoute();
-    const table = ref(0);
+    const table = ref(route.params.table);
     table.value = route.query.table;
     const branch = ref(route.params.branchID);
+    
 
     const customerData = ref({
       name: "",
@@ -397,7 +412,7 @@ export default {
 
       /* DATA NULL */
       name: "",
-      phone: "",
+      phone: null,
       username: "",
       password: "",
       timestamp: "",
@@ -410,6 +425,7 @@ export default {
       branch_Name: "",
       value: "https://example.com",
       size: 300,
+      tableOutlet: [],
 
       /* LAMA DATA RETURN */
 
@@ -424,10 +440,17 @@ export default {
   mounted() {
     if (localStorage.orderid != "") {
       this.orderid = localStorage.orderid;
-      localStorage.removeItem("name");
-      localStorage.removeItem("phone");
       localStorage.removeItem("time");
       localStorage.removeItem("mmberno");
+    }
+
+    if(this.$route.params.table != "")
+    {
+      this.table = this.$route.params.table;
+    }
+    else
+    {
+      this.table = 0;
     }
 
     window.onbeforeunload = function () {
@@ -443,16 +466,22 @@ export default {
     this.branch = this.$route.params.branchID;
     if (this.branch != 0 && this.branch != undefined) {
       this.getOutlet(this.branch);
-    } else if (localStorage.branch != 0) {
+      this.getTableNumber(this.branch);
+    } else {
+      this.branch = localStorage.branch;
       this.getOutlet(localStorage.branch);
+      this.getTableNumber(localStorage.branch);
     }
 
     this.getNow();
   },
   computed: {
     isDisabled() {
-      if (this.name !== "" && this.phone !== "") return false;
-      else return true;
+      if (this.name !== "" && this.phone.length > 9 ) {
+        return false;
+      } else {
+        return true;
+      }
     },
     isDisabled2() {
       if (this.username !== "" && this.password !== "") return false;
@@ -520,10 +549,8 @@ export default {
               localStorage.phone = response.data.data[0].phone_no;
 
               this.orderType();
-            }
-            else
-            {
-              alert(response.data.message)
+            } else {
+              alert(response.data.message);
             }
           }.bind(this)
         )
@@ -615,7 +642,7 @@ export default {
         localStorage.branch = this.branch;
         this.$router.push({
           name: "order",
-          params: { branchID: this.branch, orderID: "", table: table },
+          params: { branchID: this.branch, table: table, orderID: "" },
         });
       } else {
         alert("Please Enter a valid table number");
@@ -662,6 +689,34 @@ export default {
       });
     }, */
 
+    async getTableNumber(branch) {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        branch_ID: branch,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTableNumber",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.tableOutlet.push({
+                table_no: response.data.data[i].outlet_table,
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     async addTable(table) {
       if (table != 0 && table > 0) {
         this.customerProceed = true;
@@ -706,6 +761,15 @@ export default {
     async nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
         e.preventDefault();
+      }
+    },
+
+    async onlyNumber($event) {
+      //console.log($event.keyCode); //keyCodes value
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        // 46 is dot
+        $event.preventDefault();
       }
     },
   },

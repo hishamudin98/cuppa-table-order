@@ -25,9 +25,24 @@ export default [
       component: () => import("@/views/apps/administrator/adminMenu.vue"),
     },
     {
-      path: "/admin/report",
-      name: "admin-report",
+      path: "/admin/report/transaction",
+      name: "admin-report-t",
       component: () => import("@/views/apps/administrator/adminReports.vue"),
+    },
+    {
+      path: "/admin/report/shift",
+      name: "admin-report-s",
+      component: () => import("@/views/apps/administrator/adminReportsShift.vue"),
+    },
+    {
+      path: "/admin/report/refund",
+      name: "admin-report-r",
+      component: () => import("@/views/apps/administrator/adminReportsRefund.vue"),
+    },
+    {
+      path: "/admin/table",
+      name: "admin-table",
+      component: () => import("@/views/apps/administrator/adminTable.vue"),
     },
     /*{
       path: "/order/previous/:orderID?",
