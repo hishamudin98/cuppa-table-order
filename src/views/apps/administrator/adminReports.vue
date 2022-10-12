@@ -9,11 +9,7 @@
         <div class="flex gap-x-2 items-center">
           <div class="text-white">{{ this.staffName }}</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
+            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
           </div>
         </div>
       </div>
@@ -30,19 +26,7 @@
                     <router-link :to="{ name: 'dashboard' }">
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          bg-gray-300
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal bg-gray-300 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                       >
                         <span class="ml-3">Dashboard</span>
                       </a>
@@ -52,18 +36,7 @@
                     <router-link :to="{ name: 'admin-user' }">
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">User</span>
                       </a>
@@ -73,18 +46,7 @@
                     <router-link :to="{ name: 'admin-staff' }">
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
                       </a>
@@ -94,18 +56,7 @@
                     <router-link :to="{ name: 'admin-menu' }">
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                       </a>
@@ -114,45 +65,19 @@
                   <li>
                     <a
                       href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
+                      class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap"
-                        >Membership</span
-                      >
+                      <span class="flex-1 ml-3 whitespace-nowrap">Membership</span>
                     </a>
                   </li>
                   <li>
                     <div>
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                         @click="dropdownOutlet()"
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Outlet</span
-                        >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
                       </a>
                     </div>
                     <div v-if="this.outletDrop == true">
@@ -161,19 +86,7 @@
                           <router-link :to="{ name: 'admin-table' }">
                             <a
                               href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
+                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Table Management</span
                               >
@@ -184,19 +97,7 @@
                           <router-link :to="{ name: 'admin-report-s' }">
                             <a
                               href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
+                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Counter Management</span
                               >
@@ -210,23 +111,10 @@
                     <div>
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                         @click="triggerDropdown()"
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Report</span
-                        >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
                       </a>
                     </div>
                     <div v-if="this.show == true">
@@ -235,19 +123,7 @@
                           <router-link :to="{ name: 'admin-report-t' }">
                             <a
                               href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
+                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Report Transaction</span
                               >
@@ -258,19 +134,7 @@
                           <router-link :to="{ name: 'admin-report-s' }">
                             <a
                               href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
+                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Report Shift</span
                               >
@@ -280,19 +144,7 @@
                         <li>
                           <a
                             href="#"
-                            class="
-                              flex
-                              items-center
-                              p-3
-                              ml-2
-                              text-sm
-                              font-sm
-                              text-gray-900
-                              rounded-lg
-                              dark:text-white
-                              hover:bg-gray-300
-                              dark:hover:bg-gray-700
-                            "
+                            class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                             ><span class="flex-1 ml-3 whitespace-nowrap"
                               >Report Refund</span
                             >
@@ -305,22 +157,9 @@
                     <router-link :to="{ name: 'login' }">
                       <a
                         href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Log Out</span
-                        >
+                        <span class="flex-1 ml-3 whitespace-nowrap">Log Out</span>
                       </a>
                     </router-link>
                   </li>
@@ -337,9 +176,7 @@
                   <strong>Number of transaction by outlet</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">
-                  {{ this.totalData }} transactions
-                </div>
+                <div class="text-center py-8">{{ this.totalData }} transactions</div>
               </rs-card>
             </div>
             <div class="inline-block w-1/2 pr-10">
@@ -357,7 +194,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-full h-1">
+              <div class="w-full" style="padding-top: 10px">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -372,9 +209,7 @@
                 />
               </div>
               <div class="w-1/12" style="padding-top: 10px">
-                <rs-button
-                  @click="filter()"
-                  class="bg-heandshe hover:bg-heandshe"
+                <rs-button @click="filter()" class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
               </div>
@@ -395,22 +230,13 @@
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
                       <Column field="trans_no" header="Transaction No"></Column>
-                      <Column
-                        field="trans_date"
-                        header="Transaction Date"
-                      ></Column>
+                      <Column field="trans_date" header="Transaction Date"></Column>
                       <Column
                         field="trans_amount"
                         header="Transaction Amount (RM)"
                       ></Column>
-                      <Column
-                        field="trans_status"
-                        header="Transaction Status"
-                      ></Column>
-                      <Column
-                        field="trans_method"
-                        header="Transaction Method"
-                      ></Column>
+                      <Column field="trans_status" header="Transaction Status"></Column>
+                      <Column field="trans_method" header="Transaction Method"></Column>
 
                       <template #paginatorstart>
                         <Button
@@ -420,11 +246,7 @@
                         />
                       </template>
                       <template #paginatorend>
-                        <Button
-                          type="button"
-                          icon="pi pi-cloud"
-                          class="p-button-text"
-                        />
+                        <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                       </template>
                     </DataTable>
                   </div>
@@ -460,11 +282,7 @@
         validation-visibility="live"
       />
 
-      <rs-button
-        style="float: right"
-        variant="primary-outline"
-        @click="filters()"
-      >
+      <rs-button style="float: right" variant="primary-outline" @click="filters()">
         Clear
       </rs-button>
       <!-- <rs-button
@@ -509,17 +327,17 @@ export default {
     const start_date = ref("");
 
     const searchTrans = computed(() => {
-      return trans.value.filter((trans) => {
-        return (
-          trans.trans_status
-            .toLowerCase()
-            .indexOf(trans_status.value.toLowerCase()) != -1 &&
-          trans.trans_method
-            .toLowerCase()
-            .indexOf(trans_method.value.toLowerCase()) != -1 &&
-            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase())
-        );
-      });
+        return trans.value.filter((trans) => {
+          return (
+            trans.trans_status.toLowerCase().indexOf(trans_status.value.toLowerCase()) !=
+              -1 &&
+            trans.trans_method.toLowerCase().indexOf(trans_method.value.toLowerCase()) !=
+              -1 &&
+            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1 &&
+            moment(trans.trans_date).format("DD-MM-YYYY") >= moment(start_date.value).format("DD-MM-YYYY") != -1
+          );
+        });
+      
     });
 
     const filters = () => {
@@ -616,8 +434,7 @@ export default {
       });
       var config = {
         method: "post",
-        url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTransaction" /*   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTransaction" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -630,41 +447,29 @@ export default {
               /* STATUS */
               if (response.data.data.trans_details[i].trans_status == 1) {
                 this.status = "Success";
-              } else if (
-                response.data.data.trans_details[i].trans_status == 2
-              ) {
+              } else if (response.data.data.trans_details[i].trans_status == 2) {
                 this.status = "Pending";
-              } else if (
-                response.data.data.trans_details[i].trans_status == 3
-              ) {
+              } else if (response.data.data.trans_details[i].trans_status == 3) {
                 this.status = "Failed";
-              } else if (
-                response.data.data.trans_details[i].trans_status == 4
-              ) {
+              } else if (response.data.data.trans_details[i].trans_status == 4) {
                 this.status = "Unknown";
-              } else if (
-                response.data.data.trans_details[i].trans_status == 5
-              ) {
+              } else if (response.data.data.trans_details[i].trans_status == 5) {
                 this.status = "Refund";
               }
               /* METHOD */
               if (response.data.data.trans_details[i].trans_method == 1) {
                 this.transMethod = "Cash";
-              } else if (
-                response.data.data.trans_details[i].trans_method == 2
-              ) {
+              } else if (response.data.data.trans_details[i].trans_method == 2) {
                 this.transMethod = "FPX";
-              } else if (
-                response.data.data.trans_details[i].trans_method == 3
-              ) {
+              } else if (response.data.data.trans_details[i].trans_method == 3) {
                 this.transMethod = "Credit/Debit Card";
               }
 
               this.trans.push({
                 trans_no: response.data.data.trans_details[i].trans_no,
-                trans_date: moment(
-                  response.data.data.trans_details[i].trans_date
-                ).format("DD-MM-YYYY"),
+                trans_date: moment(response.data.data.trans_details[i].trans_date).format(
+                  "DD-MM-YYYY"
+                ),
                 trans_amount: response.data.data.trans_details[i].trans_amount,
                 trans_status: this.status,
                 trans_method: this.transMethod,
