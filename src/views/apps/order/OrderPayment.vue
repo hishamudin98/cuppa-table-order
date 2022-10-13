@@ -2,26 +2,44 @@
   <rs-layout>
     <div class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2" v-if="this.time == null">
-          <router-link
-            class="flex items-center justify-center"
-            :to="{ name: 'order', params: {branchID: this.branch , table: this.tableNo , orderID: this.MenuID } }"
-          >
-            <vue-feather class="text-white" type="chevron-left"></vue-feather>
-          </router-link>
-          <p class="font-semibold text-white text-lg">Order Confirmation</p>
+        <div v-if="this.status != 'FAIL'">
+          <div class="flex items-center gap-x-2" v-if="this.time == null">
+            <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'order',
+                params: {
+                  branchID: this.branch,
+                  table: this.tableNo,
+                  orderID: this.MenuID,
+                },
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"></vue-feather>
+            </router-link>
+            <p class="font-semibold text-white text-lg">Order Confirmation</p>
+          </div>
+          
+          <div class="flex items-center gap-x-2" v-else>
+            <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'takeaway',
+                params: {
+                  branchID: this.branch,
+                  table: this.tableNo,
+                  orderID: this.MenuID,
+                },
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"></vue-feather>
+            </router-link>
+            <p class="font-semibold text-white text-lg">Order Confirmation</p>
+          </div>
         </div>
-        <div class="flex items-center gap-x-2" v-else>
-          <router-link
-            class="flex items-center justify-center"
-            :to="{ name: 'takeaway', params: {branchID: this.branch , table: this.tableNo , orderID: this.MenuID } }"
-          >
-            <vue-feather class="text-white" type="chevron-left"></vue-feather>
-          </router-link>
-          <p class="font-semibold text-white text-lg">Order Confirmation</p>
-        </div>
+        <div class="flex items-center gap-x-2" v-else></div>
         <div class="bg-white px-3 py-1 rounded-full text-heandshe">
-          Table #{{ this.tableNo }}
+          {{ this.tableNo }}
         </div>
       </div>
     </div>
@@ -617,59 +635,61 @@
                 >
               </div>
             </div> -->
-            <div
-              class="
-                modal-item-action
-                flex
-                w-full
-                justify-between
-                items-center
-                overflow-auto
-                px-2
-                gap-x-2
-              "
-            >
-              <button
-                class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
-                @click="addToCart(modalData)"
+            <div v-if="this.status != 'FAIL'">
+              <div
+                class="
+                  modal-item-action
+                  flex
+                  w-full
+                  justify-between
+                  items-center
+                  overflow-auto
+                  px-2
+                  gap-x-2
+                "
               >
-                Save to Cart - RM
-                {{
-                  modalData && modalData.discountedPrice
-                    ? formatPrice(modalData.discountedPrice + 1)
-                    : formatPrice(modalData.menu_price + 1)
-                }}
-              </button>
-              <div class="flex gap-x-2">
                 <button
-                  class="
-                    flex
-                    items-center
-                    justify-center
-                    bg-heandshe
-                    text-primary-50
-                    p-1
-                    rounded-lg
-                  "
-                  @click="decrement()"
+                  class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
+                  @click="addToCart(modalData)"
                 >
-                  <vue-feather type="minus"></vue-feather>
+                  Save to Cart - RM
+                  {{
+                    modalData && modalData.discountedPrice
+                      ? formatPrice(modalData.discountedPrice)
+                      : formatPrice(modalData.menu_price)
+                  }}
                 </button>
-                {{ modalData.menu_quantity }}
-                <button
-                  class="
-                    flex
-                    items-center
-                    justify-center
-                    bg-heandshe
-                    text-primary-50
-                    p-1
-                    rounded-lg
-                  "
-                  @click="increment()"
-                >
-                  <vue-feather type="plus"></vue-feather>
-                </button>
+                <div class="flex gap-x-2">
+                  <button
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      bg-heandshe
+                      text-primary-50
+                      p-1
+                      rounded-lg
+                    "
+                    @click="decrement()"
+                  >
+                    <vue-feather type="minus"></vue-feather>
+                  </button>
+                  {{ modalData.menu_quantity }}
+                  <button
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      bg-heandshe
+                      text-primary-50
+                      p-1
+                      rounded-lg
+                    "
+                    @click="increment()"
+                  >
+                    <vue-feather type="plus"></vue-feather>
+                  </button>
+                </div>
               </div>
             </div>
           </perfect-scrollbar>
@@ -839,7 +859,6 @@ import RsButton from "@/components/Button.vue";
 import { FreeMode } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { useRoute } from "vue-router";
-
 import QrcodeVue from "qrcode.vue";
 
 export default {
@@ -952,6 +971,7 @@ export default {
     };
 
     const viewDetailItem = (product) => {
+      console.log(product);
       modalData.value = product;
       openModal.value = true;
     };
@@ -1005,6 +1025,13 @@ export default {
       size: 200,
       branch: 0,
       time: null,
+      status: "",
+
+      /* TIMER IDLE */
+      IDLE_COUNTER: 60,
+      idleSecondsCounter: 0,
+      idleSecondsTimer: 0,
+      tablNo: 0,
     };
   },
 
@@ -1012,9 +1039,43 @@ export default {
     this.getOrder();
     this.branch = localStorage.branch;
     this.time = localStorage.time;
+    this.status = localStorage.status;
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("branch", this.branch);
+    });
+
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    };
+  },
+
+  mounted() {
+    document.onclick = () => {
+      this.idleSecondsTimer = 0;
+    };
+    document.onmousemove = () => {
+      this.idleSecondsTimer = 0;
+    };
+    document.ontouchmove = () => {
+      this.idleSecondsTimer = 0;
+    };
+    this.idleSecondsCounter = window.setInterval(this.idleChecker, 1000);
   },
 
   methods: {
+    async idleChecker() {
+      this.idleSecondsTimer++;
+      this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsTimer;
+      if (this.idleSecondsCounter == 0) {
+        window.clearInterval(this.idleSecondsCounter)
+        alert("You have been idle for 1 minute");
+        this.$router.push({
+          name: "orderLogin",
+          params: { branchID: this.branch , table: this.tablNo },
+        });
+      }
+    },
     async SetBank(code) {
       this.bankcode = code;
     },
@@ -1096,6 +1157,7 @@ export default {
               this.totalPay = this.totalPay - this.discountedP;
             }
             this.orderno = response.data.data.order_no;
+            this.tablNo = response.data.data.order_table;
           }.bind(this)
         )
         .catch(function (error) {

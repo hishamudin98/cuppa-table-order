@@ -7,7 +7,7 @@
           <div class="flex items-center gap-x-2">
            
             <div class="welcome text-lg font-semibold text-white">
-              Table #{{ this.table }}
+             {{this.tblNo}}
             </div>
           </div>
 
@@ -390,7 +390,7 @@
 
                 <hr class="my-4" />
                 <div class="modal-item-content">
-                  <div
+                  <!-- <div
                     class="
                       membership
                       flex
@@ -417,7 +417,7 @@
                       :disabled="isDisabled"
                       >Apply</rs-button
                     >
-                  </div>
+                  </div> -->
                   <div>
                     <input type="hidden" v-model="modalData.station" />
                   </div>
@@ -725,8 +725,7 @@
                       discount,
                       mmbershipNo,
                       remarks,
-                      variasi,
-                      variasi2
+                      this.tblNo
                     )
                   "
                   :disabled="isdisabled"
@@ -921,7 +920,7 @@ export default {
       }
     };
 
-    const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
+    const addToCart = (product, picked, discount, mmbershipNo, remarks,tblno) => {
       
       var exist = "";
       var check = 0;
@@ -1028,7 +1027,7 @@ export default {
         totalPrice.value = total;
       } else {
         order.value.push({
-          tableNo: table.value,
+          tableNo: tblno,
           sku: product.sku,
           menu_name: product.name,
           menu_price: product.price + check,
@@ -1182,12 +1181,14 @@ export default {
       getVariantdata: [],
       orderArray: [],
       isdisabled: false,
+      tblNo:0,
     };
   },
 
   async created() {
     this.getCategories();
     this.getMenu();
+    this.getTable();
     this.orderID = this.$route.params.orderID;
     this.table = this.$route.params.table;
     this.branch = this.$route.params.branchID;
@@ -1232,6 +1233,29 @@ export default {
     },
   },
   methods: {
+    async getTable() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        table_id: this.table,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTblNo",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.tblNo = response.data.data[0].outlet_table_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     async getOutlet(branch) {
       var axios = require("axios");
       var data = JSON.stringify({

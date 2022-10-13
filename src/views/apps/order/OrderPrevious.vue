@@ -8,6 +8,47 @@
       </div>
     </div>
     <div class="my-5">
+      <div class="flex justify-center items-center mb-2" v-if="this.status == 1">
+        <img
+          class="w-9 h-9"
+          src="https://www.pngall.com/wp-content/uploads/8/Green-Check-Mark-PNG-Image.png"
+          alt="checked"
+        />
+      </div>
+      
+      <div class="flex justify-center items-center mb-2" v-else>
+        <img
+          class="w-9 h-9"
+          src="https://www.pngall.com/wp-content/uploads/2016/04/Red-Cross-Mark-Download-PNG.png"
+          alt="cross"
+        />
+      </div>
+      <p
+        class="
+          flex
+          justify-center
+          items-center
+          font-semibold
+          text-lg text-green-500
+        "
+        v-if="this.status == 1"
+      >
+        Order has been made.
+      </p>
+      <p
+        class="
+          flex
+          justify-center
+          items-center
+          font-semibold
+          text-lg text-red-500
+        "
+        v-else
+      >
+        Order failed
+      </p>
+    </div>
+    <div class="my-5">
       <p class="flex justify-center items-center font-semibold text-2xl">
         RM {{ this.orderamount }}
       </p>
@@ -63,6 +104,7 @@ export default {
       orderamount: null,
       order_type: "",
       branch: 0,
+      status: 0,
     };
   },
   async created() {
@@ -107,6 +149,7 @@ export default {
                 
               });
             }
+            this.status = response.data.data[0].order_status;
             this.orderamount = response.data.data[0].order_total;
             
           }.bind(this)

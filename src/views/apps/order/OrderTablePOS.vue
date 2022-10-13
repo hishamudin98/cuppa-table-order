@@ -17,7 +17,7 @@
               alt=""
             />
           </div>
-          <div class="text-white">{{this.branch_Name}}</div>
+          <div class="text-white">{{ this.branch_Name }}</div>
         </div>
         <div
           style="height: 40vh"
@@ -49,14 +49,16 @@
           <h4>{{ OrderID }}</h4>
         </div>
         <div class="flex items-center justify-center">
-          <h4>Table {{ this.table }}</h4>
+          <h4>{{this.tblNo}}</h4>
         </div>
         <br />
         <div class="flex items-center justify-center">
           <h4 style="font-weight: normal">Thank you !</h4>
         </div>
         <br />
-        <router-link :to="{ name: 'orderLogin' , params: { branchID: this.branch } }">
+        <router-link
+          :to="{ name: 'orderLogin', params: { branchID: this.branch, table: this.table } }"
+        >
           <rs-button class="w-full bg-heandshe"> Order Again? </rs-button>
         </router-link>
       </div>
@@ -92,8 +94,8 @@ export default {
     const route = useRoute();
     /* console.log(route.query);
     console.log(route.params); */
-    const table = ref(0);
-    table.value = route.params.table;
+    /* const table = ref(0); */
+    /* table.value = route.params.table; */
     const branch = ref(route.query.branch);
     const OrderID = ref(0);
     OrderID.value = route.params.orderID;
@@ -122,7 +124,6 @@ export default {
     }; */
 
     return {
-      table,
       changetable,
       customerData,
       customerProceed,
@@ -141,6 +142,8 @@ export default {
       size: 200,
       branch: 0,
       branch_Name: "",
+      table: "",
+      tblNo: "",
     };
   },
   async created() {
@@ -148,14 +151,38 @@ export default {
     localStorage.orderid = this.ORDERID;
     this.value = this.ORDERID;
     this.branch = localStorage.branch;
-    if(this.branch != "")
-    {
-      this.getOutlet(this.branch)
+    this.table = this.$route.params.table;
+    if (this.branch != "") {
+      this.getOutlet(this.branch);
     }
+    this.getTable();
   },
 
   methods: {
-     async getOutlet(branch) {
+    async getTable() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        table_id: this.table,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTblNo",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.tblNo = response.data.data[0].outlet_table_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    async getOutlet(branch) {
       var axios = require("axios");
       var data = JSON.stringify({
         branch_ID: branch,

@@ -63,7 +63,9 @@
                         dark:hover:bg-gray-700
                       "
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Membership</span>
+                      <span class="flex-1 ml-3 whitespace-nowrap"
+                        >Membership</span
+                      >
                     </a>
                   </router-link>
                 </li>
@@ -89,7 +91,7 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link :to="{ name: 'admin-menu' }">
+                  <div>
                     <a
                       href="#"
                       class="
@@ -104,10 +106,38 @@
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
                       "
+                      @click="dropdownMenu()"
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                     </a>
-                  </router-link>
+                  </div>
+                  <div v-if="this.menuDrop == true">
+                    <ul>
+                      <li>
+                        <router-link :to="{ name: 'admin-menu' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Menu Management</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
                 <li>
                   <div>
@@ -250,27 +280,6 @@
                           </a>
                         </router-link>
                       </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="
-                            flex
-                            items-center
-                            p-3
-                            ml-2
-                            text-sm
-                            font-sm
-                            text-gray-900
-                            rounded-lg
-                            dark:text-white
-                            hover:bg-gray-300
-                            dark:hover:bg-gray-700
-                          "
-                          ><span class="flex-1 ml-3 whitespace-nowrap"
-                            >Report Refund</span
-                          >
-                        </a>
-                      </li>
                     </ul>
                   </div>
                 </li>
@@ -333,6 +342,7 @@ export default {
       staffName: "",
       show: false,
       outletDrop: false,
+      menuDrop: false,
     };
   },
   async created() {
@@ -418,7 +428,14 @@ export default {
   },
 
   methods: {
-    async dropdownOutlet(){
+    async dropdownMenu() {
+      if (this.menuDrop == false) {
+        this.menuDrop = true;
+      } else {
+        this.menuDrop = false;
+      }
+    },
+    async dropdownOutlet() {
       if (this.outletDrop == false) {
         this.outletDrop = true;
       } else {

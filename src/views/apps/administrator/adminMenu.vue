@@ -23,7 +23,7 @@
         <!-- UNTUK SEBELAH2 -->
         <div>
           <div class="w-64">
-          <aside aria-label="Sidebar">
+            <aside aria-label="Sidebar">
             <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
               <ul class="space-y-2">
                 <li>
@@ -65,7 +65,9 @@
                         dark:hover:bg-gray-700
                       "
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap">User</span>
+                      <span class="flex-1 ml-3 whitespace-nowrap"
+                        >Membership</span
+                      >
                     </a>
                   </router-link>
                 </li>
@@ -91,7 +93,7 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link :to="{ name: 'admin-menu' }">
+                  <div>
                     <a
                       href="#"
                       class="
@@ -106,31 +108,38 @@
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
                       "
+                      @click="dropdownMenu()"
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                     </a>
-                  </router-link>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="
-                      flex
-                      items-center
-                      p-2
-                      text-base
-                      font-normal
-                      text-gray-900
-                      rounded-lg
-                      dark:text-white
-                      hover:bg-gray-300
-                      dark:hover:bg-gray-700
-                    "
-                  >
-                    <span class="flex-1 ml-3 whitespace-nowrap"
-                      >Membership</span
-                    >
-                  </a>
+                  </div>
+                  <div v-if="this.menuDrop == true">
+                    <ul>
+                      <li>
+                        <router-link :to="{ name: 'admin-menu' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Menu Management</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
                 <li>
                   <div>
@@ -273,27 +282,6 @@
                           </a>
                         </router-link>
                       </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="
-                            flex
-                            items-center
-                            p-3
-                            ml-2
-                            text-sm
-                            font-sm
-                            text-gray-900
-                            rounded-lg
-                            dark:text-white
-                            hover:bg-gray-300
-                            dark:hover:bg-gray-700
-                          "
-                          ><span class="flex-1 ml-3 whitespace-nowrap"
-                            >Report Refund</span
-                          >
-                        </a>
-                      </li>
                     </ul>
                   </div>
                 </li>
@@ -324,7 +312,7 @@
           </div>
         </div>
         <div class="w-full flex flex-col">
-          <div class="w-full flex flex-row mb-64">
+          <div class="w-full flex flex-row mb-1">
             <div class="inline-block w-1/2 pr-10 h-2/4">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
@@ -348,7 +336,7 @@
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
               <div class="w-11/12 h-10">
-                <FormKit
+                <!-- <FormKit
                   v-model="search"
                   id="search-sticky"
                   placeholder="Search for Menu..."
@@ -359,79 +347,99 @@
                     outer: 'flex-1 mb-0',
                     input: 'h-12',
                   }"
-                />
+                /> -->
               </div>
               <div class="w-1/12" style="padding-top: 10px">
-                <rs-button
-                  @click="addUser()"
+                <!-- <rs-button
+                  @click="addMenu()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Add Menu</rs-button
-                >
+                > -->
               </div>
             </div>
             <div class="h-4/6">
-              <rs-card style="padding-top: 10px">
-                <div class="overflow-y-auto h-96">
-                  <div v-for="(user, index) in searchUsers" :key="index">
-                    <rs-card class="mb-5" @click="staffSelect(user)">
-                      <div
-                        class="
-                          product-content-wrapper
-                          flex-1 flex flex-col
-                          px-4
-                          mb-4
-                        "
-                      >
-                        <div class="product-title mt-4">
-                          <span
-                            class="block text-base font-semibold line-clamp-2"
-                            >{{ user.name }}
-                          </span>
-                        </div>
-                        <div class="product-content flex flex-col">
-                          <div
-                            class="
-                              product-price
-                              flex
-                              justify-between
-                              items-center
-                            "
-                          >
-                            <div class="truncate">
-                              <div class="text-sm text-black-500">
-                                {{ user.code }}
-                              </div>
-                              <div class="text-sm text-black-500">
-                                RM {{ formatPrice(user.price) }}
-                              </div>
-                            </div>
-                            <div style="padding-bottom: 2%">
-                              <rs-button
-                                class="
-                                  w-full
-                                  bg-heandshe
-                                  hover:bg-heandshe
-                                  mb-0.5
-                                "
-                                @click="editUser(user)"
-                              >
-                                Edit
-                              </rs-button>
-                              <rs-button
-                                variant="primary-outline"
-                                class="w-full h-10"
-                                @click="deleteUser(user)"
-                              >
-                                Delete
-                              </rs-button>
-                            </div>
-                          </div>
-                        </div>
+              <div>
+                <DataTable
+                  :value="searchUsers"
+                  :paginator="true"
+                  :rows="10"
+                  paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                  :rowsPerPageOptions="[10, 20, 50]"
+                  responsiveLayout="scroll"
+                  removableSort
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                >
+                  <template #header>
+                    <div class="flex justify-content-between">
+                      <div class="w-11/12 h-10">
+                        <FormKit
+                          v-model="search"
+                          id="search-sticky"
+                          placeholder="Search for Menu..."
+                          type="search"
+                          :classes="{
+                            inner:
+                              'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                            outer: 'flex-1 mb-0',
+                            input: 'h-12',
+                          }"
+                        />
                       </div>
-                    </rs-card>
-                  </div>
-                </div>
-              </rs-card>
+                      <div class="w-1/12 h-12 mt-1">
+                        <rs-button
+                          @click="addMenu()"
+                          class="bg-heandshe hover:bg-heandshe"
+                          >Add Menu</rs-button
+                        >
+                      </div>
+                    </div>
+                  </template>
+                  <Column field="name" header="Menu Name"></Column>
+                  <Column field="price" header="Price ( RM )" :sortable="true">
+                    <template #body="searchUsers">
+                      {{ formatPrice(searchUsers.data.price) }}
+                    </template>
+                  </Column>
+                  <Column
+                    field="code"
+                    header="Menu Code"
+                    :sortable="true"
+                  ></Column>
+                  <Column :exportable="false" style="min-width: 8rem">
+                    <template #body="searchUsers">
+                      <Button
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mx-2 "
+                        @click="editMenu(searchUsers)"
+                      />
+                      <Button
+                        icon="pi pi-folder-open"
+                        class="p-button-rounded p-button-success mx-5"
+                        @click="select(searchUsers)"
+                      />
+                      <Button
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning mx-2"
+                        @click="deleteUser(searchUsers)"
+                      />
+                    </template>
+                  </Column>
+                  <template #paginatorstart>
+                    <Button
+                      type="button"
+                      icon="pi pi-refresh"
+                      class="p-button-text"
+                    />
+                  </template>
+                  <template #paginatorend>
+                    <Button
+                      type="button"
+                      icon="pi pi-cloud"
+                      class="p-button-text"
+                    />
+                  </template>
+                </DataTable>
+              </div>
             </div>
 
             <!-- UNTUK ATAS BAWAH -->
@@ -440,141 +448,94 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
-
-    <rs-modal title="Menu" v-model="selectStaff" position="middle" size="md">
-      <FormKit label="Menu Name" type="text" :value="users1.name" readonly />
-      <FormKit label="Menu Code" type="text" :value="users1.code" readonly />
-      <FormKit
-        label="Price ( RM )"
-        type="text"
-        :value="formatPrice(users1.price)"
-        readonly
-      />
-      <div v-for="(variant, index) in users1.variants" :key="index">
-        <FormKit
-        v-if="users1.variant != null && users1.variant != undefined"
-        label="Variant"
-        type="radio"
-        :value="users1.variants"
-        :options="users1.variants"
-      />
-      </div>
-      
-
-      <!-- <FormKit
-        v-if="users1.variant != null && users1.variant != undefined"
-        label="Variant"
-        type="radio"
-        :value="users1.data"
-        :options="users1.data"
-      />
-      <FormKit
-        label="Pin Code"
-        help="for POS system login"
-        type="number"
-        :value="users1.user_pincode"
-        readonly
-      /> --> </rs-modal
-    ><!-- SELECT -->
-
     <rs-modal
-      title="Add Staff"
-      v-model="modalPOS"
+      title="Add Menu"
+      v-model="addMenuModal"
       position="middle"
       size="full"
     >
-      <FormKit label="Fullname" type="text" v-model="fullname" />
-      <FormKit label="Phone No." type="number" v-model="phone" />
-      <FormKit label="Email" type="email" v-model="email" />
-      <FormKit label="Password No." type="password" v-model="password" />
+      <FormKit type="text" label="Menu Name" v-model="menu_name" />
       <FormKit
-        label="Pin Code"
-        help="for POS system login"
-        type="number"
-        v-model="pincode"
+        type="file"
+        label="Images"
+        v-model="menu_images"
+        accept=".jpg, .png, .jpeg"
       />
-      <FormKit label="Address" type="textarea" v-model="address" />
-      <FormKit label="Date of Birth." type="date" v-model="dob" />
+      <FormKit type="number" label="Menu Price ( RM )" v-model="menu_price" />
       <FormKit
         type="select"
-        label="Staff Position"
-        :options="staffPosition"
-        v-model="position"
+        label="Menu Stations"
+        v-model="menu_station"
+        :options="[
+          { label: 'Kitchen', value: 1 },
+          { label: 'Beverages', value: 2 },
+          { label: 'Bakery', value: 3 },
+        ]"
       />
-      <rs-button style="float: right" @click="insertUser()">
-        Save
-      </rs-button> </rs-modal
-    ><!-- INSERT -->
-    <rs-modal
-      title="Edit Staff"
-      v-model="modalEdit"
-      position="middle"
-      size="full"
-    >
-      <FormKit label="Fullname" type="text" v-model="users1.user_name" />
-      <FormKit label="Phone No." type="number" v-model="users1.user_phone" />
-      <FormKit label="Email" type="email" v-model="users1.user_email" />
-      <FormKit
-        label="Password No."
-        type="password"
-        v-model="users1.user_password"
-      />
-      <FormKit
-        label="Pin Code"
-        help="for POS system login"
-        type="number"
-        v-model="users1.user_pincode"
-      />
-      <FormKit label="Address" type="textarea" v-model="address" />
-      <FormKit label="Date of Birth." type="date" v-model="users1.user_dob" />
       <FormKit
         type="select"
-        label="Staff Position"
-        :options="staffPosition"
-        v-model="users1.user_position"
+        label="Category"
+        name="categories"
+        v-model="category"
+        :options="this.categories"
       />
-      <rs-button style="float: right" @click="updateUser(users1)">
-        Save
-      </rs-button> </rs-modal
-    ><!-- EDIT -->
+      <rs-button style="float: right" @click="insert()"> Save </rs-button>
+    </rs-modal>
+
     <rs-modal
-      title="Delete User"
-      v-model="modalDelete"
+      title="Edit Menu"
+      v-model="editMenuModal"
       position="middle"
       size="full"
     >
-      <p>Are you sure you want to delete this user?</p>
-      <rs-button
-        style="float: right"
-        class="bg-heandshe hover:bg-heandshe"
-        @click="this.modalDelete = false"
-      >
-        No
-      </rs-button>
-      <rs-button
-        style="float: right"
-        class="mx-1"
-        variant="danger"
-        @click="UserDelete(users1)"
-      >
-        Yes
-      </rs-button> </rs-modal
-    ><!-- DELETE -->
+      <FormKit type="text" label="Menu Name" v-model="menuedit.name" />
+      <FormKit
+        type="number"
+        label="Menu Price ( RM )"
+        v-model="menuedit.price"
+      />
+      <rs-button style="float: right" @click="edit(menuedit)"> Save </rs-button>
+    </rs-modal>
+
+    <rs-modal
+      title="Menu"
+      v-model="showMenuModal"
+      position="middle"
+      size="full"
+    >
+      <FormKit type="text" label="Menu Name" v-model="menuedit.name" readonly />
+      <FormKit
+        type="number"
+        label="Menu Price ( RM )"
+        v-model="menuedit.price"
+        readonly
+      />
+    </rs-modal>
   </rs-layout>
 </template>
 <script>
 import { ref, computed } from "vue";
 import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Button from "primevue/button";
+import "primevue/resources/themes/saga-blue/theme.css";
+import "primevue/resources/primevue.min.css";
+import "primeicons/primeicons.css";
 export default {
   name: "AdminDashboard",
   components: {
     RsButton,
     RsModal,
+    DataTable,
+    Column,
+    Button,
   },
   setup() {
     const users = ref([]);
     const search = ref("");
+    const categories = ref([]);
 
     const searchUsers = computed(() => {
       return users.value.filter((user) => {
@@ -592,6 +553,7 @@ export default {
     };
     return {
       search,
+      categories,
       searchUsers,
       users,
       formatPrice,
@@ -600,37 +562,45 @@ export default {
   data() {
     return {
       staffPosition: [],
+      menuedit: "",
       /* DATA V-MODEL */
       staffid: "",
       staffName: "",
-
-      fullname: "",
-      phone: null,
-      email: "",
-      address: "",
-      password: "",
-      pincode: "",
-      dob: "",
-      position: "",
+      valueCategory: [],
       variansi: [],
+      /* FORM V-MODAL */
+      menu_name: "",
+      menu_images: "",
+      menu_price: "",
+      menu_station: "",
+      category: "",
+
+      variants: [],
 
       /* MODAL SHOW */
-      modalDelete: false,
-      modalPOS: false,
-      modalEdit: false,
-      selectStaff: false,
+      showMenuModal: false,
+      addMenuModal: false,
+      editMenuModal: false,
       users1: "",
       show: false,
       outletDrop: false,
+      menuDrop: false,
     };
   },
   async created() {
     this.getdata();
     this.getMenu();
-    this.getPosition();
+    this.getCategories();
   },
   methods: {
-    async dropdownOutlet(){
+    async dropdownMenu() {
+      if (this.menuDrop == false) {
+        this.menuDrop = true;
+      } else {
+        this.menuDrop = false;
+      }
+    },
+    async dropdownOutlet() {
       if (this.outletDrop == false) {
         this.outletDrop = true;
       } else {
@@ -644,29 +614,40 @@ export default {
         this.show = false;
       }
     },
-
-    async staffSelect(user) {
-      this.users1 = user;
-      this.selectStaff = true;
+    async select(event) {
+      this.menuedit = event.data;
+      if (this.showMenuModal == false) {
+        this.showMenuModal = true;
+      } else {
+        this.showMenuModal = false;
+      }
     },
-
-    async getPosition() {
+    
+    async getCategories() {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getPosition" /*  */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
       };
+
       await axios(config)
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
-              this.staffPosition.push({
-                label: response.data.data[i].pos_name,
-                value: response.data.data[i].pos_id,
+              this.valueCategory.push({
+                category_id: response.data.data[i].category_id,
+                category_name: response.data.data[i].category_name,
               });
+              this.categories.push({
+                label: response.data.data[i].category_name,
+                value: this.valueCategory,
+              });
+              this.valueCategory = [];
             }
           }.bind(this)
         )
@@ -674,7 +655,6 @@ export default {
           console.log(error);
         });
     },
-
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -717,13 +697,10 @@ export default {
               if (variant == null) {
                 this.variansi = "";
               } else {
-                
                 for (let j = 0; j < variant.length; j++) {
-                    this.variansi.push(
-                        {
-                            label: variant[j].data
-                        }
-                    )
+                  this.variansi.push({
+                    label: variant[j].data,
+                  });
                 }
               }
               /* VARIATION */
@@ -733,40 +710,44 @@ export default {
                 price: response.data.data[i].menu_price,
                 code: response.data.data[i].menu_code,
                 category: response.data.data[i].menu_category,
-                variants: this.variansi /*
-                user_pincode: response.data.data[i].user_pincode,
-                user_address: response.data.data[i].user_address,
-                user_dob: response.data.data[i].user_dob,
-                user_position: response.data.data[i].user_position, */,
+                variants: this.variansi,
               });
               this.variansi = [];
             }
-            console.log(this.users)
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
         });
     },
-
-    async editUser(user) {
-      this.users1 = user;
-      this.modalEdit = true;
+    /* FOR FUNCTIONAL REASONS */
+    async addMenu() {
+      if (this.addMenuModal == false) {
+        this.addMenuModal = true;
+      } else {
+        this.addMenuModal = false;
+      }
     },
-
-    async deleteUser(user) {
-      this.users1 = user;
-      this.modalDelete = true;
+    async editMenu(menu) {
+      if (this.editMenuModal == false) {
+        this.menuedit = menu.data;
+        this.editMenuModal = true;
+      } else {
+        this.editMenuModal = false;
+      }
     },
-
-    async UserDelete(users) {
+    async insert() {
       var axios = require("axios");
       var data = JSON.stringify({
-        user_id: users.user_id,
+        menu_name: this.menu_name,
+        menu_image: this.menu_images,
+        menu_price: this.menu_price,
+        menu_station: this.menu_station,
+        menu_category: this.category,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteStaff" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -775,37 +756,23 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == "Success") {
-              this.modalDelete = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
+            alert(response.message);
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
         });
     },
-
-    async updateUser(users) {
+    async edit(menuedit) {
       var axios = require("axios");
       var data = JSON.stringify({
-        user_name: users.user_name,
-        user_phone: users.user_phone,
-        user_email: users.user_email,
-        user_id: users.user_id,
-        address: this.address,
-        password: this.password,
-        pincode: this.pincode,
-        dob: this.dob,
-        position: this.position,
+        menu_name: menuedit.name,
+        menu_price: menuedit.price,
+        menu_id: menuedit.menuid,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateStaff" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -814,57 +781,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == "Success") {
-              this.modalEdit = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    async addUser() {
-      this.modalPOS = true;
-    },
-
-    async insertUser() {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        fullname: this.fullname,
-        phone: this.phone,
-        email: this.email,
-        address: this.address,
-        password: this.password,
-        pincode: this.pincode,
-        dob: this.dob,
-        position: this.position,
-        staffid: localStorage.staff,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalPOS = false;
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
+            alert(response.message);
           }.bind(this)
         )
         .catch(function (error) {

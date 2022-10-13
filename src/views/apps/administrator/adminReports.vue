@@ -65,7 +65,9 @@
                           dark:hover:bg-gray-700
                         "
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap">User</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap"
+                          >Membership</span
+                        >
                       </a>
                     </router-link>
                   </li>
@@ -91,7 +93,7 @@
                     </router-link>
                   </li>
                   <li>
-                    <router-link :to="{ name: 'admin-menu' }">
+                    <div>
                       <a
                         href="#"
                         class="
@@ -106,31 +108,38 @@
                           hover:bg-gray-300
                           dark:hover:bg-gray-700
                         "
+                        @click="dropdownMenu()"
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                       </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="
-                        flex
-                        items-center
-                        p-2
-                        text-base
-                        font-normal
-                        text-gray-900
-                        rounded-lg
-                        dark:text-white
-                        hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                      "
-                    >
-                      <span class="flex-1 ml-3 whitespace-nowrap"
-                        >Membership</span
-                      >
-                    </a>
+                    </div>
+                    <div v-if="this.menuDrop == true">
+                      <ul>
+                        <li>
+                          <router-link :to="{ name: 'admin-menu' }">
+                            <a
+                              href="#"
+                              class="
+                                flex
+                                items-center
+                                p-3
+                                ml-2
+                                text-sm
+                                font-sm
+                                text-gray-900
+                                rounded-lg
+                                dark:text-white
+                                hover:bg-gray-300
+                                dark:hover:bg-gray-700
+                              "
+                              ><span class="flex-1 ml-3 whitespace-nowrap"
+                                >Menu Management</span
+                              >
+                            </a>
+                          </router-link>
+                        </li>
+                      </ul>
+                    </div>
                   </li>
                   <li>
                     <div>
@@ -277,27 +286,6 @@
                             </a>
                           </router-link>
                         </li>
-                        <li>
-                          <a
-                            href="#"
-                            class="
-                              flex
-                              items-center
-                              p-3
-                              ml-2
-                              text-sm
-                              font-sm
-                              text-gray-900
-                              rounded-lg
-                              dark:text-white
-                              hover:bg-gray-300
-                              dark:hover:bg-gray-700
-                            "
-                            ><span class="flex-1 ml-3 whitespace-nowrap"
-                              >Report Refund</span
-                            >
-                          </a>
-                        </li>
                       </ul>
                     </div>
                   </li>
@@ -357,7 +345,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-full h-1">
+              <!-- <div class="w-full h-1">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -371,46 +359,113 @@
                   }"
                 />
               </div>
-              <div class="w-1/12" style="padding-top: 10px">
+              <div class="w-1/12 h-2">
                 <rs-button
                   @click="filter()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
-              </div>
+              </div> -->
             </div>
             <div class="">
-              <rs-card style="margin-top: 40px">
+              <rs-card style="margin-top: 10px">
                 <div>
                   <div>
                     <DataTable
                       :value="searchTrans"
                       :paginator="true"
                       :rows="10"
-                      filterDisplay="menu"
+                      ref="dt"
                       v-model:filters="filters1"
+                      filterDisplay="menu"
                       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                       :rowsPerPageOptions="[10, 20, 50]"
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
+                      <template #header>
+                        <div style="text-align: left">
+                          <Button
+                            icon="pi pi-external-link"
+                            label="Export"
+                            @click="exportCSV($event)"
+                          />
+                        </div>
+                        <div class="flex justify-content-between pb-10 pt-3">
+                          <div class="w-11/12 h-1">
+                            <FormKit
+                              v-model="search"
+                              id="search-sticky"
+                              placeholder="Search for a ..."
+                              type="search"
+                              :classes="{
+                                inner:
+                                  'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                                outer: 'flex-1 mb-0',
+                                input: 'h-10',
+                              }"
+                            />
+                          </div>
+                          <div class="w-1/12 h-2">
+                            <rs-button
+                              @click="filter()"
+                              class="bg-heandshe hover:bg-heandshe"
+                              >Filter</rs-button
+                            >
+                          </div>
+                        </div>
+                      </template>
                       <Column field="trans_no" header="Transaction No"></Column>
                       <Column
                         field="trans_date"
                         header="Transaction Date"
                       ></Column>
+                      <!-- <Column
+                        header="Date"
+                        filterField="trans_date"
+                        dataType="date"
+                        style="min-width: 10rem"
+                      >
+                        <template #body="{ data }">
+                          {{ formatDate(data.trans_date) }}
+                        </template>
+                        <template #filter="{ filterModel }">
+                          <Calendar
+                            v-model="filterModel.value"
+                            dateFormat="mm/dd/yy"
+                            placeholder="mm/dd/yyyy"
+                          />
+                        </template>
+                      </Column> -->
                       <Column
                         field="trans_amount"
                         header="Transaction Amount (RM)"
+                        :sortable="true"
+                      ></Column>
+                      <Column
+                        field="trans_tax"
+                        header="Transaction Tax (RM)"
+                        :sortable="true"
                       ></Column>
                       <Column
                         field="trans_status"
                         header="Transaction Status"
+                        :sortable="true"
                       ></Column>
                       <Column
                         field="trans_method"
                         header="Transaction Method"
+                        :sortable="true"
                       ></Column>
+                      <Column :exportable="false" style="min-width: 8rem">
+                        <template #body="searchTrans">
+                          <Button
+                            icon="pi pi-folder-open"
+                            class="p-button-rounded p-button-success mx-5"
+                            @click="select(searchTrans)"
+                          />
+                        </template>
+                      </Column>
 
                       <template #paginatorstart>
                         <Button
@@ -451,14 +506,14 @@
         label="Payment Method"
         :options="['FPX', 'CASH', 'DEBIT/CREDIT CARD']"
       />
-      <FormKit
+      <!-- <FormKit
         type="date"
         v-model="start_date"
         label="Birthday"
         help="Enter your birth day"
         validation="required|before:2010-01-01"
         validation-visibility="live"
-      />
+      /> -->
 
       <rs-button
         style="float: right"
@@ -475,6 +530,31 @@
         Filter
       </rs-button> -->
     </rs-modal>
+    <!--  -->
+    <rs-modal
+      title="Transaction Details"
+      v-model="showTransDetail"
+      position="middle"
+      size="md"
+    >
+      <label><strong>Transaction No.</strong></label>
+      <p>{{ this.transDetail.trans_no }}</p>
+      <br />
+      <label><strong>Transaction Date</strong></label>
+      <p>{{ this.transDetail.trans_date }}</p>
+      <br />
+      <label><strong>Transaction Amount ( RM )</strong></label>
+      <p>{{ this.transDetail.trans_amount }}</p>
+      <br />
+      <label><strong>Transaction Tax ( RM )</strong></label>
+      <p>{{ this.transDetail.trans_tax }}</p>
+      <br />
+      <label><strong>Transaction Status</strong></label>
+      <p>{{ this.transDetail.trans_status }}</p>
+      <br />
+      <label><strong>Payment Method</strong></label>
+      <p>{{ this.transDetail.trans_method }}</p>
+    </rs-modal>
   </rs-layout>
 </template>
 <script>
@@ -488,7 +568,8 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
-/* import Calendar from 'primevue/calendar'; */
+import { FilterMatchMode, FilterOperator } from "primevue/api";
+/* import Calendar from "primevue/calendar"; */
 
 export default {
   name: "AdminDashboard",
@@ -498,15 +579,24 @@ export default {
     DataTable,
     Column,
     Button,
-    /*  Calendar, */
+    /* Calendar, */
   },
   setup() {
+    const dt = ref();
     const trans = ref([]);
     const search = ref("");
     const filterModal = ref(false);
     const trans_method = ref("");
     const trans_status = ref("");
-    const start_date = ref("");
+    const order = ref([]);
+
+    const exportCSV = () => {
+      dt.value.exportCSV();
+    };
+
+    const formatDate = (value) => {
+      return moment(value).format("DD/MM/YYYY");
+    };
 
     const searchTrans = computed(() => {
       return trans.value.filter((trans) => {
@@ -517,7 +607,7 @@ export default {
           trans.trans_method
             .toLowerCase()
             .indexOf(trans_method.value.toLowerCase()) != -1 &&
-            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase())
+          trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1
         );
       });
     });
@@ -538,17 +628,38 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    const filters1 = ref({
+      trans_date: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+      },
+    });
+
+    const initFilters1 = () => {
+      filters1.value = {
+        trans_date: {
+          operator: FilterOperator.AND,
+          constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+        },
+      };
+    };
     return {
       search,
       searchTrans,
       trans,
+      filters1,
+      initFilters1,
       formatPrice,
+      formatDate,
       filter,
       filters,
+      exportCSV,
       trans_status,
       filterModal,
       trans_method,
-      start_date,
+      order,
+      dt,
     };
   },
   data() {
@@ -561,7 +672,10 @@ export default {
       transMethod: "",
       show: false,
       outletDrop: false,
+      menuDrop: false,
       /* BARU */
+      showTransDetail: false,
+      transDetail: "",
     };
   },
   async created() {
@@ -570,6 +684,13 @@ export default {
   },
 
   methods: {
+    async dropdownMenu() {
+      if (this.menuDrop == false) {
+        this.menuDrop = true;
+      } else {
+        this.menuDrop = false;
+      }
+    },
     async dropdownOutlet() {
       if (this.outletDrop == false) {
         this.outletDrop = true;
@@ -668,7 +789,9 @@ export default {
                 trans_amount: response.data.data.trans_details[i].trans_amount,
                 trans_status: this.status,
                 trans_method: this.transMethod,
-              }); /*   */
+                trans_tax: response.data.data.trans_details[i].trans_tax,
+                orders: response.data.data.trans_details[i].order_details,
+              });
             }
 
             this.totalData = this.trans.length;
@@ -678,6 +801,15 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    /* SELECT STATEMENT */
+    async select(selectTrans) {
+      this.transDetail = selectTrans.data;
+      if (this.showTransDetail == false) {
+        this.showTransDetail = true;
+      } else {
+        this.showTransDetail = false;
+      }
     },
   },
 };

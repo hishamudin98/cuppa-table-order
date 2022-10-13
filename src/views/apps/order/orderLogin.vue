@@ -193,7 +193,7 @@
               gap-x-2
             "
           >
-             <span v-if="changetable == false"
+             <!-- <span v-if="changetable == false"
               >Table #{{ this.table ? this.table : "0" }}</span
             >
             <div v-else class="flex justify-center items-center">
@@ -223,13 +223,14 @@
               "
             >
               Change table
-            </button>
-            <!-- <FormKit
+            </button> -->
+            <FormKit
               type="select"
               label="Table Number"
-              name="small_country"
-              :options="['Monaco', 'Vatican City', 'Maldives', 'Tuvalu']"
-            /> -->
+              name="table number"
+              v-model="this.table"
+              :options="tableOutlet"
+            />
           </div>
           <rs-button
             class="w-full bg-heandshe hover:bg-heandshe"
@@ -412,7 +413,7 @@ export default {
 
       /* DATA NULL */
       name: "",
-      phone: null,
+      phone: "",
       username: "",
       password: "",
       timestamp: "",
@@ -438,10 +439,12 @@ export default {
   },
 
   mounted() {
-    if (localStorage.orderid != "") {
-      this.orderid = localStorage.orderid;
+    if (localStorage.orderId != "") {
+      this.orderid = localStorage.orderId;
       localStorage.removeItem("time");
       localStorage.removeItem("mmberno");
+      localStorage.removeItem("order")
+      localStorage.removeItem("orderID")
     }
 
     if(this.$route.params.table != "")
@@ -477,7 +480,8 @@ export default {
   },
   computed: {
     isDisabled() {
-      if (this.name !== "" && this.phone.length > 9 ) {
+      
+      if (this.name !== "" && this.phone.length > 9 && this.phone.length != 0 ) {
         return false;
       } else {
         return true;
@@ -605,7 +609,7 @@ export default {
         if (this.timer2 < "10:30" || this.timer2 > "20:00") {
           alert("Outside Working Hours");
         } else {
-          if (table2 != 0 && table2 > 0 && table2 < 30) {
+          if (table2 != 0 && table2 > 0 ) {
             localStorage.time = this.timer2;
             this.customerProceed = true;
             this.$router.push({
@@ -637,7 +641,7 @@ export default {
       }
     },
     async pickOrder(table) {
-      if (table != 0 && table > 0 && table < 30) {
+      if (table != 0 && table > 0 ) {
         this.customerProceed = true;
         localStorage.branch = this.branch;
         this.$router.push({
@@ -706,8 +710,10 @@ export default {
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
+              
               this.tableOutlet.push({
-                table_no: response.data.data[i].outlet_table,
+                label: response.data.data[i].outlet_table_Name,
+                value: response.data.data[i].outlet_table_id
               });
             }
           }.bind(this)
