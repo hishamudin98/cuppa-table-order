@@ -416,45 +416,40 @@
                         </div>
                       </template>
                       <Column field="trans_no" header="Transaction No"></Column>
-                      <Column
-                        field="trans_date"
-                        header="Transaction Date"
-                      ></Column>
-                      <!-- <Column
-                        header="Date"
-                        filterField="trans_date"
-                        dataType="date"
-                        style="min-width: 10rem"
-                      >
-                        <template #body="{ data }">
-                          {{ formatDate(data.trans_date) }}
-                        </template>
-                        <template #filter="{ filterModel }">
-                          <Calendar
-                            v-model="filterModel.value"
-                            dateFormat="mm/dd/yy"
-                            placeholder="mm/dd/yyyy"
-                          />
-                        </template>
-                      </Column> -->
+                      <Column field="trans_date" header="Date"></Column>
                       <Column
                         field="trans_amount"
-                        header="Transaction Amount (RM)"
+                        header="Amount (RM)"
                         :sortable="true"
-                      ></Column>
+                        ><template #body="searchTrans">
+                          {{ formatPrice(searchTrans.data.trans_amount) }}
+                        </template>
+                      </Column>
                       <Column
                         field="trans_tax"
-                        header="Transaction Tax (RM)"
+                        header="Tax (RM)"
                         :sortable="true"
-                      ></Column>
+                        ><template #body="searchTrans">
+                          {{ formatPrice(searchTrans.data.trans_tax) }}
+                        </template>
+                      </Column>
+                      <Column
+                        field="trans_discount"
+                        header="Discount (RM)"
+                        :sortable="true"
+                      >
+                        <template #body="searchTrans">
+                          {{ formatPrice(searchTrans.data.trans_discount) }}
+                        </template>
+                      </Column>
                       <Column
                         field="trans_status"
-                        header="Transaction Status"
+                        header=" Status"
                         :sortable="true"
                       ></Column>
                       <Column
                         field="trans_method"
-                        header="Transaction Method"
+                        header="Payment Method"
                         :sortable="true"
                       ></Column>
                       <Column :exportable="false" style="min-width: 8rem">
@@ -506,14 +501,7 @@
         label="Payment Method"
         :options="['FPX', 'CASH', 'DEBIT/CREDIT CARD']"
       />
-      <!-- <FormKit
-        type="date"
-        v-model="start_date"
-        label="Birthday"
-        help="Enter your birth day"
-        validation="required|before:2010-01-01"
-        validation-visibility="live"
-      /> -->
+      <FormKit type="date" v-model="start_date" label="Start Date" />
 
       <rs-button
         style="float: right"
@@ -540,7 +528,7 @@
       <label><strong>Transaction No.</strong></label>
       <p>{{ this.transDetail.trans_no }}</p>
       <br />
-      <label><strong>Transaction Date</strong></label>
+      <label><strong>Date</strong></label>
       <p>{{ this.transDetail.trans_date }}</p>
       <br />
       <label><strong>Transaction Amount ( RM )</strong></label>
@@ -554,6 +542,14 @@
       <br />
       <label><strong>Payment Method</strong></label>
       <p>{{ this.transDetail.trans_method }}</p>
+      <br />
+      <label><strong>Order Details</strong></label>
+      <div v-for="(input, k) in this.transDetail.orders" :key="k">
+        <p>
+          {{ input.menu_name }} x {{ input.menu_quantity }} - RM
+          {{ formatPrice(input.menu_price) }}
+        </p>
+      </div>
     </rs-modal>
   </rs-layout>
 </template>
@@ -589,6 +585,7 @@ export default {
     const trans_method = ref("");
     const trans_status = ref("");
     const order = ref([]);
+    const start_date = ref("");
 
     const exportCSV = () => {
       dt.value.exportCSV();
@@ -599,17 +596,35 @@ export default {
     };
 
     const searchTrans = computed(() => {
-      return trans.value.filter((trans) => {
-        return (
-          trans.trans_status
-            .toLowerCase()
-            .indexOf(trans_status.value.toLowerCase()) != -1 &&
-          trans.trans_method
-            .toLowerCase()
-            .indexOf(trans_method.value.toLowerCase()) != -1 &&
-          trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1
-        );
-      });
+      console.log(trans_status.value);
+      if (start_date.value != "") {
+        return trans.value.filter((trans) => {
+          return (
+            trans.trans_status
+              .toLowerCase()
+              .indexOf(trans_status.value.toLowerCase()) != -1 &&
+            trans.trans_method
+              .toLowerCase()
+              .indexOf(trans_method.value.toLowerCase()) != -1 &&
+            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) !=
+              -1 &&
+            trans.trans_date >= moment(start_date.value).format("DD-MM-YYYY")
+          );
+        });
+      } else {
+        return trans.value.filter((trans) => {
+          return (
+            trans.trans_status
+              .toLowerCase()
+              .indexOf(trans_status.value.toLowerCase()) != -1 &&
+            trans.trans_method
+              .toLowerCase()
+              .indexOf(trans_method.value.toLowerCase()) != -1 &&
+            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) !=
+              -1
+          );
+        });
+      }
     });
 
     const filters = () => {
@@ -645,6 +660,7 @@ export default {
       };
     };
     return {
+      start_date,
       search,
       searchTrans,
       trans,
@@ -790,7 +806,11 @@ export default {
                 trans_status: this.status,
                 trans_method: this.transMethod,
                 trans_tax: response.data.data.trans_details[i].trans_tax,
-                orders: response.data.data.trans_details[i].order_details,
+                trans_discount:
+                  response.data.data.trans_details[i].trans_discount,
+                orders: JSON.parse(
+                  response.data.data.trans_details[i].order_details
+                ),
               });
             }
 
