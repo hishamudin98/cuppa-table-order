@@ -1088,7 +1088,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getOrder" /*  http://localhost:3000tbl/getOrder*/,
         headers: {
           "Content-Type": "application/json",
@@ -1389,7 +1389,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl */,
         headers: {
           "Content-Type": "application/json",
@@ -1432,7 +1432,7 @@ export default {
         var config = {
           method: "POST",
           url:
-            process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/tblorderPayment" /*  */,
+            process.env.VUE_APP_FNB_URL + "/tbl/tblorderPayment" /*  */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1475,7 +1475,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/tblOrderPOS" /* http://localhost:3000tbltblOrderPOS */,
         headers: {
           "Content-Type": "application/json",
@@ -1530,7 +1530,7 @@ export default {
       var config = {
         method: "POST",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/tblorderPayment" /*http://localhost:3000tbltblorderPayment */,
         headers: {
           "Content-Type": "application/json",

@@ -711,7 +711,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getPosition" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getPosition" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -738,7 +738,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -762,7 +762,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getStaff" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -809,7 +809,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteStaff" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/deleteStaff" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -849,7 +849,7 @@ export default {
       console.log(data);
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateStaff" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateStaff" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -894,7 +894,7 @@ export default {
       console.log("Insert data :", data);
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertStaff",
         headers: {
           "Content-Type": "application/json",
         },

@@ -506,7 +506,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -531,7 +531,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getShift" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getShift" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

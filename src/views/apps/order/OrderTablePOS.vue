@@ -166,7 +166,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTblNo",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getTblNo",
         headers: {
           "Content-Type": "application/json",
         },
@@ -189,7 +189,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },

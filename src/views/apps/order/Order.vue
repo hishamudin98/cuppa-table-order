@@ -1240,7 +1240,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTblNo",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getTblNo",
         headers: {
           "Content-Type": "application/json",
         },
@@ -1263,7 +1263,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },
@@ -1285,7 +1285,7 @@ export default {
       var config = {
         method: "get",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
@@ -1313,7 +1313,7 @@ export default {
       var config = {
         method: "get",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
@@ -1472,7 +1472,7 @@ export default {
         var config = {
           method: "post",
           url:
-            process.env.VUE_APP_FNB_URL_LOCAL +
+            process.env.VUE_APP_FNB_URL +
             "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
@@ -1507,7 +1507,7 @@ export default {
         var config = {
           method: "post",
           url:
-            process.env.VUE_APP_FNB_URL_LOCAL +
+            process.env.VUE_APP_FNB_URL +
             "/tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
@@ -1540,7 +1540,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
         headers: {
           "Content-Type": "application/json",
@@ -1592,7 +1592,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",

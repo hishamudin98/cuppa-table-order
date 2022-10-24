@@ -557,7 +557,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -579,7 +579,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getUser" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getUser" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -622,7 +622,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteUser" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/deleteUser" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -657,7 +657,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateUser" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateUser" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -695,7 +695,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertUser",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertUser",
         headers: {
           "Content-Type": "application/json",
         },

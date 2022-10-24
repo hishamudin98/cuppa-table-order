@@ -725,7 +725,7 @@ export default {
       var config = {
         method: "get",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
@@ -759,7 +759,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -780,7 +780,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getMenu" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -901,7 +901,7 @@ export default {
       }
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertMenu",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertMenu",
         headers: {
           "Content-Type": "application/json",
         },
@@ -926,7 +926,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateMenu" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

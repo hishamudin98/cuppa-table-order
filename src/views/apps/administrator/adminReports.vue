@@ -728,7 +728,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -754,7 +754,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTransaction" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getTransaction" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

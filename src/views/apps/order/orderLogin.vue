@@ -538,7 +538,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getMemberLogin",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getMemberLogin",
         headers: {
           "Content-Type": "application/json",
         },
@@ -661,7 +661,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },
@@ -700,7 +700,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTableNumber",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getTableNumber",
         headers: {
           "Content-Type": "application/json",
         },
