@@ -1470,6 +1470,7 @@ export default {
         customerName: this.custName,
         customerPhone: this.custPhone,
         MenuID: this.MenuID,
+        outletID: this.branch,
       });
 
       var config = {
@@ -1490,7 +1491,7 @@ export default {
               name: "order-table",
               params: {
                 orderID: response.data.data.order_no,
-                table: this.tableNo,
+                table: response.data.data.otd_table,
                 branch: localStorage.branch,
               },
             });
