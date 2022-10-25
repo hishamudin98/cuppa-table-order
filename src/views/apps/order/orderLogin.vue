@@ -439,8 +439,8 @@ export default {
   },
 
   mounted() {
-    if (localStorage.orderId != "") {
-      this.orderid = localStorage.orderId;
+    if (localStorage.orderid != "") {
+      this.orderid = localStorage.orderid;
       localStorage.removeItem("time");
       localStorage.removeItem("mmberno");
       localStorage.removeItem("order")

@@ -288,7 +288,7 @@ export default {
             this.branch = response.data.data[0].outled_id;
             this.tblNo = response.data.data[0].table_no;
             localStorage.branch = response.data.data[0].outled_id;
-            localStorage.orderId = response.data.data[0].order_no;
+            localStorage.orderid = response.data.data[0].order_no;
           }.bind(this)
         )
         .catch(function (error) {
