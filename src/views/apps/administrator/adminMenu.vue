@@ -400,7 +400,29 @@
                       </div>
                     </div>
                   </template>
-                  <Column field="name" header="Menu Name"></Column>
+                  <Column field="name" header="Menu Name">
+                    <template #body="searchUsers">
+                      <div class="flex flex-row gap-y-px">
+                        <div class="pr-10">
+                          <img
+                            :src="searchUsers.data.images[0].image1" 
+                            
+                            class="product-image"
+                          />
+                          
+                        </div>
+
+                        <div class="mt-5">
+                          {{ searchUsers.data.name }}
+                        </div>
+                      </div>
+                    </template>
+                  </Column>
+                  <Column  header="Category" >
+                    <template #body="searchUsers">
+                      {{ searchUsers.data.category[0].category_name }}
+                    </template>
+                  </Column>
                   <Column field="price" header="Price ( RM )" :sortable="true">
                     <template #body="searchUsers">
                       {{ formatPrice(searchUsers.data.price) }}
@@ -423,11 +445,11 @@
                         class="p-button-rounded p-button-success mx-5"
                         @click="select(searchUsers)"
                       />
-                      <Button
+                      <!-- <Button
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-warning mx-2"
                         @click="deleteUser(searchUsers)"
-                      />
+                      /> -->
                     </template>
                   </Column>
                   <template #paginatorstart>
@@ -720,6 +742,11 @@ export default {
       }
     },
 
+    async setAltImg(event) {
+      event.target.src =
+        "https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png";
+    },
+
     async getCategories() {
       var axios = require("axios");
       var config = {
@@ -780,7 +807,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getMenu" /*   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -801,16 +828,33 @@ export default {
                 }
               }
               /* VARIATION */
+              var images = response.data.data[i].menu_image;
+               if (images == null) {
+                images = [
+                  {
+                    image1:
+                      "https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png",
+                  },
+                ];
+              } else {
+                images = [
+                  {
+                    image1: JSON.parse(response.data.data[i].menu_image),
+                  },
+                ];
+              }
               this.users.push({
                 menuid: response.data.data[i].menu_id,
                 name: response.data.data[i].menu_name,
                 price: response.data.data[i].menu_price,
                 code: response.data.data[i].menu_code,
-                category: response.data.data[i].menu_category,
+                category: JSON.parse(response.data.data[i].menu_category),
                 variants: this.variansi,
+                images: images[0].image1,
               });
               this.variansi = [];
             }
+            console.log(this.users)
           }.bind(this)
         )
         .catch(function (error) {
@@ -887,9 +931,7 @@ export default {
           menu_category: this.category,
           menu_variant: null,
         });
-      }
-      else
-      {
+      } else {
         data = JSON.stringify({
           menu_name: this.menu_name,
           menu_image: this.menu_images,
@@ -945,3 +987,15 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-image {
+  width: 100px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+</style>    

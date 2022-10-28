@@ -1068,7 +1068,7 @@ export default {
       this.idleSecondsTimer++;
       this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsTimer;
       if (this.idleSecondsCounter == 0) {
-       /*  window.clearInterval(this.idleSecondsCounter) */
+        window.clearInterval(this.idleSecondsCounter)
         alert("You have been idle for 1 minute");
         this.$router.push({
           name: "orderLogin",

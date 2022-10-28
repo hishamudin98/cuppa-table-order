@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="my-5">
-      <div class="flex justify-center items-center mb-2" v-if="this.status == 1">
+      <div class="flex justify-center items-center mb-2" v-if="this.status == 1 || this.status == 5">
         <img
           class="w-9 h-9"
           src="https://www.pngall.com/wp-content/uploads/8/Green-Check-Mark-PNG-Image.png"
@@ -31,7 +31,7 @@
           font-semibold
           text-lg text-green-500
         "
-        v-if="this.status == 1"
+        v-if="this.status == 1 || this.status == 5"
       >
         Order has been made.
       </p>

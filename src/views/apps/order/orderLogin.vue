@@ -279,7 +279,7 @@
               gap-x-2
             "
           >
-            <span v-if="changetable == false"
+            <!-- <span v-if="changetable == false"
               >Table #{{ table ? table : "0" }}</span
             >
             <div v-else class="flex justify-center items-center">
@@ -309,7 +309,14 @@
               "
             >
               Change table
-            </button>
+            </button> -->
+            <FormKit
+              type="select"
+              label="Table Number"
+              name="table number"
+              v-model="this.table"
+              :options="tableOutlet"
+            />
           </div>
           <FormKit
             type="time"
@@ -317,7 +324,7 @@
             v-model="timer2"
             value="23:15"
           />
-          <rs-button class="w-full bg-heandshe" @click="preorderCheck(table2)"
+          <rs-button class="w-full bg-heandshe" @click="preorderCheck(this.table)"
             >Proceed</rs-button
           >
           <hr class="my-3" />
