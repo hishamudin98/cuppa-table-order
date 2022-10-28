@@ -129,7 +129,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
         headers: {
           "Content-Type": "application/json",
@@ -158,7 +158,7 @@ export default {
               
             }
             this.status = response.data.data[0].order_status;
-            this.orderamount = response.data.data[0].order_total;
+            this.orderamount = response.data.data[0].ordertotal_amount;
             this.tblNo = response.data.data[0].table_no;
           }.bind(this)
         )
