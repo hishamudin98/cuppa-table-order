@@ -8,14 +8,17 @@
       </div>
     </div>
     <div class="my-5">
-      <div class="flex justify-center items-center mb-2" v-if="this.status == 1 || this.status == 5">
+      <div
+        class="flex justify-center items-center mb-2"
+        v-if="this.status == 1 || this.status == 5"
+      >
         <img
           class="w-9 h-9"
           src="https://www.pngall.com/wp-content/uploads/8/Green-Check-Mark-PNG-Image.png"
           alt="checked"
         />
       </div>
-      
+
       <div class="flex justify-center items-center mb-2" v-else>
         <img
           class="w-9 h-9"
@@ -58,15 +61,19 @@
         <div class="flex justify-between items-center my-3">
           <p class="font-semibold uppercase">Order No ( {{ this.orderID }})</p>
         </div>
-         <div v-for="(product, index) in orders" :key="index">
+        <div v-for="(product, index) in orders" :key="index">
           <div class="order-wrapper flex flex-col gap-2">
             <div class="flex justify-between items-center">
-              <div>{{ product.menu_name }}  x {{product.menu_quantity}} ( {{product.orderType}} )</div>
-              <div class="font-semibold">RM {{ (product.menu_quantity*(product.menu_price)).toFixed(2) }}</div>
+              <div>
+                {{ product.menu_name }} x {{ product.menu_quantity }} (
+                {{ product.orderType }} )
+              </div>
+              <div class="font-semibold">
+                RM {{ (product.menu_quantity * product.menu_price).toFixed(2) }}
+              </div>
             </div>
           </div>
         </div>
-        
       </div>
     </rs-card>
     <div class="flex flex-col items-center justify-center gap-3 mx-4">
@@ -74,10 +81,11 @@
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
-      <router-link class="w-full" :to="{ name: 'orderLogin' , params: { branchID: this.branch } }">
-        <rs-button class="w-full gap-x-2 mb-6 bg-heandshe" >
-          Back
-        </rs-button>
+      <router-link
+        class="w-full"
+        :to="{ name: 'orderLogin', params: { branchID: this.branch  , table: this.tblNo} }"
+      >
+        <rs-button class="w-full gap-x-2 mb-6 bg-heandshe"> Back </rs-button>
       </router-link>
     </div>
   </rs-layout>
@@ -120,7 +128,9 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL+"/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -131,12 +141,11 @@ export default {
           function (response) {
             this.orderData = JSON.parse(response.data.data[0].order_detail);
             for (let i = 0; i < this.orderData.length; i++) {
-                if(this.orderData[i].orderType == "2"){
-                    this.order_type = "Take Away";
-                }
-                else{
-                    this.order_type = "Dine In";
-                }
+              if (this.orderData[i].orderType == "2") {
+                this.order_type = "Take Away";
+              } else {
+                this.order_type = "Dine In";
+              }
               this.orders.push({
                 sku: this.orderData[i].sku,
                 menu_name: this.orderData[i].menu_name,
@@ -144,10 +153,9 @@ export default {
                 menu_quantity: this.orderData[i].menu_quantity,
                 menu_id: this.orderData[i].menu_id,
                 tableNo: this.orderData[i].tableNo,
-                orderType: this.order_type
-
-                
+                orderType: this.order_type,
               });
+              this.tblNo = response.data.data[0].table_no;
             }
             this.status = response.data.data[0].order_status;
             this.orderamount = response.data.data[0].order_total;

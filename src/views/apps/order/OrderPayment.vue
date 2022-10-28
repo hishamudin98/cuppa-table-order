@@ -1441,6 +1441,7 @@ export default {
         await axios(config)
           .then(
             function (response) {
+              window.clearInterval(this.idleSecondsCounter)
               var link = response.data.data2;
               window.location.href = link;
             }.bind(this)
@@ -1487,6 +1488,7 @@ export default {
         .then(
           function (response) {
             /* :to="{ name: 'order-payment' , params:{id:  } }" */
+            window.clearInterval(this.idleSecondsCounter)
             this.$router.push({
               name: "order-table",
               params: {
