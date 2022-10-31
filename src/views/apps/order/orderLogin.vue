@@ -610,8 +610,8 @@ export default {
 
     async preorderCheck(table2) {
       const today = moment();
-      if (this.timer2 < today.format("HH:mm")) {
-        alert("Please pick a valid time");
+      if (this.timer2 <= today.format("HH:mm")) {
+        alert("Please pick above current time");
       } else {
         if (this.timer2 < "10:30" || this.timer2 > "20:00") {
           alert("Outside Working Hours");
@@ -632,7 +632,7 @@ export default {
     async addTime() {
       const today = moment();
       if (this.timer <= today.format("HH:mm")) {
-        alert("Please pick a valid time");
+        alert("Please pick above current time");
       } else {
         if (this.timer < "10:30" || this.timer > "20:00") {
           alert("Outside Working Hours");

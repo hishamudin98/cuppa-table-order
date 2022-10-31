@@ -19,7 +19,7 @@
             </router-link>
             <p class="font-semibold text-white text-lg">Order Confirmation</p>
           </div>
-          
+
           <div class="flex items-center gap-x-2" v-else>
             <router-link
               class="flex items-center justify-center"
@@ -70,7 +70,28 @@
               <div
                 class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
               >
-                <div class="product-title mt-4">
+                <div
+                  class="product-title mt-4"
+                  v-if="product.menu_variation[1] != null"
+                >
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }}
+                    , {{ product.menu_variation[1].name }})
+                  </span>
+                </div>
+                <div
+                  class="product-title mt-4"
+                  v-else-if="product.menu_variation[0] != null"
+                >
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }})
+                  </span>
+                </div>
+                <div class="product-title mt-4" v-else>
                   <span class="block text-base font-semibold line-clamp-2"
                     >{{ product.menu_name }}
                   </span>
@@ -142,9 +163,19 @@
               <div
                 class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
               >
-                <div class="product-title mt-4">
+                <div class="product-title mt-4" v-if="product.menu_variation[1] != null">
                   <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }}
+                    >{{ product.menu_name }} ({{product.menu_variation[0].name }} , {{ product.menu_variation[1].name}})
+                  </span>
+                </div>
+                <div class="product-title mt-4" v-else-if="product.menu_variation[0] != null">
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{product.menu_variation[0].name }})
+                  </span>
+                </div>
+                <div class="product-title mt-4" v-else>
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} 
                   </span>
                 </div>
                 <div class="product-content flex flex-col">
@@ -971,7 +1002,7 @@ export default {
     };
 
     const viewDetailItem = (product) => {
-      console.log(product);
+      
       modalData.value = product;
       openModal.value = true;
     };
@@ -1029,8 +1060,9 @@ export default {
 
       /* TIMER IDLE */
       IDLE_COUNTER: 60,
-      idleSecondsCounter: 0,
+      LOADING_COUNTER: 30,
       idleSecondsTimer: 0,
+      idleSecondsCounter: 0,
       tablNo: 0,
     };
   },
@@ -1052,27 +1084,43 @@ export default {
 
   mounted() {
     document.onclick = () => {
-      this.idleSecondsTimer = 0;
+      this.idleSecondsCounter = 0;
     };
     document.onmousemove = () => {
-      this.idleSecondsTimer = 0;
+      this.idleSecondsCounter = 0;
     };
     document.ontouchmove = () => {
-      this.idleSecondsTimer = 0;
+      this.idleSecondsCounter = 0;
     };
-    this.idleSecondsCounter = window.setInterval(this.idleChecker, 1000);
+    /* this.idleSecondsTimer = setInterval(this.idleChecker, 1000); */
   },
 
   methods: {
+    async loadingRedirect() {
+      this.idleSecondsCounter++;
+      /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
+      if (this.idleSecondsCounter >= this.LOADING_COUNTER) {
+        clearInterval(this.idleSecondsTimer);
+        this.idleSecondsTimer = null;
+        this.idleSecondsCounter = 0;
+        this.$router.push({
+          name: "orderLogin",
+          params: { branchID: this.branch, table: this.tablNo },
+        });
+      }
+    },
+    
     async idleChecker() {
-      this.idleSecondsTimer++;
-      this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsTimer;
-      if (this.idleSecondsCounter == 0) {
-        window.clearInterval(this.idleSecondsCounter)
+      this.idleSecondsCounter++;
+      /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
+      if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
+        clearInterval(this.idleSecondsTimer);
+        this.idleSecondsTimer = null;
+        this.idleSecondsCounter = 0;
         alert("You have been idle for 1 minute");
         this.$router.push({
           name: "orderLogin",
-          params: { branchID: this.branch , table: this.tablNo },
+          params: { branchID: this.branch, table: this.tablNo },
         });
       }
     },
@@ -1115,12 +1163,14 @@ export default {
                   },
                 ];
               }
+              var variants = this.orderData[i].menu_variant;
               if (this.orderData[i].orderType == "1") {
                 this.orders.push({
                   sku: this.orderData[i].sku,
                   menu_name: this.orderData[i].menu_name,
                   menu_price: this.orderData[i].menu_price,
                   menu_quantity: this.orderData[i].menu_quantity,
+                  menu_variation: variants,
                   menu_image: [images[0].image1],
                   orderType: this.orderData[i].orderType,
                   menu_id: this.orderData[i].menu_id,
@@ -1132,6 +1182,7 @@ export default {
                   menu_name: this.orderData[i].menu_name,
                   menu_price: this.orderData[i].menu_price,
                   menu_quantity: this.orderData[i].menu_quantity,
+                  menu_variation: variants,
                   menu_image: [images[0].image1],
                   orderType: this.orderData[i].orderType,
                   menu_id: this.orderData[i].menu_id,
@@ -1431,8 +1482,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url:
-            process.env.VUE_APP_FNB_URL + "/tbl/tblorderPayment" /*  */,
+          url: process.env.VUE_APP_FNB_URL + "/tbl/tblorderPayment" /*  */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1441,7 +1491,9 @@ export default {
         await axios(config)
           .then(
             function (response) {
-              window.clearInterval(this.idleSecondsCounter)
+              clearInterval(this.idleSecondsTimer);
+              this.idleSecondsTimer = null;
+              this.idleSecondsCounter = 0;
               var link = response.data.data2;
               window.location.href = link;
             }.bind(this)
@@ -1488,7 +1540,9 @@ export default {
         .then(
           function (response) {
             /* :to="{ name: 'order-payment' , params:{id:  } }" */
-            window.clearInterval(this.idleSecondsCounter)
+            clearInterval(this.idleSecondsTimer);
+            this.idleSecondsTimer = null;
+            this.idleSecondsCounter = 0;
             this.$router.push({
               name: "order-table",
               params: {

@@ -947,6 +947,7 @@ export default {
           check = variasi.value.price;
         } else {
           variation.value.push(variasi.value, variasi2.value);
+          check = variasi.value.price;
         }
       }
       /* CHECK EXIST */
