@@ -805,7 +805,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getMenu" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

@@ -1,7 +1,7 @@
 <template>
   <rs-layout>
     <div class="order-customer">
-      <div style="height: 100vh" class="bg-heandshe after:content-['']">
+      <div style="height: 100vh" class="bg-gradient-to-b from-black via-gray-600 to-white after:content-['']">
         <div class="flex flex-col">
           <div class="pt-20 flex justify-center text-white">
             <h3>Share the payment link</h3>
@@ -39,7 +39,7 @@
                 <div>
                   <input type="hidden" id="testing-code" :value="this.link" />
                   <rs-button
-                    class="w-full"
+                    class="w-full bg-heandshe"
                     @click.stop.prevent="copyTestingCode"
                   >
                     Copy
@@ -52,7 +52,7 @@
           <div class="flex justify-center mt-10">
             <div class="pt-10 w-5/6">
             <router-link class="w-full" :to="{ name: 'order-payment', params: {id: this.OrderID} }">
-              <rs-button class="w-full">
+              <rs-button class="w-full bg-heandshe">
                 Try another method?
               </rs-button>
             </router-link>
