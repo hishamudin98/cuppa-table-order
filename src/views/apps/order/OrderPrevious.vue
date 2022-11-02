@@ -53,7 +53,7 @@
     </div>
     <div class="my-5">
       <p class="flex justify-center items-center font-semibold text-2xl">
-        RM {{ this.orderamount }}
+        RM {{ formatPrice(this.orderamount) }}
       </p>
     </div>
     <rs-card class="py-3 px-4">
@@ -83,9 +83,20 @@
       </rs-button> -->
       <router-link
         class="w-full"
-        :to="{ name: 'orderLogin', params: { branchID: this.branch  , table: this.tblNo} }"
+        :to="{
+          name: 'orderLogin',
+          params: { branchID: this.branch, table: this.tblNo },
+        }"
+        v-if="this.LocalStatus != 'FAIL'"
       >
         <rs-button class="w-full gap-x-2 mb-6 bg-heandshe"> Back </rs-button>
+      </router-link>
+      <router-link
+        class="w-full"
+        :to="{ name: 'paymentlink', params: { orderid: this.orderi } }"
+        v-else
+      >
+        <rs-button class="w-full gap-x-2 mb-6 bg-heandshe"> Return </rs-button>
       </router-link>
     </div>
   </rs-layout>
@@ -101,8 +112,16 @@ export default {
   },
   setup() {
     const orders = ref([]);
+
+    const formatPrice = (price) => {
+      return parseFloat(price)
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     return {
       orders,
+      formatPrice,
     };
   },
   data() {
@@ -113,12 +132,17 @@ export default {
       order_type: "",
       branch: 0,
       status: 0,
+      LocalStatus: 0,
+      orderi: 0,
     };
   },
   async created() {
     this.orderID = this.$route.params.orderID;
+    this.orderi = localStorage.orderID;
     this.getPreviousOrder();
     this.branch = localStorage.branch;
+
+    this.LocalStatus = localStorage.status;
   },
   methods: {
     async getPreviousOrder() {
@@ -128,9 +152,7 @@ export default {
       });
       var config = {
         method: "post",
-        url:
-          process.env.VUE_APP_FNB_URL +
-          "/tbl/getPreviousOrder" /* http://localhost:8000/getMenu */,
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getPreviousOrder",
         headers: {
           "Content-Type": "application/json",
         },
@@ -155,11 +177,14 @@ export default {
                 tableNo: this.orderData[i].tableNo,
                 orderType: this.order_type,
               });
-              
             }
             this.status = response.data.data[0].order_status;
             this.orderamount = response.data.data[0].ordertotal_amount;
             this.tblNo = response.data.data[0].table_no;
+            if(this.status == 5)
+            {
+              this.LocalStatus = "DONE"
+            }
           }.bind(this)
         )
         .catch(function (error) {

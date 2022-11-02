@@ -201,10 +201,10 @@ export default {
       localStorage.status = "FAIL";
     }
     this.getOrderConfirm();
-    history.pushState(null, null, location.href);
+    /* history.pushState(null, null, location.href);
     window.onpopstate = function () {
       history.go(1);
-    };
+    }; */
   },
   methods: {
     async sentBank() {

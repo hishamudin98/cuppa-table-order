@@ -163,19 +163,30 @@
               <div
                 class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
               >
-                <div class="product-title mt-4" v-if="product.menu_variation[1] != null">
+                <div
+                  class="product-title mt-4"
+                  v-if="product.menu_variation[1] != null"
+                >
                   <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} ({{product.menu_variation[0].name }} , {{ product.menu_variation[1].name}})
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }}
+                    , {{ product.menu_variation[1].name }})
                   </span>
                 </div>
-                <div class="product-title mt-4" v-else-if="product.menu_variation[0] != null">
+                <div
+                  class="product-title mt-4"
+                  v-else-if="product.menu_variation[0] != null"
+                >
                   <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} ({{product.menu_variation[0].name }})
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }})
                   </span>
                 </div>
                 <div class="product-title mt-4" v-else>
                   <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} 
+                    >{{ product.menu_name }}
                   </span>
                 </div>
                 <div class="product-content flex flex-col">
@@ -415,8 +426,12 @@
                     <rs-button
                       class="w-full bg-heandshe hover:bg-heandshe"
                       @click="sentBank()"
+                      :disabled="loading"
                     >
-                      Pay Online RM {{ formatPrice(this.totalPay) }}
+                      <span v-if="loading"> Loading </span>
+                      <span v-else
+                        >Pay Online RM {{ formatPrice(this.totalPay) }}</span
+                      >
                     </rs-button>
                   </div>
                   <div
@@ -453,7 +468,10 @@
                         class="w-full"
                         @click="sentPaymentLink()"
                         variant="primary-outline"
-                        >Get Payment Link</rs-button
+                        :disabled="loading"
+                      >
+                        <span v-if="loading"> Loading </span>
+                        <span v-else> Get Payment Link</span></rs-button
                       >
                     </div>
                   </div>
@@ -482,7 +500,10 @@
         class="w-full my-2"
         variant="primary-outline"
         @click="sentPOS()"
-        >Pay at counter RM {{ formatPrice(this.totalPay) }}
+        :disabled="loading"
+      >
+        <span v-if="loading"> Loading </span>
+        <span v-else> Pay at counter RM {{ formatPrice(this.totalPay) }}</span>
       </rs-button>
       <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
         Pay Online RM {{ formatPrice(this.totalPay) }}
@@ -1002,7 +1023,6 @@ export default {
     };
 
     const viewDetailItem = (product) => {
-      
       modalData.value = product;
       openModal.value = true;
     };
@@ -1064,6 +1084,9 @@ export default {
       idleSecondsTimer: 0,
       idleSecondsCounter: 0,
       tablNo: 0,
+
+      /* LOADING */
+      loading: false,
     };
   },
 
@@ -1076,10 +1099,10 @@ export default {
       localStorage.setItem("branch", this.branch);
     });
 
-    history.pushState(null, null, location.href);
+    /* history.pushState(null, null, location.href);
     window.onpopstate = function () {
       history.go(1);
-    };
+    }; */
   },
 
   mounted() {
@@ -1092,24 +1115,10 @@ export default {
     document.ontouchmove = () => {
       this.idleSecondsCounter = 0;
     };
-    /* this.idleSecondsTimer = setInterval(this.idleChecker, 1000); */
+    this.idleSecondsTimer = setInterval(this.idleChecker, 1000);
   },
 
   methods: {
-    async loadingRedirect() {
-      this.idleSecondsCounter++;
-      /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
-      if (this.idleSecondsCounter >= this.LOADING_COUNTER) {
-        clearInterval(this.idleSecondsTimer);
-        this.idleSecondsTimer = null;
-        this.idleSecondsCounter = 0;
-        this.$router.push({
-          name: "orderLogin",
-          params: { branchID: this.branch, table: this.tablNo },
-        });
-      }
-    },
-    
     async idleChecker() {
       this.idleSecondsCounter++;
       /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
@@ -1461,6 +1470,7 @@ export default {
     /* FOR BANK PAYMENT */
     async sentBank() {
       if (this.bankcode != "") {
+        this.loading = true;
         this.total = this.totalPay.toFixed(2);
         this.roundNumber =
           this.total.toString().split(".")[0] +
@@ -1499,6 +1509,7 @@ export default {
             }.bind(this)
           )
           .catch(function (error) {
+            this.loading = false;
             console.log(error);
           });
       } else {
@@ -1507,6 +1518,7 @@ export default {
     },
 
     async sentPOS() {
+      this.loading = true;
       var axios = require("axios");
       this.custName = localStorage.name;
       this.custPhone = localStorage.phone;
@@ -1554,11 +1566,13 @@ export default {
           }.bind(this)
         )
         .catch(function (error) {
+          this.loading = false;
           console.log(error);
         });
     },
 
     async sentPaymentLink() {
+      this.loading = true;
       this.total = this.totalPay.toFixed(2);
       this.roundNumber =
         this.total.toString().split(".")[0] +
@@ -1599,10 +1613,20 @@ export default {
           function (response) {
             this.link = response.data.data2;
             this.value = this.link;
-            this.modalOpen = true;
+            this.modalOpen = false;
+            clearInterval(this.idleSecondsTimer);
+            this.idleSecondsTimer = null;
+            this.idleSecondsCounter = 0;
+            this.$router.push({
+              name: "paymentlink",
+              params: {
+                orderid: this.MenuID,
+              },
+            });
           }.bind(this)
         )
         .catch(function (error) {
+          this.loading = false;
           console.log(error);
         });
     },

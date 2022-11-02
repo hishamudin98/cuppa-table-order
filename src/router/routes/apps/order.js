@@ -44,4 +44,9 @@ export default [
     name: "takeaway",
     component: () => import("@/views/apps/order/OrderTakeAway.vue"),
   },
+  {
+    path: "/order/payment-link/:orderid?",
+    name: "paymentlink",
+    component: () => import("@/views/apps/order/OrderPaymentLink.vue"),
+  },
 ];

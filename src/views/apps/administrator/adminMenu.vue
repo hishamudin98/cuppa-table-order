@@ -405,11 +405,9 @@
                       <div class="flex flex-row gap-y-px">
                         <div class="pr-10">
                           <img
-                            :src="searchUsers.data.images[0].image1" 
-                            
+                            :src="searchUsers.data.images[0].image1"
                             class="product-image"
                           />
-                          
                         </div>
 
                         <div class="mt-5">
@@ -418,7 +416,7 @@
                       </div>
                     </template>
                   </Column>
-                  <Column  header="Category" >
+                  <Column header="Category">
                     <template #body="searchUsers">
                       {{ searchUsers.data.category[0].category_name }}
                     </template>
@@ -829,7 +827,7 @@ export default {
               }
               /* VARIATION */
               var images = response.data.data[i].menu_image;
-               if (images == null) {
+              if (images == null) {
                 images = [
                   {
                     image1:
@@ -854,7 +852,7 @@ export default {
               });
               this.variansi = [];
             }
-            console.log(this.users)
+            console.log(this.users);
           }.bind(this)
         )
         .catch(function (error) {
@@ -952,7 +950,9 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            alert(response.message);
+            alert(response.data.message);
+            this.addVariantModal = false;
+            this.addMenuModal = false;
           }.bind(this)
         )
         .catch(function (error) {
