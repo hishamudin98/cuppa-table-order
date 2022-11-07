@@ -351,7 +351,7 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
+    "arbitrary": Menu,
   },
   setup() {
     const users = ref([]);
