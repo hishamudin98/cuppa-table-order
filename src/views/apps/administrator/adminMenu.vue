@@ -314,7 +314,8 @@
       <label><strong>Menu Price (RM)</strong></label>
       <p>{{ formatPrice(menuedit.price) }}</p>
       <br />
-      <div v-if="menuedit.variants != ''">
+      
+      <div v-if="menuedit.variants[0].label != ''">
         <label><strong>Variants</strong></label>
         <div v-for="(product, index) in menuedit.variants[0].label" :key="index">
           {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
@@ -322,7 +323,7 @@
         <br />
         <hr />
         <br />
-        <div v-if="menuedit.variants[1].label != ''">
+        <div v-if="menuedit.variants[1] != null">
         <div v-for="(product, index) in menuedit.variants[1].label" :key="index">
           {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
         </div>
