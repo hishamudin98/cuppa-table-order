@@ -2,26 +2,44 @@
   <rs-layout>
     <div class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2" v-if="this.time == null">
-          <router-link
-            class="flex items-center justify-center"
-            :to="{ name: 'order', params: {branchID: this.branch , table: this.tableNo , orderID: this.MenuID } }"
-          >
-            <vue-feather class="text-white" type="chevron-left"></vue-feather>
-          </router-link>
-          <p class="font-semibold text-white text-lg">Order Confirmation</p>
+        <div v-if="this.status != 'FAIL'">
+          <div class="flex items-center gap-x-2" v-if="this.time == null">
+            <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'order',
+                params: {
+                  branchID: this.branch,
+                  table: this.tableNo,
+                  orderID: this.MenuID,
+                },
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"></vue-feather>
+            </router-link>
+            <p class="font-semibold text-white text-lg">Order Confirmation</p>
+          </div>
+
+          <div class="flex items-center gap-x-2" v-else>
+            <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'takeaway',
+                params: {
+                  branchID: this.branch,
+                  table: this.tableNo,
+                  orderID: this.MenuID,
+                },
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"></vue-feather>
+            </router-link>
+            <p class="font-semibold text-white text-lg">Order Confirmation</p>
+          </div>
         </div>
-        <div class="flex items-center gap-x-2" v-else>
-          <router-link
-            class="flex items-center justify-center"
-            :to="{ name: 'takeaway', params: {branchID: this.branch , table: this.tableNo , orderID: this.MenuID } }"
-          >
-            <vue-feather class="text-white" type="chevron-left"></vue-feather>
-          </router-link>
-          <p class="font-semibold text-white text-lg">Order Confirmation</p>
-        </div>
+        <div class="flex items-center gap-x-2" v-else></div>
         <div class="bg-white px-3 py-1 rounded-full text-heandshe">
-          Table #{{ this.tableNo }}
+          {{ this.tableNo }}
         </div>
       </div>
     </div>
@@ -52,7 +70,28 @@
               <div
                 class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
               >
-                <div class="product-title mt-4">
+                <div
+                  class="product-title mt-4"
+                  v-if="product.menu_variation[1] != null"
+                >
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }}
+                    , {{ product.menu_variation[1].name }})
+                  </span>
+                </div>
+                <div
+                  class="product-title mt-4"
+                  v-else-if="product.menu_variation[0] != null"
+                >
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }})
+                  </span>
+                </div>
+                <div class="product-title mt-4" v-else>
                   <span class="block text-base font-semibold line-clamp-2"
                     >{{ product.menu_name }}
                   </span>
@@ -124,7 +163,28 @@
               <div
                 class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
               >
-                <div class="product-title mt-4">
+                <div
+                  class="product-title mt-4"
+                  v-if="product.menu_variation[1] != null"
+                >
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }}
+                    , {{ product.menu_variation[1].name }})
+                  </span>
+                </div>
+                <div
+                  class="product-title mt-4"
+                  v-else-if="product.menu_variation[0] != null"
+                >
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.menu_name }} ({{
+                      product.menu_variation[0].name
+                    }})
+                  </span>
+                </div>
+                <div class="product-title mt-4" v-else>
                   <span class="block text-base font-semibold line-clamp-2"
                     >{{ product.menu_name }}
                   </span>
@@ -366,8 +426,12 @@
                     <rs-button
                       class="w-full bg-heandshe hover:bg-heandshe"
                       @click="sentBank()"
+                      :disabled="loading"
                     >
-                      Pay Online RM {{ formatPrice(this.totalPay) }}
+                      <span v-if="loading"> Loading </span>
+                      <span v-else
+                        >Pay Online RM {{ formatPrice(this.totalPay) }}</span
+                      >
                     </rs-button>
                   </div>
                   <div
@@ -404,7 +468,10 @@
                         class="w-full"
                         @click="sentPaymentLink()"
                         variant="primary-outline"
-                        >Get Payment Link</rs-button
+                        :disabled="loading"
+                      >
+                        <span v-if="loading"> Loading </span>
+                        <span v-else> Get Payment Link</span></rs-button
                       >
                     </div>
                   </div>
@@ -433,7 +500,10 @@
         class="w-full my-2"
         variant="primary-outline"
         @click="sentPOS()"
-        >Pay at counter RM {{ formatPrice(this.totalPay) }}
+        :disabled="loading"
+      >
+        <span v-if="loading"> Loading </span>
+        <span v-else> Pay at counter RM {{ formatPrice(this.totalPay) }}</span>
       </rs-button>
       <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
         Pay Online RM {{ formatPrice(this.totalPay) }}
@@ -617,59 +687,61 @@
                 >
               </div>
             </div> -->
-            <div
-              class="
-                modal-item-action
-                flex
-                w-full
-                justify-between
-                items-center
-                overflow-auto
-                px-2
-                gap-x-2
-              "
-            >
-              <button
-                class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
-                @click="addToCart(modalData)"
+            <div v-if="this.status != 'FAIL'">
+              <div
+                class="
+                  modal-item-action
+                  flex
+                  w-full
+                  justify-between
+                  items-center
+                  overflow-auto
+                  px-2
+                  gap-x-2
+                "
               >
-                Save to Cart - RM
-                {{
-                  modalData && modalData.discountedPrice
-                    ? formatPrice(modalData.discountedPrice + 1)
-                    : formatPrice(modalData.menu_price + 1)
-                }}
-              </button>
-              <div class="flex gap-x-2">
                 <button
-                  class="
-                    flex
-                    items-center
-                    justify-center
-                    bg-heandshe
-                    text-primary-50
-                    p-1
-                    rounded-lg
-                  "
-                  @click="decrement()"
+                  class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
+                  @click="addToCart(modalData)"
                 >
-                  <vue-feather type="minus"></vue-feather>
+                  Save to Cart - RM
+                  {{
+                    modalData && modalData.discountedPrice
+                      ? formatPrice(modalData.discountedPrice)
+                      : formatPrice(modalData.menu_price)
+                  }}
                 </button>
-                {{ modalData.menu_quantity }}
-                <button
-                  class="
-                    flex
-                    items-center
-                    justify-center
-                    bg-heandshe
-                    text-primary-50
-                    p-1
-                    rounded-lg
-                  "
-                  @click="increment()"
-                >
-                  <vue-feather type="plus"></vue-feather>
-                </button>
+                <div class="flex gap-x-2">
+                  <button
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      bg-heandshe
+                      text-primary-50
+                      p-1
+                      rounded-lg
+                    "
+                    @click="decrement()"
+                  >
+                    <vue-feather type="minus"></vue-feather>
+                  </button>
+                  {{ modalData.menu_quantity }}
+                  <button
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      bg-heandshe
+                      text-primary-50
+                      p-1
+                      rounded-lg
+                    "
+                    @click="increment()"
+                  >
+                    <vue-feather type="plus"></vue-feather>
+                  </button>
+                </div>
               </div>
             </div>
           </perfect-scrollbar>
@@ -839,7 +911,6 @@ import RsButton from "@/components/Button.vue";
 import { FreeMode } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { useRoute } from "vue-router";
-
 import QrcodeVue from "qrcode.vue";
 
 export default {
@@ -1005,6 +1076,17 @@ export default {
       size: 200,
       branch: 0,
       time: null,
+      status: "",
+
+      /* TIMER IDLE */
+      IDLE_COUNTER: 60,
+      LOADING_COUNTER: 30,
+      idleSecondsTimer: 0,
+      idleSecondsCounter: 0,
+      tablNo: 0,
+
+      /* LOADING */
+      loading: false,
     };
   },
 
@@ -1012,9 +1094,45 @@ export default {
     this.getOrder();
     this.branch = localStorage.branch;
     this.time = localStorage.time;
+    this.status = localStorage.status;
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("branch", this.branch);
+    });
+
+    /* history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    }; */
+  },
+
+  mounted() {
+    document.onclick = () => {
+      this.idleSecondsCounter = 0;
+    };
+    document.onmousemove = () => {
+      this.idleSecondsCounter = 0;
+    };
+    document.ontouchmove = () => {
+      this.idleSecondsCounter = 0;
+    };
+    this.idleSecondsTimer = setInterval(this.idleChecker, 1000);
   },
 
   methods: {
+    async idleChecker() {
+      this.idleSecondsCounter++;
+      /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
+      if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
+        clearInterval(this.idleSecondsTimer);
+        this.idleSecondsTimer = null;
+        this.idleSecondsCounter = 0;
+        alert("You have been idle for 1 minute");
+        this.$router.push({
+          name: "orderLogin",
+          params: { branchID: this.branch, table: this.tablNo },
+        });
+      }
+    },
     async SetBank(code) {
       this.bankcode = code;
     },
@@ -1027,7 +1145,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/getOrder" /*  http://localhost:3000tbl/getOrder*/,
         headers: {
           "Content-Type": "application/json",
@@ -1054,12 +1172,14 @@ export default {
                   },
                 ];
               }
+              var variants = this.orderData[i].menu_variant;
               if (this.orderData[i].orderType == "1") {
                 this.orders.push({
                   sku: this.orderData[i].sku,
                   menu_name: this.orderData[i].menu_name,
                   menu_price: this.orderData[i].menu_price,
                   menu_quantity: this.orderData[i].menu_quantity,
+                  menu_variation: variants,
                   menu_image: [images[0].image1],
                   orderType: this.orderData[i].orderType,
                   menu_id: this.orderData[i].menu_id,
@@ -1071,6 +1191,7 @@ export default {
                   menu_name: this.orderData[i].menu_name,
                   menu_price: this.orderData[i].menu_price,
                   menu_quantity: this.orderData[i].menu_quantity,
+                  menu_variation: variants,
                   menu_image: [images[0].image1],
                   orderType: this.orderData[i].orderType,
                   menu_id: this.orderData[i].menu_id,
@@ -1096,6 +1217,7 @@ export default {
               this.totalPay = this.totalPay - this.discountedP;
             }
             this.orderno = response.data.data.order_no;
+            this.tablNo = response.data.data.order_table;
           }.bind(this)
         )
         .catch(function (error) {
@@ -1327,7 +1449,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl */,
         headers: {
           "Content-Type": "application/json",
@@ -1348,6 +1470,7 @@ export default {
     /* FOR BANK PAYMENT */
     async sentBank() {
       if (this.bankcode != "") {
+        this.loading = true;
         this.total = this.totalPay.toFixed(2);
         this.roundNumber =
           this.total.toString().split(".")[0] +
@@ -1369,8 +1492,7 @@ export default {
         });
         var config = {
           method: "POST",
-          url:
-            process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/tblorderPayment" /*  */,
+          url: process.env.VUE_APP_FNB_URL + "/tbl/tblorderPayment" /*  */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1379,11 +1501,15 @@ export default {
         await axios(config)
           .then(
             function (response) {
+              clearInterval(this.idleSecondsTimer);
+              this.idleSecondsTimer = null;
+              this.idleSecondsCounter = 0;
               var link = response.data.data2;
               window.location.href = link;
             }.bind(this)
           )
           .catch(function (error) {
+            this.loading = false;
             console.log(error);
           });
       } else {
@@ -1392,6 +1518,7 @@ export default {
     },
 
     async sentPOS() {
+      this.loading = true;
       var axios = require("axios");
       this.custName = localStorage.name;
       this.custPhone = localStorage.phone;
@@ -1408,12 +1535,13 @@ export default {
         customerName: this.custName,
         customerPhone: this.custPhone,
         MenuID: this.MenuID,
+        outletID: this.branch,
       });
 
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/tblOrderPOS" /* http://localhost:3000tbltblOrderPOS */,
         headers: {
           "Content-Type": "application/json",
@@ -1424,22 +1552,27 @@ export default {
         .then(
           function (response) {
             /* :to="{ name: 'order-payment' , params:{id:  } }" */
+            clearInterval(this.idleSecondsTimer);
+            this.idleSecondsTimer = null;
+            this.idleSecondsCounter = 0;
             this.$router.push({
               name: "order-table",
               params: {
                 orderID: response.data.data.order_no,
-                table: this.tableNo,
+                table: response.data.data.otd_table,
                 branch: localStorage.branch,
               },
             });
           }.bind(this)
         )
         .catch(function (error) {
+          this.loading = false;
           console.log(error);
         });
     },
 
     async sentPaymentLink() {
+      this.loading = true;
       this.total = this.totalPay.toFixed(2);
       this.roundNumber =
         this.total.toString().split(".")[0] +
@@ -1468,7 +1601,7 @@ export default {
       var config = {
         method: "POST",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/tbl/tblorderPayment" /*http://localhost:3000tbltblorderPayment */,
         headers: {
           "Content-Type": "application/json",
@@ -1480,10 +1613,20 @@ export default {
           function (response) {
             this.link = response.data.data2;
             this.value = this.link;
-            this.modalOpen = true;
+            this.modalOpen = false;
+            clearInterval(this.idleSecondsTimer);
+            this.idleSecondsTimer = null;
+            this.idleSecondsCounter = 0;
+            this.$router.push({
+              name: "paymentlink",
+              params: {
+                orderid: this.MenuID,
+              },
+            });
           }.bind(this)
         )
         .catch(function (error) {
+          this.loading = false;
           console.log(error);
         });
     },

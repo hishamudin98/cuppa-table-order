@@ -102,7 +102,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: "http://localhost:3000/admin/login" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/login" /*  */,
         headers: {
           "Content-Type": "application/json",
         },

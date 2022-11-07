@@ -6,7 +6,7 @@
           <p class="font-semibold text-white text-lg">Receipt</p>
         </div>
         <div class="bg-white px-3 py-1 rounded-full text-heandshe">
-          Table {{this.tableno}}
+           {{this.tableno}}
         </div>
       </div>
     </div>
@@ -127,12 +127,12 @@
         </div>
       </div>
     </rs-card>
-    <div class="flex flex-col items-center justify-center gap-3 mx-4">
+    <div class="flex flex-col items-center justify-center gap-3 mx-4" v-if="this.status == 1">
       <!-- <rs-button class="w-full gap-x-2">
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
-      <router-link class="w-full" :to="{ name: 'orderLogin', params: {branchID: this.branch } }">
+      <router-link class="w-full" :to="{ name: 'orderLogin', params: {branchID: this.branch , table: this.tblNo} }">
         <rs-button class="w-full gap-x-2 mb-6 bg-heandshe hover:bg-heandshe" >
           Order Again
         </rs-button>
@@ -143,11 +143,15 @@
         Print Receipt
         <vue-feather type="bookmark"></vue-feather>
       </rs-button> -->
-      <router-link class="w-full" :to="{ name: 'orderLogin' }">
-        <rs-button class="w-full gap-x-2 mb-6" variant="primary-outline" >
-          Try pay at counter
+      
+        <rs-button class="w-full gap-x-2 mb-2 bg-heandshe hover:bg-heandshe" @click="sentBank()" >
+          Pay Again?
         </rs-button>
-      </router-link>
+        <router-link class="w-full" :to="{ name: 'order-payment', params: {id: this.orderid} }">
+        <rs-button class="w-full gap-x-2 mb-6" variant="primary-outline" >
+          Try Another Method?
+        </rs-button>
+        </router-link>
     </div>
   </rs-layout>
 </template>
@@ -184,15 +188,65 @@ export default {
       time: null,
       status:0,
       branch:0,
+      tblNo:0,
+      orderid:0,
     };
   },
   async created() {
     this.billCode = this.$route.query.billcode;
     this.transactionId = this.$route.query.transaction_id;
     this.status = this.$route.query.status_id;
+    if(this.status == 3)
+    {
+      localStorage.status = "FAIL";
+    }
     this.getOrderConfirm();
+    /* history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    }; */
   },
   methods: {
+    async sentBank() {
+        this.total = this.orderAmount;
+        this.roundNumber =
+          this.total.toString().split(".")[0] +
+          this.total.toString().split(".")[1];
+        this.service = 0.0;
+        var axios = require("axios");
+        var data = JSON.stringify({
+          serviceCharge: this.service,
+          discount: this.discountedP + this.outletDisc,
+          tax: this.tax,
+          billName: "Order For Table " + this.tableNo,
+          billDesc: "Order For Table " + this.tableNo,
+          billAmount: parseInt(this.roundNumber),
+          billExternalReferenceNo: "Order For Table " + this.tableNo,
+          billTo: localStorage.name,
+          billPhone: localStorage.phone,
+          orderNo: this.orderno,
+          branch: localStorage.branch,
+        });
+        var config = {
+          method: "POST",
+          url:
+            process.env.VUE_APP_FNB_URL + "/tbl/tblorderPayment" /*  */,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+        await axios(config)
+          .then(
+            function (response) {
+              var link = response.data.data2;
+              window.location.href = link;
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
     async getOrderConfirm() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -201,7 +255,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL+"/tbl/getOrderConfirm",  /* http://localhost:3000tbl/getOrderConfirm */
+        url: process.env.VUE_APP_FNB_URL+"/tbl/getOrderConfirm",  /* http://localhost:3000tbl/getOrderConfirm */
         headers: {
           "Content-Type": "application/json",
         },
@@ -221,17 +275,20 @@ export default {
                 tableNo: this.orderData[i].tableNo,
               });
             }
+            this.orderid = response.data.data[0].order_id
             this.orderNo = response.data.data[0].order_no;
             this.orderAmount = response.data.data[0].ordertotal_amount;
             this.orderAmount = this.orderAmount.toFixed(2);
-            this.tableno = response.data.data[0].table_no;
+            this.tableno = response.data.data[0].tableNNo;
             this.tax = response.data.data[0].tax;
             this.discount = response.data.data[0].discount;
             this.transacno = response.data.data[0].transac_no;
             this.date = moment(response.data.data[0].order_date).format("DD-MM-YYYY")
             this.time = moment(response.data.data[0].order_date).format("HH:mm:ss")
-            localStorage.branch = response.data.data[0].outled_id;
             this.branch = response.data.data[0].outled_id;
+            this.tblNo = response.data.data[0].table_no;
+            localStorage.branch = response.data.data[0].outled_id;
+            localStorage.orderid = response.data.data[0].order_no;
           }.bind(this)
         )
         .catch(function (error) {

@@ -3,7 +3,9 @@
     <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white"></div>
+          <div class="welcome text-lg font-semibold text-white">
+            Report Shift 
+          </div>
         </div>
 
         <div class="flex gap-x-2 items-center">
@@ -22,8 +24,9 @@
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
         <div>
-          <div class="w-64">
-          <aside aria-label="Sidebar">
+          <arbitrary />
+         <!--  <div class="w-64">
+            <aside aria-label="Sidebar">
             <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
               <ul class="space-y-2">
                 <li>
@@ -65,7 +68,9 @@
                         dark:hover:bg-gray-700
                       "
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap">User</span>
+                      <span class="flex-1 ml-3 whitespace-nowrap"
+                        >Membership</span
+                      >
                     </a>
                   </router-link>
                 </li>
@@ -91,7 +96,7 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link :to="{ name: 'admin-menu' }">
+                  <div>
                     <a
                       href="#"
                       class="
@@ -106,31 +111,38 @@
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
                       "
+                      @click="dropdownMenu()"
                     >
                       <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                     </a>
-                  </router-link>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="
-                      flex
-                      items-center
-                      p-2
-                      text-base
-                      font-normal
-                      text-gray-900
-                      rounded-lg
-                      dark:text-white
-                      hover:bg-gray-300
-                      dark:hover:bg-gray-700
-                    "
-                  >
-                    <span class="flex-1 ml-3 whitespace-nowrap"
-                      >Membership</span
-                    >
-                  </a>
+                  </div>
+                  <div v-if="this.menuDrop == true">
+                    <ul>
+                      <li>
+                        <router-link :to="{ name: 'admin-menu' }">
+                          <a
+                            href="#"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
+                            ><span class="flex-1 ml-3 whitespace-nowrap"
+                              >Menu Management</span
+                            >
+                          </a>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
                 <li>
                   <div>
@@ -273,27 +285,6 @@
                           </a>
                         </router-link>
                       </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="
-                            flex
-                            items-center
-                            p-3
-                            ml-2
-                            text-sm
-                            font-sm
-                            text-gray-900
-                            rounded-lg
-                            dark:text-white
-                            hover:bg-gray-300
-                            dark:hover:bg-gray-700
-                          "
-                          ><span class="flex-1 ml-3 whitespace-nowrap"
-                            >Report Refund</span
-                          >
-                        </a>
-                      </li>
                     </ul>
                   </div>
                 </li>
@@ -321,7 +312,7 @@
               </ul>
             </div>
           </aside>
-          </div>
+          </div> -->
         </div>
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-0">
@@ -436,6 +427,7 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
+import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 
 export default {
   name: "AdminDashboard",
@@ -443,6 +435,7 @@ export default {
     DataTable,
     Column,
     Button,
+    'arbitrary': Menu,
   },
   setup() {
     const shift = ref([]);
@@ -480,6 +473,7 @@ export default {
       show: false,
       outletDrop: false,
       sumShifts: 0,
+      menuDrop: false,
       /* BARU */
     };
   },
@@ -489,6 +483,13 @@ export default {
   },
 
   methods: {
+    async dropdownMenu() {
+      if (this.menuDrop == false) {
+        this.menuDrop = true;
+      } else {
+        this.menuDrop = false;
+      }
+    },
     async dropdownOutlet(){
       if (this.outletDrop == false) {
         this.outletDrop = true;
@@ -510,7 +511,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -535,7 +536,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getShift" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getShift" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

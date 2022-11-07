@@ -193,7 +193,7 @@
               gap-x-2
             "
           >
-             <span v-if="changetable == false"
+             <!-- <span v-if="changetable == false"
               >Table #{{ this.table ? this.table : "0" }}</span
             >
             <div v-else class="flex justify-center items-center">
@@ -223,13 +223,14 @@
               "
             >
               Change table
-            </button>
-            <!-- <FormKit
+            </button> -->
+            <FormKit
               type="select"
               label="Table Number"
-              name="small_country"
-              :options="['Monaco', 'Vatican City', 'Maldives', 'Tuvalu']"
-            /> -->
+              name="table number"
+              v-model="this.table"
+              :options="tableOutlet"
+            />
           </div>
           <rs-button
             class="w-full bg-heandshe hover:bg-heandshe"
@@ -278,7 +279,7 @@
               gap-x-2
             "
           >
-            <span v-if="changetable == false"
+            <!-- <span v-if="changetable == false"
               >Table #{{ table ? table : "0" }}</span
             >
             <div v-else class="flex justify-center items-center">
@@ -308,7 +309,14 @@
               "
             >
               Change table
-            </button>
+            </button> -->
+            <FormKit
+              type="select"
+              label="Table Number"
+              name="table number"
+              v-model="this.table"
+              :options="tableOutlet"
+            />
           </div>
           <FormKit
             type="time"
@@ -316,7 +324,7 @@
             v-model="timer2"
             value="23:15"
           />
-          <rs-button class="w-full bg-heandshe" @click="preorderCheck(table2)"
+          <rs-button class="w-full bg-heandshe" @click="preorderCheck(this.table)"
             >Proceed</rs-button
           >
           <hr class="my-3" />
@@ -412,7 +420,7 @@ export default {
 
       /* DATA NULL */
       name: "",
-      phone: null,
+      phone: "",
       username: "",
       password: "",
       timestamp: "",
@@ -442,6 +450,8 @@ export default {
       this.orderid = localStorage.orderid;
       localStorage.removeItem("time");
       localStorage.removeItem("mmberno");
+      localStorage.removeItem("order")
+      localStorage.removeItem("orderID")
     }
 
     if(this.$route.params.table != "")
@@ -477,7 +487,8 @@ export default {
   },
   computed: {
     isDisabled() {
-      if (this.name !== "" && this.phone.length > 9 ) {
+      
+      if (this.name !== "" && this.phone.length > 9 && this.phone.length != 0 ) {
         return false;
       } else {
         return true;
@@ -534,7 +545,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getMemberLogin",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getMemberLogin",
         headers: {
           "Content-Type": "application/json",
         },
@@ -599,13 +610,13 @@ export default {
 
     async preorderCheck(table2) {
       const today = moment();
-      if (this.timer2 < today.format("HH:mm")) {
-        alert("Please pick a valid time");
+      if (this.timer2 <= today.format("HH:mm")) {
+        alert("Please pick above current time");
       } else {
         if (this.timer2 < "10:30" || this.timer2 > "20:00") {
           alert("Outside Working Hours");
         } else {
-          if (table2 != 0 && table2 > 0 && table2 < 30) {
+          if (table2 != 0 && table2 > 0 ) {
             localStorage.time = this.timer2;
             this.customerProceed = true;
             this.$router.push({
@@ -621,7 +632,7 @@ export default {
     async addTime() {
       const today = moment();
       if (this.timer <= today.format("HH:mm")) {
-        alert("Please pick a valid time");
+        alert("Please pick above current time");
       } else {
         if (this.timer < "10:30" || this.timer > "20:00") {
           alert("Outside Working Hours");
@@ -637,7 +648,7 @@ export default {
       }
     },
     async pickOrder(table) {
-      if (table != 0 && table > 0 && table < 30) {
+      if (table != 0 && table > 0 ) {
         this.customerProceed = true;
         localStorage.branch = this.branch;
         this.$router.push({
@@ -657,7 +668,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getBranch",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getBranch",
         headers: {
           "Content-Type": "application/json",
         },
@@ -696,7 +707,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/tbl/getTableNumber",
+        url: process.env.VUE_APP_FNB_URL + "/tbl/getTableNumber",
         headers: {
           "Content-Type": "application/json",
         },
@@ -706,8 +717,10 @@ export default {
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
+              
               this.tableOutlet.push({
-                table_no: response.data.data[i].outlet_table,
+                label: response.data.data[i].outlet_table_Name,
+                value: response.data.data[i].outlet_table_id
               });
             }
           }.bind(this)

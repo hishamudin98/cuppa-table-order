@@ -3,7 +3,9 @@
     <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white"></div>
+          <div class="welcome text-lg font-semibold text-white">
+            Report Transaction
+          </div>
         </div>
 
         <div class="flex gap-x-2 items-center">
@@ -26,7 +28,19 @@
                     <router-link :to="{ name: 'dashboard' }">
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal bg-gray-300 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          bg-gray-300
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                       >
                         <span class="ml-3">Dashboard</span>
                       </a>
@@ -36,7 +50,18 @@
                     <router-link :to="{ name: 'admin-user' }">
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">User</span>
                       </a>
@@ -46,7 +71,18 @@
                     <router-link :to="{ name: 'admin-staff' }">
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
                       </a>
@@ -56,7 +92,18 @@
                     <router-link :to="{ name: 'admin-menu' }">
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                       >
                         <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
                       </a>
@@ -65,19 +112,45 @@
                   <li>
                     <a
                       href="#"
-                      class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                      class="
+                        flex
+                        items-center
+                        p-2
+                        text-base
+                        font-normal
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                      "
                     >
-                      <span class="flex-1 ml-3 whitespace-nowrap">Membership</span>
+                      <span class="flex-1 ml-3 whitespace-nowrap"
+                        >Membership</span
+                      >
                     </a>
                   </li>
                   <li>
                     <div>
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                         @click="dropdownOutlet()"
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap"
+                          >Outlet</span
+                        >
                       </a>
                     </div>
                     <div v-if="this.outletDrop == true">
@@ -86,7 +159,19 @@
                           <router-link :to="{ name: 'admin-table' }">
                             <a
                               href="#"
-                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                              class="
+                                flex
+                                items-center
+                                p-3
+                                ml-2
+                                text-sm
+                                font-sm
+                                text-gray-900
+                                rounded-lg
+                                dark:text-white
+                                hover:bg-gray-300
+                                dark:hover:bg-gray-700
+                              "
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Table Management</span
                               >
@@ -97,7 +182,19 @@
                           <router-link :to="{ name: 'admin-report-s' }">
                             <a
                               href="#"
-                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                              class="
+                                flex
+                                items-center
+                                p-3
+                                ml-2
+                                text-sm
+                                font-sm
+                                text-gray-900
+                                rounded-lg
+                                dark:text-white
+                                hover:bg-gray-300
+                                dark:hover:bg-gray-700
+                              "
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Counter Management</span
                               >
@@ -111,10 +208,23 @@
                     <div>
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                         @click="triggerDropdown()"
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap"
+                          >Report</span
+                        >
                       </a>
                     </div>
                     <div v-if="this.show == true">
@@ -123,7 +233,19 @@
                           <router-link :to="{ name: 'admin-report-t' }">
                             <a
                               href="#"
-                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                              class="
+                                flex
+                                items-center
+                                p-3
+                                ml-2
+                                text-sm
+                                font-sm
+                                text-gray-900
+                                rounded-lg
+                                dark:text-white
+                                hover:bg-gray-300
+                                dark:hover:bg-gray-700
+                              "
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Report Transaction</span
                               >
@@ -134,7 +256,19 @@
                           <router-link :to="{ name: 'admin-report-s' }">
                             <a
                               href="#"
-                              class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                              class="
+                                flex
+                                items-center
+                                p-3
+                                ml-2
+                                text-sm
+                                font-sm
+                                text-gray-900
+                                rounded-lg
+                                dark:text-white
+                                hover:bg-gray-300
+                                dark:hover:bg-gray-700
+                              "
                               ><span class="flex-1 ml-3 whitespace-nowrap"
                                 >Report Shift</span
                               >
@@ -144,7 +278,19 @@
                         <li>
                           <a
                             href="#"
-                            class="flex items-center p-3 ml-2 text-sm font-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                            class="
+                              flex
+                              items-center
+                              p-3
+                              ml-2
+                              text-sm
+                              font-sm
+                              text-gray-900
+                              rounded-lg
+                              dark:text-white
+                              hover:bg-gray-300
+                              dark:hover:bg-gray-700
+                            "
                             ><span class="flex-1 ml-3 whitespace-nowrap"
                               >Report Refund</span
                             >
@@ -157,9 +303,22 @@
                     <router-link :to="{ name: 'login' }">
                       <a
                         href="#"
-                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
+                        class="
+                          flex
+                          items-center
+                          p-2
+                          text-base
+                          font-normal
+                          text-gray-900
+                          rounded-lg
+                          dark:text-white
+                          hover:bg-gray-300
+                          dark:hover:bg-gray-700
+                        "
                       >
-                        <span class="flex-1 ml-3 whitespace-nowrap">Log Out</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap"
+                          >Log Out</span
+                        >
                       </a>
                     </router-link>
                   </li>
@@ -194,7 +353,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-full" style="padding-top: 10px">
+              <div class="w-full h-1">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -209,34 +368,78 @@
                 />
               </div>
               <div class="w-1/12" style="padding-top: 10px">
-                <rs-button @click="filter()" class="bg-heandshe hover:bg-heandshe"
+                <rs-button
+                  @click="filter()"
+                  class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
-              </div>
+              </div> -->
             </div>
             <div class="">
-              <rs-card style="margin-top: 40px">
+              <rs-card style="margin-top: 10px">
                 <div>
                   <div>
                     <DataTable
                       :value="searchTrans"
                       :paginator="true"
                       :rows="10"
-                      filterDisplay="menu"
+                      ref="dt"
                       v-model:filters="filters1"
+                      filterDisplay="menu"
                       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                       :rowsPerPageOptions="[10, 20, 50]"
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
+                      <template #header>
+                        <div style="text-align: left">
+                          <Button
+                            icon="pi pi-external-link"
+                            label="Export"
+                            @click="exportCSV($event)"
+                          />
+                        </div>
+                        <div class="flex justify-content-between pb-10 pt-3">
+                          <div class="w-11/12 h-1">
+                            <FormKit
+                              v-model="search"
+                              id="search-sticky"
+                              placeholder="Search for a ..."
+                              type="search"
+                              :classes="{
+                                inner:
+                                  'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                                outer: 'flex-1 mb-0',
+                                input: 'h-10',
+                              }"
+                            />
+                          </div>
+                          <div class="w-1/12 h-2">
+                            <rs-button
+                              @click="filter()"
+                              class="bg-heandshe hover:bg-heandshe"
+                              >Filter</rs-button
+                            >
+                          </div>
+                        </div>
+                      </template>
                       <Column field="trans_no" header="Transaction No"></Column>
-                      <Column field="trans_date" header="Transaction Date"></Column>
+                      <Column
+                        field="trans_date"
+                        header="Transaction Date"
+                      ></Column>
                       <Column
                         field="trans_amount"
                         header="Transaction Amount (RM)"
                       ></Column>
-                      <Column field="trans_status" header="Transaction Status"></Column>
-                      <Column field="trans_method" header="Transaction Method"></Column>
+                      <Column
+                        field="trans_status"
+                        header="Transaction Status"
+                      ></Column>
+                      <Column
+                        field="trans_method"
+                        header="Transaction Method"
+                      ></Column>
 
                       <template #paginatorstart>
                         <Button
@@ -273,14 +476,7 @@
         label="Payment Method"
         :options="['FPX', 'CASH', 'DEBIT/CREDIT CARD']"
       />
-      <FormKit
-        type="date"
-        v-model="start_date"
-        label="Birthday"
-        help="Enter your birth day"
-        validation="required|before:2010-01-01"
-        validation-visibility="live"
-      />
+      <FormKit type="date" v-model="start_date" label="Start Date" />
 
       <rs-button style="float: right" variant="primary-outline" @click="filters()">
         Clear
@@ -292,6 +488,39 @@
       >
         Filter
       </rs-button> -->
+    </rs-modal>
+    <!--  -->
+    <rs-modal
+      title="Transaction Details"
+      v-model="showTransDetail"
+      position="middle"
+      size="md"
+    >
+      <label><strong>Transaction No.</strong></label>
+      <p>{{ this.transDetail.trans_no }}</p>
+      <br />
+      <label><strong>Date</strong></label>
+      <p>{{ this.transDetail.trans_date }}</p>
+      <br />
+      <label><strong>Transaction Amount ( RM )</strong></label>
+      <p>{{ this.transDetail.trans_amount }}</p>
+      <br />
+      <label><strong>Transaction Tax ( RM )</strong></label>
+      <p>{{ this.transDetail.trans_tax }}</p>
+      <br />
+      <label><strong>Transaction Status</strong></label>
+      <p>{{ this.transDetail.trans_status }}</p>
+      <br />
+      <label><strong>Payment Method</strong></label>
+      <p>{{ this.transDetail.trans_method }}</p>
+      <br />
+      <label><strong>Order Details</strong></label>
+      <div v-for="(input, k) in this.transDetail.orders" :key="k">
+        <p>
+          {{ input.menu_name }} x {{ input.menu_quantity }} - RM
+          {{ formatPrice(input.menu_price) }}
+        </p>
+      </div>
     </rs-modal>
   </rs-layout>
 </template>
@@ -306,7 +535,9 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
-/* import Calendar from 'primevue/calendar'; */
+import { FilterMatchMode, FilterOperator } from "primevue/api";
+import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+/* import Calendar from "primevue/calendar"; */
 
 export default {
   name: "AdminDashboard",
@@ -316,28 +547,39 @@ export default {
     DataTable,
     Column,
     Button,
-    /*  Calendar, */
+    'arbitrary': Menu,
+    /* Calendar, */
   },
   setup() {
+    const dt = ref();
     const trans = ref([]);
     const search = ref("");
     const filterModal = ref(false);
     const trans_method = ref("");
     const trans_status = ref("");
+    const order = ref([]);
     const start_date = ref("");
 
+    const exportCSV = () => {
+      dt.value.exportCSV();
+    };
+
+    const formatDate = (value) => {
+      return moment(value).format("DD/MM/YYYY");
+    };
+
     const searchTrans = computed(() => {
-        return trans.value.filter((trans) => {
-          return (
-            trans.trans_status.toLowerCase().indexOf(trans_status.value.toLowerCase()) !=
-              -1 &&
-            trans.trans_method.toLowerCase().indexOf(trans_method.value.toLowerCase()) !=
-              -1 &&
-            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1 &&
-            moment(trans.trans_date).format("DD-MM-YYYY") >= moment(start_date.value).format("DD-MM-YYYY") != -1
-          );
-        });
-      
+      return trans.value.filter((trans) => {
+        return (
+          trans.trans_status
+            .toLowerCase()
+            .indexOf(trans_status.value.toLowerCase()) != -1 &&
+          trans.trans_method
+            .toLowerCase()
+            .indexOf(trans_method.value.toLowerCase()) != -1 &&
+            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase())
+        );
+      });
     });
 
     const filters = () => {
@@ -356,17 +598,39 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    const filters1 = ref({
+      trans_date: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+      },
+    });
+
+    const initFilters1 = () => {
+      filters1.value = {
+        trans_date: {
+          operator: FilterOperator.AND,
+          constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+        },
+      };
+    };
     return {
+      start_date,
       search,
       searchTrans,
       trans,
+      filters1,
+      initFilters1,
       formatPrice,
+      formatDate,
       filter,
       filters,
+      exportCSV,
       trans_status,
       filterModal,
       trans_method,
-      start_date,
+      order,
+      dt,
     };
   },
   data() {
@@ -379,7 +643,10 @@ export default {
       transMethod: "",
       show: false,
       outletDrop: false,
+      menuDrop: false,
       /* BARU */
+      showTransDetail: false,
+      transDetail: "",
     };
   },
   async created() {
@@ -388,6 +655,13 @@ export default {
   },
 
   methods: {
+    async dropdownMenu() {
+      if (this.menuDrop == false) {
+        this.menuDrop = true;
+      } else {
+        this.menuDrop = false;
+      }
+    },
     async dropdownOutlet() {
       if (this.outletDrop == false) {
         this.outletDrop = true;
@@ -409,7 +683,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -434,7 +708,8 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTransaction" /*   */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTransaction" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -473,7 +748,13 @@ export default {
                 trans_amount: response.data.data.trans_details[i].trans_amount,
                 trans_status: this.status,
                 trans_method: this.transMethod,
-              }); /*   */
+                trans_tax: response.data.data.trans_details[i].trans_tax,
+                trans_discount:
+                  response.data.data.trans_details[i].trans_discount,
+                orders: JSON.parse(
+                  response.data.data.trans_details[i].order_details
+                ),
+              });
             }
 
             this.totalData = this.trans.length;
@@ -483,6 +764,15 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    /* SELECT STATEMENT */
+    async select(selectTrans) {
+      this.transDetail = selectTrans.data;
+      if (this.showTransDetail == false) {
+        this.showTransDetail = true;
+      } else {
+        this.showTransDetail = false;
+      }
     },
   },
 };

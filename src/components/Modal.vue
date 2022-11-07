@@ -4,7 +4,7 @@
       <div
         v-if="modelValue"
         @click.self="closeModal"
-        class="modal fixed top-0 left-0 w-full h-full overflow-hidden"
+        class="modal fixed top-0 left-0 w-full h-full overflow-auto"
         :class="{
           'flex items-start': position == 'top',
           'flex items-center': position == 'center',
