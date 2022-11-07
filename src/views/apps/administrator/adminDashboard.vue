@@ -3,7 +3,9 @@
     <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white"></div>
+           <div class="welcome text-lg font-semibold text-white">
+             Dashboard
+            </div>
         </div>
 
         <div class="flex gap-x-2 items-center">
@@ -21,7 +23,8 @@
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <div class="inline-block w-1/6">
-          <aside aria-label="Sidebar">
+          <arbitrary />
+          <!-- <aside aria-label="Sidebar">
             <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
               <ul class="space-y-2">
                 <li>
@@ -306,7 +309,7 @@
                 </li>
               </ul>
             </div>
-          </aside>
+          </aside> -->
         </div>
         <div class="inline-block pt-4 w-5/6">
           <div class="inline-block w-1/2 pr-10">
@@ -329,9 +332,13 @@
 import Chart from "chart.js/auto";
 import { onMounted } from "vue";
 import moment from "moment";
+import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+
 export default {
   name: "AdminDashboard",
-  components: {},
+  components: {
+    'arbitrary': Menu,
+  },
 
   setup() {
     onMounted(() => {});
@@ -428,27 +435,6 @@ export default {
   },
 
   methods: {
-    async dropdownMenu() {
-      if (this.menuDrop == false) {
-        this.menuDrop = true;
-      } else {
-        this.menuDrop = false;
-      }
-    },
-    async dropdownOutlet() {
-      if (this.outletDrop == false) {
-        this.outletDrop = true;
-      } else {
-        this.outletDrop = false;
-      }
-    },
-    async triggerDropdown() {
-      if (this.show == false) {
-        this.show = true;
-      } else {
-        this.show = false;
-      }
-    },
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({

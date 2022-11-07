@@ -3,7 +3,9 @@
     <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white"></div>
+          <div class="welcome text-lg font-semibold text-white">
+            Report Shift 
+          </div>
         </div>
 
         <div class="flex gap-x-2 items-center">
@@ -22,7 +24,8 @@
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
         <div>
-          <div class="w-64">
+          <arbitrary />
+         <!--  <div class="w-64">
             <aside aria-label="Sidebar">
             <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
               <ul class="space-y-2">
@@ -309,7 +312,7 @@
               </ul>
             </div>
           </aside>
-          </div>
+          </div> -->
         </div>
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-0">
@@ -424,6 +427,7 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
+import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 
 export default {
   name: "AdminDashboard",
@@ -431,6 +435,7 @@ export default {
     DataTable,
     Column,
     Button,
+    'arbitrary': Menu,
   },
   setup() {
     const shift = ref([]);

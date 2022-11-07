@@ -3,7 +3,7 @@
     <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white"></div>
+          <div class="welcome text-lg font-semibold text-white">Menu</div>
         </div>
 
         <div class="flex gap-x-2 items-center">
@@ -22,300 +22,7 @@
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
         <div>
-          <div class="w-64">
-            <aside aria-label="Sidebar">
-              <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
-                <ul class="space-y-2">
-                  <li>
-                    <router-link :to="{ name: 'dashboard' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          bg-gray-300
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="ml-3">Dashboard</span>
-                      </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'admin-user' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Membership</span
-                        >
-                      </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'admin-staff' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
-                      </a>
-                    </router-link>
-                  </li>
-                  <li>
-                    <div>
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                        @click="dropdownMenu()"
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
-                      </a>
-                    </div>
-                    <div v-if="this.menuDrop == true">
-                      <ul>
-                        <li>
-                          <router-link :to="{ name: 'admin-menu' }">
-                            <a
-                              href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
-                              ><span class="flex-1 ml-3 whitespace-nowrap"
-                                >Menu Management</span
-                              >
-                            </a>
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                        @click="dropdownOutlet()"
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Outlet</span
-                        >
-                      </a>
-                    </div>
-                    <div v-if="this.outletDrop == true">
-                      <ul>
-                        <li>
-                          <router-link :to="{ name: 'admin-table' }">
-                            <a
-                              href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
-                              ><span class="flex-1 ml-3 whitespace-nowrap"
-                                >Table Management</span
-                              >
-                            </a>
-                          </router-link>
-                        </li>
-                        <li>
-                          <router-link :to="{ name: 'admin-report-s' }">
-                            <a
-                              href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
-                              ><span class="flex-1 ml-3 whitespace-nowrap"
-                                >Counter Management</span
-                              >
-                            </a>
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                        @click="triggerDropdown()"
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Report</span
-                        >
-                      </a>
-                    </div>
-                    <div v-if="this.show == true">
-                      <ul>
-                        <li>
-                          <router-link :to="{ name: 'admin-report-t' }">
-                            <a
-                              href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
-                              ><span class="flex-1 ml-3 whitespace-nowrap"
-                                >Report Transaction</span
-                              >
-                            </a>
-                          </router-link>
-                        </li>
-                        <li>
-                          <router-link :to="{ name: 'admin-report-s' }">
-                            <a
-                              href="#"
-                              class="
-                                flex
-                                items-center
-                                p-3
-                                ml-2
-                                text-sm
-                                font-sm
-                                text-gray-900
-                                rounded-lg
-                                dark:text-white
-                                hover:bg-gray-300
-                                dark:hover:bg-gray-700
-                              "
-                              ><span class="flex-1 ml-3 whitespace-nowrap"
-                                >Report Shift</span
-                              >
-                            </a>
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li>
-                    <router-link :to="{ name: 'login' }">
-                      <a
-                        href="#"
-                        class="
-                          flex
-                          items-center
-                          p-2
-                          text-base
-                          font-normal
-                          text-gray-900
-                          rounded-lg
-                          dark:text-white
-                          hover:bg-gray-300
-                          dark:hover:bg-gray-700
-                        "
-                      >
-                        <span class="flex-1 ml-3 whitespace-nowrap"
-                          >Log Out</span
-                        >
-                      </a>
-                    </router-link>
-                  </li>
-                </ul>
-              </div>
-            </aside>
-          </div>
+          <arbitrary />
         </div>
         <div class="w-full flex flex-col">
           <div class="w-full flex flex-row mb-1">
@@ -589,7 +296,7 @@
       title="Edit Menu"
       v-model="editMenuModal"
       position="middle"
-      size="full"
+      size="md"
     >
       <FormKit type="text" label="Menu Name" v-model="menuedit.name" />
       <FormKit
@@ -600,19 +307,25 @@
       <rs-button style="float: right" @click="edit(menuedit)"> Save </rs-button>
     </rs-modal>
 
-    <rs-modal
-      title="Menu"
-      v-model="showMenuModal"
-      position="middle"
-      size="full"
-    >
-      <FormKit type="text" label="Menu Name" v-model="menuedit.name" readonly />
-      <FormKit
-        type="number"
-        label="Menu Price ( RM )"
-        v-model="menuedit.price"
-        readonly
-      />
+    <rs-modal title="Menu" v-model="showMenuModal" position="middle" size="md">
+      <label><strong>Menu Name</strong></label>
+      <p>{{ menuedit.name }}</p>
+      <br />
+      <label><strong>Menu Price (RM)</strong></label>
+      <p>{{ formatPrice(menuedit.price) }}</p>
+      <br />
+      <div v-if="menuedit.variants != ''">
+        <label><strong>Variants</strong></label>
+        <div v-for="(product, index) in menuedit.variants[0].label" :key="index">
+          {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
+        </div>
+        <br />
+        <hr />
+        <br />
+        <div v-for="(product, index) in menuedit.variants[1].label" :key="index">
+          {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
+        </div>
+      </div>
     </rs-modal>
   </rs-layout>
 </template>
@@ -626,6 +339,8 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
+import Menu from "@/views/apps/administrator/adminSidemenu.vue";
+
 export default {
   name: "AdminDashboard",
   components: {
@@ -634,6 +349,7 @@ export default {
     DataTable,
     Column,
     Button,
+    arbitrary: Menu,
   },
   setup() {
     const users = ref([]);
