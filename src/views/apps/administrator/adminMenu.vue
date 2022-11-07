@@ -322,8 +322,10 @@
         <br />
         <hr />
         <br />
+        <div v-if="menuedit.variants[1].label != ''">
         <div v-for="(product, index) in menuedit.variants[1].label" :key="index">
           {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
+        </div>
         </div>
       </div>
     </rs-modal>
