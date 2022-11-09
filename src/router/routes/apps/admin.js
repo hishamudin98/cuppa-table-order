@@ -44,6 +44,11 @@ export default [
       name: "admin-table",
       component: () => import("@/views/apps/administrator/adminTable.vue"),
     },
+    {
+      path: "/admin/order",
+      name: "admin-order",
+      component: () => import("@/views/apps/administrator/adminOrder.vue"),
+    },
     /*{
       path: "/order/previous/:orderID?",
       name: "order-previous",

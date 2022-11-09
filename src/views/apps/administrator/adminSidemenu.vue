@@ -122,7 +122,7 @@
             </div>
           </li>
           <li>
-            <router-link :to="{ name: 'order' }">
+            <router-link :to="{ name: 'admin-order' }">
               <a
                 href="#"
                 class="

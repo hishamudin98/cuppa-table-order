@@ -483,27 +483,7 @@ export default {
   },
 
   methods: {
-    async dropdownMenu() {
-      if (this.menuDrop == false) {
-        this.menuDrop = true;
-      } else {
-        this.menuDrop = false;
-      }
-    },
-    async dropdownOutlet(){
-      if (this.outletDrop == false) {
-        this.outletDrop = true;
-      } else {
-        this.outletDrop = false;
-      }
-    },
-    async triggerDropdown() {
-      if (this.show == false) {
-        this.show = true;
-      } else {
-        this.show = false;
-      }
-    },
+   
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -545,7 +525,6 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            console.log("SEBELUM :", response.data.data.Shift_det.length)
             for (let i = 0; i < response.data.data.Shift_det.length; i++) {
               this.shift.push({
                 shift_net: response.data.data.Shift_det[i].shift_netSales,
