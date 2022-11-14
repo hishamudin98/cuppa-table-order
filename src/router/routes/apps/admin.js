@@ -50,18 +50,81 @@ export default [{
         path: "/admin/table",
         name: "admin-table",
         component: () =>
-            import ("@/views/apps/administrator/Outlet/adminTable.vue"),
+            import ("@/views/apps/administrator/outlet/adminTable.vue"),
     },
     {
         path: "/admin/order",
         name: "admin-order",
         component: () =>
-            import ("@/views/apps/administrator/adminOrder.vue"),
+            import ("@/views/apps/administrator/Order/adminOrder.vue"),
+    },
+
+    {
+        path: "/admin/supplier",
+        name: "admin-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/supplier/supplierIndex.vue"),
+    },
+
+    {
+        path: "/admin/manage-stock",
+        name: "rawmaterial-index",
+        component: () =>
+            import ("@/views/apps/administrator/rawMaterial/materialIndex.vue"),
+    },
+
+    {
+        path: "/admin/manage-order-stock",
+        name: "manage-order-stock-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/hq/stock/manageOrderSupplier.vue"),
+    },
+
+    {
+        path: "/admin/manage-order-stock/:id",
+        name: "order-stock-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/hq/stock/manageStockOrderSupplier.vue"),
+    },
+
+    {
+        path: "/admin/manage-order-stock-outlet-hq",
+        name: "manage-order-stock-outlet-hq",
+        component: () =>
+            import ("@/views/apps/administrator/hq/stock/manageOrderOutlet.vue"),
+    },
+
+    {
+        path: "/admin/manage-order-stock-outlet-hq/:id",
+        name: "order-stock-outlet-hq",
+        component: () =>
+            import ("@/views/apps/administrator/hq/stock/manageStockOrderOutlet.vue"),
+    },
+
+    {
+        path: "/admin/outlet/manage-stock",
+        name: "outlet-manage-stock",
+        component: () =>
+            import ("@/views/apps/administrator/outlet/stock/manageStock.vue"),
+    },
+
+    {
+        path: "/admin/manage-order-stock-outlet",
+        name: "manage-order-stock-outlet",
+        component: () =>
+            import ("@/views/apps/administrator/outlet/stock/manageOrder.vue"),
+    },
+
+    {
+        path: "/admin/order-stock-outlet",
+        name: "order-stock-outlet",
+        component: () =>
+            import ("@/views/apps/administrator/outlet/stock/manageOrder.vue"),
     },
 
     /*{
-                path: "/order/previous/:orderID?",
-                name: "order-previous",
-                component: () => import("@/views/apps/order/OrderPrevious.vue"),
-              }, */
+                    path: "/order/previous/:orderID?",
+                    name: "order-previous",
+                    component: () => import("@/views/apps/order/OrderPrevious.vue"),
+                  }, */
 ];

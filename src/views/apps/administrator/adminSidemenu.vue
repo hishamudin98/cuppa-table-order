@@ -6,31 +6,26 @@
           <!-- DASHBOARD -->
           <li>
             <router-link :to="{ name: 'dashboard' }">
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
                   text-base
                   font-normal
                   focus:bg-gray-300
-                  text-gray-900
+                  text-white-900
                   rounded-lg
                   dark:text-white
-                  hover:bg-gray-300
-                "
-              >
+                  hover:bg-gray-100
+                " @click="clickActive()">
                 <span class="ml-3">Dashboard</span>
               </a>
+
             </router-link>
           </li>
-          <!-- OUTLET -->
-          <li v-if="this.staff_role != 3 || this.staff_category != 3">
+          <li>
             <div>
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -41,19 +36,15 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-                @click="dropdownOutlet()"
-              >
+                " @click="dropdownOutlet()">
                 <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
               </a>
             </div>
             <div v-if="this.outletDrop == true">
               <ul>
                 <li>
-                  <router-link :to="{ name: 'admin-outlet' }">
-                    <a
-                      href="#"
-                      class="
+                  <router-link :to="{ name: 'admin-report-s' }">
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -65,18 +56,13 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Outlet Management</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Outlet Management</span>
                     </a>
                   </router-link>
                 </li>
                 <li>
                   <router-link :to="{ name: 'admin-table' }">
-                    <a
-                      href="#"
-                      class="
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -88,19 +74,14 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Table Management</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Table Management</span>
                     </a>
                   </router-link>
                 </li>
 
                 <li>
                   <router-link :to="{ name: 'admin-table' }">
-                    <a
-                      href="#"
-                      class="
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -112,10 +93,7 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Station Management</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Station Management</span>
                     </a>
                   </router-link>
                 </li>
@@ -125,9 +103,7 @@
           <!-- ORDER -->
           <li>
             <router-link :to="{ name: 'admin-order' }">
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -138,18 +114,16 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-              >
+                ">
                 <span class="ml-3">Order</span>
               </a>
             </router-link>
           </li>
-          <!-- MENU -->
+
+
           <li>
             <div>
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -160,9 +134,7 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-                @click="dropdownMenu()"
-              >
+                " @click="dropdownMenu()">
                 <span class="flex-1 ml-3 whitespace-nowrap">Menu</span>
               </a>
             </div>
@@ -170,9 +142,7 @@
               <ul>
                 <li>
                   <router-link :to="{ name: 'admin-menu' }">
-                    <a
-                      href="#"
-                      class="
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -184,18 +154,13 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Menu Management</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Menu Management</span>
                     </a>
                   </router-link>
                 </li>
                 <li>
                   <router-link :to="{ name: 'admin-menu' }">
-                    <a
-                      href="#"
-                      class="
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -207,10 +172,7 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Category Management</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Category Management</span>
                     </a>
                   </router-link>
                 </li>
@@ -220,9 +182,7 @@
           <!-- USER -->
           <li>
             <router-link :to="{ name: 'admin-staff' }">
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -233,18 +193,15 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-              >
+                ">
                 <span class="flex-1 ml-3 whitespace-nowrap">User</span>
               </a>
             </router-link>
           </li>
           <!-- MEMBERSHIP -->
-          <li v-if="this.staff_role != 3 || this.staff_category != 3" >
+          <li v-if="this.staff_role != 3 || this.staff_category != 3">
             <router-link :to="{ name: 'admin-user' }">
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -255,18 +212,13 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-              >
+                ">
                 <span class="flex-1 ml-3 whitespace-nowrap">Membership</span>
               </a>
             </router-link>
           </li>
-          <!-- RAW MATERIAL -->
-          <li v-if="this.staff_category == 2">
-            <router-link :to="{ name: 'dashboard' }">
-              <a
-                href="#"
-                class="
+          <li>
+            <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -277,18 +229,76 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-              >
-                <span class="ml-3">Raw Material</span>
-              </a>
-            </router-link>
+                " @click="dropdownStock()">
+              <span class="flex-1 ml-3 whitespace-nowrap">Stock - HQ</span>
+            </a>
+            <div v-if="this.stockDrop == true">
+              <ul>
+                <li>
+                  <router-link :to="{ name: 'rawmaterial-index' }">
+                    <a href="#" class="
+                    flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                ">
+                      <span class="ml-3">Manage Stock</span>
+                    </a>
+                  </router-link>
+                </li>
+
+                <li>
+                  <router-link :to="{ name: 'manage-order-stock-supplier' }">
+                    <a href="#" class="
+                    flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                ">
+                      <span class="ml-3">Manage Order Supplier</span>
+                    </a>
+                  </router-link>
+                </li>
+
+                <li>
+                  <router-link :to="{ name: 'manage-order-stock-outlet-hq' }">
+                    <a href="#" class="
+                    flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                ">
+                      <span class="ml-3">Manage Order Outlet</span>
+                    </a>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
           </li>
-          <!-- SUPPLIER -->
-          <li v-if="this.staff_category == 2">
-            <router-link :to="{ name: 'admin-staff' }">
-              <a
-                href="#"
-                class="
+
+          <li>
+            <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -299,18 +309,76 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-              >
+                " @click="dropdownStockOutlet()">
+              <span class="flex-1 ml-3 whitespace-nowrap">Stock - Outlet</span>
+            </a>
+            <div v-if="this.stockDropOutlet == true">
+              <ul>
+                <li>
+                  <router-link :to="{ name: 'outlet-manage-stock' }">
+                    <a href="#" class="
+                    flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                ">
+                      <span class="ml-3">Manage Stock</span>
+                    </a>
+                  </router-link>
+                </li>
+
+                <li>
+                  <router-link :to="{ name: 'manage-order-stock-outlet' }">
+                    <a href="#" class="
+                    flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                ">
+                      <span class="ml-3">Manage Order Outlet</span>
+                    </a>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'admin-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
                 <span class="flex-1 ml-3 whitespace-nowrap">Supplier</span>
               </a>
             </router-link>
           </li>
-          <!-- REPORTS -->
+
           <li>
             <div>
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -321,9 +389,7 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-                @click="triggerDropdown()"
-              >
+                " @click="triggerDropdown()">
                 <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
               </a>
             </div>
@@ -331,9 +397,7 @@
               <ul>
                 <li>
                   <router-link :to="{ name: 'admin-report-t' }">
-                    <a
-                      href="#"
-                      class="
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -345,18 +409,13 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Report Transaction</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Report Transaction</span>
                     </a>
                   </router-link>
                 </li>
                 <li>
                   <router-link :to="{ name: 'admin-report-s' }">
-                    <a
-                      href="#"
-                      class="
+                    <a href="#" class="
                         flex
                         items-center
                         p-3
@@ -368,10 +427,7 @@
                         dark:text-white
                         hover:bg-gray-300
                         dark:hover:bg-gray-700
-                      "
-                      ><span class="flex-1 ml-3 whitespace-nowrap"
-                        >Report Shift</span
-                      >
+                      "><span class="flex-1 ml-3 whitespace-nowrap">Report Shift</span>
                     </a>
                   </router-link>
                 </li>
@@ -381,9 +437,7 @@
           <!-- LOGOUT -->
           <li>
             <router-link :to="{ name: 'login' }">
-              <a
-                href="#"
-                class="
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -394,8 +448,7 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "
-              >
+                ">
                 <span class="flex-1 ml-3 whitespace-nowrap">Log Out</span>
               </a>
             </router-link>
@@ -410,17 +463,23 @@ export default {
   data() {
     return {
       show: false,
+      activeClick: false,
       outletDrop: false,
       menuDrop: false,
-      staff_category:0,
-      staff_role:0,
+      stockDrop: false,
+      stockDropOutlet: false,
     };
   },
-  async created() {
-    this.getdata();
-  },
+  async created() { },
 
   methods: {
+    async clickActive() {
+      if (this.activeClick == false) {
+        this.activeClick = true;
+      } else {
+        this.activeClick = false;
+      }
+    },
     async dropdownMenu() {
       if (this.menuDrop == false) {
         this.menuDrop = true;
@@ -443,29 +502,20 @@ export default {
       }
     },
 
-    async getdata() {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        staffid: localStorage.staff,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            this.staff_category = response.data.data[0].category;
-            this.staff_role = response.data.data[0].role
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
+    async dropdownStock() {
+      if (this.stockDrop == false) {
+        this.stockDrop = true;
+      } else {
+        this.stockDrop = false;
+      }
+    },
+
+    async dropdownStockOutlet() {
+      if (this.stockDropOutlet == false) {
+        this.stockDropOutlet = true;
+      } else {
+        this.stockDropOutlet = false;
+      }
     },
   },
 };
