@@ -34,7 +34,9 @@
                   <strong>Number of active staff</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">64 Active Users</div>
+                <div class="text-center py-8">
+                  {{ this.totalStaff }} Active Users
+                </div>
               </rs-card>
             </div>
             <div class="inline-block w-1/2 pr-10 pb-2">
@@ -43,7 +45,9 @@
                   <strong>Number of staff by Outlet</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">10 Active Users</div></rs-card
+                <div class="text-center py-8">
+                  {{ this.totalStaff }} Active Users
+                </div></rs-card
               >
             </div>
           </div>
@@ -64,7 +68,8 @@
                   }"
                 />
               </div>
-              <div class="w-1/12" style="padding-top: 10px">
+              <div v-if="this.staff_role != 3 || this.staff_category != 3" 
+              class="w-1/12" style="padding-top: 10px">
                 <rs-button
                   @click="addUser()"
                   class="bg-heandshe hover:bg-heandshe"
@@ -72,7 +77,9 @@
                 >
               </div>
             </div>
-            <div class="h-4/6">
+            <div class="">
+            <rs-card style="padding-top: 10px">
+              <div>
               <div>
                 <DataTable
                   :value="searchUsers"
@@ -92,6 +99,11 @@
                         icon="pi pi-pencil"
                         class="p-button-rounded p-button-success mr-2"
                         @click="editUser(searchUsers)"
+                      />
+                      <Button
+                        icon="pi pi-folder-open"
+                        class="p-button-rounded p-button-success"
+                        @click="staffSelect(searchUsers)"
                       />
                       <Button
                         icon="pi pi-trash"
@@ -116,68 +128,8 @@
                   </template>
                 </DataTable>
               </div>
-              <!-- <rs-card style="padding-top: 10px">
-                <div class="overflow-y-auto h-96">
-                  <div v-for="(user, index) in searchUsers" :key="index">
-                    <rs-card class="mb-5" @click="staffSelect(user)">
-                      <div
-                        class="
-                          product-content-wrapper
-                          flex-1 flex flex-col
-                          px-4
-                          mb-4
-                        "
-                      >
-                        <div class="product-title mt-4">
-                          <span
-                            class="block text-base font-semibold line-clamp-2"
-                            >{{ user.user_name }}
-                          </span>
-                        </div>
-                        <div class="product-content flex flex-col">
-                          <div
-                            class="
-                              product-price
-                              flex
-                              justify-between
-                              items-center
-                            "
-                          >
-                            <div class="truncate">
-                              <div class="text-sm text-black-500">
-                                {{ user.user_email }}
-                              </div>
-                              <div class="text-sm text-black-500">
-                                {{ user.user_phone }}
-                              </div>
-                            </div>
-                            <div style="padding-bottom: 2%">
-                              <rs-button
-                                class="
-                                  w-full
-                                  bg-heandshe
-                                  hover:bg-heandshe
-                                  mb-0.5
-                                "
-                                @click="editUser(user)"
-                              >
-                                Edit
-                              </rs-button>
-                              <rs-button
-                                variant="primary-outline"
-                                class="w-full h-10"
-                                @click="deleteUser(user)"
-                              >
-                                Delete
-                              </rs-button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </rs-card>
-                  </div>
-                </div>
-              </rs-card> -->
+              </div>
+            </rs-card>
             </div>
 
             <!-- UNTUK ATAS BAWAH -->
@@ -187,59 +139,35 @@
       </div>
     </div>
 
-    <rs-modal title="Staff" v-model="selectStaff" position="middle" size="full">
-      <FormKit
-        label="Fullname"
-        type="text"
-        :value="users1.user_name"
-        readonly
-      />
-      <FormKit
-        label="Phone No."
-        type="number"
-        :value="users1.user_phone"
-        readonly
-      />
-      <FormKit label="Email" type="email" :value="users1.user_email" readonly />
-      <FormKit
-        label="Password."
-        type="text"
-        :value="users1.user_password"
-        readonly
-      />
-      <FormKit
-        label="Pin Code"
-        help="for POS system login"
-        type="number"
-        :value="users1.user_pincode"
-        readonly
-      />
-      <FormKit
-        label="Address"
-        type="textarea"
-        :value="users1.user_address"
-        readonly
-      />
-      <FormKit
-        label="Date of Birth."
-        type="text"
-        :value="users1.dob"
-        readonly
-      />
-      <FormKit
-        label="Position"
-        type="text"
-        :value="users1.user_position"
-        readonly
-      /> </rs-modal
+    <rs-modal title="Staff" v-model="selectStaff" position="middle" size="md">
+      <label><strong>Name</strong></label>
+      <p>{{ users1.data.user_name }}</p>
+      <br />
+      <label><strong>Phone No.</strong></label>
+      <p>{{ users1.data.user_phone }}</p>
+      <br />
+      <label><strong>Email</strong></label>
+      <p>{{ users1.data.user_email }}</p>
+      <br />
+      <label><strong>Password</strong></label>
+      <p>{{ users1.data.user_password }}</p>
+      <br />
+      <label><strong>Pin Code</strong></label>
+      <p>{{ users1.data.user_pincode }}</p>
+      <br />
+      <label><strong>Address</strong></label>
+      <p>{{ users1.data.user_address }}</p>
+      <br />
+      <label><strong>Date of Birth.</strong></label>
+      <p>{{ users1.data.dob }}</p>
+      <br />
+      <label><strong>Position</strong></label>
+      <p>{{ users1.data.user_position }}</p>
+      <br />
+       </rs-modal
     ><!-- SELECT -->
 
-    <rs-modal
-      title="Add Staff"
-      v-model="modalPOS"
-      position="middle"
-      size="full"
-    >
+    <rs-modal title="Add Staff" v-model="modalPOS" position="middle" size="md">
       <FormKit label="Fullname" type="text" v-model="fullname" />
       <FormKit label="Phone No." type="number" v-model="phone" />
       <FormKit label="Email" type="email" v-model="email" />
@@ -266,7 +194,7 @@
       title="Edit Staff"
       v-model="modalEdit"
       position="middle"
-      size="full"
+      size="md"
     >
       <FormKit label="Fullname" type="text" v-model="users1.user_name" />
       <FormKit label="Phone No." type="number" v-model="users1.user_phone" />
@@ -298,8 +226,9 @@
       title="Delete User"
       v-model="modalDelete"
       position="middle"
-      size="full"
+      size="md"
     >
+    
       <p>Are you sure you want to delete this user?</p>
       <rs-button
         style="float: right"
@@ -312,7 +241,7 @@
         style="float: right"
         class="mx-1"
         variant="danger"
-        @click="UserDelete(users1)"
+        @click="UserDelete(users1.data.user_id)"
       >
         Yes
       </rs-button> </rs-modal
@@ -339,7 +268,7 @@ export default {
     DataTable,
     Column,
     Button,
-    'arbitrary': Menu,
+    arbitrary: Menu,
   },
   setup() {
     const users = ref([]);
@@ -367,6 +296,8 @@ export default {
       /* DATA V-MODEL */
       staffid: "",
       staffName: "",
+      staff_category:0,
+      staff_role:0,
 
       fullname: "",
       phone: null,
@@ -386,6 +317,7 @@ export default {
       show: false,
       outletDrop: false,
       menuDrop: false,
+      totalStaff: 0,
     };
   },
   async created() {
@@ -434,7 +366,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -444,6 +376,8 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+            this.staff_category = response.data.data[0].category;
+            this.staff_role = response.data.data[0].role
           }.bind(this)
         )
         .catch(function (error) {
@@ -458,7 +392,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getStaff" /*   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -467,20 +401,21 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            for (let i = 0; i < response.data.data.length; i++) {
+            for (let i = 0; i < response.data.data.staff_det.length; i++) {
               this.users.push({
-                user_id: response.data.data[i].user_id,
-                user_name: response.data.data[i].user_name,
-                user_phone: response.data.data[i].user_phone,
-                user_email: response.data.data[i].user_email,
-                user_password: response.data.data[i].user_password,
-                user_no: response.data.data[i].user_no,
-                user_pincode: response.data.data[i].user_pincode,
-                user_address: response.data.data[i].user_address,
-                user_dob: response.data.data[i].user_dob,
-                user_position: response.data.data[i].user_position,
+                user_id: response.data.data.staff_det[i].user_id,
+                user_name: response.data.data.staff_det[i].user_name,
+                user_phone: response.data.data.staff_det[i].user_phone,
+                user_email: response.data.data.staff_det[i].user_email,
+                user_password: response.data.data.staff_det[i].user_password,
+                user_no: response.data.data.staff_det[i].user_no,
+                user_pincode: response.data.data.staff_det[i].user_pincode,
+                user_address: response.data.data.staff_det[i].user_address,
+                user_dob: response.data.data.staff_det[i].user_dob,
+                user_position: response.data.data.staff_det[i].user_position,
               });
             }
+            this.totalStaff = response.data.data.staff_sum[0].sums;
           }.bind(this)
         )
         .catch(function (error) {
@@ -493,6 +428,7 @@ export default {
       this.modalEdit = true;
     },
 
+
     async deleteUser(user) {
       this.users1 = user;
       this.modalDelete = true;
@@ -501,11 +437,11 @@ export default {
     async UserDelete(users) {
       var axios = require("axios");
       var data = JSON.stringify({
-        user_id: users.user_id,
+        user_id: users,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/deleteStaff" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteStaff" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -587,10 +523,9 @@ export default {
         position: this.position,
         staffid: localStorage.staff,
       });
-      console.log("Insert data :", data);
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertStaff",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
         headers: {
           "Content-Type": "application/json",
         },
@@ -601,6 +536,14 @@ export default {
           function (response) {
             if (response.data.status == "Success") {
               this.modalPOS = false;
+              this.fullname = "";
+              this.phone = "";
+              this.email = "";
+              this.address = "";
+              this.password = "";
+              this.pincode = "";
+              this.dob = "";
+              this.position = "";
               alert(response.data.message);
               this.users.splice(0);
               this.getuser();

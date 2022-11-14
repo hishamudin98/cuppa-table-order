@@ -11,7 +11,11 @@
         <div class="flex gap-x-2 items-center">
           <div class="text-white">{{ this.staffName }}</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
+            <img
+              class="flex-1"
+              src="@/assets/images/logo/heandshe.jpg"
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -30,7 +34,9 @@
                   <strong>Number of transaction by outlet</strong>
                 </div>
                 <hr />
-                <div class="text-center py-8">{{ this.totalData }} transactions</div>
+                <div class="text-center py-8">
+                  {{ this.totalData }} transactions
+                </div>
               </rs-card>
             </div>
             <div class="inline-block w-1/2 pr-10">
@@ -47,7 +53,7 @@
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
-            <div style="display: flex; flex-direction: row; padding-top: 10px">
+            <!-- <div style="display: flex; flex-direction: row; padding-top: 10px">
               <div class="w-full h-1">
                 <FormKit
                   v-model="search"
@@ -68,8 +74,8 @@
                   class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
-              </div> -->
-            </div>
+              </div>
+            </div> -->
             <div class="">
               <rs-card style="margin-top: 10px">
                 <div>
@@ -144,7 +150,11 @@
                         />
                       </template>
                       <template #paginatorend>
-                        <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                        <Button
+                          type="button"
+                          icon="pi pi-cloud"
+                          class="p-button-text"
+                        />
                       </template>
                     </DataTable>
                   </div>
@@ -173,7 +183,11 @@
       />
       <FormKit type="date" v-model="start_date" label="Start Date" />
 
-      <rs-button style="float: right" variant="primary-outline" @click="filters()">
+      <rs-button
+        style="float: right"
+        variant="primary-outline"
+        @click="filters()"
+      >
         Clear
       </rs-button>
       <!-- <rs-button
@@ -231,7 +245,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
-import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 /* import Calendar from "primevue/calendar"; */
 
 export default {
@@ -242,7 +256,7 @@ export default {
     DataTable,
     Column,
     Button,
-    'arbitrary': Menu,
+    arbitrary: Menu,
     /* Calendar, */
   },
   setup() {
@@ -265,15 +279,17 @@ export default {
 
     const searchTrans = computed(() => {
       return trans.value.filter((trans) => {
-        return (
-          trans.trans_status
-            .toLowerCase()
-            .indexOf(trans_status.value.toLowerCase()) != -1 &&
-          trans.trans_method
-            .toLowerCase()
-            .indexOf(trans_method.value.toLowerCase()) != -1 &&
-            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase())
-        );
+        
+          return (
+            trans.trans_status
+              .toLowerCase()
+              .indexOf(trans_status.value.toLowerCase()) != -1 &&
+              trans.trans_method
+                .toLowerCase()
+                .indexOf(trans_method.value.toLowerCase()) != -1 &&
+            trans.trans_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1
+          );
+        
       });
     });
 
@@ -413,33 +429,46 @@ export default {
       await axios(config)
         .then(
           function (response) {
+            console.log(response.data.data.trans_details.length);
             for (let i = 0; i < response.data.data.trans_details.length; i++) {
               /* STATUS */
               if (response.data.data.trans_details[i].trans_status == 1) {
                 this.status = "Success";
-              } else if (response.data.data.trans_details[i].trans_status == 2) {
+              } else if (
+                response.data.data.trans_details[i].trans_status == 2
+              ) {
                 this.status = "Pending";
-              } else if (response.data.data.trans_details[i].trans_status == 3) {
+              } else if (
+                response.data.data.trans_details[i].trans_status == 3
+              ) {
                 this.status = "Failed";
-              } else if (response.data.data.trans_details[i].trans_status == 4) {
+              } else if (
+                response.data.data.trans_details[i].trans_status == 4
+              ) {
                 this.status = "Unknown";
-              } else if (response.data.data.trans_details[i].trans_status == 5) {
+              } else if (
+                response.data.data.trans_details[i].trans_status == 5
+              ) {
                 this.status = "Refund";
               }
               /* METHOD */
               if (response.data.data.trans_details[i].trans_method == 1) {
                 this.transMethod = "Cash";
-              } else if (response.data.data.trans_details[i].trans_method == 2) {
+              } else if (
+                response.data.data.trans_details[i].trans_method == 2
+              ) {
                 this.transMethod = "FPX";
-              } else if (response.data.data.trans_details[i].trans_method == 3) {
+              } else if (
+                response.data.data.trans_details[i].trans_method == 3
+              ) {
                 this.transMethod = "Credit/Debit Card";
               }
 
               this.trans.push({
                 trans_no: response.data.data.trans_details[i].trans_no,
-                trans_date: moment(response.data.data.trans_details[i].trans_date).format(
-                  "DD-MM-YYYY"
-                ),
+                trans_date: moment(
+                  response.data.data.trans_details[i].trans_date
+                ).format("DD-MM-YYYY"),
                 trans_amount: response.data.data.trans_details[i].trans_amount,
                 trans_status: this.status,
                 trans_method: this.transMethod,

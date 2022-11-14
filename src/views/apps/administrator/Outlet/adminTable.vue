@@ -171,7 +171,7 @@
       title="Add Table"
       v-model="tableADD"
       position="middle"
-      size="full"
+      size="md"
     >
       <FormKit label="Table No" type="number" v-model="tableno" />
       <FormKit label="Table Name" type="text" v-model="tablename" />

@@ -50,7 +50,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-full h-1">
+              <div class="w-11/12 h-1">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -63,6 +63,13 @@
                     input: 'h-10',
                   }"
                 />
+              </div>
+              <div class="w-1/12 h-2">
+                <rs-button
+                  @click="filter()"
+                  class="bg-heandshe hover:bg-heandshe"
+                  >Filter</rs-button
+                >
               </div>
             </div>
             <div class="">
@@ -80,6 +87,7 @@
                     >
                       <Column field="order_no" header="Order No"></Column>
                       <Column field="order_status" header="Status"></Column>
+                      
                       <Column
                         field="orderDatetime"
                         header="Order Date"
@@ -125,6 +133,17 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
+    <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
+      <FormKit
+        v-model="outlet_id"
+        type="radio"
+        label="Outlet"
+        :options="this.outlet"
+      />
+      <rs-button style="float: right" variant="primary-outline" @click="filters()">
+        Clear
+      </rs-button>
+    </rs-modal>
   </rs-layout>
 </template>
 <script>
@@ -137,10 +156,14 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
 import Menu from "@/views/apps/administrator/adminSidemenu.vue";
+import RsButton from "@/components/Button.vue";
+import RsModal from "@/components/Modal.vue";
 
 export default {
   name: "AdminDashboard",
   components: {
+    RsButton,
+    RsModal,
     DataTable,
     Column,
     Button,
@@ -149,29 +172,47 @@ export default {
   setup() {
     const order = ref([]);
     const search = ref("");
+    const filterModal = ref(false);
+    const outlet = ref([]);
+    const outlet_id = ref("");
 
     const searchOrder = computed(() => {
       return order.value.filter((orders) => {
         return (
-          orders.order_customer
-            .toLowerCase()
-            .indexOf(search.value.toLowerCase()) != -1 ||
-          orders.staffName.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1
+          orders.outlet_id.toString().indexOf(outlet_id.value.toString()) != -1  &&
+          orders.order_customer.toLowerCase().indexOf(search.value.toLowerCase()) != -1 /* ||
+          orders.staffName.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
+          orders.order_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1  */
         );
       });
     });
+
     const formatPrice = (price) => {
       return parseFloat(price)
         .toFixed(2)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    const filters = () => {
+      outlet_id.value = "";
+      filterModal.value = false;
+    };
+
+    const filter = () => {
+      filterModal.value = true;
+    };
+
     return {
       search,
       searchOrder,
       order,
+      filterModal,
+      outlet,
+      outlet_id,
       formatPrice,
+      filter,
+      filters,
     };
   },
   data() {
@@ -181,11 +222,13 @@ export default {
       totalData: 0,
       sumOrder: 0,
       status: "",
+      outlet_details: "",
     };
   },
   async created() {
     this.getdata();
     this.getOrder();
+    this.getOutlethq();
   },
 
   methods: {
@@ -207,6 +250,40 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getOutlethq() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
+      var config = {
+        method: "post",
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.outlet_details = response.data.data.Outlet_det;
+            for (let i = 0; i < this.outlet_details.length; i++) {
+              this.outlet.push({
+                value: this.outlet_details[i].outlet_id,
+                label: this.outlet_details[i].outlet_name,
+              });
+            }
+            this.totalData = this.outlet.length;
+
+            /* this.sumShifts = response.data.data.Shift_sum[0].sums */
           }.bind(this)
         )
         .catch(function (error) {
@@ -252,6 +329,7 @@ export default {
                   response.data.data.Order_det[i].order_totalAmount,
                 order_customer: response.data.data.Order_det[i].order_customer,
                 staffName: response.data.data.Order_det[i].staff_name,
+                outlet_id: response.data.data.Order_det[i].outlet_id,
               });
             }
             this.totalData = this.order.length;

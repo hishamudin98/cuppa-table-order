@@ -3,6 +3,7 @@
     <aside aria-label="Sidebar">
       <div class="h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
         <ul class="space-y-2">
+          <!-- DASHBOARD -->
           <li>
             <router-link :to="{ name: 'dashboard' }">
               <a
@@ -19,13 +20,13 @@
                   dark:text-white
                   hover:bg-gray-300
                 "
-                
               >
                 <span class="ml-3">Dashboard</span>
               </a>
             </router-link>
           </li>
-          <li>
+          <!-- OUTLET -->
+          <li v-if="this.staff_role != 3 || this.staff_category != 3">
             <div>
               <a
                 href="#"
@@ -49,7 +50,7 @@
             <div v-if="this.outletDrop == true">
               <ul>
                 <li>
-                  <router-link :to="{ name: 'admin-report-s' }">
+                  <router-link :to="{ name: 'admin-outlet' }">
                     <a
                       href="#"
                       class="
@@ -121,6 +122,7 @@
               </ul>
             </div>
           </li>
+          <!-- ORDER -->
           <li>
             <router-link :to="{ name: 'admin-order' }">
               <a
@@ -142,8 +144,7 @@
               </a>
             </router-link>
           </li>
-          
-
+          <!-- MENU -->
           <li>
             <div>
               <a
@@ -216,6 +217,7 @@
               </ul>
             </div>
           </li>
+          <!-- USER -->
           <li>
             <router-link :to="{ name: 'admin-staff' }">
               <a
@@ -237,7 +239,8 @@
               </a>
             </router-link>
           </li>
-          <li>
+          <!-- MEMBERSHIP -->
+          <li v-if="this.staff_role != 3 || this.staff_category != 3" >
             <router-link :to="{ name: 'admin-user' }">
               <a
                 href="#"
@@ -258,7 +261,8 @@
               </a>
             </router-link>
           </li>
-          <li>
+          <!-- RAW MATERIAL -->
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'dashboard' }">
               <a
                 href="#"
@@ -279,8 +283,8 @@
               </a>
             </router-link>
           </li>
-
-          <li>
+          <!-- SUPPLIER -->
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'admin-staff' }">
               <a
                 href="#"
@@ -301,7 +305,7 @@
               </a>
             </router-link>
           </li>
-
+          <!-- REPORTS -->
           <li>
             <div>
               <a
@@ -374,6 +378,7 @@
               </ul>
             </div>
           </li>
+          <!-- LOGOUT -->
           <li>
             <router-link :to="{ name: 'login' }">
               <a
@@ -407,9 +412,13 @@ export default {
       show: false,
       outletDrop: false,
       menuDrop: false,
+      staff_category:0,
+      staff_role:0,
     };
   },
-  async created() {},
+  async created() {
+    this.getdata();
+  },
 
   methods: {
     async dropdownMenu() {
@@ -432,6 +441,31 @@ export default {
       } else {
         this.show = false;
       }
+    },
+
+    async getdata() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.staff_category = response.data.data[0].category;
+            this.staff_role = response.data.data[0].role
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

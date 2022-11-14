@@ -98,7 +98,8 @@
                           }"
                         />
                       </div>
-                      <div class="w-1/12 h-12 mt-1">
+                      <div v-if="this.staff_role != 3 || this.staff_category != 3" 
+                      class="w-1/12 h-12 mt-1" >
                         <rs-button
                           @click="addMenu()"
                           class="bg-heandshe hover:bg-heandshe"
@@ -212,6 +213,13 @@
         v-model="category"
         :options="this.categories"
       />
+      <FormKit
+        type="checkbox"
+        label="Outlet Available"
+        v-model="outlet"
+        :options="this.outlets"
+        
+      />
       <FormKit v-model="value" type="checkbox" label="Variants?" />
       <rs-button style="float: right" @click="nextPage()"> Save </rs-button>
     </rs-modal>
@@ -314,19 +322,24 @@
       <label><strong>Menu Price (RM)</strong></label>
       <p>{{ formatPrice(menuedit.price) }}</p>
       <br />
-      
-      <div v-if="menuedit.variants[0].label != ''">
+      <div v-if="menuedit.variants[0] != null">
         <label><strong>Variants</strong></label>
-        <div v-for="(product, index) in menuedit.variants[0].label" :key="index">
-          {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
+        <div
+          v-for="(product, index) in menuedit.variants[0].label"
+          :key="index"
+        >
+          {{ index + 1 }}. {{ product.name }} - RM
+          {{ formatPrice(product.price) }}
         </div>
-        <br />
-        <hr />
-        <br />
-        <div v-if="menuedit.variants[1] != null">
-        <div v-for="(product, index) in menuedit.variants[1].label" :key="index">
-          {{index+1}}. {{product.name}} - RM {{formatPrice(product.price)}}
-        </div>
+      </div>
+      <hr />
+      <div v-if="menuedit.variants[1] != null">
+        <div
+          v-for="(product, index) in menuedit.variants[1].label"
+          :key="index"
+        >
+          {{ index + 1 }}. {{ product.name }} - RM
+          {{ formatPrice(product.price) }}
         </div>
       </div>
     </rs-modal>
@@ -352,12 +365,13 @@ export default {
     DataTable,
     Column,
     Button,
-    "arbitrary": Menu,
+    arbitrary: Menu,
   },
   setup() {
     const users = ref([]);
     const search = ref("");
     const categories = ref([]);
+    const outlets = ref([]);
 
     const searchUsers = computed(() => {
       return users.value.filter((user) => {
@@ -376,6 +390,7 @@ export default {
     return {
       search,
       categories,
+      outlets,
       searchUsers,
       users,
       formatPrice,
@@ -388,7 +403,10 @@ export default {
       /* DATA V-MODEL */
       staffid: "",
       staffName: "",
+      staff_category:0,
+      staff_role:0,
       valueCategory: [],
+      valueOutlet: [],
       variansi: [],
       /* FORM V-MODAL */
       menu_name: "",
@@ -421,35 +439,16 @@ export default {
       show: false,
       outletDrop: false,
       menuDrop: false,
+      file: "",
     };
   },
   async created() {
     this.getdata();
     this.getMenu();
     this.getCategories();
+    this.getOutlet();
   },
   methods: {
-    async dropdownMenu() {
-      if (this.menuDrop == false) {
-        this.menuDrop = true;
-      } else {
-        this.menuDrop = false;
-      }
-    },
-    async dropdownOutlet() {
-      if (this.outletDrop == false) {
-        this.outletDrop = true;
-      } else {
-        this.outletDrop = false;
-      }
-    },
-    async triggerDropdown() {
-      if (this.show == false) {
-        this.show = true;
-      } else {
-        this.show = false;
-      }
-    },
     async select(event) {
       this.menuedit = event.data;
       if (this.showMenuModal == false) {
@@ -462,6 +461,37 @@ export default {
     async setAltImg(event) {
       event.target.src =
         "https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png";
+    },
+
+    async getOutlet() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutlet",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.valueOutlet.push({
+                outlet_id: response.data.data[i].outlet_id,
+                outlet_name: response.data.data[i].outlet_name,
+              });
+              this.outlets.push({
+                label: response.data.data[i].outlet_name,
+                value: this.valueOutlet,
+              });
+              this.valueOutlet = [];
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     async getCategories() {
@@ -503,7 +533,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -513,6 +543,8 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+            this.staff_category = response.data.data[0].category;
+            this.staff_role = response.data.data[0].role
           }.bind(this)
         )
         .catch(function (error) {
@@ -571,7 +603,6 @@ export default {
               });
               this.variansi = [];
             }
-            console.log(this.users);
           }.bind(this)
         )
         .catch(function (error) {
@@ -636,13 +667,20 @@ export default {
         this.editMenuModal = false;
       }
     },
+
     async insert() {
       var axios = require("axios");
       var data = null;
+
+      if (this.menu_images != "") {
+        this.file = this.menu_images[0].file;
+      } else {
+        this.file = null;
+      }
       if (this.value == false) {
         data = JSON.stringify({
           menu_name: this.menu_name,
-          menu_image: this.menu_images,
+          menu_image: this.file,
           menu_price: this.menu_price,
           menu_station: this.menu_station,
           menu_category: this.category,
@@ -651,16 +689,17 @@ export default {
       } else {
         data = JSON.stringify({
           menu_name: this.menu_name,
-          menu_image: this.menu_images,
+          menu_image: this.file,
           menu_price: this.menu_price,
           menu_station: this.menu_station,
           menu_category: this.category,
           menu_variant: this.variants,
         });
       }
+
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertMenu",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertMenu",
         headers: {
           "Content-Type": "application/json",
         },
@@ -696,7 +735,8 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            alert(response.message);
+            alert(response.data.message);
+            this.editMenuModal = false;
           }.bind(this)
         )
         .catch(function (error) {
