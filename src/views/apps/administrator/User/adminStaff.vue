@@ -366,7 +366,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -392,7 +392,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getStaff" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -441,7 +441,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/deleteStaff" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/deleteStaff" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -525,7 +525,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertStaff",
         headers: {
           "Content-Type": "application/json",
         },

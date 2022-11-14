@@ -420,7 +420,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getTransaction" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getTransaction" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

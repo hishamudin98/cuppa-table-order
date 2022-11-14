@@ -273,7 +273,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -325,7 +325,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertOutlet",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertOutlet",
         headers: {
           "Content-Type": "application/json",
         },
@@ -366,7 +366,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/updateOutlet",
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateOutlet",
         headers: {
           "Content-Type": "application/json",
         },

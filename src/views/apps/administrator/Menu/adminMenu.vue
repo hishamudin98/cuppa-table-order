@@ -467,7 +467,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutlet",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
         headers: {
           "Content-Type": "application/json",
         },
@@ -533,7 +533,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/dashboard" /*  */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -699,7 +699,7 @@ export default {
 
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertMenu",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertMenu",
         headers: {
           "Content-Type": "application/json",
         },
