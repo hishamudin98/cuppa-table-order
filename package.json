@@ -62,6 +62,7 @@
         "vue-session": "^1.0.0",
         "vue-sessionstorage": "^1.0.0",
         "vue-simple-password-meter": "^1.1.0",
+        "vue-taggable-select": "^1.0.1",
         "vue-toastification": "^2.0.0-rc.5",
         "vue3-apexcharts": "^1.4.1",
         "vue3-click-away": "^1.2.4",

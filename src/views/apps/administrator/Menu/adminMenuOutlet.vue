@@ -4,7 +4,14 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <div class="welcome text-lg font-semibold text-white">
-            Outlet Management
+             <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'admin-menu',
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"> </vue-feather>Menu Outlet Management
+             </router-link>
           </div>
         </div>
 
@@ -70,7 +77,7 @@
                 <rs-button
                   @click="addOutlet()"
                   class="bg-heandshe hover:bg-heandshe"
-                  >Add Outlet</rs-button
+                  >Assign Outlet Price</rs-button
                 >
               </div>
             </div>
@@ -90,8 +97,10 @@
                       <Column field="outlet_code" header="Outlet Code"></Column>
                       <Column field="outlet_name" header="Outlet Name"></Column>
                       <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
-                      <Column field="outlet_phone" header="Phone No."></Column>
-                      <Column field="outlet_address" header="Address"></Column>
+                      <Column field="" header="Price ( RM )"><template #body="">
+                      6.00
+                    </template></Column>
+                      <!-- <Column field="outlet_address" header="Address"></Column>
                       <Column field="outlet_email" header="Email"></Column>
                       <Column
                         :exportable="false"
@@ -109,14 +118,14 @@
                             icon="pi pi-table"
                             class="p-button-rounded p-button-success"
                           />
-                          </router-link>
+                          </router-link> -->
                           <!-- <Button
                             icon="pi pi-trash"
                             class="p-button-rounded p-button-warning"
                             @click="deleteTable(searchOutlet)"
                           /> -->
-                        </template>
-                      </Column>
+                       <!--  </template>
+                      </Column> -->
 
                       <template #paginatorstart>
                         <Button
@@ -145,47 +154,18 @@
       </div>
     </div>
     <rs-modal
-      title="Add Outlet"
+      title="Assign Outlet Price"
       v-model="modalInsert"
       position="middle"
       size="md"
     >
-      <FormKit label="Outlet Name" type="text" v-model="outlet_name" />
-      <FormKit label="Phone No." type="number" v-model="outlet_phone" />
-      <FormKit label="Email" type="email" v-model="outlet_email" />
-      <FormKit label="Postcode" type="number" v-model="outlet_postcode" />
-      <FormKit label="Address" type="textarea" v-model="outlet_address" />
-      <FormKit
-        type="file"
-        label="Images"
-        v-model="outlet_images"
-        accept=".jpg, .png, .jpeg"
-      />
-      <hr />
-      <br>
-      <label><strong>Social Media's URL</strong></label>
-      <br />
-      <FormKit
-        type="url"
-        label="Facebook"
-        placeholder="https://www.example.com..."
-        validation="url"
-      />
-      <FormKit
-        type="url"
-        label="Instagram"
-        placeholder="https://www.example.com..."
-      />
-      <FormKit
-        type="url"
-        label="Twitter"
-        placeholder="https://www.example.com..."
-      />
-      <FormKit
-        type="url"
-        label="Official Website"
-        placeholder="https://www.example.com..."
-      />
+      <label><strong>Outlet Available</strong></label>
+      <vue-taggable-select
+        v-model="outlet"
+        :options="this.outlets"
+    ></vue-taggable-select>
+    <br>
+    <FormKit type="number" label="Menu Price By Outlet ( RM )" v-model="menu_price" />
       <rs-button style="float: right" @click="insertOutlet()"> Save </rs-button>
     </rs-modal>
     <!-- EDIT -->
@@ -203,7 +183,7 @@
         type="textarea"
         v-model="outlet1.outlet_address"
       />
-      <rs-button style="float: right" @click="editOutlets(outlet1)">
+      <rs-button style="float: right" @click="modalInsert=false">
         Save
       </rs-button>
     </rs-modal>
@@ -221,6 +201,7 @@ import RsModal from "@/components/Modal.vue";
 import "primeicons/primeicons.css";
 /* import moment from "moment"; */
 import Menu from "@/views/apps/administrator/adminSidemenu.vue";
+import VueTaggableSelect from "vue-taggable-select";
 
 export default {
   name: "AdminDashboard",
@@ -231,10 +212,12 @@ export default {
     Column,
     Button,
     arbitrary: Menu,
+    VueTaggableSelect,
   },
   setup() {
     const outlet = ref([]);
     const search = ref("");
+    const outlets = ref([]);
 
     const searchOutlet = computed(() => {
       return outlet.value.filter((shifts) => {
@@ -258,6 +241,7 @@ export default {
       search,
       searchOutlet,
       outlet,
+      outlets,
       formatPrice,
     };
   },
@@ -283,6 +267,7 @@ export default {
   async created() {
     this.getdata();
     this.getOutlethq();
+    this.getOutlet();
   },
 
   methods: {
@@ -304,6 +289,33 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getOutlet() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutlet",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.outlets.push(/* {
+                label:  */response.data.data[i].outlet_name
+                /* value: this.valueOutlet, */
+              /* } */);
+              this.valueOutlet = [];
+            }
           }.bind(this)
         )
         .catch(function (error) {

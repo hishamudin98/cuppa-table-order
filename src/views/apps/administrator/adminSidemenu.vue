@@ -72,7 +72,7 @@
                     </a>
                   </router-link>
                 </li>
-                <li>
+                <!-- <li>
                   <router-link :to="{ name: 'admin-table' }">
                     <a
                       href="#"
@@ -118,7 +118,7 @@
                       >
                     </a>
                   </router-link>
-                </li>
+                </li> -->
               </ul>
             </div>
           </li>
@@ -191,7 +191,7 @@
                     </a>
                   </router-link>
                 </li>
-                <li>
+                <!-- <li>
                   <router-link :to="{ name: 'admin-menu' }">
                     <a
                       href="#"
@@ -213,13 +213,13 @@
                       >
                     </a>
                   </router-link>
-                </li>
+                </li> -->
               </ul>
             </div>
           </li>
           <!-- USER -->
           <li>
-            <router-link :to="{ name: 'admin-staff' }">
+            <router-link :to="{ name: 'admin-outlet-staff' }">
               <a
                 href="#"
                 class="

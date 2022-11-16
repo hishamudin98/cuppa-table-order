@@ -4,7 +4,15 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <div class="welcome text-lg font-semibold text-white">
-            User Management
+             <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'admin-outlet-staff',
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"> </vue-feather>User Management
+            </router-link>
+           
           </div>
         </div>
 
@@ -107,7 +115,7 @@
                       />
                       <Button
                         icon="pi pi-trash"
-                        class="p-button-rounded p-button-warning"
+                        class="p-button-rounded p-button-danger"
                         @click="deleteUser(searchUsers)"
                       />
                     </template>
@@ -318,9 +326,11 @@ export default {
       outletDrop: false,
       menuDrop: false,
       totalStaff: 0,
+      outlet:0,
     };
   },
   async created() {
+    this.outlet = this.$route.params.outletid;
     this.staffid = localStorage.staff;
     window.addEventListener("beforeunload", () => {
       localStorage.setItem("staff", this.staffid);
@@ -389,10 +399,11 @@ export default {
       var axios = require("axios");
       var data = JSON.stringify({
         staffid: localStorage.staff,
+        outletid: this.outlet,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getStaff" /*   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

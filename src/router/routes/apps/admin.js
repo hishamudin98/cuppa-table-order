@@ -15,7 +15,7 @@ export default [
       component: () => import("@/views/apps/administrator/Membership/adminUser.vue"),
     },
     {
-      path: "/admin/staff",
+      path: "/admin/staff/:outletid?",
       name: "admin-staff",
       component: () => import("@/views/apps/administrator/User/adminStaff.vue"),
     },
@@ -53,6 +53,16 @@ export default [
       path: "/admin/outlet",
       name: "admin-outlet",
       component: () => import("@/views/apps/administrator/Outlet/adminOutlet.vue"),
+    },
+    {
+      path: "/admin/staff/outlet",
+      name: "admin-outlet-staff",
+      component: () => import("@/views/apps/administrator/User/adminOutletStaff.vue"),
+    },
+    {
+      path: "/admin/menu/:menuid?",
+      name: "admin-menu-outlet",
+      component: () => import("@/views/apps/administrator/Menu/adminMenuOutlet.vue"),
     },
     /*{
       path: "/order/previous/:orderID?",

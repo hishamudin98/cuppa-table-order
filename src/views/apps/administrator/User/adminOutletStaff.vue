@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <div class="welcome text-lg font-semibold text-white">
-            Outlet Management
+            Outlet 
           </div>
         </div>
 
@@ -52,7 +52,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-11/12 h-1">
+              <div class="w-full h-1">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -66,13 +66,13 @@
                   }"
                 />
               </div>
-              <div class="w-1/12">
+              <!-- <div class="w-1/12">
                 <rs-button
                   @click="addOutlet()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Add Outlet</rs-button
                 >
-              </div>
+              </div> -->
             </div>
             <div class="">
               <rs-card style="margin-top: 40px">
@@ -90,25 +90,26 @@
                       <Column field="outlet_code" header="Outlet Code"></Column>
                       <Column field="outlet_name" header="Outlet Name"></Column>
                       <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
-                      <Column field="outlet_phone" header="Phone No."></Column>
+                      <!-- <Column field="outlet_phone" header="Phone No."></Column>
                       <Column field="outlet_address" header="Address"></Column>
-                      <Column field="outlet_email" header="Email"></Column>
+                      <Column field="outlet_email" header="Email"></Column> -->
                       <Column
                         :exportable="false"
                         style="min-width: 8rem"
                         header="Actions"
                       >
                         <template #body="searchOutlet">
-                          <Button
+                          <!-- <Button
                             icon="pi pi-pencil"
                             class="p-button-rounded p-button-success"
                             @click="editOutlet(searchOutlet)"
-                          />
-                          <router-link :to="{ name: 'admin-table' }">
+                          /> -->
+                          <router-link :to="{ name: 'admin-staff', params: { outletid: searchOutlet.data.outlet_id } }">
                            <Button
-                            icon="pi pi-table"
+                            icon="pi pi-users"
                             class="p-button-rounded p-button-success"
                           />
+                          
                           </router-link>
                           <!-- <Button
                             icon="pi pi-trash"

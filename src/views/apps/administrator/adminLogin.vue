@@ -102,7 +102,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/login" /*  */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/login" /*  */,
         headers: {
           "Content-Type": "application/json",
         },

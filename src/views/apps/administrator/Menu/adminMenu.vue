@@ -139,15 +139,21 @@
                     header="Menu Code"
                     :sortable="true"
                   ></Column>
-                  <Column :exportable="false" style="min-width: 8rem">
+                  <Column :exportable="false" style="min-width: 8rem" header="Actions">
                     <template #body="searchUsers">
                       <Button
                         icon="pi pi-pencil"
                         class="p-button-rounded p-button-success mx-2"
                         @click="editMenu(searchUsers)"
                       />
+                      <router-link :to="{ name: 'admin-menu-outlet', params: { menuid: searchUsers.data.menuid } }">
                       <Button
-                        icon="pi pi-folder-open"
+                        icon="pi pi-building"
+                        class="p-button-rounded p-button-success mx-5"
+                      />
+                      </router-link>
+                      <Button
+                        icon="pi pi-box"
                         class="p-button-rounded p-button-success mx-5"
                         @click="select(searchUsers)"
                       />
@@ -206,20 +212,21 @@
           { label: 'Bakery', value: 3 },
         ]"
       />
-      <FormKit
+      <!-- <FormKit
         type="select"
         label="Category"
         name="categories"
         v-model="category"
         :options="this.categories"
-      />
-      <FormKit
-        type="checkbox"
-        label="Outlet Available"
-        v-model="outlet"
-        :options="this.outlets"
-        
-      />
+      /> -->
+      <label><strong>Menu Category</strong></label>
+      <vue-taggable-select
+        v-model="fruit"
+        :options="this.categories"
+        placeholder="Select Category"
+    ></vue-taggable-select>
+      
+      <br />
       <FormKit v-model="value" type="checkbox" label="Variants?" />
       <rs-button style="float: right" @click="nextPage()"> Save </rs-button>
     </rs-modal>
@@ -319,29 +326,17 @@
       <label><strong>Menu Name</strong></label>
       <p>{{ menuedit.name }}</p>
       <br />
-      <label><strong>Menu Price (RM)</strong></label>
+      <label><strong>Menu Base Price (RM)</strong></label>
       <p>{{ formatPrice(menuedit.price) }}</p>
       <br />
-      <div v-if="menuedit.variants[0] != null">
-        <label><strong>Variants</strong></label>
-        <div
-          v-for="(product, index) in menuedit.variants[0].label"
-          :key="index"
-        >
-          {{ index + 1 }}. {{ product.name }} - RM
-          {{ formatPrice(product.price) }}
-        </div>
-      </div>
-      <hr />
-      <div v-if="menuedit.variants[1] != null">
-        <div
-          v-for="(product, index) in menuedit.variants[1].label"
-          :key="index"
-        >
-          {{ index + 1 }}. {{ product.name }} - RM
-          {{ formatPrice(product.price) }}
-        </div>
-      </div>
+      <label><strong>Outlet Available</strong></label>
+      <vue-taggable-select
+        v-model="outlet"
+        :options="this.outlets"
+    ></vue-taggable-select>
+    <br>
+    <FormKit type="number" label="Menu Price By Outlet ( RM )" v-model="menu_price" />
+    <rs-button style="float: right" @click="showMenuModal=false"> Save </rs-button>
     </rs-modal>
   </rs-layout>
 </template>
@@ -356,6 +351,7 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from "@/views/apps/administrator/adminSidemenu.vue";
+import VueTaggableSelect from "vue-taggable-select";
 
 export default {
   name: "AdminDashboard",
@@ -366,6 +362,7 @@ export default {
     Column,
     Button,
     arbitrary: Menu,
+    VueTaggableSelect,
   },
   setup() {
     const users = ref([]);
@@ -467,7 +464,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutlet",
         headers: {
           "Content-Type": "application/json",
         },
@@ -481,10 +478,10 @@ export default {
                 outlet_id: response.data.data[i].outlet_id,
                 outlet_name: response.data.data[i].outlet_name,
               });
-              this.outlets.push({
-                label: response.data.data[i].outlet_name,
-                value: this.valueOutlet,
-              });
+              this.outlets.push(/* {
+                label:  */response.data.data[i].outlet_name
+                /* value: this.valueOutlet, */
+              /* } */);
               this.valueOutlet = [];
             }
           }.bind(this)
@@ -514,10 +511,10 @@ export default {
                 category_id: response.data.data[i].category_id,
                 category_name: response.data.data[i].category_name,
               });
-              this.categories.push({
-                label: response.data.data[i].category_name,
-                value: this.valueCategory,
-              });
+              this.categories.push(
+                /* label:  */response.data.data[i].category_name,
+               /*  value: this.valueCategory, */
+              );
               this.valueCategory = [];
             }
           }.bind(this)
@@ -683,7 +680,7 @@ export default {
           menu_image: this.file,
           menu_price: this.menu_price,
           menu_station: this.menu_station,
-          menu_category: this.category,
+          /* menu_category: this.category, */
           menu_variant: null,
         });
       } else {
@@ -692,14 +689,14 @@ export default {
           menu_image: this.file,
           menu_price: this.menu_price,
           menu_station: this.menu_station,
-          menu_category: this.category,
+          /* menu_category: this.category, */
           menu_variant: this.variants,
         });
       }
 
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertMenu",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertMenu",
         headers: {
           "Content-Type": "application/json",
         },

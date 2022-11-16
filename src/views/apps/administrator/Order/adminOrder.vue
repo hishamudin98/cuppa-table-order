@@ -49,6 +49,7 @@
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
+            <div v-if="outlet_id != ''">Filter By : {{order_status}} , {{order_from}}</div>
             <div style="display: flex; flex-direction: row; padding-top: 10px">
               <div class="w-11/12 h-1">
                 <FormKit
@@ -86,11 +87,12 @@
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
                       <Column field="order_no" header="Order No"></Column>
-                      <Column field="order_status" header="Status"></Column>
-                      
+                      <Column field="order_status" header="Status" :sortable="true"></Column>
+
                       <Column
                         field="orderDatetime"
                         header="Order Date"
+                        :sortable="true"
                       ></Column>
                       <Column
                         field="order_totalAmount"
@@ -106,6 +108,19 @@
                         header="Customer Name"
                       ></Column>
                       <Column field="staffName" header="Staff Name"></Column>
+                      <Column
+                        :exportable="false"
+                        style="min-width: 8rem"
+                        header="Actions"
+                      >
+                        <template #body="searchOrder">
+                          <Button
+                            icon="pi pi-folder"
+                            class="p-button-rounded p-button-success"
+                            @click="selectOrder(searchOrder)"
+                          />
+                        </template>
+                      </Column>
 
                       <template #paginatorstart>
                         <Button
@@ -133,6 +148,36 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
+    <rs-modal title="Add Staff" v-model="show" position="middle" size="md">
+      
+      <label><strong>Order No.</strong></label>
+      <br />
+      {{this.data.order_no}}
+      <br />
+      <label><strong>Date</strong></label>
+      <br />
+      {{this.data.orderDatetime}}
+      <br />
+      <label><strong>Order Status</strong></label>
+      <br />
+      {{this.data.order_status}}
+      <br />
+      <label><strong>Order Total ( RM )</strong></label>
+      <br />
+      {{this.data.order_totalAmount}}
+      <br />
+      <label><strong>Order From </strong></label>
+      <br />
+      {{this.data.order_from}}
+      <br />
+      <label><strong>Order Details</strong></label>
+      <div v-for="(input, k) in this.data.order_detail" :key="k">
+        <p>
+          {{ input.menu_name }} x {{ input.menu_quantity }} - RM
+          {{ formatPrice(input.menu_price) }}
+        </p>
+      </div>
+       </rs-modal>
     <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
       <FormKit
         v-model="outlet_id"
@@ -140,7 +185,25 @@
         label="Outlet"
         :options="this.outlet"
       />
-      <rs-button style="float: right" variant="primary-outline" @click="filters()">
+      <FormKit
+        v-model="order_status"
+        type="radio"
+        label="Order Status"
+        :options="['Cancelled', 'Completed', '	Pending', '	In Cart', 'Preparing']"
+      />
+      <FormKit
+        v-model="order_from"
+        type="radio"
+        label="Order From"
+        :options="['POS', 'Table']"
+      />
+      <FormKit type="date" v-model="start_date" label="From Date" />
+      <FormKit type="date" v-model="end_date" label="To Date" />
+      <rs-button
+        style="float: right"
+        variant="primary-outline"
+        @click="filters()"
+      >
         Clear
       </rs-button>
     </rs-modal>
@@ -175,12 +238,23 @@ export default {
     const filterModal = ref(false);
     const outlet = ref([]);
     const outlet_id = ref("");
+    const order_status = ref("");
+    const order_from = ref("");
 
     const searchOrder = computed(() => {
       return order.value.filter((orders) => {
         return (
-          orders.outlet_id.toString().indexOf(outlet_id.value.toString()) != -1  &&
-          orders.order_customer.toLowerCase().indexOf(search.value.toLowerCase()) != -1 /* ||
+          orders.outlet_id.toString().indexOf(outlet_id.value.toString()) !=
+            -1 &&
+          orders.order_status
+            .toString()
+            .indexOf(order_status.value.toString()) != -1 &&
+          orders.order_from
+            .toString()
+            .indexOf(order_from.value.toString()) != -1 &&
+          orders.order_customer
+            .toLowerCase()
+            .indexOf(search.value.toLowerCase()) != -1 /* ||
           orders.staffName.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
           orders.order_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1  */
         );
@@ -210,6 +284,8 @@ export default {
       filterModal,
       outlet,
       outlet_id,
+      order_status,
+      order_from,
       formatPrice,
       filter,
       filters,
@@ -223,6 +299,8 @@ export default {
       sumOrder: 0,
       status: "",
       outlet_details: "",
+      data:"",
+      show: false,
     };
   },
   async created() {
@@ -257,6 +335,12 @@ export default {
         });
     },
 
+    async selectOrder(searchOrder)
+    {
+      this.data = searchOrder.data;
+      this.show = true;
+    },
+
     async getOutlethq() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -265,7 +349,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
+          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -298,7 +382,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getOrder" /*   */,
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOrder" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -330,6 +414,8 @@ export default {
                 order_customer: response.data.data.Order_det[i].order_customer,
                 staffName: response.data.data.Order_det[i].staff_name,
                 outlet_id: response.data.data.Order_det[i].outlet_id,
+                order_detail: JSON.parse(response.data.data.Order_det[i].order_detail),
+                order_from: response.data.data.Order_det[i].order_from,
               });
             }
             this.totalData = this.order.length;
