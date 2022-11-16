@@ -11,16 +11,9 @@ export default [{
             import ("@/views/apps/administrator/adminDashboard.vue"),
     },
     {
-<<<<<<< HEAD
       path: "/admin/staff/:outletid?",
       name: "admin-staff",
       component: () => import("@/views/apps/administrator/User/adminStaff.vue"),
-=======
-        path: "/admin/user",
-        name: "admin-user",
-        component: () =>
-            import ("@/views/apps/administrator/Membership/adminUser.vue"),
->>>>>>> ff3dba786c30b697ad5c27cff2c081efe6b4ed8e
     },
     {
         path: "/admin/staff",
