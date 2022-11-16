@@ -25,6 +25,7 @@
           </li>
           <li>
             <div>
+               <router-link :to="{ name: 'admin-outlet' }">
               <a href="#" class="
                   flex
                   items-center
@@ -36,9 +37,10 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                " @click="dropdownOutlet()">
+                "><!--  @click="dropdownOutlet()" -->
                 <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
               </a>
+               </router-link>
             </div>
             <div v-if="this.outletDrop == true">
               <ul>

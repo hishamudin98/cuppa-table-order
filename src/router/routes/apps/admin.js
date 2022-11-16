@@ -11,6 +11,12 @@ export default [{
     import("@/views/apps/administrator/adminDashboard.vue"),
 },
 {
+  path: "/admin/outlet",
+  name: "admin-outlet",
+  component: () =>
+    import("@/views/apps/administrator/Outlet/adminOutlet.vue"),
+},
+{
   path: "/admin/staff/:outletid?",
   name: "admin-staff-outlet",
   component: () => import("@/views/apps/administrator/User/adminStaff.vue"),

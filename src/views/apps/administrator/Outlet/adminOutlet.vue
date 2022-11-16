@@ -167,6 +167,11 @@
       <br />
       <FormKit
         type="url"
+        label="Official Website"
+        placeholder="https://www.example.com..."
+      />
+      <FormKit
+        type="url"
         label="Facebook"
         placeholder="https://www.example.com..."
         validation="url"
@@ -179,11 +184,6 @@
       <FormKit
         type="url"
         label="Twitter"
-        placeholder="https://www.example.com..."
-      />
-      <FormKit
-        type="url"
-        label="Official Website"
         placeholder="https://www.example.com..."
       />
       <rs-button style="float: right" @click="insertOutlet()"> Save </rs-button>

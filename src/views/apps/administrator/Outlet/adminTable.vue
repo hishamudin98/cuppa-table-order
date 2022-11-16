@@ -4,7 +4,14 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <div class="welcome text-lg font-semibold text-white">
-            Table Management
+            <router-link
+              class="flex items-center justify-center"
+              :to="{
+                name: 'admin-outlet',
+              }"
+            >
+              <vue-feather class="text-white" type="chevron-left"> </vue-feather>Table Management
+            </router-link>
           </div>
         </div>
 
@@ -337,7 +344,6 @@ export default {
         },
         data: data,
       };
-      console.log(config)
       await axios(config)
         .then(
           function (response) {
