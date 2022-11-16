@@ -206,6 +206,14 @@
       >
         Clear
       </rs-button>
+      <rs-button
+        style="float: right"
+        class="mx-1 bg-heandshe hover:bg-heandshe"
+        @click="filters()"
+      >
+        All Filter
+      </rs-button>
+      
     </rs-modal>
   </rs-layout>
 </template>

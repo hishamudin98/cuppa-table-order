@@ -152,11 +152,12 @@
                         class="p-button-rounded p-button-success mx-5"
                       />
                       </router-link>
+                      <router-link :to="{ name: 'admin-menu-rawmaterial', params: { menuid: searchUsers.data.menuid } }">
                       <Button
                         icon="pi pi-box"
                         class="p-button-rounded p-button-success mx-5"
-                        @click="select(searchUsers)"
                       />
+                      </router-link>
                       <!-- <Button
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-warning mx-2"

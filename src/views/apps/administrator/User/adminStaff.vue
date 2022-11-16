@@ -7,7 +7,7 @@
              <router-link
               class="flex items-center justify-center"
               :to="{
-                name: 'admin-outlet-staff',
+                name: 'admin-staff',
               }"
             >
               <vue-feather class="text-white" type="chevron-left"> </vue-feather>User Management
@@ -62,7 +62,7 @@
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-10">
+              <div class="w-10/12 h-10">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -82,6 +82,13 @@
                   @click="addUser()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Add Staff</rs-button
+                >
+              </div>
+               <div class="w-1/12" style="padding-top: 10px">
+                <rs-button
+                  @click="filter()"
+                  class="bg-heandshe hover:bg-heandshe"
+                  >Filter</rs-button
                 >
               </div>
             </div>
@@ -174,6 +181,37 @@
       <br />
        </rs-modal
     ><!-- SELECT -->
+
+    <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
+      <FormKit
+        v-model="role"
+        type="radio"
+        label="Role Status"
+        :options="['Admin', 'User']"
+      />
+      <FormKit
+        v-model="category"
+        type="radio"
+        label="Category Status"
+        :options="['HQ', 'Outlet', 'Supplier']"
+      />
+      
+
+      <rs-button
+        style="float: right"
+        variant="primary-outline"
+        @click="filters()"
+      >
+        Clear
+      </rs-button>
+      <rs-button
+        style="float: right"
+        class="mx-1 bg-heandshe hover:bg-heandshe"
+        @click="filters()"
+      >
+        All Filter
+      </rs-button>
+    </rs-modal>
 
     <rs-modal title="Add Staff" v-model="modalPOS" position="middle" size="md">
       <FormKit label="Fullname" type="text" v-model="fullname" />
@@ -281,6 +319,9 @@ export default {
   setup() {
     const users = ref([]);
     const search = ref("");
+    const filterModal = ref(false);
+    const role = ref("");
+    const category = ref("");
 
     const searchUsers = computed(() => {
       return users.value.filter((user) => {
@@ -292,10 +333,25 @@ export default {
         );
       });
     });
+
+    const filters = () => {
+      role.value = "";
+      category.value = "";
+      filterModal.value = false;
+    };
+
+    const filter = () => {
+      filterModal.value = true;
+    };
+
+    
     return {
       search,
       searchUsers,
       users,
+      filter,
+      filters,
+      filterModal,
     };
   },
   data() {

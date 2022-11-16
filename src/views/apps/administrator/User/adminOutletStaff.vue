@@ -104,7 +104,7 @@
                             class="p-button-rounded p-button-success"
                             @click="editOutlet(searchOutlet)"
                           /> -->
-                          <router-link :to="{ name: 'admin-staff', params: { outletid: searchOutlet.data.outlet_id } }">
+                          <router-link :to="{ name: 'admin-staff-outlet', params: { outletid: searchOutlet.data.outlet_id } }">
                            <Button
                             icon="pi pi-users"
                             class="p-button-rounded p-button-success"
