@@ -25,8 +25,8 @@
           </li>
           <li>
             <div>
-               <router-link :to="{ name: 'admin-outlet' }">
-              <a href="#" class="
+              <router-link :to="{ name: 'admin-outlet' }">
+                <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -37,15 +37,16 @@
                   dark:text-white
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
-                "><!--  @click="dropdownOutlet()" -->
-                <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
-              </a>
-               </router-link>
+                ">
+                  <!--  @click="dropdownOutlet()" -->
+                  <span class="flex-1 ml-3 whitespace-nowrap">Outlet</span>
+                </a>
+              </router-link>
             </div>
             <div v-if="this.outletDrop == true">
               <ul>
                 <li>
-                  <router-link :to="{ name: 'admin-report-s' }">
+                  <router-link :to="{ name: 'admin-outlet' }">
                     <a href="#" class="
                         flex
                         items-center
@@ -102,9 +103,9 @@
               </ul>
             </div>
           </li>
-          <!-- ORDER -->
+          <!-- USER -->
           <li>
-            <router-link :to="{ name: 'admin-order' }">
+            <router-link :to="{ name: 'admin-staff' }">
               <a href="#" class="
                   flex
                   items-center
@@ -117,12 +118,13 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="ml-3">Order</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">User</span>
               </a>
             </router-link>
           </li>
 
 
+          <!-- MENU -->
           <li>
             <div>
               <a href="#" class="
@@ -181,25 +183,7 @@
               </ul>
             </div>
           </li>
-          <!-- USER -->
-          <li>
-            <router-link :to="{ name: 'admin-staff' }">
-              <a href="#" class="
-                  flex
-                  items-center
-                  p-2
-                  text-base
-                  font-normal
-                  text-gray-900
-                  rounded-lg
-                  dark:text-white
-                  hover:bg-gray-300
-                  dark:hover:bg-gray-700
-                ">
-                <span class="flex-1 ml-3 whitespace-nowrap">User</span>
-              </a>
-            </router-link>
-          </li>
+
           <!-- MEMBERSHIP -->
           <li v-if="this.staff_role != 3 || this.staff_category != 3">
             <router-link :to="{ name: 'admin-user' }">
@@ -219,6 +203,28 @@
               </a>
             </router-link>
           </li>
+
+          <!-- ORDER -->
+          <li>
+            <router-link :to="{ name: 'admin-order' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="ml-3">Order</span>
+              </a>
+            </router-link>
+          </li>
+
+          <!-- STOCK HQ -->
           <li>
             <a href="#" class="
                   flex
@@ -237,7 +243,7 @@
             <div v-if="this.stockDrop == true">
               <ul>
                 <li>
-                  <router-link :to="{ name: 'rawmaterial-index' }">
+                  <router-link :to="{ name: 'manage-stock' }">
                     <a href="#" class="
                     flex
                         items-center
@@ -298,6 +304,8 @@
               </ul>
             </div>
           </li>
+
+
 
           <li>
             <a href="#" class="
@@ -360,6 +368,25 @@
           </li>
 
           <li>
+            <router-link :to="{ name: 'manage-store' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Store</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
             <router-link :to="{ name: 'admin-supplier' }">
               <a href="#" class="
                   flex
@@ -374,6 +401,46 @@
                   dark:hover:bg-gray-700
                 ">
                 <span class="flex-1 ml-3 whitespace-nowrap">Supplier</span>
+              </a>
+            </router-link>
+          </li>
+
+
+
+          <li>
+            <router-link :to="{ name: 'manage-delivery-order' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'manage-invoice' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Invoice</span>
               </a>
             </router-link>
           </li>
