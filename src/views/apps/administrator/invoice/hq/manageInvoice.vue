@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-x-2">
                     <div class="welcome text-lg font-semibold text-white">
-                        Store
+                        Invoice
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
 
                                             <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
-                                                    <rs-badges variant="success" v-if="searchStore.data.sto_Status">
+                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
                                                         Approved</rs-badges>
 
                                                     <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
@@ -131,6 +131,10 @@
 
                                             <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchStore">
+                                                    <Button icon="pi pi-dollar"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="redirectPayment()" />
+
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchStore)" />
@@ -304,6 +308,11 @@ export default {
     },
 
     methods: {
+        async redirectPayment() {
+
+            window.location.href = "https://dev1.toyyibpay.com/dev1-iserve-ewallet";
+
+        },
 
         async getdata() {
             var axios = require("axios");

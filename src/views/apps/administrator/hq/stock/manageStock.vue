@@ -58,7 +58,7 @@
                                     }" />
                             </div>
                             <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add New
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Raw Material
                                 </rs-button>
                             </div>
                         </div>
@@ -128,7 +128,8 @@
 
                                             <Column :exportable="false" header="Supplier">
                                                 <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'" hidden>Level 1</p>
+                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'" hidden>Level 1
+                                                    </p>
                                                     <router-link :to="{ name: 'admin-supplier' }">
                                                         <Button icon="pi pi-truck"
                                                             class="p-button-rounded p-button-info" />
@@ -178,6 +179,10 @@
             <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
                 :options="this.unitMeasurement" />
 
+            <FormKit type="select" label="Type Store" :options="[
+                'HQ',
+                'Outlet',
+            ]" />
             <FormKit type="select" label="Store" :options="[
                 'Store Shah Alam',
                 'Store Sg Besi',

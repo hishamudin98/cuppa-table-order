@@ -58,6 +58,11 @@
                                     }" />
                             </div>
 
+                            <div class="w-1/12" style="padding-top: 10px">
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Raw Material
+                                </rs-button>
+                            </div>
+
                         </div>
                         <div class="">
                             <rs-card style="margin-top: 40px">
@@ -151,15 +156,28 @@
         </div>
 
         <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
-            <FormKit label="Name" type="text" v-model="name" />
-            <FormKit label="SKU" type="text" v-model="sku" />
+            <FormKit type="select" label="Raw Material" :options="[
+                'Fanta 1.5L',
+                'Coke 1.5L',
+                'Pasta',
+            ]" />
             <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
             <FormKit label="Quantity" type="number" v-model="quantity" />
-            <FormKit label="Price (RM)" type="number" v-model="price" />
-            <FormKit type="select" label="Packaging Type" v-model="packaging_type" placeholder="Choose Packaging Type"
-                :options="this.typePackaging" />
-            <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
-                :options="this.unitMeasurement" />
+
+            <FormKit type="select" label="Type Store" :options="[
+                'HQ',
+                'Outlet',
+            ]" />
+
+            <FormKit type="select" label="Store" :options="[
+                'Store Shah Alam',
+                'Store Sg Besi',
+                'Store Sg Buloh',
+            ]" />
+
+            <FormKit label="Level 1" type="text" v-model="price" />
+            <FormKit label="Level 2" type="text" v-model="price" />
+            <FormKit label="Level 3" type="text" v-model="price" />
 
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
