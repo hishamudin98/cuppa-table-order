@@ -75,6 +75,17 @@
                       <Column field="sup_Email" header="Email"></Column>
                       <Column field="sup_Address" header="Address"></Column>
 
+                      <Column field="sup_Status" header="Account No"> <template #body="searchSupplier">
+                          <p v-if="searchSupplier.data.sup_Status === '1'">123123123</p>
+                          <p v-if="searchSupplier.data.sup_Status === '2'">Inactive</p>
+                        </template></Column>
+
+                      <Column field="sup_Status" header="Bank"> <template #body="searchSupplier">
+                          <p v-if="searchSupplier.data.sup_Status === '1'">Bank Islam</p>
+                          <p v-if="searchSupplier.data.sup_Status === '2'">Inactive</p>
+                        </template></Column>
+
+
                       <Column field="sup_Status" header="Status"> <template #body="searchSupplier">
                           <p v-if="searchSupplier.data.sup_Status === '1'">Active</p>
                           <p v-if="searchSupplier.data.sup_Status === '2'">Inactive</p>
@@ -119,6 +130,8 @@
       <FormKit label="Name" type="text" v-model="name" />
       <FormKit label="Code" type="text" v-model="code" />
       <FormKit label="Phone No." type="number" v-model="phone" />
+      <FormKit label="Account No." type="number" v-model="phone" />
+      <FormKit label="Bank" type="select" v-model="phone" :options="['Bank Islam']" />
       <FormKit label="Email" type="number" v-model="email" />
       <FormKit label="Address" type="textarea" v-model="address" />
 

@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-x-2">
                     <div class="welcome text-lg font-semibold text-white">
-                        Raw Material
+                        Store
                     </div>
                 </div>
 
@@ -24,26 +24,7 @@
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
                     <div class="w-full flex flex-row mb-0">
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total of Raw Material </strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">{{ this.totalData }} Raw Material</div>
-                            </rs-card>
-                        </div>
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total Price Raw Material ( RM )</strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">
-                                    {{ formatPrice(this.sumPrice) }}
-                                </div>
-                            </rs-card>
-                        </div>
+
                     </div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
@@ -57,93 +38,106 @@
                                         input: 'h-10',
                                     }" />
                             </div>
+
                             <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add New
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Invoice
                                 </rs-button>
                             </div>
+
                         </div>
                         <div class="">
                             <rs-card style="margin-top: 40px">
                                 <div>
                                     <div>
-                                        <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
+                                        <DataTable :value="searchStore" :paginator="true" :rows="10"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                            <Column field="rm_Name" header="Name"></Column>
-                                            <Column field="rm_Sku" header="SKU"></Column>
-                                            <Column field="rm_Quantity" header="Quantity"></Column>
-                                            <Column field="rm_MinQuantity" header="Min. Quantity"></Column>
-                                            <Column field="rm_Packaging" header="Packaging Type">
-                                                <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Packaging === '1'">Box</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Packaging === '2'">Packet</p>
+                                            <Column field="sto_Name" header="Invoice No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">00001</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
-                                            <Column field="rm_Unit" header="Measurement">
-                                                <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Unit === '1'">gram</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Unit === '2'">kilogram</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Unit === '3'">centimetre</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Unit === '4'">metre</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Unit === '5'">pcs</p>
-                                                </template>
-                                            </Column>
-                                            <Column field="rm_Price" header="Unit Price (RM)">
-                                                <template #body="searchRawMaterial">
-                                                    {{ formatPrice(searchRawMaterial.data.rm_Price) }}
+                                            <Column field="sto_Email" header="Date">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">14/07/2022</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
 
-                                            <Column field="rm_Price" header="Total Price (RM)">
-                                                <template #body="searchRawMaterial">
-                                                    {{ formatPrice(searchRawMaterial.data.rm_TotalPrice) }}
+                                            <Column field="sto_PhoneNo" header="DO No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">D0-00001</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
 
-                                            <Column field="rm_Status" header="Status">
-                                                <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">Active</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
+                                            <Column field="sto_PhoneNo" header="Staff">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">Staff HQ</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
-
+                                            </Column>
+                                            <Column field="sto_Type" header="Total Price">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
+                                            </Column>
+                                            <Column field="sto_Level" header="Bill To">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type === '1'">He & She University of
+                                                        Malaya</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
                                             </Column>
 
-                                            <Column field="rm_Status" header="Store">
-                                                <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">Shah Alam</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
-                                                </template>
-
-                                            </Column>
-
-                                            <Column field="rm_Status" header="Level">
-                                                <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">Level 1</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
+                                            <Column field="sto_Status" header="PIC Name">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">Customer Name</p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
                                                 </template>
 
                                             </Column>
 
+                                            <Column field="sto_Status" header="PIC Phone No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">0123123123</p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                </template>
 
-                                            <Column :exportable="false" header="Supplier">
-                                                <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'" hidden>Level 1</p>
-                                                    <router-link :to="{ name: 'admin-supplier' }">
+                                            </Column>
+
+                                            <Column field="sto_Status" header="Status">
+                                                <template #body="searchStore">
+                                                    <rs-badges variant="success" v-if="searchStore.data.sto_Status">
+                                                        Approved</rs-badges>
+
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                </template>
+
+                                            </Column>
+
+                                            <Column :exportable="false" header="Details">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.rm_Status === '1'" hidden>Level 1</p>
+                                                    <router-link :to="{ name: 'manage-stock' }">
                                                         <Button icon="pi pi-truck"
                                                             class="p-button-rounded p-button-info" />
                                                     </router-link>
                                                 </template>
                                             </Column>
 
-
-                                            <Column :exportable="false" style="min-width: 8rem">
-                                                <template #body="searchRawMaterial">
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                                                <template #body="searchStore">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchRawMaterial)" />
+                                                        @click="editUser(searchStore)" />
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                        @click="deleteUser(searchRawMaterial)" />
+                                                        @click="deleteUser(searchStore)" />
+
+
                                                 </template>
                                             </Column>
 
@@ -153,6 +147,7 @@
                                             <template #paginatorend>
                                                 <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                                             </template>
+
                                         </DataTable>
                                     </div>
                                 </div>
@@ -166,27 +161,55 @@
             </div>
         </div>
 
-        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
-            <FormKit label="Name" type="text" v-model="name" />
-            <FormKit label="SKU" type="text" v-model="sku" />
-            <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
-            <FormKit label="Quantity" type="number" v-model="quantity" />
-            <FormKit label="Price (RM)" type="number" v-model="price" />
-            <FormKit class="" type="file" label="Images" accept=".jpg, .png, .jpeg" />
-            <FormKit type="select" label="Packaging Type" v-model="packaging_type" placeholder="Choose Packaging Type"
-                :options="this.typePackaging" />
-            <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
-                :options="this.unitMeasurement" />
+        <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
+            <FormKit label="PIC Name" type="text" v-model="name" />
+            <FormKit label="PIC Phone No." type="text" v-model="sku" />
+            <FormKit label="Bill To" type="select" v-model="minquantity" :options="[
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+            ]" />
+            <FormKit label="Postcode" type="text" v-model="sku" />
 
-            <FormKit type="select" label="Store" :options="[
-                'Store Shah Alam',
-                'Store Sg Besi',
-                'Store Sg Buloh',
+            <FormKit label="Address" type="textarea" v-model="sku" />
+            <FormKit label="DO No." type="select" v-model="minquantity" :options="[
+                'D0-00001',
+                'D0-00002',
             ]" />
 
-            <FormKit label="Level 1" type="text" v-model="price" />
-            <FormKit label="Level 2" type="text" v-model="price" />
-            <FormKit label="Level 3" type="text" v-model="price" />
+            <table>
+                <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <FormKit type="text" hidden />
+                            </td>
+                            <td>
+                                <FormKit type="select" label="Stock Name" :options="[
+                                    'Fanta 1.5L',
+                                    'Pasta 1kg',
+                                    'Coca Cola 1.5L',
+                                    'Milo 1kg',
+                                ]" />
+                            </td>
+                            <td>
+                                <FormKit type="number" label="Quantity" />
+                            </td>
+                            <td>
+                                <FormKit type="text" label="Remarks" />
+                            </td>
+                            <td>
+                                <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                    @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
+                            </td>
+                            <td>
+                                <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                    @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </div>
+            </table>
 
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
@@ -206,11 +229,14 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import RsBadges from "@/components/Badges.vue";
+
 
 export default {
     name: "RawMaterial",
     components: {
         RsButton,
+        RsBadges,
         DataTable,
         RsModal,
         Column,
@@ -218,17 +244,17 @@ export default {
         'arbitrary': Menu,
     },
     setup() {
-        const rawMaterial = ref([]);
+        const store = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
-        const searchRawMaterial = computed(() => {
-            return rawMaterial.value.filter((rawMaterial) => {
+        const searchStore = computed(() => {
+            return store.value.filter((store) => {
                 return (
-                    rawMaterial.rm_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    rawMaterial.rm_Name
+                    store.sto_Name
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -242,8 +268,8 @@ export default {
         };
         return {
             search,
-            searchRawMaterial,
-            rawMaterial,
+            searchStore,
+            store,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -259,7 +285,9 @@ export default {
             sumPrice: 0,
             menuDrop: false,
             /* BARU */
-
+            rawMaterial: [{
+                type: "",
+            }],
             name: null,
             sku: null,
             quantity: null,
@@ -272,9 +300,7 @@ export default {
     },
     async created() {
         this.getdata();
-        this.getRawMaterial();
-        this.getTypePackaging();
-        this.getUnitMeasurement();
+        this.getStore();
     },
 
     methods: {
@@ -304,66 +330,14 @@ export default {
                 });
         },
 
-        async getTypePackaging() {
-            var axios = require("axios");
-            var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getTypePackaging",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.typePackaging.push({
-                                label: response.data.data[i].packaging_Name,
-                                value: response.data.data[i].packaging_Value,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getUnitMeasurement() {
-            var axios = require("axios");
-            var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getUnitMeasurement",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.unitMeasurement.push({
-                                label: response.data.data[i].packaging_Name,
-                                value: response.data.data[i].packaging_Value,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getRawMaterial() {
+        async getStore() {
             var axios = require("axios");
             // var data = JSON.stringify({
             //     staffid: localStorage.staff,
             // });
             var config = {
                 method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -371,9 +345,9 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        // console.log("price", response.data.data.rm_Price[0]);
-                        this.rawMaterial = response.data.data;
-                        this.totalData = this.rawMaterial.length;
+                        console.log("resp", response.data.data);
+                        this.store = response.data.data;
+                        this.totalData = this.store.length;
 
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
@@ -429,6 +403,19 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        addRawMaterial(index) {
+            this.counter++;
+            console.log("ADD", index);
+            this.rawMaterial.push({
+                type: "",
+            });
+        },
+        removeRawMaterial(index) {
+            this.counter--;
+            console.log("REMOVE", index);
+            this.rawMaterial.splice(index, 1);
         },
     },
 };

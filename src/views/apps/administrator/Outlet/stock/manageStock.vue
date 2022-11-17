@@ -57,7 +57,7 @@
                                         input: 'h-10',
                                     }" />
                             </div>
-                          
+
                         </div>
                         <div class="">
                             <rs-card style="margin-top: 40px">
@@ -106,12 +106,27 @@
 
                                             </Column>
 
+                                            <Column field="rm_Status" header="Store">
+                                                <template #body="searchRawMaterial">
+                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'"> Shah Alam</p>
+                                                    <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
+                                                </template>
+
+                                            </Column>
+                                            <Column field="rm_Status" header="Level">
+                                                <template #body="searchRawMaterial">
+                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">Level 1</p>
+                                                    <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
+                                                </template>
+
+                                            </Column>
+
                                             <Column :exportable="false" style="min-width: 8rem">
                                                 <template #body="searchRawMaterial">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchRawMaterial)" />
-                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchRawMaterial)" />
                                                 </template>
                                             </Column>

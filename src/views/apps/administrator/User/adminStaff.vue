@@ -228,7 +228,7 @@
       <FormKit label="Date of Birth." type="date" v-model="dob" />
       <FormKit
         type="select"
-        label="Staff Position"
+        label="Staff Role"
         :options="this.staffPosition"
         v-model="position"
       />

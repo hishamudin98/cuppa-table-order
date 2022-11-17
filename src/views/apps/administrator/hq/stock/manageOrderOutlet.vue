@@ -58,7 +58,7 @@
                                     }" />
                             </div>
                             <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add New
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Order Stock
                                 </rs-button>
                             </div>
                         </div>
@@ -84,18 +84,24 @@
                                             <Column field="stockOrderOutletStatusCode" header="Status">
                                                 <template #body="searchOrderStock">
                                                     <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
-                                                        Active</p>
+                                                        Open</p>
                                                     <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
-                                                        Inactive</p>
+                                                        Approved</p>
+
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
+                                                        Accepted</p>
+
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
+                                                        Delivery</p>
+
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
+                                                        Received</p>
                                                 </template>
 
                                             </Column>
 
-                                            <Column field="stockOrderOutletInvoiceStatus" header="Invoice Status">
 
-                                            </Column>
-
-                                            <Column :exportable="false" header="Stock">
+                                            <Column :exportable="false" header="Details">
 
                                                 <template #body="searchOrderStock">
 
@@ -109,12 +115,12 @@
 
                                             </Column>
 
-                                            <Column :exportable="false" style="min-width: 8rem">
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchOrderStock">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchOrderStock)" />
-                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchOrderStock)" />
                                                 </template>
                                             </Column>
@@ -139,6 +145,52 @@
         </div>
 
         <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="md">
+            <FormKit type="select" label="Outlet" :options="[
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+            ]" />
+            <table>
+                <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                <FormKit type="text" hidden />
+                            </td>
+                            <td>
+                                <FormKit type="select" label="Stock Name" :options="[
+                                    'Fanta 1.5L',
+                                    'Pasta 1kg',
+                                    'Coca Cola 1.5L',
+                                    'Milo 1kg',
+                                ]" />
+                            </td>
+                            <td>
+                                <FormKit type="number" label="Quantity" />
+                            </td>
+                            <td>
+                                <FormKit type="select" label="Store" :options="[
+                                    'Store Shah Alam',
+                                    'Store Sg Besi',
+                                    'Store Sg Buloh',
+                                ]" />
+                            </td>
+                            <td>
+                                <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                    @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
+                            </td>
+                            <td>
+                                <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                    @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </div>
+            </table>
+
+
+            <!-- 
             <FormKit label="Name" type="text" v-model="name" />
             <FormKit label="SKU" type="text" v-model="sku" />
             <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
@@ -147,7 +199,7 @@
             <FormKit type="select" label="Packaging Type" v-model="packaging_type" placeholder="Choose Packaging Type"
                 :options="this.typePackaging" />
             <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
-                :options="this.unitMeasurement" />
+                :options="this.unitMeasurement" /> -->
 
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
@@ -220,7 +272,9 @@ export default {
             sumPrice: 0,
             menuDrop: false,
             /* BARU */
-
+            rawMaterial: [{
+                type: "",
+            }],
             name: null,
             sku: null,
             quantity: null,
@@ -390,6 +444,19 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        addRawMaterial(index) {
+            this.counter++;
+            console.log("ADD", index);
+            this.rawMaterial.push({
+                type: "",
+            });
+        },
+        removeRawMaterial(index) {
+            this.counter--;
+            console.log("REMOVE", index);
+            this.rawMaterial.splice(index, 1);
         },
     },
 };

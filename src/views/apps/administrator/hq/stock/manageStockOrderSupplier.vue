@@ -102,14 +102,14 @@
                                                         pcs</p>
                                                 </template>
                                             </Column>
-                                            <Column field="suppOrderDetailsPrice" header="Unit Price">
+                                            <Column field="suppOrderDetailsPrice" header="Unit Price (RM)">
                                                 <template #body="searchRawMaterial">
                                                     {{ formatPrice(searchRawMaterial.data.suppOrderDetailsPrice)
                                                     }}
                                                 </template>
                                             </Column>
 
-                                            <Column field="suppOrderDetailsTotalPrice" header="Total Price">
+                                            <Column field="suppOrderDetailsTotalPrice" header="Total Price (RM)">
                                                 <template #body="searchRawMaterial">
                                                     {{
                                                             formatPrice(searchRawMaterial.data.suppOrderDetailsTotalPrice)
@@ -117,16 +117,12 @@
                                                 </template>
                                             </Column>
 
-                                            <Column field="suppOrderDetailsStatus" header="Status">
+                                            <Column field="suppOrderDetailsTotalPrice" header="Store">
                                                 <template #body="searchRawMaterial">
                                                     <p
-                                                        v-if="searchRawMaterial.data.suppOrderDetailsStatus === '1'">
-                                                        Active</p>
-                                                    <p
-                                                        v-if="searchRawMaterial.data.suppOrderDetailsStatus === '2'">
-                                                        Inactive</p>
+                                                        v-if="searchRawMaterial.data.suppOrderDetailsTotalPrice">
+                                                        Shah Alam</p>
                                                 </template>
-
                                             </Column>
 
                                             <Column :exportable="false" style="min-width: 8rem">
@@ -134,7 +130,7 @@
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchOrderStock)" />
-                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchOrderStock)" />
                                                 </template>
                                             </Column>

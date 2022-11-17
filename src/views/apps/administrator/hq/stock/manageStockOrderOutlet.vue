@@ -24,26 +24,7 @@
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
                     <div class="w-full flex flex-row mb-0">
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total of Order Stock </strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">{{ this.totalData }} Order Stock</div>
-                            </rs-card>
-                        </div>
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total Price Order Stock ( RM )</strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">
-                                    {{ formatPrice(this.sumPrice) }}
-                                </div>
-                            </rs-card>
-                        </div>
+
                     </div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
@@ -62,14 +43,17 @@
                                 </rs-button>
                             </div>
                         </div>
+                        <p style="font-weight:bold">Order No. : {{ this.orderNo }}</p>
                         <div class="">
                             <rs-card style="margin-top: 40px">
                                 <div>
                                     <div>
                                         <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                            v-model:expandedRows="expandedRows"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="rawMaterialName" header="Name"></Column>
                                             <Column field="rawMaterialSku" header="SKU"></Column>
                                             <Column field="stockOrderOutletDetailsQuantity" header="Quantity"></Column>
@@ -117,34 +101,146 @@
                                                 </template>
                                             </Column>
 
-                                            <Column field="suppOrderDetailsStatus" header="Status">
+                                            <Column field="stockOrderOutletDetailsStatus" header="Status">
                                                 <template #body="searchRawMaterial">
                                                     <p
-                                                        v-if="searchRawMaterial.data.suppOrderDetailsStatus === '1'">
-                                                        Active</p>
+                                                        v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                        Completed</p>
                                                     <p
-                                                        v-if="searchRawMaterial.data.suppOrderDetailsStatus === '2'">
+                                                        v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === '2'">
                                                         Inactive</p>
                                                 </template>
 
                                             </Column>
 
-                                            <Column :exportable="false" style="min-width: 8rem">
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchOrderStock">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchOrderStock)" />
-                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchOrderStock)" />
                                                 </template>
                                             </Column>
 
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
+
+                                            <template #expansion="searchRawMaterial">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom:20px">Delivery Order Record for {{
+                                                            searchRawMaterial.data.rawMaterialName
+                                                    }}</h5>
+
+                                                    <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                                        v-model:expandedRows="expandedRows"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                                        <Column field="sto_Name" header="DO No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    D0-00001</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="stockOrderOutletDetailsStatus" header="Date">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    14/07/2022</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus"
+                                                            header="Order No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    #QwDer</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus" header="Staff">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    Staff HQ</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus" header="Quantity">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    5</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus"
+                                                            header="Total Price">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    123.00</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="stockOrderOutletDetailsStatus"
+                                                            header="Destination">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    He & She
+                                                                    University of
+                                                                    Malaya</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus" header="PIC Name">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    Customer
+                                                                    Name</p>
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus"
+                                                            header="PIC Phone No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    0123123123
+                                                                </p>
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <Column field="stockOrderOutletDetailsStatus" header="Status">
+                                                            <template #body="searchRawMaterial">
+                                                                <rs-badges variant="success"
+                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    Approved</rs-badges>
+
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+
+                                                    </DataTable>
+
+
+
+                                                </div>
                                             </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-                                            </template>
+
                                         </DataTable>
                                     </div>
                                 </div>
@@ -187,12 +283,14 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import RsBadges from "@/components/Badges.vue";
 
 export default {
     name: "RawMaterial",
     components: {
         RsButton,
         DataTable,
+        RsBadges,
         RsModal,
         Column,
         Button,
@@ -241,6 +339,8 @@ export default {
             menuDrop: false,
             /* BARU */
 
+            orderNo: "",
+            expandedRows: [],
             name: null,
             sku: null,
             quantity: null,
@@ -259,6 +359,13 @@ export default {
     },
 
     methods: {
+
+        expandAll() {
+            this.expandedRows = this.orderStock.filter(p => p.stockOrderOutletDetailsId);
+        },
+        collapseAll() {
+            this.expandedRows = null;
+        },
 
         async getdata() {
             var axios = require("axios");
@@ -344,7 +451,7 @@ export default {
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/outlet/getOrderStockAll",
+                url: process.env.VUE_APP_FNB_URL + "/outlet/getOrderStockByOrderId",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -356,7 +463,7 @@ export default {
                         console.log("data : ", response.data.data);
                         this.orderStock = response.data.data;
                         this.totalData = this.orderStock.length;
-
+                        this.orderNo = response.data.data[0].stockOrderOutletNo;
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
                             price += response.data.data[i].stockOrderOutletDetailsTotalPrice;
