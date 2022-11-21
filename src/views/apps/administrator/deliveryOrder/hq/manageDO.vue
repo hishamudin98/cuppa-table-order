@@ -92,6 +92,36 @@
 
                                             </Column>
 
+                                            <Column field="sto_Level" header="Delivery Address">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type === '1'">
+                                                        He & She University of Malaya
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
+                                            </Column>
+
+                                            <Column field="sto_Status" header="PIC Name">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">
+                                                        Customer Name
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
+                                                </template>
+                                            </Column>
+
+                                            <Column field="sto_Status" header="PIC Phone No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">
+                                                        0123123123
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
+                                                </template>
+                                            </Column>
 
                                             <Column :exportable="false" header="Details">
                                                 <template #body="searchStore">
