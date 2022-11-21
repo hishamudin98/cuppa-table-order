@@ -24,7 +24,7 @@
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
                     <div class="w-full flex flex-row mb-0">
-                        <div class="inline-block w-1/2 pr-10">
+                        <!-- <div class="inline-block w-1/2 pr-10">
                             <rs-card>
                                 <div class="text-center pt-10 pb-2">
                                     <strong>Total of Raw Material </strong>
@@ -43,7 +43,7 @@
                                     {{ formatPrice(this.sumPrice) }}
                                 </div>
                             </rs-card>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->

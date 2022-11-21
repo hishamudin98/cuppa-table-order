@@ -67,12 +67,25 @@
                                 <div>
                                     <div>
                                         <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                        v-model:expandedRows="expandedRows"
+
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="rawMaterialName" header="Name"></Column>
                                             <Column field="rawMaterialSku" header="SKU"></Column>
                                             <Column field="suppOrderDetailsQuantity" header="Quantity"></Column>
+                                            <Column field="suppOrderDetailsQuantity" header="Quantity Delivered">
+                                                <template #body="searchRawMaterial">
+                                                    <p v-if="searchRawMaterial.data.suppOrderDetailsQuantity">
+                                                        20/{{ searchRawMaterial.data.suppOrderDetailsQuantity }}
+                                                    </p>
+                                                    <p
+                                                        v-if="searchRawMaterial.data.suppOrderDetailsQuantity === '2'">
+                                                        Packet</p>
+                                                </template>
+                                            </Column>
                                             <Column field="rawMaterialPackagingTypeRefCode" header="Packaging Type">
                                                 <template #body="searchRawMaterial">
                                                     <p
@@ -119,8 +132,7 @@
 
                                             <Column field="suppOrderDetailsTotalPrice" header="Store">
                                                 <template #body="searchRawMaterial">
-                                                    <p
-                                                        v-if="searchRawMaterial.data.suppOrderDetailsTotalPrice">
+                                                    <p v-if="searchRawMaterial.data.suppOrderDetailsTotalPrice">
                                                         Shah Alam</p>
                                                 </template>
                                             </Column>
@@ -135,11 +147,119 @@
                                                 </template>
                                             </Column>
 
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                                            </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                                            <template #expansion="searchRawMaterial">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom:20px">Delivery Order Record for {{
+                                                            searchRawMaterial.data.rawMaterialName
+                                                    }}</h5>
+
+                                                    <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                                        v-model:expandedRows="expandedRows"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                                        <Column field="rawMaterialName" header="DO No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    D0-00001</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rawMaterialName" header="Date">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    14/07/2022</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="rawMaterialName"
+                                                            header="Order No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    #QwDer</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="rawMaterialName" header="Staff">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    Staff HQ</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rawMaterialName" header="Quantity">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    5</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rawMaterialName"
+                                                            header="Total Price">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    123.00</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rawMaterialName"
+                                                            header="Destination">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    He & She
+                                                                    University of
+                                                                    Malaya</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="rawMaterialName" header="PIC Name">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    Customer
+                                                                    Name</p>
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <Column field="rawMaterialName"
+                                                            header="PIC Phone No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    0123123123
+                                                                </p>
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <Column field="rawMaterialName" header="Status">
+                                                            <template #body="searchRawMaterial">
+                                                                <rs-badges variant="success"
+                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                    Approved</rs-badges>
+
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+
+                                                    </DataTable>
+
+
+
+                                                </div>
                                             </template>
                                         </DataTable>
                                     </div>
@@ -236,6 +356,7 @@ export default {
             sumPrice: 0,
             menuDrop: false,
             /* BARU */
+            expandedRows: [],
 
             name: null,
             sku: null,
