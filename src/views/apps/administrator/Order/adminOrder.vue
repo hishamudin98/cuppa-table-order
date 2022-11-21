@@ -121,6 +121,22 @@
                           />
                         </template>
                       </Column>
+                      <Column
+                        :exportable="false"
+                        style="min-width: 8rem"
+                        header="More Actions"
+                      >
+                        <template #body="searchOrder">
+                          <Button v-if="searchOrder.data.order_status == 'Completed' || searchOrder.data.order_status == 'Preparing'"
+                          class=" p-button-rounded p-button-danger">
+                            Refund
+                          </Button>
+                          <Button v-if="searchOrder.data.order_status == 'In Cart' || searchOrder.data.order_status == 'Pending'"
+                          class="p-button-rounded p-button-warning">
+                            Refund
+                          </Button>
+                        </template>
+                      </Column>
 
                       <template #paginatorstart>
                         <Button
@@ -148,7 +164,7 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
-    <rs-modal title="Add Staff" v-model="show" position="middle" size="md">
+    <rs-modal title="Order Details" v-model="show" position="middle" size="md">
       
       <label><strong>Order No.</strong></label>
       <br />
@@ -169,6 +185,13 @@
       <label><strong>Order From </strong></label>
       <br />
       {{this.data.order_from}}
+      <br />
+      <label><strong>Membership No. : </strong></label>
+      <div v-for="(input, l) in this.data.order_detail" :key="l">
+        <p>
+          {{ input.membership_no }} 
+        </p>
+      </div>
       <br />
       <label><strong>Order Details</strong></label>
       <div v-for="(input, k) in this.data.order_detail" :key="k">

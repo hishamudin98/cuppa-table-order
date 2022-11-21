@@ -167,6 +167,12 @@ export default [{
         component: () =>
             import ("@/views/apps/administrator/invoice/hq/manageInvoice.vue"),
     },
+    {
+        path: "/admin/organization",
+        name: "admin-organization",
+        component: () =>
+            import ("@/views/apps/administrator/organization/adminOrganization.vue"),
+    },
 
     /*{
                     path: "/order/previous/:orderID?",

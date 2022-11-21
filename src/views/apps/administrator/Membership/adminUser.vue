@@ -101,6 +101,12 @@
                             class="p-button-rounded p-button-warning"
                             @click="deleteUser(searchUsers)"
                           />
+                          <router-link :to="{ name: 'admin-order' }">
+                          <Button
+                            icon="pi pi-folder-open"
+                            class="p-button-rounded p-button-success"
+                          />
+                          </router-link>
                         </template>
                       </Column>
                       <template #paginatorstart>

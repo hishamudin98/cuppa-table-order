@@ -103,6 +103,25 @@
               </ul>
             </div>
           </li>
+          <!-- ORGRANIZATION -->
+          <li>
+            <router-link :to="{ name: 'admin-organization' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Organization</span>
+              </a>
+            </router-link>
+          </li>
           <!-- USER -->
           <li>
             <router-link :to="{ name: 'admin-staff' }">
@@ -122,8 +141,6 @@
               </a>
             </router-link>
           </li>
-
-
           <!-- MENU -->
           <li>
             <router-link :to="{ name: 'admin-menu' }">

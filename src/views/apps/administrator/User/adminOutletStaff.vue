@@ -66,13 +66,13 @@
                   }"
                 />
               </div>
-              <!-- <div class="w-1/12">
+              <div class="w-1/12" style="padding-top: 10px">
                 <rs-button
-                  @click="addOutlet()"
+                  @click="filter()"
                   class="bg-heandshe hover:bg-heandshe"
-                  >Add Outlet</rs-button
+                  >Filter</rs-button
                 >
-              </div> -->
+              </div>
             </div>
             <div class="">
               <rs-card style="margin-top: 40px">
@@ -208,6 +208,29 @@
         Save
       </rs-button>
     </rs-modal>
+    <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
+      <FormKit
+        v-model="role"
+        type="radio"
+        label="Role Status"
+        :options="['HQ', 'Outlet', 'Supplier']"
+      />
+
+      <rs-button
+        style="float: right"
+        variant="primary-outline"
+        @click="filters()"
+      >
+        Clear
+      </rs-button>
+      <rs-button
+        style="float: right"
+        class="mx-1 bg-heandshe hover:bg-heandshe"
+        @click="filters()"
+      >
+        All Filter
+      </rs-button>
+    </rs-modal>
   </rs-layout>
 </template>
 <script>
@@ -236,6 +259,7 @@ export default {
   setup() {
     const outlet = ref([]);
     const search = ref("");
+    const filterModal = ref(false);
 
     const searchOutlet = computed(() => {
       return outlet.value.filter((shifts) => {
@@ -255,11 +279,24 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    const filters = () => {
+      
+      filterModal.value = false;
+    };
+
+    const filter = () => {
+      filterModal.value = true;
+    };
+
     return {
       search,
       searchOutlet,
       outlet,
       formatPrice,
+      filter,
+      filters,
+      filterModal,
     };
   },
   data() {

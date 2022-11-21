@@ -105,10 +105,10 @@
                             @click="editOutlet(searchOutlet)"
                           />
                           <router-link :to="{ name: 'admin-table' }">
-                           <Button
-                            icon="pi pi-table"
-                            class="p-button-rounded p-button-success"
-                          />
+                            <Button
+                              icon="pi pi-table"
+                              class="p-button-rounded p-button-success"
+                            />
                           </router-link>
                           <!-- <Button
                             icon="pi pi-trash"
@@ -156,13 +156,29 @@
       <FormKit label="Postcode" type="number" v-model="outlet_postcode" />
       <FormKit label="Address" type="textarea" v-model="outlet_address" />
       <FormKit
+        type="radio"
+        label="Outlet Type"
+        :options="[
+          'HQ',
+          'Branch',
+        ]"
+      />
+      <FormKit
         type="file"
         label="Images"
         v-model="outlet_images"
         accept=".jpg, .png, .jpeg"
       />
       <hr />
-      <br>
+      <br />
+      <label><strong>Organization's Information</strong></label>
+      <br />
+      <FormKit label="Owner Name" type="text" />
+      <FormKit label="Phone No." type="number" />
+      <FormKit label="Email" type="email" />
+      <FormKit label="Address" type="textarea" />
+      <hr />
+      <br />
       <label><strong>Social Media's URL</strong></label>
       <br />
       <FormKit

@@ -4,15 +4,7 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <div class="welcome text-lg font-semibold text-white">
-            <router-link
-              class="flex items-center justify-center"
-              :to="{
-                name: 'admin-staff',
-              }"
-            >
-              <vue-feather class="text-white" type="chevron-left"> </vue-feather
-              >User Management
-            </router-link>
+            Organization Management
           </div>
         </div>
 
@@ -35,7 +27,7 @@
           <arbitrary />
         </div>
         <div class="w-full flex flex-col">
-          <!--  <div class="w-full flex flex-row mb-1">
+          <div class="w-full flex flex-row mb-1">
             <div class="inline-block w-1/2 pr-10 h-2/4">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
@@ -50,7 +42,7 @@
             <div class="inline-block w-1/2 pr-10 pb-2">
               <rs-card>
                 <div class="text-center pt-10">
-                  <strong>Number of staff by Outlet</strong>
+                  <strong>Number of staff by Organization</strong>
                 </div>
                 <hr />
                 <div class="text-center py-8">
@@ -58,11 +50,11 @@
                 </div></rs-card
               >
             </div>
-          </div> -->
+          </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
-              <div class="w-10/12 h-10">
+              <div class="w-11/12 h-10">
                 <FormKit
                   v-model="search"
                   id="search-sticky"
@@ -84,16 +76,16 @@
                 <rs-button
                   @click="addUser()"
                   class="bg-heandshe hover:bg-heandshe"
-                  >Add Staff</rs-button
+                  >Add Organization Owner</rs-button
                 >
               </div>
-              <div class="w-1/12" style="padding-top: 10px">
+              <!-- <div class="w-1/12" style="padding-top: 10px">
                 <rs-button
                   @click="filter()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
-              </div>
+              </div> -->
             </div>
             <div class="">
               <rs-card style="padding-top: 10px">
@@ -103,57 +95,66 @@
                       :value="searchUsers"
                       :paginator="true"
                       :rows="10"
+                      v-model:expandedRows="expandedRows"
                       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                       :rowsPerPageOptions="[10, 20, 50]"
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
-                      <Column field="user_name" header="Name"></Column>
-                      <Column field="user_phone" header="Phone no."></Column>
-                      <Column field="user_email" header="Email"></Column>
-                      <Column field="user_position" header="Role">
-                        <template #body="searchUsers">
-                          <p v-if="searchUsers.data.user_position === 2">HQ</p>
-                          <p v-if="searchUsers.data.user_position === 3">
-                            Outlet
-                          </p>
-                          <p v-if="searchUsers.data.user_position === 4">
-                            Supplier
-                          </p>
-                        </template>
-                      </Column>
-                      <Column :exportable="false" style="min-width: 8rem">
-                        <template #body="searchUsers">
-                          <Button
-                            icon="pi pi-pencil"
-                            class="p-button-rounded p-button-success mr-2"
-                            @click="editUser(searchUsers)"
-                          />
-                          <Button
-                            icon="pi pi-folder-open"
-                            class="p-button-rounded p-button-success"
-                            @click="staffSelect(searchUsers)"
-                          />
-                          <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger"
-                            @click="deleteUser(searchUsers)"
-                          />
-                        </template>
-                      </Column>
-                      <template #paginatorstart>
-                        <Button
-                          type="button"
-                          icon="pi pi-refresh"
-                          class="p-button-text"
-                        />
-                      </template>
-                      <template #paginatorend>
-                        <Button
-                          type="button"
-                          icon="pi pi-cloud"
-                          class="p-button-text"
-                        />
+                      <Column :expander="true" headerStyle="width: 3rem" />
+                      <Column field="owner_name" header="Name"></Column>
+                      <Column field="owner_phone" header="Phone no."></Column>
+                      <Column field="owner_email" header="Email"></Column>
+
+                      <template #expansion="searchRawMaterial">
+                        <div class="orders-subtable">
+                          <h5 style="margin-bottom: 20px">
+                            Organization's Informations
+                            {{ searchRawMaterial.data.outlet.outlet_name }}
+                          </h5>
+
+                          <DataTable
+                            :value="searchRawMaterial.data.outlet"
+                            :paginator="true"
+                            :rows="10"
+                            v-model:expandedRows="expandedRows"
+                            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                            :rowsPerPageOptions="[10, 20, 50]"
+                            responsiveLayout="scroll"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                          >
+                            <Column header="Outlet Name">
+                              <template #body="searchRawMaterial">
+                                {{ searchRawMaterial.data.outlet_name }}
+                              </template>
+                            </Column>
+                            <Column header="Phone No.">
+                              <template #body="searchRawMaterial">
+                                {{ searchRawMaterial.data.outlet_phone }}
+                              </template>
+                            </Column>
+                            <Column header="Address">
+                              <template #body="searchRawMaterial">
+                                {{ searchRawMaterial.data.outlet_address }}
+                              </template>
+                            </Column>
+
+                            <template #paginatorstart>
+                              <Button
+                                type="button"
+                                icon="pi pi-refresh"
+                                class="p-button-text"
+                              />
+                            </template>
+                            <template #paginatorend>
+                              <Button
+                                type="button"
+                                icon="pi pi-cloud"
+                                class="p-button-text"
+                              />
+                            </template>
+                          </DataTable>
+                        </div>
                       </template>
                     </DataTable>
                   </div>
@@ -202,6 +203,12 @@
         label="Role Status"
         :options="['Admin', 'User']"
       />
+      <FormKit
+        v-model="category"
+        type="radio"
+        label="Category Status"
+        :options="['HQ', 'Outlet', 'Supplier']"
+      />
 
       <rs-button
         style="float: right"
@@ -219,7 +226,7 @@
       </rs-button>
     </rs-modal>
 
-    <rs-modal title="Add Staff" v-model="modalPOS" position="middle" size="md">
+    <rs-modal title="Add Organization's Owner" v-model="modalPOS" position="middle" size="md">
       <FormKit label="Fullname" type="text" v-model="fullname" />
       <FormKit label="Phone No." type="number" v-model="phone" />
       <FormKit label="Email" type="email" v-model="email" />
@@ -238,8 +245,6 @@
         :options="this.staffPosition"
         v-model="position"
       />
-      <FormKit label="Outlet" type="text" v-model="this.searchUsers[0].outlet_name" readonly/>
-
       <rs-button style="float: right" @click="insertUser()">
         Save
       </rs-button> </rs-modal
@@ -333,9 +338,9 @@ export default {
     const searchUsers = computed(() => {
       return users.value.filter((user) => {
         return (
-          user.user_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+          user.owner_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
             -1 ||
-          user.user_email.toLowerCase().indexOf(search.value.toLowerCase()) !=
+          user.owner_email.toLowerCase().indexOf(search.value.toLowerCase()) !=
             -1
         );
       });
@@ -377,6 +382,7 @@ export default {
       pincode: "",
       dob: "",
       position: "",
+      expandedRows: [],
 
       /* MODAL SHOW */
       modalDelete: false,
@@ -387,7 +393,7 @@ export default {
       show: false,
       outletDrop: false,
       menuDrop: false,
-      totalStaff: 0,
+      totalStaff: 2,
       outlet: 0,
     };
   },
@@ -402,6 +408,13 @@ export default {
     this.getPosition();
   },
   methods: {
+    expandAll() {
+      this.expandedRows = this.searchUsers.filter((p) => p.owner_id);
+    },
+    collapseAll() {
+      this.expandedRows = null;
+    },
+
     async staffSelect(user) {
       this.users1 = user;
       this.selectStaff = true;
@@ -461,11 +474,11 @@ export default {
       var axios = require("axios");
       var data = JSON.stringify({
         staffid: localStorage.staff,
-        outletid: this.outlet,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getStaff" /*   */,
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOwnerDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -474,22 +487,23 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            for (let i = 0; i < response.data.data.staff_det.length; i++) {
+            for (let i = 0; i < response.data.data.length; i++) {
               this.users.push({
-                user_id: response.data.data.staff_det[i].user_id,
-                user_name: response.data.data.staff_det[i].user_name,
-                user_phone: response.data.data.staff_det[i].user_phone,
-                user_email: response.data.data.staff_det[i].user_email,
-                user_password: response.data.data.staff_det[i].user_password,
-                user_no: response.data.data.staff_det[i].user_no,
-                user_pincode: response.data.data.staff_det[i].user_pincode,
-                user_address: response.data.data.staff_det[i].user_address,
-                user_dob: response.data.data.staff_det[i].user_dob,
-                user_position: response.data.data.staff_det[i].user_position,
-                outlet_name: response.data.data.staff_det[i].outlet_name
+                owner_id: response.data.data[i].owner_id,
+                owner_name: response.data.data[i].owner_name,
+                owner_phone: response.data.data[i].owner_phone,
+                owner_email: response.data.data[i].owner_email,
+                outlet: [
+                  {
+                    outlet_id: response.data.data[i].outlet_id,
+                    outlet_name: response.data.data[i].outlet_name,
+                    outlet_address: response.data.data[i].outlet_address,
+                    outlet_phone: response.data.data[i].outlet_phone,
+                    outlet_code: response.data.data[i].outlet_code,
+                  },
+                ],
               });
             }
-            this.totalStaff = response.data.data.staff_sum[0].sums;
           }.bind(this)
         )
         .catch(function (error) {
@@ -584,7 +598,7 @@ export default {
     },
 
     async insertUser() {
-      var axios = require("axios");
+      /* var axios = require("axios");
       var data = JSON.stringify({
         fullname: this.fullname,
         phone: this.phone,
@@ -606,28 +620,30 @@ export default {
       };
       await axios(config)
         .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalPOS = false;
-              this.fullname = "";
-              this.phone = "";
-              this.email = "";
-              this.address = "";
-              this.password = "";
-              this.pincode = "";
-              this.dob = "";
-              this.position = "";
-              alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
+          function (response) { */
+          
+      /* if (response.data.status == "Success") { */
+        this.modalPOS = false;
+        this.fullname = "";
+        this.phone = "";
+        this.email = "";
+        this.address = "";
+        this.password = "";
+        this.pincode = "";
+        this.dob = "";
+        this.position = "";
+        /* alert(response.data.message); */
+        alert("Successfully Insert New Organization's Owner")
+       /*  this.users.splice(0);
+        this.getuser(); */
+     /*  } else {
+        alert(response.data.message);
+      } */
+      /*   }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
-        });
+        }); */
     },
   },
 };
