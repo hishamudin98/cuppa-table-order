@@ -74,6 +74,16 @@
                                             <Column field="rawMaterialName" header="Name"></Column>
                                             <Column field="rawMaterialSku" header="SKU"></Column>
                                             <Column field="stockOrderOutletDetailsQuantity" header="Quantity"></Column>
+                                            <Column field="stockOrderOutletDetailsQuantity" header="Quantity Delivered">
+                                                <template #body="searchRawMaterial">
+                                                    <p v-if="searchRawMaterial.data.stockOrderOutletDetailsQuantity">
+                                                        20/{{ searchRawMaterial.data.stockOrderOutletDetailsQuantity }}
+                                                    </p>
+                                                    <p
+                                                        v-if="searchRawMaterial.data.stockOrderOutletDetailsQuantity === '2'">
+                                                        Packet</p>
+                                                </template>
+                                            </Column>
                                             <Column field="rawMaterialPackagingTypeRefCode" header="Packaging Type">
                                                 <template #body="searchRawMaterial">
                                                     <p

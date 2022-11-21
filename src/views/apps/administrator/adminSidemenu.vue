@@ -279,7 +279,7 @@
                   </router-link>
                 </li>
 
-                <li>
+                <!-- <li>
                   <router-link :to="{ name: 'manage-order-stock-supplier' }">
                     <a href="#" class="
                     flex
@@ -292,12 +292,11 @@
                         rounded-lg
                         dark:text-white
                         hover:bg-gray-300
-                        dark:hover:bg-gray-700
-                ">
+                        dark:hover:bg-gray-700">
                       <span class="ml-3">Manage Order Supplier</span>
                     </a>
                   </router-link>
-                </li>
+                </li> -->
 
                 <li>
                   <router-link :to="{ name: 'manage-order-stock-outlet-hq' }">
@@ -318,6 +317,26 @@
                     </a>
                   </router-link>
                 </li>
+
+                <li>
+                  <router-link :to="{ name: 'summary-stock-order' }">
+                    <a href="#" class="
+                    flex
+                        items-center
+                        p-3
+                        ml-2
+                        text-sm
+                        font-sm
+                        text-gray-900
+                        rounded-lg
+                        dark:text-white
+                        hover:bg-gray-300
+                        dark:hover:bg-gray-700
+                ">
+                      <span class="ml-3">Summary Stock Order</span>
+                    </a>
+                  </router-link>
+                </li>
               </ul>
             </div>
           </li>
@@ -325,7 +344,8 @@
 
 
           <li>
-            <a href="#" class="
+            <router-link :to="{ name: 'outlet-manage-stock' }">
+              <a href="#" class="
                   flex
                   items-center
                   p-2
@@ -337,9 +357,10 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 " @click="dropdownStockOutlet()">
-              <span class="flex-1 ml-3 whitespace-nowrap">Stock - Outlet</span>
-            </a>
-            <div v-if="this.stockDropOutlet == true">
+                <span class="flex-1 ml-3 whitespace-nowrap">Stock - Outlet</span>
+              </a>
+            </router-link>
+            <!-- <div v-if="this.stockDropOutlet == true">
               <ul>
                 <li>
                   <router-link :to="{ name: 'outlet-manage-stock' }">
@@ -381,7 +402,27 @@
                   </router-link>
                 </li>
               </ul>
-            </div>
+            </div> -->
+          </li>
+
+
+          <li>
+            <router-link :to="{ name: 'manage-order-stock-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order - HQ</span>
+              </a>
+            </router-link>
           </li>
 
           <li>
@@ -398,7 +439,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order - HQ </span>
               </a>
             </router-link>
           </li>
@@ -417,7 +458,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Invoice</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Invoice - HQ</span>
               </a>
             </router-link>
           </li>
@@ -436,7 +477,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Store</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Store - HQ</span>
               </a>
             </router-link>
           </li>
@@ -455,7 +496,121 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Supplier</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Supplier - HQ</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'manage-order-stock-outlet' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Stock Order - Outlet</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'manage-delivery-order-outlet' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order - Outlet </span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'manage-invoice' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Invoice - Outlet</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'admin-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Order - Supplier</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'admin-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order - Supplier</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li>
+            <router-link :to="{ name: 'admin-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Invoice - Supplier</span>
               </a>
             </router-link>
           </li>
@@ -518,6 +673,26 @@
               </ul>
             </div>
           </li>
+
+          <li>
+            <router-link :to="{ name: 'login' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Settings</span>
+              </a>
+            </router-link>
+          </li>
+
           <!-- LOGOUT -->
           <li>
             <router-link :to="{ name: 'login' }">

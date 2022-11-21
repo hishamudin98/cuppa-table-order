@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-x-2">
                     <div class="welcome text-lg font-semibold text-white">
-                        Manage Order Stock - Outlet
+                        Manage Order Stock Outlet - HQ
                     </div>
                 </div>
 
@@ -23,14 +23,14 @@
                     <arbitrary />
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
-                    <!-- <div class="w-full flex flex-row mb-0">
+                    <div class="w-full flex flex-row mb-0">
                         <div class="inline-block w-1/2 pr-10">
                             <rs-card>
                                 <div class="text-center pt-10 pb-2">
                                     <strong>Total of Stock Order </strong>
                                 </div>
                                 <hr />
-                                <div class="text-center py-8">{{ this.totalData }} Stock Order</div>
+                                <div class="text-center py-8">{{ this.totalData }} shifts</div>
                             </rs-card>
                         </div>
                         <div class="inline-block w-1/2 pr-10">
@@ -44,7 +44,7 @@
                                 </div>
                             </rs-card>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
                         <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -58,7 +58,7 @@
                                     }" />
                             </div>
                             <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">New Stock Order
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Order Stock
                                 </rs-button>
                             </div>
                         </div>
@@ -66,81 +66,54 @@
                             <rs-card style="margin-top: 40px">
                                 <div>
                                     <div>
-
                                         <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column field="outletName" header="Outlet Name"></Column>
                                             <Column field="stockOrderOutletNo" header="Order No."></Column>
                                             <Column field="stockOrderOutletDatetime" header="Order Datetime"></Column>
-                                            <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
-                                            <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
+                                            <Column field="stockOrderOutletRemarks" header="Stock Name">
                                                 <template #body="searchOrderStock">
-                                                    {{
-                                                            formatPrice(searchOrderStock.data.stockOrderOutletTotalPrice)
-                                                    }}
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
+                                                        Pasta</p>
+
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
+                                                        Gula 1kg</p>
                                                 </template>
                                             </Column>
-
-                                            <Column field="stockOrderOutletRemarks" header="Staff">
+                                            <Column field="stockOrderOutletRemarks" header="Quantity Requested">
                                                 <template #body="searchOrderStock">
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletRemarks">
-                                                        Staff A</p>
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode">
+                                                        20</p>
                                                 </template>
+                                            </Column>
+                                            <Column field="stockOrderOutletRemarks" header="Quantity Available">
+                                                <template #body="searchOrderStock">
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
+                                                        5</p>
 
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
+                                                        100</p>
+                                                </template>
                                             </Column>
                                             <Column field="stockOrderOutletStatusCode" header="Status">
                                                 <template #body="searchOrderStock">
-                                                    <rs-badges variant="success"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
-                                                        @click="clickBtnStatus()">
-                                                        Open</rs-badges>
-                                                    {{ "" }}
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
+                                                    <rs-badges variant="danger"
+                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
+                                                        Low Stock</rs-badges>
 
                                                     <rs-badges variant="success"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
-                                                        @click="clickBtnStatus()">
-                                                        Approved</rs-badges>
-                                                    {{ "" }}
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
+                                                        In Stock</rs-badges>
 
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
-                                                        Accepted</p>
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
-                                                        Delivery</p>
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
-                                                        Received</p>
                                                 </template>
 
                                             </Column>
 
-                                            <Column :exportable="false" header="Details">
-
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchOrderStock">
-
-                                                    <router-link
-                                                        :to="{ name: 'order-stock-outlet', params: { id: searchOrderStock.data.stockOrderOutletId } }">
-                                                        <Button icon="pi pi-truck"
-                                                            class="p-button-rounded p-button-info" />
-                                                    </router-link>
-                                                </template>
-
-
-                                            </Column>
-
-                                            <Column :exportable="false" style="min-width: 8rem">
-                                                <template #body="searchOrderStock">
-                                                    <Button icon="pi pi-send"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
-                                                    <Button icon="pi pi-print"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchOrderStock)" />
@@ -169,9 +142,15 @@
         </div>
 
         <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="md">
+            <FormKit type="select" label="Outlet" :options="[
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+            ]" />
             <table>
                 <div v-for="(rm, l) in this.rawMaterial" :key="l">
                     <tbody>
+
                         <tr>
                             <td>
                                 <FormKit type="text" hidden />
@@ -224,29 +203,6 @@
             </rs-button>
         </rs-modal><!-- INSERT -->
 
-        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
-
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
-                Save
-            </rs-button>
-        </rs-modal>
-
-        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
-
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
-        </rs-modal>
-
     </rs-layout>
 </template>
 <script>
@@ -261,6 +217,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 import RsBadges from '@/components/Badges.vue';
+
 
 export default {
     name: "RawMaterial",
@@ -314,9 +271,7 @@ export default {
             outletDrop: false,
             sumPrice: 0,
             menuDrop: false,
-            counter: 1,
             /* BARU */
-
             rawMaterial: [{
                 type: "",
             }],
@@ -328,8 +283,6 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
-            modalStatus: false,
-            modalInfo: false,
         };
     },
     async created() {
@@ -453,16 +406,6 @@ export default {
         async clickBtnAdd() {
             // this.users1 = user.data;
             this.modalRawMaterial = true;
-        },
-
-        async clickBtnInfo() {
-            // this.users1 = user.data;
-            this.modalInfo = true;
-        },
-
-        async clickBtnStatus() {
-            // this.users1 = user.data;
-            this.modalStatus = true;
         },
 
         async insertRawMaterial() {

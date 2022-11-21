@@ -119,6 +119,13 @@ export default [{
     },
 
     {
+        path: "/admin/summary-stock-order",
+        name: "summary-stock-order",
+        component: () =>
+            import ("@/views/apps/administrator/hq/stock/summaryStockOrder.vue"),
+    },
+
+    {
         path: "/admin/manage-order-stock-outlet-hq/:id",
         name: "order-stock-outlet-hq",
         component: () =>
@@ -158,7 +165,7 @@ export default [{
         path: "/admin/delivery-order",
         name: "manage-delivery-order",
         component: () =>
-            import ("@/views/apps/administrator/deliveryOrder/manageDO.vue"),
+            import ("@/views/apps/administrator/deliveryOrder/hq/manageDO.vue"),
     },
 
     {
@@ -172,6 +179,13 @@ export default [{
         name: "admin-organization",
         component: () =>
             import ("@/views/apps/administrator/organization/adminOrganization.vue"),
+    },
+
+    {
+        path: "/admin/delivery-order-outlet",
+        name: "manage-delivery-order-outlet",
+        component: () =>
+            import ("@/views/apps/administrator/deliveryOrder/outlet/manageDO.vue"),
     },
 
     /*{

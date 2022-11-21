@@ -23,7 +23,7 @@
                     <arbitrary />
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
-                    <div class="w-full flex flex-row mb-0">
+                    <!-- <div class="w-full flex flex-row mb-0">
                         <div class="inline-block w-1/2 pr-10">
                             <rs-card>
                                 <div class="text-center pt-10 pb-2">
@@ -44,7 +44,7 @@
                                 </div>
                             </rs-card>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
                         <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -81,10 +81,38 @@
                                                     }}
                                                 </template>
                                             </Column>
+
+                                            <Column field="suppOrderRemarks" header="Staff">
+                                                <template #body="searchOrderStock">
+                                                    <p v-if="searchOrderStock.data.suppOrderRemarks">
+                                                        Staff A</p>
+                                                </template>
+
+                                            </Column>
+
+                                            <Column field="suppOrderRemarks" header="DO">
+                                                <template #body="searchOrderStock">
+                                                    <p v-if="searchOrderStock.data.suppOrderStatusCode === '2'" hidden>
+                                                        Approved</p>
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        @click="clickBtnDO()">
+                                                        <vue-feather type="file-text" style="width: 17px;height:17px">
+                                                        </vue-feather>
+                                                    </Button>
+                                                </template>
+
+                                            </Column>
+
                                             <Column field="suppOrderStatusCode" header="Status">
                                                 <template #body="searchOrderStock">
-                                                    <p v-if="searchOrderStock.data.suppOrderStatusCode === '1'">
-                                                        Open</p>
+                                                    <rs-badges variant="success"
+                                                        v-if="searchOrderStock.data.suppOrderStatusCode === '1'"
+                                                        @click="clickBtnStatus()">
+                                                        Partial Delivered</rs-badges>
+                                                    {{ "" }}
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
                                                     <p v-if="searchOrderStock.data.suppOrderStatusCode === '2'">
                                                         Approved</p>
                                                     <p v-if="searchOrderStock.data.suppOrderStatusCode === '3'">
@@ -111,13 +139,20 @@
 
                                             </Column>
 
-                                            <Column :exportable="false" style="min-width: 8rem">
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchOrderStock">
+
+                                                    <Button icon="pi pi-send"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
+                                                    <Button icon="pi pi-print"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchOrderStock)" />
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                        @click="deleteUser(searchOrderStock)" />
+                                                        @click="deleteUser(searchOrderStock)" /> {{ "" }}
                                                 </template>
                                             </Column>
 
@@ -152,6 +187,14 @@
                 'Outlet',
             ]" />
 
+            <FormKit type="select" label="Store" :options="[
+                'Store Shah Alam',
+                'Store Sg Besi',
+                'Store Sg Buloh',
+            ]" />
+
+            <FormKit type="textarea" label="Remarks" />
+
             <table>
                 <div v-for="(rm, l) in this.rawMaterial" :key="l">
                     <tbody>
@@ -169,14 +212,13 @@
                                 ]" />
                             </td>
                             <td>
-                                <FormKit type="number" label="Quantity" />
+                                <FormKit type="number" label="Quantity Order" />
                             </td>
                             <td>
-                                <FormKit type="select" label="Store" :options="[
-                                    'Store Shah Alam',
-                                    'Store Sg Besi',
-                                    'Store Sg Buloh',
-                                ]" />
+                                <FormKit type="number" label="Quantity Available" />
+                            </td>
+                            <td>
+                                <FormKit type="number" label="Min. Quantity" />
                             </td>
                             <td>
                                 <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
@@ -208,6 +250,37 @@
             </rs-button>
         </rs-modal><!-- INSERT -->
 
+
+        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
+            <FormKit type="select" label="Status" :options="[
+                'Open',
+                'Approved',
+                'Accepted',
+                'Delivery',
+                'Received',
+            ]" />
+
+            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                Save
+            </rs-button>
+        </rs-modal>
+
+        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
+            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
+            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
+            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
+            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
+
+        <rs-modal title="DO No." v-model="modalDO" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>D0001</b> (Open)</p>
+            <p>2022-11-18 12:00 : <b>D0002</b> (Approved)</p>
+            <p>2022-11-18 13:00 : <b>D0003</b> (Received)</p>
+        </rs-modal>
+
     </rs-layout>
 </template>
 <script>
@@ -221,12 +294,15 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import RsBadges from "@/components/Badges.vue";
+
 
 export default {
     name: "RawMaterial",
     components: {
         RsButton,
         DataTable,
+        RsBadges,
         RsModal,
         Column,
         Button,
@@ -285,6 +361,10 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
+            modalStatus: false,
+            modalInfo: false,
+            modalDO: false,
+
         };
     },
     async created() {
@@ -408,6 +488,21 @@ export default {
         async clickBtnAdd() {
             // this.users1 = user.data;
             this.modalRawMaterial = true;
+        },
+
+        async clickBtnStatus() {
+            // this.users1 = user.data;
+            this.modalStatus = true;
+        },
+
+        async clickBtnInfo() {
+            // this.users1 = user.data;
+            this.modalInfo = true;
+        },
+
+        async clickBtnDO() {
+            // this.users1 = user.data;
+            this.modalDO = true;
         },
 
         async insertRawMaterial() {

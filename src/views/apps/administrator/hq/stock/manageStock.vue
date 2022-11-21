@@ -72,8 +72,17 @@
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                             <Column field="rm_Name" header="Name"></Column>
                                             <Column field="rm_Sku" header="SKU"></Column>
-                                            <Column field="rm_Quantity" header="Quantity"></Column>
+                                            <Column field="rm_Quantity" header="Quantity">
+                                                <template #body="searchRawMaterial">
+                                                    <p v-if="searchRawMaterial.data.rm_Quantity <= 5"
+                                                        style="color:red; font-weight: bold;">
+                                                        {{ searchRawMaterial.data.rm_Quantity }}</p>
+                                                    <p v-else>{{ searchRawMaterial.data.rm_Quantity }}</p>
+                                                </template>
+                                            </Column>
                                             <Column field="rm_MinQuantity" header="Min. Quantity"></Column>
+                                            <Column field="rm_MinQuantity" header="Quantity By Packaging Type">
+                                            </Column>
                                             <Column field="rm_Packaging" header="Packaging Type">
                                                 <template #body="searchRawMaterial">
                                                     <p v-if="searchRawMaterial.data.rm_Packaging === '1'">Box</p>
@@ -169,6 +178,11 @@
 
         <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
             <FormKit label="Name" type="text" v-model="name" />
+
+            <FormKit type="select" label="Category" :options="[
+                'Product',
+                'Product & Services',
+            ]" />
             <FormKit label="SKU" type="text" v-model="sku" />
             <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
             <FormKit label="Quantity" type="number" v-model="quantity" />

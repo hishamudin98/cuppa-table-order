@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-x-2">
                     <div class="welcome text-lg font-semibold text-white">
-                        Manage Order Stock - Outlet
+                        Delivery Order
                     </div>
                 </div>
 
@@ -23,28 +23,9 @@
                     <arbitrary />
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
-                    <!-- <div class="w-full flex flex-row mb-0">
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total of Stock Order </strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">{{ this.totalData }} Stock Order</div>
-                            </rs-card>
-                        </div>
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total Price Stock Order ( RM )</strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">
-                                    {{ formatPrice(this.sumPrice) }}
-                                </div>
-                            </rs-card>
-                        </div>
-                    </div> -->
+                    <div class="w-full flex flex-row mb-0">
+
+                    </div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
                         <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -57,95 +38,100 @@
                                         input: 'h-10',
                                     }" />
                             </div>
+
                             <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">New Stock Order
+                                <rs-button class="bg-heandshe hover:bg-heandshe">Filter
                                 </rs-button>
                             </div>
+
                         </div>
                         <div class="">
                             <rs-card style="margin-top: 40px">
                                 <div>
                                     <div>
-
-                                        <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                        <DataTable :value="searchStore" :paginator="true" :rows="10"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                            <Column field="stockOrderOutletNo" header="Order No."></Column>
-                                            <Column field="stockOrderOutletDatetime" header="Order Datetime"></Column>
-                                            <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
-                                            <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
-                                                <template #body="searchOrderStock">
-                                                    {{
-                                                            formatPrice(searchOrderStock.data.stockOrderOutletTotalPrice)
-                                                    }}
+                                            <Column field="sto_Name" header="DO No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">D0-00001</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
+                                            </Column>
+                                            <Column field="sto_Email" header="Date">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">14/07/2022</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
 
-                                            <Column field="stockOrderOutletRemarks" header="Staff">
-                                                <template #body="searchOrderStock">
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletRemarks">
-                                                        Staff A</p>
+                                            <Column field="sto_PhoneNo" header="Order No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">#QwDer</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
+                                            </Column>
+
+                                            <Column field="sto_PhoneNo" header="Staff">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type">Staff HQ</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
+                                            </Column>
+                                            <Column field="sto_Type" header="Total Price">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
+                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                </template>
+                                            </Column>
+
+                                            <Column field="sto_Status" header="PIC Name">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">Customer Name</p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
                                                 </template>
 
                                             </Column>
-                                            <Column field="stockOrderOutletStatusCode" header="Status">
-                                                <template #body="searchOrderStock">
-                                                    <rs-badges variant="success"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
-                                                        @click="clickBtnStatus()">
-                                                        Open</rs-badges>
-                                                    {{ "" }}
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
 
-                                                    <rs-badges variant="success"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
-                                                        @click="clickBtnStatus()">
+                                            <Column field="sto_Status" header="PIC Phone No.">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">0123123123</p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                </template>
+
+                                            </Column>
+
+                                            <Column field="sto_Status" header="Status">
+                                                <template #body="searchStore">
+                                                    <rs-badges variant="success" v-if="searchStore.data.sto_Status">
                                                         Approved</rs-badges>
-                                                    {{ "" }}
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
 
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
-                                                        Accepted</p>
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
-                                                        Delivery</p>
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
-                                                        Received</p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
                                                 </template>
 
                                             </Column>
+
 
                                             <Column :exportable="false" header="Details">
-
-                                                <template #body="searchOrderStock">
-
-                                                    <router-link
-                                                        :to="{ name: 'order-stock-outlet', params: { id: searchOrderStock.data.stockOrderOutletId } }">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.rm_Status === '1'" hidden>Level 1</p>
+                                                    <router-link :to="{ name: 'manage-stock' }">
                                                         <Button icon="pi pi-truck"
                                                             class="p-button-rounded p-button-info" />
                                                     </router-link>
                                                 </template>
-
-
                                             </Column>
 
-                                            <Column :exportable="false" style="min-width: 8rem">
-                                                <template #body="searchOrderStock">
-                                                    <Button icon="pi pi-send"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
-                                                    <Button icon="pi pi-print"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                                                <template #body="searchStore">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchOrderStock)" />
+                                                        @click="editUser(searchStore)" />
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                        @click="deleteUser(searchOrderStock)" />
+                                                        @click="deleteUser(searchStore)" />
+
+
                                                 </template>
                                             </Column>
 
@@ -155,6 +141,7 @@
                                             <template #paginatorend>
                                                 <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                                             </template>
+
                                         </DataTable>
                                     </div>
                                 </div>
@@ -168,7 +155,20 @@
             </div>
         </div>
 
-        <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="md">
+        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="md">
+            <FormKit label="PIC Name" type="text" v-model="name" />
+            <FormKit label="PIC Phone No." type="text" v-model="sku" />
+            <FormKit label="Destination" type="select" v-model="minquantity" :options="[
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+                'He & She University of Malaya',
+            ]" />
+
+            <FormKit label="Order No." type="select" v-model="minquantity" :options="[
+                '#QwDer',
+                '#ASDqwe',
+            ]" />
+
             <table>
                 <div v-for="(rm, l) in this.rawMaterial" :key="l">
                     <tbody>
@@ -188,11 +188,7 @@
                                 <FormKit type="number" label="Quantity" />
                             </td>
                             <td>
-                                <FormKit type="select" label="Store" :options="[
-                                    'Store Shah Alam',
-                                    'Store Sg Besi',
-                                    'Store Sg Buloh',
-                                ]" />
+                                <FormKit type="text" label="Remarks" />
                             </td>
                             <td>
                                 <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
@@ -207,45 +203,10 @@
                 </div>
             </table>
 
-
-            <!-- 
-            <FormKit label="Name" type="text" v-model="name" />
-            <FormKit label="SKU" type="text" v-model="sku" />
-            <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
-            <FormKit label="Quantity" type="number" v-model="quantity" />
-            <FormKit label="Price (RM)" type="number" v-model="price" />
-            <FormKit type="select" label="Packaging Type" v-model="packaging_type" placeholder="Choose Packaging Type"
-                :options="this.typePackaging" />
-            <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
-                :options="this.unitMeasurement" /> -->
-
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
-
-        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
-
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
-                Save
-            </rs-button>
-        </rs-modal>
-
-        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
-
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
-        </rs-modal>
 
     </rs-layout>
 </template>
@@ -260,7 +221,8 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
-import RsBadges from '@/components/Badges.vue';
+import RsBadges from "@/components/Badges.vue";
+
 
 export default {
     name: "RawMaterial",
@@ -274,17 +236,17 @@ export default {
         'arbitrary': Menu,
     },
     setup() {
-        const orderStock = ref([]);
+        const store = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
-        const searchOrderStock = computed(() => {
-            return orderStock.value.filter((orderStock) => {
+        const searchStore = computed(() => {
+            return store.value.filter((store) => {
                 return (
-                    orderStock.stockOrderOutletNo.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    orderStock.stockOrderOutletNo
+                    store.sto_Name
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -298,8 +260,8 @@ export default {
         };
         return {
             search,
-            searchOrderStock,
-            orderStock,
+            searchStore,
+            store,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -314,9 +276,7 @@ export default {
             outletDrop: false,
             sumPrice: 0,
             menuDrop: false,
-            counter: 1,
             /* BARU */
-
             rawMaterial: [{
                 type: "",
             }],
@@ -328,15 +288,11 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
-            modalStatus: false,
-            modalInfo: false,
         };
     },
     async created() {
         this.getdata();
-        this.getOrderStock();
-        this.getTypePackaging();
-        this.getUnitMeasurement();
+        this.getStore();
     },
 
     methods: {
@@ -366,66 +322,14 @@ export default {
                 });
         },
 
-        async getTypePackaging() {
-            var axios = require("axios");
-            var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getTypePackaging",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.typePackaging.push({
-                                label: response.data.data[i].packaging_Name,
-                                value: response.data.data[i].packaging_Value,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getUnitMeasurement() {
-            var axios = require("axios");
-            var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getUnitMeasurement",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.unitMeasurement.push({
-                                label: response.data.data[i].packaging_Name,
-                                value: response.data.data[i].packaging_Value,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getOrderStock() {
+        async getStore() {
             var axios = require("axios");
             // var data = JSON.stringify({
             //     staffid: localStorage.staff,
             // });
             var config = {
                 method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/outlet/getOrderStock",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -433,13 +337,13 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        console.log("data : ", response.data.data);
-                        this.orderStock = response.data.data;
-                        this.totalData = this.orderStock.length;
+                        console.log("resp", response.data.data);
+                        this.store = response.data.data;
+                        this.totalData = this.store.length;
 
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].stockOrderOutletTotalPrice;
+                            price += response.data.data[i].rm_Price;
 
                         }
                         this.sumPrice = price;
@@ -453,16 +357,6 @@ export default {
         async clickBtnAdd() {
             // this.users1 = user.data;
             this.modalRawMaterial = true;
-        },
-
-        async clickBtnInfo() {
-            // this.users1 = user.data;
-            this.modalInfo = true;
-        },
-
-        async clickBtnStatus() {
-            // this.users1 = user.data;
-            this.modalStatus = true;
         },
 
         async insertRawMaterial() {
@@ -492,7 +386,7 @@ export default {
                             this.modalRawMaterial = false;
                             alert(response.data.message);
                             this.users.splice(0);
-                            this.getOrderStock();
+                            this.getRawMaterial();
                         } else {
                             alert(response.data.message);
                         }
