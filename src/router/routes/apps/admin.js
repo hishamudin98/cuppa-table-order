@@ -188,6 +188,13 @@ export default [{
             import ("@/views/apps/administrator/deliveryOrder/outlet/manageDO.vue"),
     },
 
+    {
+        path: "/admin/payment-voucher",
+        name: "manage-payment-voucher",
+        component: () =>
+            import ("@/views/apps/administrator/paymentVoucher/hq/managePayment.vue"),
+    },
+
     /*{
                     path: "/order/previous/:orderID?",
                     name: "order-previous",
