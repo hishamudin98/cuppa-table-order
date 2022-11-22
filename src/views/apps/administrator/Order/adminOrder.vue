@@ -128,12 +128,12 @@
                       >
                         <template #body="searchOrder">
                           <Button v-if="searchOrder.data.order_status == 'Completed' || searchOrder.data.order_status == 'Preparing'"
-                          class=" p-button-rounded p-button-danger">
+                          class=" p-button-rounded p-button-warning">
                             Refund
                           </Button>
                           <Button v-if="searchOrder.data.order_status == 'In Cart' || searchOrder.data.order_status == 'Pending'"
-                          class="p-button-rounded p-button-warning">
-                            Refund
+                          class="p-button-rounded p-button-danger">
+                            Cancel
                           </Button>
                         </template>
                       </Column>
@@ -185,6 +185,14 @@
       <label><strong>Order From </strong></label>
       <br />
       {{this.data.order_from}}
+      <br />
+      <label><strong>Receipt No</strong></label>
+      <br />
+      {{this.data.receipt_no}}
+      <br />
+      <label><strong>Payment Method</strong></label>
+      <br />
+      {{this.data.payment_method}}
       <br />
       <label><strong>Membership No. : </strong></label>
       <div v-for="(input, l) in this.data.order_detail" :key="l">
@@ -332,6 +340,7 @@ export default {
       outlet_details: "",
       data:"",
       show: false,
+      payment: "",
     };
   },
   async created() {
@@ -434,6 +443,16 @@ export default {
               } else {
                 this.status = "Preparing";
               }
+
+              if (response.data.data.Order_det[i].transaction_method == 1) {
+                this.payment = "Cash";
+              } else if (response.data.data.Order_det[i].transaction_method == 2) {
+                this.payment = "FPX";
+              } else if (response.data.data.Order_det[i].transaction_method == 3) {
+                this.payment = "Credit/Debit Card";
+              } else if (response.data.data.Order_det[i].transaction_method == 4) {
+                this.payment = "QR Payment";
+              }
               this.order.push({
                 order_no: response.data.data.Order_det[i].order_no,
                 orderDatetime: moment(
@@ -447,6 +466,8 @@ export default {
                 outlet_id: response.data.data.Order_det[i].outlet_id,
                 order_detail: JSON.parse(response.data.data.Order_det[i].order_detail),
                 order_from: response.data.data.Order_det[i].order_from,
+                payment_method : this.payment,
+                receipt_no : response.data.data.Order_det[i].transaction_no,
               });
             }
             this.totalData = this.order.length;

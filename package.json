@@ -31,6 +31,7 @@
         "@storinka/dropdown": "^2.0.2",
         "@tailwindcss/line-clamp": "^0.4.0",
         "@tinymce/tinymce-vue": "^4",
+        "@vueform/multiselect": "^2.5.7",
         "@vuepic/vue-datepicker": "^3.2.2",
         "apexcharts": "^3.35.2",
         "autoprefixer": "^10",

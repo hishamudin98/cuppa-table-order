@@ -70,8 +70,8 @@
               </div>
               <div
                 v-if="this.staff_role != 3 || this.staff_category != 3"
-                class="w-1/12"
-                style="padding-top: 10px"
+                class="w-2/12"
+                style="padding-top: 3px"
               >
                 <rs-button
                   @click="addUser()"
@@ -79,13 +79,13 @@
                   >Add Organization Owner</rs-button
                 >
               </div>
-              <!-- <div class="w-1/12" style="padding-top: 10px">
+              <div class="w-1/12" style="padding-top: 3px">
                 <rs-button
                   @click="filter()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
-              </div> -->
+              </div>
             </div>
             <div class="">
               <rs-card style="padding-top: 10px">
@@ -197,17 +197,17 @@
     ><!-- SELECT -->
 
     <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
-      <FormKit
+      <!-- <FormKit
         v-model="role"
         type="radio"
         label="Role Status"
         :options="['Admin', 'User']"
-      />
+      /> -->
       <FormKit
         v-model="category"
         type="radio"
         label="Category Status"
-        :options="['HQ', 'Outlet', 'Supplier']"
+        :options="['HQ', 'Branch', 'Supplier' , 'Customer']"
       />
 
       <rs-button

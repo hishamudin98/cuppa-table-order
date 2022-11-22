@@ -9,7 +9,11 @@
         <div class="flex gap-x-2 items-center">
           <div class="text-white">{{ this.staffName }}</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
+            <img
+              class="flex-1"
+              src="@/assets/images/logo/heandshe.jpg"
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -68,23 +72,41 @@
             </div>
             <div class="h-4/6">
               <div>
-                <DataTable :value="searchUsers" :paginator="true" :rows="10"
+                <DataTable
+                  :value="searchUsers"
+                  :paginator="true"
+                  :rows="10"
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                  :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll" removableSort
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                  :rowsPerPageOptions="[10, 20, 50]"
+                  responsiveLayout="scroll"
+                  removableSort
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                >
                   <template #header>
                     <div class="flex justify-content-between">
                       <div class="w-11/12 h-10">
-                        <FormKit v-model="search" id="search-sticky" placeholder="Search for Menu..." type="search"
+                        <FormKit
+                          v-model="search"
+                          id="search-sticky"
+                          placeholder="Search for Menu..."
+                          type="search"
                           :classes="{
                             inner:
                               'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
                             outer: 'flex-1 mb-0',
                             input: 'h-12',
-                          }" />
+                          }"
+                        />
                       </div>
-                      <div v-if="this.staff_role != 3 || this.staff_category != 3" class="w-1/12 h-12 mt-1">
-                        <rs-button @click="addMenu()" class="bg-heandshe hover:bg-heandshe">Add Menu</rs-button>
+                      <div
+                        v-if="this.staff_role != 3 || this.staff_category != 3"
+                        class="w-1/12 h-12 mt-1"
+                      >
+                        <rs-button
+                          @click="addMenu()"
+                          class="bg-heandshe hover:bg-heandshe"
+                          >Add Menu</rs-button
+                        >
                       </div>
                     </div>
                   </template>
@@ -92,7 +114,10 @@
                     <template #body="searchUsers">
                       <div class="flex flex-row gap-y-px">
                         <div class="pr-10">
-                          <img :src="searchUsers.data.images[0].image1" class="product-image" />
+                          <img
+                            :src="searchUsers.data.images[0].image1"
+                            class="product-image"
+                          />
                         </div>
 
                         <div class="mt-5">
@@ -111,24 +136,49 @@
                       {{ formatPrice(searchUsers.data.price) }}
                     </template>
                   </Column>
-                  <Column field="code" header="Menu Code" :sortable="true"></Column>
+                  <Column
+                    field="code"
+                    header="Menu Code"
+                    :sortable="true"
+                  ></Column>
                   <Column field="code" header="Raw Materials">
                     <template #body="searchUsers">
-                      
                       <router-link
-                        :to="{ name: 'admin-menu-rawmaterial', params: { menuid: searchUsers.data.menuid } }">
-                        <Button icon="pi pi-box" class="p-button-rounded p-button-info mx-5" />
+                        :to="{
+                          name: 'admin-menu-rawmaterial',
+                          params: { menuid: searchUsers.data.menuid },
+                        }"
+                      >
+                        <Button
+                          icon="pi pi-box"
+                          class="p-button-rounded p-button-info mx-5"
+                        />
                       </router-link>
                     </template>
                   </Column>
-                  <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                  <Column
+                    :exportable="false"
+                    style="min-width: 8rem"
+                    header="Actions"
+                  >
                     <template #body="searchUsers">
-                      <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
-                        @click="editMenu(searchUsers)" />
-                      <router-link :to="{ name: 'admin-menu-outlet', params: { menuid: searchUsers.data.menuid } }">
-                        <Button icon="pi pi-building" class="p-button-rounded p-button-success mx-5" />
+                      <Button
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mx-2"
+                        @click="editMenu(searchUsers)"
+                      />
+                      <router-link
+                        :to="{
+                          name: 'admin-menu-outlet',
+                          params: { menuid: searchUsers.data.menuid },
+                        }"
+                      >
+                        <Button
+                          icon="pi pi-building"
+                          class="p-button-rounded p-button-success mx-5"
+                        />
                       </router-link>
-                   
+
                       <!-- <Button
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-warning mx-2"
@@ -137,10 +187,18 @@
                     </template>
                   </Column>
                   <template #paginatorstart>
-                    <Button type="button" icon="pi pi-refresh" class="p-button-text" />
+                    <Button
+                      type="button"
+                      icon="pi pi-refresh"
+                      class="p-button-text"
+                    />
                   </template>
                   <template #paginatorend>
-                    <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                    <Button
+                      type="button"
+                      icon="pi pi-cloud"
+                      class="p-button-text"
+                    />
                   </template>
                 </DataTable>
               </div>
@@ -152,15 +210,30 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
-    <rs-modal title="Add Menu" v-model="addMenuModal" position="middle" size="md">
+    <rs-modal
+      title="Add Menu"
+      v-model="addMenuModal"
+      position="middle"
+      size="md"
+    >
       <FormKit type="text" label="Menu Name" v-model="menu_name" />
-      <FormKit type="file" label="Images" v-model="menu_images" accept=".jpg, .png, .jpeg" />
+      <FormKit
+        type="file"
+        label="Images"
+        v-model="menu_images"
+        accept=".jpg, .png, .jpeg"
+      />
       <FormKit type="number" label="Menu Price ( RM )" v-model="menu_price" />
-      <FormKit type="select" label="Menu Stations" v-model="menu_station" :options="[
-        { label: 'Kitchen', value: 1 },
-        { label: 'Beverages', value: 2 },
-        { label: 'Bakery', value: 3 },
-      ]" />
+      <FormKit
+        type="select"
+        label="Menu Stations"
+        v-model="menu_station"
+        :options="[
+          { label: 'Kitchen', value: 1 },
+          { label: 'Beverages', value: 2 },
+          { label: 'Bakery', value: 3 },
+        ]"
+      />
       <!-- <FormKit
         type="select"
         label="Category"
@@ -169,15 +242,30 @@
         :options="this.categories"
       /> -->
       <label><strong>Menu Category</strong></label>
-      <vue-taggable-select v-model="fruit" :options="this.categories" placeholder="Select Category">
-      </vue-taggable-select>
+      <!-- <vue-taggable-select v-model="category1" :options="this.categories" placeholder="Select Category">
+      </vue-taggable-select> -->
+      <Multiselect
+        v-model="fruit"
+        mode="tags"
+        :close-on-select="false"
+        :searchable="true"
+        :create-option="true"
+        :options="this.categories"
+      />
+
+      
 
       <br />
       <FormKit v-model="value" type="checkbox" label="Variants?" />
       <rs-button style="float: right" @click="nextPage()"> Save </rs-button>
     </rs-modal>
 
-    <rs-modal title="Add Variant" v-model="addVariantModal" position="middle" size="md">
+    <rs-modal
+      title="Add Variant"
+      v-model="addVariantModal"
+      position="middle"
+      size="md"
+    >
       <div v-for="(input, k) in variants" :key="k">
         <table class="table-fixed border-2 mb-2">
           <tbody>
@@ -185,12 +273,20 @@
               <FormKit type="text" label="Variants Type" v-model="input.type" />
             </td>
             <td>
-              <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2" @click="remove(k)"
-                v-show="k || (!k && variants.length > 1)" />
+              <Button
+                icon="pi pi-minus"
+                class="p-button-rounded p-button-danger mx-2"
+                @click="remove(k)"
+                v-show="k || (!k && variants.length > 1)"
+              />
             </td>
             <td>
-              <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5" @click="add(k)"
-                v-show="k == variants.length - 1" />
+              <Button
+                icon="pi pi-plus"
+                class="p-button-rounded p-button-success mx-5"
+                @click="add(k)"
+                v-show="k == variants.length - 1"
+              />
             </td>
           </tbody>
           <tr>
@@ -201,18 +297,34 @@
                     <FormKit type="text" v-model="inputs.id" hidden />
                   </td>
                   <td>
-                    <FormKit type="text" label="Variant Name" v-model="inputs.name" />
+                    <FormKit
+                      type="text"
+                      label="Variant Name"
+                      v-model="inputs.name"
+                    />
                   </td>
                   <td>
-                    <FormKit type="number" label="Price Added To Base Price" v-model="inputs.price" />
+                    <FormKit
+                      type="number"
+                      label="Price Added To Base Price"
+                      v-model="inputs.price"
+                    />
                   </td>
                   <td>
-                    <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2" @click="removeL(k)"
-                      v-show="l || (!l && input.data.length > 1)" />
+                    <Button
+                      icon="pi pi-minus"
+                      class="p-button-rounded p-button-danger mx-2"
+                      @click="removeL(k)"
+                      v-show="l || (!l && input.data.length > 1)"
+                    />
                   </td>
                   <td>
-                    <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5" @click="addL(k)"
-                      v-show="l == input.data.length - 1" />
+                    <Button
+                      icon="pi pi-plus"
+                      class="p-button-rounded p-button-success mx-5"
+                      @click="addL(k)"
+                      v-show="l == input.data.length - 1"
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -224,9 +336,18 @@
       <rs-button style="float: right" @click="insert()"> Save </rs-button>
     </rs-modal>
 
-    <rs-modal title="Edit Menu" v-model="editMenuModal" position="middle" size="md">
+    <rs-modal
+      title="Edit Menu"
+      v-model="editMenuModal"
+      position="middle"
+      size="md"
+    >
       <FormKit type="text" label="Menu Name" v-model="menuedit.name" />
-      <FormKit type="number" label="Menu Price ( RM )" v-model="menuedit.price" />
+      <FormKit
+        type="number"
+        label="Menu Price ( RM )"
+        v-model="menuedit.price"
+      />
       <rs-button style="float: right" @click="edit(menuedit)"> Save </rs-button>
     </rs-modal>
 
@@ -238,10 +359,19 @@
       <p>{{ formatPrice(menuedit.price) }}</p>
       <br />
       <label><strong>Outlet Available</strong></label>
-      <vue-taggable-select v-model="outlet" :options="this.outlets"></vue-taggable-select>
-      <br>
-      <FormKit type="number" label="Menu Price By Outlet ( RM )" v-model="menu_price" />
-      <rs-button style="float: right" @click="showMenuModal = false"> Save </rs-button>
+      <vue-taggable-select
+        v-model="outlet"
+        :options="this.outlets"
+      ></vue-taggable-select>
+      <br />
+      <FormKit
+        type="number"
+        label="Menu Price By Outlet ( RM )"
+        v-model="menu_price"
+      />
+      <rs-button style="float: right" @click="showMenuModal = false">
+        Save
+      </rs-button>
     </rs-modal>
   </rs-layout>
 </template>
@@ -257,6 +387,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 import VueTaggableSelect from "vue-taggable-select";
+import Multiselect from "@vueform/multiselect";
 
 export default {
   name: "AdminDashboard",
@@ -268,6 +399,7 @@ export default {
     Button,
     arbitrary: Menu,
     VueTaggableSelect,
+    Multiselect,
   },
   setup() {
     const users = ref([]);
@@ -342,6 +474,7 @@ export default {
       outletDrop: false,
       menuDrop: false,
       file: "",
+      fruit: null,
     };
   },
   async created() {
@@ -383,10 +516,12 @@ export default {
                 outlet_id: response.data.data[i].outlet_id,
                 outlet_name: response.data.data[i].outlet_name,
               });
-              this.outlets.push(/* {
-                label:  */response.data.data[i].outlet_name
+              this.outlets.push(
+                /* {
+                label:  */ response.data.data[i].outlet_name
                 /* value: this.valueOutlet, */
-              /* } */);
+                /* } */
+              );
               this.valueOutlet = [];
             }
           }.bind(this)
@@ -417,7 +552,7 @@ export default {
                 category_name: response.data.data[i].category_name,
               });
               this.categories.push(
-                /* label:  */response.data.data[i].category_name,
+                /* label:  */ response.data.data[i].category_name
                 /*  value: this.valueCategory, */
               );
               this.valueCategory = [];
@@ -446,7 +581,7 @@ export default {
           function (response) {
             this.staffName = response.data.data[0].staff_name;
             this.staff_category = response.data.data[0].category;
-            this.staff_role = response.data.data[0].role
+            this.staff_role = response.data.data[0].role;
           }.bind(this)
         )
         .catch(function (error) {
@@ -660,3 +795,4 @@ export default {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 </style>    
+<style src="@vueform/multiselect/themes/default.css"></style>

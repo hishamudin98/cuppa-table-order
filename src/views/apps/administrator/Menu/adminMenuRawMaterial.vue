@@ -38,7 +38,7 @@
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-0">
             <div class="inline-block w-1/2 pr-10">
-              <rs-card>
+              <!-- <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Total of Raw Material </strong>
                 </div>
@@ -57,7 +57,7 @@
                 <div class="text-center py-8">
                   {{ formatPrice(this.sumPrice) }}
                 </div>
-              </rs-card>
+              </rs-card> -->
             </div>
           </div>
           <div class="w-full" style="flex-direction: column">
@@ -91,65 +91,25 @@
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
-                      <Column field="rm_Name" header="Name"></Column>
-                      <Column field="rm_Sku" header="SKU"></Column>
-                      <Column field="rm_Quantity" header="Quantity"></Column>
-                      <Column
-                        field="rm_MinQuantity"
-                        header="Min. Quantity"
-                      ></Column>
-                      <Column field="rm_Packaging" header="Packaging Type">
-                        <template #body="searchRawMaterial">
-                          <p v-if="searchRawMaterial.data.rm_Packaging === '1'">
-                            Box
-                          </p>
-                          <p v-if="searchRawMaterial.data.rm_Packaging === '2'">
-                            Packet
-                          </p>
-                        </template>
+                      <Column header="Name">
+                        <template #body=""> Mushroom </template>
                       </Column>
-                      <Column field="rm_Unit" header="Measurement">
-                        <template #body="searchRawMaterial">
-                          <p v-if="searchRawMaterial.data.rm_Unit === '1'">
-                            gram
-                          </p>
-                          <p v-if="searchRawMaterial.data.rm_Unit === '2'">
-                            kilogram
-                          </p>
-                          <p v-if="searchRawMaterial.data.rm_Unit === '3'">
-                            centimetre
-                          </p>
-                          <p v-if="searchRawMaterial.data.rm_Unit === '4'">
-                            metre
-                          </p>
-                          <p v-if="searchRawMaterial.data.rm_Unit === '5'">
-                            pcs
-                          </p>
-                        </template>
+                      <Column header="Quantity">
+                        <template #body=""> 1 </template>
                       </Column>
-                      <Column field="rm_Price" header="Unit Price">
-                        <template #body="searchRawMaterial">
-                          {{ formatPrice(searchRawMaterial.data.rm_Price) }}
-                        </template>
+                      <Column header="Measurement">
+                        <template #body=""> gram </template>
+                      </Column>
+                      <Column header="Unit Cost ( RM )">
+                        <template #body=""> 5.00 </template>
                       </Column>
 
-                      <Column field="rm_Price" header="Total Price">
-                        <template #body="searchRawMaterial">
-                          {{
-                            formatPrice(searchRawMaterial.data.rm_TotalPrice)
-                          }}
-                        </template>
+                      <Column header="Total Cost">
+                        <template #body=""> 30.00 </template>
                       </Column>
 
-                      <Column field="rm_Status" header="Status">
-                        <template #body="searchRawMaterial">
-                          <p v-if="searchRawMaterial.data.rm_Status === '1'">
-                            Active
-                          </p>
-                          <p v-if="searchRawMaterial.data.rm_Status === '2'">
-                            Inactive
-                          </p>
-                        </template>
+                      <Column header="Status">
+                        <template #body=""> Active </template>
                       </Column>
 
                       <Column :exportable="false" style="min-width: 8rem">
@@ -405,7 +365,8 @@ export default {
         .then(
           function (response) {
             // console.log("price", response.data.data.rm_Price[0]);
-            this.rawMaterial = response.data.data;
+            /* this.rawMaterial = response.data.data; */
+            this.rawMaterial.push({ rm_Name: "mushroom", rm_Sku: "123123" });
             this.totalData = this.rawMaterial.length;
 
             let price = 0;

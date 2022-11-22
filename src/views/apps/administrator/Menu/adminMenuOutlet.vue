@@ -100,33 +100,7 @@
                       <Column field="" header="Price ( RM )"><template #body="">
                       6.00
                     </template></Column>
-                      <!-- <Column field="outlet_address" header="Address"></Column>
-                      <Column field="outlet_email" header="Email"></Column>
-                      <Column
-                        :exportable="false"
-                        style="min-width: 8rem"
-                        header="Actions"
-                      >
-                        <template #body="searchOutlet">
-                          <Button
-                            icon="pi pi-pencil"
-                            class="p-button-rounded p-button-success"
-                            @click="editOutlet(searchOutlet)"
-                          />
-                          <router-link :to="{ name: 'admin-table' }">
-                           <Button
-                            icon="pi pi-table"
-                            class="p-button-rounded p-button-success"
-                          />
-                          </router-link> -->
-                          <!-- <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-warning"
-                            @click="deleteTable(searchOutlet)"
-                          /> -->
-                       <!--  </template>
-                      </Column> -->
-
+                     
                       <template #paginatorstart>
                         <Button
                           type="button"
