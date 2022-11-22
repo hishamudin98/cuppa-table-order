@@ -203,6 +203,34 @@ export default [{
             import ("@/views/apps/administrator/paymentVoucher/hq/managePayment.vue"),
     },
 
+    {
+        path: "/admin/payment-voucher-outlet",
+        name: "manage-payment-voucher-outlet",
+        component: () =>
+            import ("@/views/apps/administrator/paymentVoucher/outlet/managePayment.vue"),
+    },
+
+
+    {
+        path: "/admin/order-supplier",
+        name: "manage-order-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/purchaseOrder/supplier/manageOrder.vue"),
+    },
+
+    {
+        path: "/admin/delivery-order-supplier",
+        name: "manage-delivery-order-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/deliveryOrder/supplier/manageDO.vue"),
+    },
+
+    {
+        path: "/admin/invoice-supplier",
+        name: "manage-invoice-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/invoice/supplier/manageInvoice.vue"),
+    },
     /*{
                     path: "/order/previous/:orderID?",
                     name: "order-previous",
