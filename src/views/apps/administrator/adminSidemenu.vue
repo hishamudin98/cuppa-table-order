@@ -25,7 +25,7 @@
           </li>
 
           <!-- ORGRANIZATION -->
-          <li v-if=" this.staff_category != 4">
+          <li v-if=" this.staff_category != 4 && this.staff_category != 3">
             <router-link :to="{ name: 'admin-organization' }">
               <a href="#" class="
                   flex
@@ -259,7 +259,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 " @click="dropdownStock()">
-              <span class="flex-1 ml-3 whitespace-nowrap">Stock - HQ</span>
+              <span class="flex-1 ml-3 whitespace-nowrap">Stock (HQ) </span>
             </a>
             <div v-if="this.stockDrop == true">
               <ul>
@@ -344,6 +344,8 @@
               </ul>
             </div>
           </li>
+
+          <!-- STOCK OUTLET -->
           <li v-if="this.staff_category == 3">
             <router-link :to="{ name: 'outlet-manage-stock' }">
               <a href="#" class="
@@ -358,7 +360,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 " @click="dropdownStockOutlet()">
-                <span class="flex-1 ml-3 whitespace-nowrap">Stock - Outlet</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Stock (Outlet)</span>
               </a>
             </router-link>
             <!-- <div v-if="this.stockDropOutlet == true">
@@ -406,7 +408,7 @@
             </div> -->
           </li>
 
-
+          <!-- HQ -->
           <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'manage-order-stock-supplier' }">
               <a href="#" class="
@@ -421,7 +423,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order - HQ</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order </span>
               </a>
             </router-link>
           </li>
@@ -440,7 +442,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order - HQ </span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order  </span>
               </a>
             </router-link>
           </li>
@@ -459,7 +461,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Invoice - HQ</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Invoice </span>
               </a>
             </router-link>
           </li>
@@ -478,7 +480,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Payment Voucher - HQ</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Payment Voucher </span>
               </a>
             </router-link>
           </li>
@@ -497,7 +499,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Store - HQ</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Store </span>
               </a>
             </router-link>
           </li>
@@ -516,11 +518,13 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Supplier - HQ</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Supplier </span>
               </a>
             </router-link>
           </li>
 
+
+          <!-- OUTLET -->
           <li v-if="this.staff_category == 3">
             <router-link :to="{ name: 'manage-order-stock-outlet' }">
               <a href="#" class="
@@ -535,7 +539,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order - Outlet</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order</span>
               </a>
             </router-link>
           </li>
@@ -554,7 +558,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order - Outlet </span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Delivery Order </span>
               </a>
             </router-link>
           </li>
@@ -573,7 +577,7 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Invoice - Outlet</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Invoice </span>
               </a>
             </router-link>
           </li>
@@ -592,10 +596,12 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Payment Voucher - Outlet</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">Payment Voucher </span>
               </a>
             </router-link>
           </li>
+
+          <!-- HQ -->
 
           <li v-if="this.staff_category == 4">
             <router-link :to="{ name: 'manage-order-supplier' }">
@@ -654,6 +660,7 @@
             </router-link>
           </li>
 
+          <!-- SUPPLIER -->
 
           <li v-if="this.staff_category == 4">
             <router-link :to="{ name: 'admin-supplier' }">
