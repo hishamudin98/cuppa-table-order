@@ -69,14 +69,14 @@
                                                     <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
-                                            
+
                                             <Column field="sto_Type" header="Total Price">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
                                                     <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
-                                           
+
                                             <!-- <Column field="sto_Level" header="Bill To">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type === '1'">
@@ -133,7 +133,7 @@
 
                                             <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchStore">
-                                 
+
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchStore)" />
@@ -205,18 +205,15 @@
         <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
-            <FormKit label="Bill To" type="select" v-model="minquantity" :options="[
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-            ]" />
+            <FormKit label="Bill To" type="text" v-model="sku" />
+
             <FormKit label="Postcode" type="text" v-model="sku" />
 
             <FormKit label="Address" type="textarea" v-model="sku" />
-            <FormKit label="DO No." type="select" v-model="minquantity" :options="['D0-00001', 'D0-00002']" />
 
             <label for="sto_Type">Delivery Order No.</label>
-            <vue-taggable-select v-model="fruit" :options="this.deliveryOrders" placeholder="Select Delivery Order No." label>
+            <vue-taggable-select v-model="fruit" :options="this.deliveryOrders" placeholder="Select Delivery Order No."
+                label>
             </vue-taggable-select>
 
             <!-- <table>

@@ -205,16 +205,11 @@
         <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
-            <FormKit label="Bill To" type="select" v-model="minquantity" :options="[
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-            ]" />
+            <FormKit label="Bill To" type="text" v-model="sku" />
+
             <FormKit label="Postcode" type="text" v-model="sku" />
 
             <FormKit label="Address" type="textarea" v-model="sku" />
-            <FormKit label="DO No." type="select" v-model="minquantity" :options="['D0-00001', 'D0-00002']" />
-
             <label for="sto_Type">Delivery Order No.</label>
             <vue-taggable-select v-model="fruit" :options="this.deliveryOrders" placeholder="Select Delivery Order No."
                 label>
