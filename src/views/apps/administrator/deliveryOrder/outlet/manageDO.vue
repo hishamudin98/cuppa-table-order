@@ -50,9 +50,12 @@
                                 <div>
                                     <div>
                                         <DataTable :value="searchStore" :paginator="true" :rows="10"
+                                            v-model:expandedRows="expandedRows"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
+
                                             <Column field="sto_Name" header="DO No.">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type">D0-00001</p>
@@ -135,11 +138,54 @@
                                                 </template>
                                             </Column>
 
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                                            </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                                            <template #expansion="searchStore12">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom:20px">Order No. Record for D0-00001 {{
+                                                            searchStore12.data.sto_Status2
+                                                    }}</h5>
+
+                                                    <DataTable :value="searchStore" :paginator="true" :rows="10"
+                                                        v-model:expandedRows="expandedRows"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+
+                                                        <Column field="sto_Status" header="Order No.">
+                                                            <template #body="searchStore">
+                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                    #QwDer</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Order Datetime">
+                                                            <template #body="searchStore">
+                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                    14/07/2022</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Remarks">
+                                                            <template #body="searchStore">
+                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                    Wrap </p>
+                                                            </template>
+                                                        </Column>
+
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+
+                                                    </DataTable>
+
+
+
+                                                </div>
                                             </template>
 
                                         </DataTable>
@@ -277,6 +323,7 @@ export default {
             sumPrice: 0,
             menuDrop: false,
             /* BARU */
+            expandedRows: [],
             rawMaterial: [{
                 type: "",
             }],

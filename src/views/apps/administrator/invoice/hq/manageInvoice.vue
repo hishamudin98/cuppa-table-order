@@ -133,10 +133,7 @@
 
                                             <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchStore">
-                                                    <Button icon="pi pi-dollar"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="redirectPayment()" />
-
+                                 
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchStore)" />
