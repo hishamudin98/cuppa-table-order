@@ -52,8 +52,10 @@
                                             <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="sto_Name" header="Invoice No.">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type">00001</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                        Inv-00001</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                        Inv-00002</p>
                                                 </template>
                                             </Column>
                                             <Column field="sto_Email" header="Date">
@@ -78,44 +80,45 @@
                                             </Column>
 
                                             <!-- <Column field="sto_Level" header="Bill To">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type === '1'">
-                                                        He & She University of Malaya
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                                </template>
-                                            </Column>
-
-                                            <Column field="sto_Status" header="PIC Name">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">
-                                                        Customer Name
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
-                                                </template>
-                                            </Column>
-
-                                            <Column field="sto_Status" header="PIC Phone No.">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">
-                                                        0123123123
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
-                                                </template>
-                                            </Column> -->
+                                                  <template #body="searchStore">
+                                                      <p v-if="searchStore.data.sto_Type === '1'">
+                                                          He & She University of Malaya
+                                                      </p>
+                                                      <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                  </template>
+                                              </Column>
+  
+                                              <Column field="sto_Status" header="PIC Name">
+                                                  <template #body="searchStore">
+                                                      <p v-if="searchStore.data.sto_Status === '1'">
+                                                          Customer Name
+                                                      </p>
+                                                      <p v-if="searchStore.data.sto_Status === '2'">
+                                                          Inactive
+                                                      </p>
+                                                  </template>
+                                              </Column>
+  
+                                              <Column field="sto_Status" header="PIC Phone No.">
+                                                  <template #body="searchStore">
+                                                      <p v-if="searchStore.data.sto_Status === '1'">
+                                                          0123123123
+                                                      </p>
+                                                      <p v-if="searchStore.data.sto_Status === '2'">
+                                                          Inactive
+                                                      </p>
+                                                  </template>
+                                              </Column> -->
 
                                             <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
                                                     <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
-                                                        Approved</rs-badges>
+                                                        Payment Ready</rs-badges>
+                                                    {{ "" }}
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
 
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
                                                 </template>
                                             </Column>
 
@@ -133,10 +136,14 @@
 
                                             <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchStore">
+                                                    <Button icon="pi pi-print"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
 
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchStore)" />
+                                                    {{ "" }}
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchStore)" />
                                                 </template>
@@ -145,7 +152,7 @@
                                             <template #expansion="searchStore12">
                                                 <div class="orders-subtable">
                                                     <h5 style="margin-bottom: 20px">
-                                                        Delivery Order Record for Invoice No. : 00001
+                                                        Delivery Order Record for Inv-00001
                                                         {{ searchStore12.data.sto_Status2 }}
                                                     </h5>
 
@@ -156,17 +163,19 @@
                                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                                         <Column field="sto_Status" header="DO No.">
                                                             <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Status == '1'">
-                                                                    D0-00001
-                                                                </p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                                    D0-00001</p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                                    D0-00002</p>
                                                             </template>
                                                         </Column>
 
                                                         <Column field="sto_Status" header="DO Datetime">
                                                             <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Status == '1'">
-                                                                    14/07/2022
-                                                                </p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                                    14/07/2022 12:00</p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                                    15/07/2022 12:00</p>
                                                             </template>
                                                         </Column>
 
@@ -175,6 +184,22 @@
                                                                 <p v-if="searchStore.data.sto_Status == '1'">
                                                                     Wrap
                                                                 </p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Status">
+                                                            <template #body="searchStore">
+                                                                <rs-badges variant="success"
+                                                                    v-if="searchStore.data.sto_Status">
+                                                                    Received</rs-badges>
+                                                                {{ "" }}
+                                                                <Button icon="pi pi-info"
+                                                                    class="p-button-rounded p-button-info"
+                                                                    style="width: 25px;height:25px"
+                                                                    @click="clickBtnInfo()" />
+                                                                <p v-if="searchStore.data.sto_Status === '2'">Inactive
+                                                                </p>
+
                                                             </template>
                                                         </Column>
 
@@ -205,54 +230,150 @@
         <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
-            <FormKit label="Bill To" type="text" v-model="sku" />
-
-            <FormKit label="Postcode" type="text" v-model="sku" />
-
-            <FormKit label="Address" type="textarea" v-model="sku" />
             <label for="sto_Type">Delivery Order No.</label>
-            <vue-taggable-select v-model="fruit" :options="this.deliveryOrders" placeholder="Select Delivery Order No."
-                label>
-            </vue-taggable-select>
+            <!-- <vue-taggable-select
+          v-model="fruit"
+          :options="this.deliveryOrders"
+          placeholder="Select Delivery Order No."
+        >
+        </vue-taggable-select> -->
+            <Multiselect v-model="fruit" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
+                :options="this.deliveryOrders" @select="papar()" @deselect="padam()" @clear="padam()" />
+            <br />
+
+            <div v-if="this.order1 == true">
+                <table class="border-2">
+                    <tr>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[0] }}</th>
+                    </tr>
+                    <tr>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Fanta 1.5L" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Delivered" value="5" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="5" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Pasta" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Delivered" value="10" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="20" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Coca-cola" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Delivered" value="7" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="10" readonly />
+                            </div>
+                        </div>
+                    </tr>
+                </table>
+            </div>
+            <div v-if="this.order2 == true">
+                <table class="border-2">
+                    <tr>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[1] }}</th>
+                    </tr>
+                    <tr>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Mushroom" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Delivered" value="3" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="15" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Tea" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Delivered" value="9" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="20" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Coffee" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Delivered" value="7" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="10" readonly />
+                            </div>
+                        </div>
+                    </tr>
+                </table>
+            </div>
+            <br />
 
             <!-- <table>
-                <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <FormKit type="text" hidden />
-                            </td>
-                            <td>
-                                <FormKit type="select" label="Stock Name" :options="[
-                                    'Fanta 1.5L',
-                                    'Pasta 1kg',
-                                    'Coca Cola 1.5L',
-                                    'Milo 1kg',
-                                ]" />
-                            </td>
-                            <td>
-                                <FormKit type="number" label="Quantity" />
-                            </td>
-                            <td>
-                                <FormKit type="text" label="Remarks" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                    @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                    @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </div>
-            </table> -->
+                  <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                      <tbody>
+                          <tr>
+                              <td>
+                                  <FormKit type="text" hidden />
+                              </td>
+                              <td>
+                                  <FormKit type="select" label="Stock Name" :options="[
+                                      'Fanta 1.5L',
+                                      'Pasta 1kg',
+                                      'Coca Cola 1.5L',
+                                      'Milo 1kg',
+                                  ]" />
+                              </td>
+                              <td>
+                                  <FormKit type="number" label="Quantity" />
+                              </td>
+                              <td>
+                                  <FormKit type="text" label="Remarks" />
+                              </td>
+                              <td>
+                                  <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                      @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
+                              </td>
+                              <td>
+                                  <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                      @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                              </td>
+                          </tr>
+                      </tbody>
+                  </div>
+              </table> -->
 
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
+
+        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
+            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
+            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
+            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
+            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
     </rs-layout>
 </template>
 <script>
@@ -267,7 +388,8 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 import RsBadges from "@/components/Badges.vue";
-import VueTaggableSelect from "vue-taggable-select";
+
+import Multiselect from "@vueform/multiselect";
 
 export default {
     name: "RawMaterial",
@@ -279,7 +401,7 @@ export default {
         Column,
         Button,
         arbitrary: Menu,
-        VueTaggableSelect,
+        Multiselect,
     },
     setup() {
         const store = ref([]);
@@ -287,7 +409,6 @@ export default {
         const unitMeasurement = ref([]);
         const search = ref("");
         const deliveryOrders = ref([]);
-
 
         const searchStore = computed(() => {
             return store.value.filter((store) => {
@@ -304,6 +425,7 @@ export default {
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         };
+
         return {
             search,
             searchStore,
@@ -311,7 +433,7 @@ export default {
             formatPrice,
             typePackaging,
             unitMeasurement,
-            deliveryOrders
+            deliveryOrders,
         };
     },
     data() {
@@ -338,6 +460,10 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
+            fruit: null,
+            order1: false,
+            order2: false,
+            modalInfo: false,
         };
     },
     async created() {
@@ -347,6 +473,29 @@ export default {
     },
 
     methods: {
+
+        async clickBtnInfo() {
+            // this.users1 = user.data;
+            this.modalInfo = true;
+        },
+
+        async papar() {
+            for (var i = 0; i < this.fruit.length; i++) {
+                console.log("data", this.fruit.length);
+                if (this.fruit[i] == "D0-00001") {
+                    this.order1 = true;
+                }
+                if (this.fruit[i] == "D0-00002") {
+                    this.order2 = true;
+                }
+            }
+        },
+
+        async padam() {
+            this.order1 = false;
+            this.order2 = false;
+        },
+
         async redirectPayment() {
             window.location.href = "https://dev1.toyyibpay.com/dev1-iserve-ewallet";
         },
@@ -418,41 +567,42 @@ export default {
         },
 
         async insertRawMaterial() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                name: this.name,
-                sku: this.sku,
-                quantity: this.quantity,
-                minquantity: this.minquantity,
-                price: this.price,
-                packaging_type: this.packaging_type,
-                measurement: this.measurement,
-            });
-            console.log("Insert data :", data);
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
-                            alert(response.data.message);
-                            this.users.splice(0);
-                            this.getRawMaterial();
-                        } else {
-                            alert(response.data.message);
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
+            console.log(this.fruit);
+            /* var axios = require("axios");
+                  var data = JSON.stringify({
+                      name: this.name,
+                      sku: this.sku,
+                      quantity: this.quantity,
+                      minquantity: this.minquantity,
+                      price: this.price,
+                      packaging_type: this.packaging_type,
+                      measurement: this.measurement,
+                  });
+                  console.log("Insert data :", data);
+                  var config = {
+                      method: "post",
+                      url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                      data: data,
+                  };
+                  await axios(config)
+                      .then(
+                          function (response) {
+                              if (response.data.status == 200) {
+                                  this.modalRawMaterial = false;
+                                  alert(response.data.message);
+                                  this.users.splice(0);
+                                  this.getRawMaterial();
+                              } else {
+                                  alert(response.data.message);
+                              }
+                          }.bind(this)
+                      )
+                      .catch(function (error) {
+                          console.log(error);
+                      }); */
         },
 
         addRawMaterial(index) {
@@ -470,3 +620,7 @@ export default {
     },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css">
+
+</style>
+  
