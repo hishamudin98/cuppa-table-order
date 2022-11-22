@@ -23,7 +23,7 @@
 
             </router-link>
           </li>
-          <li>
+          <li v-if="this.staff_category != 4">
             <div>
               <router-link :to="{ name: 'admin-outlet' }">
                 <a href="#" class="
@@ -104,7 +104,7 @@
             </div>
           </li>
           <!-- ORGRANIZATION -->
-          <li>
+          <li v-if=" this.staff_category != 4">
             <router-link :to="{ name: 'admin-organization' }">
               <a href="#" class="
                   flex
@@ -123,7 +123,7 @@
             </router-link>
           </li>
           <!-- USER -->
-          <li>
+          <li v-if=" this.staff_category != 4">
             <router-link :to="{ name: 'admin-staff' }">
               <a href="#" class="
                   flex
@@ -142,7 +142,7 @@
             </router-link>
           </li>
           <!-- MENU -->
-          <li>
+          <li v-if=" this.staff_category != 4">
             <router-link :to="{ name: 'admin-menu' }">
               <a href="#" class="
                   flex
@@ -202,7 +202,7 @@
           </li>
 
           <!-- MEMBERSHIP -->
-          <li v-if="this.staff_role != 3 || this.staff_category != 3">
+          <li v-if=" this.staff_category != 4">
             <router-link :to="{ name: 'admin-user' }">
               <a href="#" class="
                   flex
@@ -222,7 +222,7 @@
           </li>
 
           <!-- ORDER -->
-          <li>
+          <li v-if=" this.staff_category != 4">
             <router-link :to="{ name: 'admin-order' }">
               <a href="#" class="
                   flex
@@ -242,7 +242,7 @@
           </li>
 
           <!-- STOCK HQ -->
-          <li>
+          <li v-if="this.staff_category == 2">
             <a href="#" class="
                   flex
                   items-center
@@ -340,10 +340,7 @@
               </ul>
             </div>
           </li>
-
-
-
-          <li>
+          <li v-if="this.staff_category == 3">
             <router-link :to="{ name: 'outlet-manage-stock' }">
               <a href="#" class="
                   flex
@@ -406,7 +403,7 @@
           </li>
 
 
-          <li>
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'manage-order-stock-supplier' }">
               <a href="#" class="
                   flex
@@ -425,7 +422,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'manage-delivery-order' }">
               <a href="#" class="
                   flex
@@ -444,7 +441,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'manage-invoice' }">
               <a href="#" class="
                   flex
@@ -463,7 +460,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'manage-payment-voucher' }">
               <a href="#" class="
                   flex
@@ -482,7 +479,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'manage-store' }">
               <a href="#" class="
                   flex
@@ -501,7 +498,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 2">
             <router-link :to="{ name: 'admin-supplier' }">
               <a href="#" class="
                   flex
@@ -520,7 +517,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 3">
             <router-link :to="{ name: 'manage-order-stock-outlet' }">
               <a href="#" class="
                   flex
@@ -539,7 +536,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 3">
             <router-link :to="{ name: 'manage-delivery-order-outlet' }">
               <a href="#" class="
                   flex
@@ -558,7 +555,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 3">
             <router-link :to="{ name: 'manage-invoice' }">
               <a href="#" class="
                   flex
@@ -577,7 +574,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 4">
             <router-link :to="{ name: 'admin-supplier' }">
               <a href="#" class="
                   flex
@@ -596,7 +593,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 4">
             <router-link :to="{ name: 'admin-supplier' }">
               <a href="#" class="
                   flex
@@ -615,7 +612,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if="this.staff_category == 4">
             <router-link :to="{ name: 'admin-supplier' }">
               <a href="#" class="
                   flex
@@ -634,7 +631,7 @@
             </router-link>
           </li>
 
-          <li>
+          <li v-if=" this.staff_category != 4">
             <div>
               <a href="#" class="
                   flex
@@ -746,9 +743,13 @@ export default {
       menuDrop: false,
       stockDrop: false,
       stockDropOutlet: false,
+      staff_category:null,
+      staff_role: null,
     };
   },
-  async created() { },
+  async created() { 
+    this.getdata();
+  },
 
   methods: {
     async clickActive() {
@@ -794,6 +795,32 @@ export default {
       } else {
         this.stockDropOutlet = false;
       }
+    },
+
+    async getdata() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.staffName = response.data.data[0].staff_name;
+            this.staff_category = response.data.data[0].category;
+            this.staff_role = response.data.data[0].role; 
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

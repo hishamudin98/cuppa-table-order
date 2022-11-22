@@ -29,13 +29,13 @@
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-0">
             <div class="inline-block w-full pr-10">
-              <rs-card>
+              <!-- <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Total of Outlet Under HQ </strong>
                 </div>
                 <hr />
                 <div class="text-center py-8">{{ this.totalData }} outlets</div>
-              </rs-card>
+              </rs-card> -->
             </div>
             <!-- <div class="inline-block w-1/2 pr-10">
               <rs-card>
@@ -87,8 +87,8 @@
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
-                      <Column field="outlet_code" header="Outlet Code"></Column>
-                      <Column field="outlet_name" header="Outlet Name"></Column>
+                      <Column field="outlet_code" header="Code"></Column>
+                      <Column field="outlet_name" header="Name"></Column>
                       <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
                       <!-- <Column field="outlet_phone" header="Phone No."></Column>
                       <Column field="outlet_address" header="Address"></Column>
@@ -366,7 +366,9 @@ export default {
       await axios(config)
         .then(
           function (response) {
+
             this.outlet_details = response.data.data.Outlet_det;
+            console.log(this.outlet_details)
             for (let i = 0; i < this.outlet_details.length; i++) {
               this.outlet.push({
                 outlet_id: this.outlet_details[i].outlet_id,
