@@ -3,9 +3,7 @@
         <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-x-2">
-                    <div class="welcome text-lg font-semibold text-white">
-                        Invoice
-                    </div>
+                    <div class="welcome text-lg font-semibold text-white">Invoice</div>
                 </div>
 
                 <div class="flex gap-x-2 items-center">
@@ -23,9 +21,7 @@
                     <arbitrary />
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
-                    <div class="w-full flex flex-row mb-0">
-
-                    </div>
+                    <div class="w-full flex flex-row mb-0"></div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
                         <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -43,16 +39,17 @@
                                 <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Invoice
                                 </rs-button>
                             </div>
-
                         </div>
                         <div class="">
                             <rs-card style="margin-top: 40px">
                                 <div>
                                     <div>
                                         <DataTable :value="searchStore" :paginator="true" :rows="10"
+                                            v-model:expandedRows="expandedRows"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="sto_Name" header="Invoice No.">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type">00001</p>
@@ -66,62 +63,67 @@
                                                 </template>
                                             </Column>
 
-                                            <Column field="sto_PhoneNo" header="DO No.">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type">D0-00001</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                                </template>
-                                            </Column>
-
                                             <Column field="sto_PhoneNo" header="Staff">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type">Staff HQ</p>
                                                     <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
+
                                             <Column field="sto_Type" header="Total Price">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
                                                     <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
-                                            <Column field="sto_Level" header="Bill To">
+
+                                            <!-- <Column field="sto_Level" header="Bill To">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type === '1'">He & She University of
-                                                        Malaya</p>
+                                                    <p v-if="searchStore.data.sto_Type === '1'">
+                                                        He & She University of Malaya
+                                                    </p>
                                                     <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                                                 </template>
                                             </Column>
 
                                             <Column field="sto_Status" header="PIC Name">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">Customer Name</p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                    <p v-if="searchStore.data.sto_Status === '1'">
+                                                        Customer Name
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
                                                 </template>
-
                                             </Column>
 
                                             <Column field="sto_Status" header="PIC Phone No.">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">0123123123</p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                    <p v-if="searchStore.data.sto_Status === '1'">
+                                                        0123123123
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
                                                 </template>
-
-                                            </Column>
+                                            </Column> -->
 
                                             <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
                                                     <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
                                                         Approved</rs-badges>
 
-                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
                                                 </template>
-
                                             </Column>
 
                                             <Column :exportable="false" header="Details">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.rm_Status === '1'" hidden>Level 1</p>
+                                                    <p v-if="searchStore.data.rm_Status === '1'" hidden>
+                                                        Level 1
+                                                    </p>
                                                     <router-link :to="{ name: 'manage-stock' }">
                                                         <Button icon="pi pi-truck"
                                                             class="p-button-rounded p-button-info" />
@@ -131,27 +133,62 @@
 
                                             <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchStore">
-                                                    <Button icon="pi pi-dollar"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="redirectPayment()" />
 
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
                                                         @click="editUser(searchStore)" />
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchStore)" />
-
-
                                                 </template>
                                             </Column>
 
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                                            </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-                                            </template>
+                                            <template #expansion="searchStore12">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom: 20px">
+                                                        Delivery Order Record for Invoice No. : 00001
+                                                        {{ searchStore12.data.sto_Status2 }}
+                                                    </h5>
 
+                                                    <DataTable :value="searchStore" :paginator="true" :rows="10"
+                                                        v-model:expandedRows="expandedRows"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                                        <Column field="sto_Status" header="DO No.">
+                                                            <template #body="searchStore">
+                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                    D0-00001
+                                                                </p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="DO Datetime">
+                                                            <template #body="searchStore">
+                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                    14/07/2022
+                                                                </p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Remarks">
+                                                            <template #body="searchStore">
+                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                    Wrap
+                                                                </p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                    </DataTable>
+                                                </div>
+                                            </template>
                                         </DataTable>
                                     </div>
                                 </div>
@@ -168,20 +205,17 @@
         <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
-            <FormKit label="Bill To" type="select" v-model="minquantity" :options="[
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-            ]" />
+            <FormKit label="Bill To" type="text" v-model="sku" />
+
             <FormKit label="Postcode" type="text" v-model="sku" />
 
             <FormKit label="Address" type="textarea" v-model="sku" />
-            <FormKit label="DO No." type="select" v-model="minquantity" :options="[
-                'D0-00001',
-                'D0-00002',
-            ]" />
+            <label for="sto_Type">Delivery Order No.</label>
+            <vue-taggable-select v-model="fruit" :options="this.deliveryOrders" placeholder="Select Delivery Order No."
+                label>
+            </vue-taggable-select>
 
-            <table>
+            <!-- <table>
                 <div v-for="(rm, l) in this.rawMaterial" :key="l">
                     <tbody>
                         <tr>
@@ -213,13 +247,12 @@
                         </tr>
                     </tbody>
                 </div>
-            </table>
+            </table> -->
 
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
-
     </rs-layout>
 </template>
 <script>
@@ -232,9 +265,9 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 import RsBadges from "@/components/Badges.vue";
-
+import VueTaggableSelect from "vue-taggable-select";
 
 export default {
     name: "RawMaterial",
@@ -245,22 +278,23 @@ export default {
         RsModal,
         Column,
         Button,
-        'arbitrary': Menu,
+        arbitrary: Menu,
+        VueTaggableSelect,
     },
     setup() {
         const store = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
+        const deliveryOrders = ref([]);
+
 
         const searchStore = computed(() => {
             return store.value.filter((store) => {
                 return (
                     store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    store.sto_Name
-                        .toLowerCase()
-                        .indexOf(search.value.toLowerCase()) != -1
+                    store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) != -1
                 );
             });
         });
@@ -276,7 +310,8 @@ export default {
             store,
             formatPrice,
             typePackaging,
-            unitMeasurement
+            unitMeasurement,
+            deliveryOrders
         };
     },
     data() {
@@ -289,9 +324,12 @@ export default {
             sumPrice: 0,
             menuDrop: false,
             /* BARU */
-            rawMaterial: [{
-                type: "",
-            }],
+            expandedRows: [],
+            rawMaterial: [
+                {
+                    type: "",
+                },
+            ],
             name: null,
             sku: null,
             quantity: null,
@@ -305,13 +343,17 @@ export default {
     async created() {
         this.getdata();
         this.getStore();
+        this.getDO();
     },
 
     methods: {
         async redirectPayment() {
-
             window.location.href = "https://dev1.toyyibpay.com/dev1-iserve-ewallet";
+        },
 
+        async getDO() {
+            const response = ["D0-00001", "D0-00002"];
+            this.deliveryOrders = response;
         },
 
         async getdata() {
@@ -361,7 +403,6 @@ export default {
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
                             price += response.data.data[i].rm_Price;
-
                         }
                         this.sumPrice = price;
                     }.bind(this)
@@ -429,4 +470,3 @@ export default {
     },
 };
 </script>
-  

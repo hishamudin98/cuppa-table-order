@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-x-2">
                     <div class="welcome text-lg font-semibold text-white">
-                        Manage Order Stock Outlet - HQ
+                        Summary Stock Order
                     </div>
                 </div>
 

@@ -556,7 +556,7 @@
           </li>
 
           <li v-if="this.staff_category == 3">
-            <router-link :to="{ name: 'manage-invoice' }">
+            <router-link :to="{ name: 'manage-invoice-outlet' }">
               <a href="#" class="
                   flex
                   items-center
