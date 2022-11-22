@@ -174,6 +174,14 @@ export default [{
         component: () =>
             import ("@/views/apps/administrator/invoice/hq/manageInvoice.vue"),
     },
+
+    {
+        path: "/admin/invoice-outlet",
+        name: "manage-invoice-outlet",
+        component: () =>
+            import ("@/views/apps/administrator/invoice/outlet/manageInvoice.vue"),
+    },
+
     {
         path: "/admin/organization",
         name: "admin-organization",
