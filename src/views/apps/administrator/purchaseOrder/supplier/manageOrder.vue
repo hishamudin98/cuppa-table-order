@@ -73,7 +73,12 @@
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                             <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="suppOrderNo" header="Order No."></Column>
-                                            <Column field="supplierName" header="Supplier Name"></Column>
+                                            <Column field="supplierName" header="Organization Name">
+                                                <template #body="searchOrderStock">
+                                                    <p v-if="searchOrderStock.data.supplierName">
+                                                        HQ He And She</p>
+                                                </template>
+                                            </Column>
                                             <Column field="suppOrderDatetime" header="Order Datetime">
                                                 <template #body="searchOrderStock">
                                                     <p v-if="searchOrderStock.data.suppOrderDatetime">
@@ -87,14 +92,6 @@
                                                             formatPrice(searchOrderStock.data.suppOrderTotalPrice)
                                                     }}
                                                 </template>
-                                            </Column>
-
-                                            <Column field="suppOrderRemarks" header="Staff">
-                                                <template #body="searchOrderStock">
-                                                    <p v-if="searchOrderStock.data.suppOrderRemarks">
-                                                        Staff A</p>
-                                                </template>
-
                                             </Column>
 
                                             <Column field="suppOrderStatusCode" header="Status">
@@ -205,13 +202,13 @@
                                                         <Column :exportable="false" style="min-width: 8rem"
                                                             header="Actions">
                                                             <template #body="searchStore">
-                                                                <Button icon="pi pi-pencil"
+                                                                <!-- <Button icon="pi pi-pencil"
                                                                     class="p-button-rounded p-button-success mr-2"
                                                                     @click="clickBtnDO()">
                                                                     <vue-feather type="file-text"
                                                                         style="width: 17px;height:17px">
                                                                     </vue-feather>
-                                                                </Button> {{ "" }}
+                                                                </Button> {{ "" }} -->
                                                                 <Button icon="pi pi-trash"
                                                                     class="p-button-rounded p-button-danger"
                                                                     @click="deleteUser(searchStore)" />

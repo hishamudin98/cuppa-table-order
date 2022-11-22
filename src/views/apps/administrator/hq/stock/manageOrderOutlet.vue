@@ -83,11 +83,25 @@
                                             </Column>
                                             <Column field="stockOrderOutletStatusCode" header="Status">
                                                 <template #body="searchOrderStock">
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
-                                                        Open</p>
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
-                                                        Approved</p>
+                                                    <div
+                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
+                                                        <rs-badges variant="warning">
+                                                            Open</rs-badges> {{ " " }}
 
+                                                        <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                            style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
+                                                    </div>
+
+                                                    <div
+                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
+                                                        <rs-badges variant="warning">
+                                                            Approved</rs-badges> {{ " " }}
+
+                                                        <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                            style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
+                                                    </div>
                                                     <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
                                                         Accepted</p>
 
@@ -119,7 +133,7 @@
                                                 <template #body="searchOrderStock">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchOrderStock)" />
+                                                        @click="editUser(searchOrderStock)" /> {{ " " }}
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchOrderStock)" />
                                                 </template>
@@ -206,6 +220,15 @@
             </rs-button>
         </rs-modal><!-- INSERT -->
 
+        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
+            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
+            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
+            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
+            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
+
     </rs-layout>
 </template>
 <script>
@@ -219,11 +242,13 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import RsBadges from "@/components/Badges.vue";
 
 export default {
     name: "RawMaterial",
     components: {
         RsButton,
+        RsBadges,
         DataTable,
         RsModal,
         Column,
@@ -283,6 +308,8 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
+            modalInfo: false,
+
         };
     },
     async created() {
@@ -293,6 +320,10 @@ export default {
     },
 
     methods: {
+        async clickBtnInfo() {
+            // this.users1 = user.data;
+            this.modalInfo = true;
+        },
 
         async getdata() {
             var axios = require("axios");
