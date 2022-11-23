@@ -49,7 +49,9 @@
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
-            <div v-if="outlet_id != ''">Filter By : {{order_status}} , {{order_from}}</div>
+            <div v-if="outlet_id != ''">
+              Filter By : {{ order_status }} , {{ order_from }}
+            </div>
             <div style="display: flex; flex-direction: row; padding-top: 10px">
               <div class="w-11/12 h-1">
                 <FormKit
@@ -87,7 +89,11 @@
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
                       <Column field="order_no" header="Order No"></Column>
-                      <Column field="order_status" header="Status" :sortable="true"></Column>
+                      <Column
+                        field="order_status"
+                        header="Status"
+                        :sortable="true"
+                      ></Column>
 
                       <Column
                         field="orderDatetime"
@@ -119,6 +125,11 @@
                             class="p-button-rounded p-button-success"
                             @click="selectOrder(searchOrder)"
                           />
+                          <Button
+                            icon="pi pi-print"
+                            class="p-button-rounded p-button-success"
+                            @click="print(searchOrder)"
+                          />
                         </template>
                       </Column>
                       <Column
@@ -127,12 +138,22 @@
                         header="More Actions"
                       >
                         <template #body="searchOrder">
-                          <Button v-if="searchOrder.data.order_status == 'Completed' || searchOrder.data.order_status == 'Preparing'"
-                          class=" p-button-rounded p-button-warning">
+                          <Button
+                            v-if="
+                              searchOrder.data.order_status == 'Completed' ||
+                              searchOrder.data.order_status == 'Preparing'
+                            "
+                            class="p-button-rounded p-button-warning"
+                          >
                             Refund
                           </Button>
-                          <Button v-if="searchOrder.data.order_status == 'In Cart' || searchOrder.data.order_status == 'Pending'"
-                          class="p-button-rounded p-button-danger">
+                          <Button
+                            v-if="
+                              searchOrder.data.order_status == 'In Cart' ||
+                              searchOrder.data.order_status == 'Pending'
+                            "
+                            class="p-button-rounded p-button-danger"
+                          >
                             Cancel
                           </Button>
                         </template>
@@ -165,39 +186,38 @@
       </div>
     </div>
     <rs-modal title="Order Details" v-model="show" position="middle" size="md">
-      
       <label><strong>Order No.</strong></label>
       <br />
-      {{this.data.order_no}}
+      {{ this.data.order_no }}
       <br />
       <label><strong>Date</strong></label>
       <br />
-      {{this.data.orderDatetime}}
+      {{ this.data.orderDatetime }}
       <br />
       <label><strong>Order Status</strong></label>
       <br />
-      {{this.data.order_status}}
+      {{ this.data.order_status }}
       <br />
       <label><strong>Order Total ( RM )</strong></label>
       <br />
-      {{this.data.order_totalAmount}}
+      {{ this.data.order_totalAmount }}
       <br />
       <label><strong>Order From </strong></label>
       <br />
-      {{this.data.order_from}}
+      {{ this.data.order_from }}
       <br />
       <label><strong>Receipt No</strong></label>
       <br />
-      {{this.data.receipt_no}}
+      {{ this.data.receipt_no }}
       <br />
       <label><strong>Payment Method</strong></label>
       <br />
-      {{this.data.payment_method}}
+      {{ this.data.payment_method }}
       <br />
       <label><strong>Membership No. : </strong></label>
       <div v-for="(input, l) in this.data.order_detail" :key="l">
         <p>
-          {{ input.membership_no }} 
+          {{ input.membership_no }}
         </p>
       </div>
       <br />
@@ -208,7 +228,7 @@
           {{ formatPrice(input.menu_price) }}
         </p>
       </div>
-       </rs-modal>
+    </rs-modal>
     <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
       <FormKit
         v-model="outlet_id"
@@ -244,7 +264,103 @@
       >
         All Filter
       </rs-button>
-      
+    </rs-modal>
+
+    <!-- PRINT -->
+    <rs-modal title="Receipt" v-model="qrcode" position="middle" size="md">
+      <div class="text-center">
+        <h5><strong> Receipt </strong></h5>
+
+        <strong>Order Date :</strong>
+        {{ this.receiptData.data.orderDatetime }}
+        <br />
+        <strong>Receipt No :</strong>
+        {{ this.receiptData.data.receipt_no }}
+        <br />
+        <strong>Order Status :</strong>
+        {{ this.receiptData.data.order_status }}
+        <br />
+        <strong>Staff Name :</strong>
+        {{ this.receiptData.data.staffName }}
+        <br />
+        <strong>Order From :</strong>
+        {{ this.receiptData.data.order_from }}
+        <br />
+        <strong>Payment Method :</strong>
+        {{ this.receiptData.data.payment_method }}
+        <br />
+
+        <br />
+        <label><strong>Order Details</strong></label>
+        <div v-for="(input, k) in this.receiptData.data.order_detail" :key="k">
+          <p>
+            {{ input.menu_name }} x {{ input.menu_quantity }} - RM
+            {{ formatPrice(input.menu_price) }}
+          </p>
+        </div>
+        <br />
+      </div>
+      <!--  {{this.receiptData}} -->
+      <div>
+        <vue3-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="false"
+          :paginate-elements-by-height="1400"
+          :filename="this.receiptData.data.receipt_no"
+          :pdf-quality="2"
+          :manual-pagination="false"
+          pdf-format="a4"
+          pdf-orientation="portrait"
+          pdf-content-width="800px"
+          @hasStartedGeneration="hasStartedGeneration()"
+          @hasGenerated="hasGenerated($event)"
+          ref="html2Pdf"
+        >
+          <template v-slot:pdf-content>
+            <div class="text-center mt-10">
+        <h5><strong> Receipt </strong></h5>
+
+        <strong>Order Date :</strong>
+        {{ this.receiptData.data.orderDatetime }}
+        <br />
+        <strong>Receipt No :</strong>
+        {{ this.receiptData.data.receipt_no }}
+        <br />
+        <strong>Order Status :</strong>
+        {{ this.receiptData.data.order_status }}
+        <br />
+        <strong>Staff Name :</strong>
+        {{ this.receiptData.data.staffName }}
+        <br />
+        <strong>Order From :</strong>
+        {{ this.receiptData.data.order_from }}
+        <br />
+        <strong>Payment Method :</strong>
+        {{ this.receiptData.data.payment_method }}
+        <br />
+
+        <br />
+        <label><strong>Order Details</strong></label>
+        <div v-for="(input, k) in this.receiptData.data.order_detail" :key="k">
+          <p>
+            {{ input.menu_name }} x {{ input.menu_quantity }} - RM
+            {{ formatPrice(input.menu_price) }}
+          </p>
+        </div>
+        <br />
+      </div>
+          </template>
+        </vue3-html2pdf>
+      </div>
+      <div>
+        <rs-button
+          class="bg-heandshe hover:bg-heandshe w-full"
+          @click="generateReport()"
+          >Print PDF</rs-button
+        >
+      </div>
     </rs-modal>
   </rs-layout>
 </template>
@@ -260,6 +376,7 @@ import moment from "moment";
 import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
+import Vue3Html2pdf from "vue3-html2pdf";
 
 export default {
   name: "AdminDashboard",
@@ -270,6 +387,7 @@ export default {
     Column,
     Button,
     arbitrary: Menu,
+    Vue3Html2pdf,
   },
   setup() {
     const order = ref([]);
@@ -288,9 +406,8 @@ export default {
           orders.order_status
             .toString()
             .indexOf(order_status.value.toString()) != -1 &&
-          orders.order_from
-            .toString()
-            .indexOf(order_from.value.toString()) != -1 &&
+          orders.order_from.toString().indexOf(order_from.value.toString()) !=
+            -1 &&
           orders.order_customer
             .toLowerCase()
             .indexOf(search.value.toLowerCase()) != -1 /* ||
@@ -338,9 +455,11 @@ export default {
       sumOrder: 0,
       status: "",
       outlet_details: "",
-      data:"",
+      data: "",
       show: false,
       payment: "",
+      qrcode: false,
+      receiptData: null,
     };
   },
   async created() {
@@ -350,6 +469,13 @@ export default {
   },
 
   methods: {
+    async print(data) {
+      this.receiptData = data;
+      this.qrcode = true;
+    },
+    async generateReport() {
+      this.$refs.html2Pdf.generatePdf();
+    },
     async getdata() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -375,8 +501,7 @@ export default {
         });
     },
 
-    async selectOrder(searchOrder)
-    {
+    async selectOrder(searchOrder) {
       this.data = searchOrder.data;
       this.show = true;
     },
@@ -446,11 +571,17 @@ export default {
 
               if (response.data.data.Order_det[i].transaction_method == 1) {
                 this.payment = "Cash";
-              } else if (response.data.data.Order_det[i].transaction_method == 2) {
+              } else if (
+                response.data.data.Order_det[i].transaction_method == 2
+              ) {
                 this.payment = "FPX";
-              } else if (response.data.data.Order_det[i].transaction_method == 3) {
+              } else if (
+                response.data.data.Order_det[i].transaction_method == 3
+              ) {
                 this.payment = "Credit/Debit Card";
-              } else if (response.data.data.Order_det[i].transaction_method == 4) {
+              } else if (
+                response.data.data.Order_det[i].transaction_method == 4
+              ) {
                 this.payment = "QR Payment";
               }
               this.order.push({
@@ -464,10 +595,12 @@ export default {
                 order_customer: response.data.data.Order_det[i].order_customer,
                 staffName: response.data.data.Order_det[i].staff_name,
                 outlet_id: response.data.data.Order_det[i].outlet_id,
-                order_detail: JSON.parse(response.data.data.Order_det[i].order_detail),
+                order_detail: JSON.parse(
+                  response.data.data.Order_det[i].order_detail
+                ),
                 order_from: response.data.data.Order_det[i].order_from,
-                payment_method : this.payment,
-                receipt_no : response.data.data.Order_det[i].transaction_no,
+                payment_method: this.payment,
+                receipt_no: response.data.data.Order_det[i].transaction_no,
               });
             }
             this.totalData = this.order.length;
