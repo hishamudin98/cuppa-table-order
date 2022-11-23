@@ -121,14 +121,14 @@
                       >
                         <template #body="searchOrder">
                           <Button
+                            icon="pi pi-print"
+                            class="p-button-rounded p-button-warning"
+                            @click="print(searchOrder)"
+                          />
+                          <Button
                             icon="pi pi-folder"
                             class="p-button-rounded p-button-success"
                             @click="selectOrder(searchOrder)"
-                          />
-                          <Button
-                            icon="pi pi-print"
-                            class="p-button-rounded p-button-success"
-                            @click="print(searchOrder)"
                           />
                         </template>
                       </Column>
