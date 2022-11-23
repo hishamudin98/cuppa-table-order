@@ -67,9 +67,11 @@
                                 <div>
                                     <div>
                                         <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
+                                            v-model:expandedRows="expandedRows"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="rm_Name" header="Name"></Column>
                                             <Column field="rm_Sku" header="SKU"></Column>
                                             <Column field="rm_Quantity" header="Quantity">
@@ -112,8 +114,12 @@
 
                                             <Column field="rm_Status" header="Status">
                                                 <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">Active</p>
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
+                                                    <rs-badges variant="danger"
+                                                        v-if="searchRawMaterial.data.rm_Quantity <= 5">
+                                                        Low Stock</rs-badges>
+                                                    <rs-badges variant="success" v-else>
+                                                        In Stock</rs-badges>
+
                                                 </template>
 
                                             </Column>
@@ -128,8 +134,10 @@
 
                                             <Column field="rm_Status" header="Level">
                                                 <template #body="searchRawMaterial">
-                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">Level 1</p>
+                                                    <p v-if="searchRawMaterial.data.rm_Status === '1'">
+                                                        1</p>
                                                     <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
+
                                                 </template>
 
                                             </Column>
@@ -147,21 +155,121 @@
                                             </Column>
 
 
-                                            <Column :exportable="false" style="min-width: 8rem">
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchRawMaterial">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchRawMaterial)" />
+                                                        @click="editUser(searchRawMaterial)" /> {{ " " }}
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchRawMaterial)" />
                                                 </template>
                                             </Column>
 
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                                            </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                                            <template #expansion="searchRawMaterial1">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom:20px">Order for {{
+                                                    searchRawMaterial1.data.rm_Name
+                                                    }}</h5>
+
+                                                    <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                                        <Column field="rm_Name" header="Order No.">
+                                                            <template #body="searchRawMaterial">
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                    #QwDer</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                    #ASDqwe</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                    #VsrSf</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rm_Name" header="Outlet Name">
+                                                            <template #body="searchRawMaterial">
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                    He & She University of Malaya</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                    He & She University of Malaya</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                    He & She SME Bank</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="rm_Status" header="Order Datetime">
+
+                                                            <template #body="searchRawMaterial">
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                    14/07/2022 17:55</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                    15/07/2022 10:50</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                    16/07/2022 15:55</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rm_Status" header="Quantity Requested">
+                                                            <template #body="searchRawMaterial">
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                    30</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                    50</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                    30</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rm_Status" header="Quantity Available">
+                                                            <template #body="searchRawMaterial">
+                                                                <p v-if="searchRawMaterial.data.rm_Status === '1'">
+                                                                    5</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Status === '2'">
+                                                                    100</p>
+                                                            </template>
+                                                        </Column>
+                                                        <Column field="rm_Status" header="Total Price (RM)">
+                                                            <template #body="searchRawMaterial">
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                    {{ formatPrice(30 * 1.50) }}</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                    {{ formatPrice(50 * 1.50) }}</p>
+
+                                                                <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                    {{ formatPrice(30 * 1.50) }}</p>
+                                                            </template>
+
+                                                        </Column>
+
+                                                        <Column :exportable="false" style="min-width: 8rem"
+                                                            header="Actions">
+                                                            <template #body="searchRawMaterial">
+                                                                <Button icon="pi pi-pencil"
+                                                                    class="p-button-rounded p-button-success mr-2"
+                                                                    @click="editUser(searchRawMaterial)" />{{ " " }}
+                                                                <Button icon="pi pi-trash"
+                                                                    class="p-button-rounded p-button-danger"
+                                                                    @click="deleteUser(searchRawMaterial)" />
+                                                            </template>
+                                                        </Column>
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                    </DataTable>
+                                                </div>
                                             </template>
                                         </DataTable>
                                     </div>
@@ -181,7 +289,7 @@
 
             <FormKit type="select" label="Category" :options="[
                 'Product',
-                'Product & Services',
+                'Services',
             ]" />
             <FormKit label="SKU" type="text" v-model="sku" />
             <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
@@ -225,12 +333,14 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import RsBadges from "@/components/Badges.vue";
 
 export default {
     name: "RawMaterial",
     components: {
         RsButton,
         DataTable,
+        RsBadges,
         RsModal,
         Column,
         Button,
@@ -278,7 +388,7 @@ export default {
             sumPrice: 0,
             menuDrop: false,
             /* BARU */
-
+            expandedRows: [],
             name: null,
             sku: null,
             quantity: null,

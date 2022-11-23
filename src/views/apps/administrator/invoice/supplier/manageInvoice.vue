@@ -65,7 +65,7 @@
 
                       <Column field="sto_PhoneNo" header="Staff">
                         <template #body="searchStore">
-                          <p v-if="searchStore.data.sto_Type">Staff HQ</p>
+                          <p v-if="searchStore.data.sto_Type">Staff Supplier</p>
                           <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
                         </template>
                       </Column>

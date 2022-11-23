@@ -203,21 +203,11 @@
                                                             </template>
                                                         </Column>
                                                         <Column field="stockOrderOutletDetailsStatus"
-                                                            header="Total Price">
+                                                            header="Total Price (RM)">
                                                             <template #body="searchRawMaterial">
                                                                 <p
                                                                     v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
                                                                     123.00</p>
-                                                            </template>
-                                                        </Column>
-                                                        <Column field="stockOrderOutletDetailsStatus"
-                                                            header="Destination">
-                                                            <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
-                                                                    He & She
-                                                                    University of
-                                                                    Malaya</p>
                                                             </template>
                                                         </Column>
 

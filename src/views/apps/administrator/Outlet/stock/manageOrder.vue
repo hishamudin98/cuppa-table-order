@@ -68,11 +68,19 @@
                                     <div>
 
                                         <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                            v-model:expandedRows="expandedRows"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
+
                                             <Column field="stockOrderOutletNo" header="Order No."></Column>
-                                            <Column field="stockOrderOutletDatetime" header="Order Datetime"></Column>
+                                            <Column field="stockOrderOutletDatetime" header="Order Datetime">
+                                                <template #body="searchOrderStock">
+                                                    <p v-if="searchOrderStock.data.stockOrderOutletRemarks">
+                                                        14/07/2022 12:00</p>
+                                                </template>
+                                            </Column>
                                             <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
                                             <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
                                                 <template #body="searchOrderStock">
@@ -94,7 +102,7 @@
                                                     <rs-badges variant="success"
                                                         v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
                                                         @click="clickBtnStatus()">
-                                                        Open</rs-badges>
+                                                        Partial Delivered</rs-badges>
                                                     {{ "" }}
                                                     <Button icon="pi pi-info" class="p-button-rounded p-button-info"
                                                         v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
@@ -103,7 +111,7 @@
                                                     <rs-badges variant="success"
                                                         v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
                                                         @click="clickBtnStatus()">
-                                                        Approved</rs-badges>
+                                                        Partial Delivered</rs-badges>
                                                     {{ "" }}
                                                     <Button icon="pi pi-info" class="p-button-rounded p-button-info"
                                                         v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
@@ -149,11 +157,117 @@
                                                 </template>
                                             </Column>
 
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                                            </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                                            <template #expansion="searchOrderStock12">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom:20px">DO No. Record for {{
+                                                            searchOrderStock12.data.suppOrderNo
+                                                    }}</h5>
+
+                                                    <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                                        v-model:expandedRows="expandedRows"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+
+                                                        <Column field="sto_Status" header="DO No.">
+                                                            <template #body="searchOrderStock">
+
+                                                                <p
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
+                                                                    D0-00001</p>
+
+                                                                <p
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                    D0-00002</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="DO Datetime">
+                                                            <template #body="searchOrderStock">
+                                                                <p
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
+                                                                    14/07/2022 18:32</p>
+
+                                                                <p
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                    15/07/2022 18:32</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Total Price (RM)">
+                                                            <template #body="searchOrderStock">
+                                                                <p
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
+                                                                    300.00</p>
+
+                                                                <p
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                    250.00</p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Status">
+                                                            <template #body="searchOrderStock">
+
+                                                                <div
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
+                                                                    <rs-badges variant="success">
+                                                                        Received</rs-badges>
+                                                                    {{ "" }}
+                                                                    <Button icon="pi pi-info"
+                                                                        class="p-button-rounded p-button-info"
+                                                                        style="width: 25px;height:25px"
+                                                                        @click="clickBtnInfo()" />
+                                                                </div>
+
+                                                                <div
+                                                                    v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                    <rs-badges variant="warning">
+                                                                        Open</rs-badges>
+                                                                    {{ "" }}
+                                                                    <Button icon="pi pi-info"
+                                                                        class="p-button-rounded p-button-info"
+                                                                        style="width: 25px;height:25px"
+                                                                        @click="clickBtnInfo()" />
+                                                                </div>
+
+
+                                                            </template>
+                                                        </Column>
+                                                        <Column :exportable="false" style="min-width: 8rem"
+                                                            header="Actions">
+                                                            <template #body="searchStore">
+                                                                <Button icon="pi pi-pencil"
+                                                                    class="p-button-rounded p-button-success mr-2"
+                                                                    @click="clickBtnDO()">
+                                                                    <vue-feather type="file-text"
+                                                                        style="width: 17px;height:17px">
+                                                                    </vue-feather>
+                                                                </Button> {{ "" }}
+                                                                <Button icon="pi pi-trash"
+                                                                    class="p-button-rounded p-button-danger"
+                                                                    @click="deleteUser(searchStore)" />
+
+
+                                                            </template>
+                                                        </Column>
+
+
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+
+                                                    </DataTable>
+
+
+
+                                                </div>
                                             </template>
                                         </DataTable>
                                     </div>
@@ -168,7 +282,14 @@
             </div>
         </div>
 
-        <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="md">
+        <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="lg">
+            <FormKit type="select" label="Store" :options="[
+                'Store Shah Alam',
+                'Store Sg Besi',
+                'Store Sg Buloh',
+            ]" />
+            <FormKit type="textarea" label="Remarks" />
+
             <table>
                 <div v-for="(rm, l) in this.rawMaterial" :key="l">
                     <tbody>
@@ -188,11 +309,10 @@
                                 <FormKit type="number" label="Quantity" />
                             </td>
                             <td>
-                                <FormKit type="select" label="Store" :options="[
-                                    'Store Shah Alam',
-                                    'Store Sg Besi',
-                                    'Store Sg Buloh',
-                                ]" />
+                                <FormKit type="text" label="Quantity Available" value="35" readonly />
+                            </td>
+                            <td>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
                             </td>
                             <td>
                                 <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
@@ -245,6 +365,62 @@
             <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
             <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
             <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
+
+        <rs-modal title="Confirm Delivery" v-model="modalDO" position="middle" size="md">
+
+            <table>
+                <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                <FormKit type="text" hidden />
+                            </td>
+                            <td>
+                                <FormKit type="select" label="Stock Name" :options="[
+                                    'Fanta 1.5L',
+                                    'Pasta 1kg',
+                                    'Coca Cola 1.5L',
+                                    'Milo 1kg',
+                                ]" />
+                            </td>
+                            <td>
+                                <FormKit type="number" label="Quantity Delivered" />
+                            </td>
+                            <td>
+                                <FormKit type="text" label="Quantity DO" value="50" readonly />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <FormKit type="text" hidden />
+                            </td>
+                            <td>
+                                <FormKit type="select" :options="[
+                                    'Fanta 1.5L',
+                                    'Pasta 1kg',
+                                    'Coca Cola 1.5L',
+                                    'Milo 1kg',
+                                ]" />
+                            </td>
+                            <td>
+                                <FormKit type="number" />
+                            </td>
+                            <td>
+                                <FormKit type="text" value="50" readonly />
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                    <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                        Save
+                    </rs-button>
+
+                </div>
+            </table>
         </rs-modal>
 
     </rs-layout>
@@ -316,6 +492,7 @@ export default {
             menuDrop: false,
             counter: 1,
             /* BARU */
+            expandedRows: [],
 
             rawMaterial: [{
                 type: "",
@@ -329,6 +506,7 @@ export default {
             measurement: null,
             modalRawMaterial: false,
             modalStatus: false,
+            modalDO: false,
             modalInfo: false,
         };
     },
@@ -340,6 +518,10 @@ export default {
     },
 
     methods: {
+        async clickBtnDO() {
+            // this.users1 = user.data;
+            this.modalDO = true;
+        },
 
         async getdata() {
             var axios = require("axios");

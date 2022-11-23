@@ -57,6 +57,16 @@
                                             <Column field="rawMaterialName" header="Name"></Column>
                                             <Column field="rawMaterialSku" header="SKU"></Column>
                                             <Column field="stockOrderOutletDetailsQuantity" header="Quantity"></Column>
+                                            <Column field="stockOrderOutletDetailsQuantity" header="Quantity Delivered">
+                                                <template #body="searchRawMaterial">
+                                                    <p v-if="searchRawMaterial.data.stockOrderOutletDetailsQuantity">
+                                                        20/{{ searchRawMaterial.data.stockOrderOutletDetailsQuantity }}
+                                                    </p>
+                                                    <p
+                                                        v-if="searchRawMaterial.data.stockOrderOutletDetailsQuantity === '2'">
+                                                        Packet</p>
+                                                </template>
+                                            </Column>
                                             <Column field="rawMaterialPackagingTypeRefCode" header="Packaging Type">
                                                 <template #body="searchRawMaterial">
                                                     <p
@@ -105,10 +115,13 @@
                                                 <template #body="searchRawMaterial">
                                                     <p
                                                         v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
-                                                        Completed</p>
+                                                        Open</p>
                                                     <p
                                                         v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === '2'">
-                                                        Inactive</p>
+                                                        Partial</p>
+                                                    <p
+                                                        v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === '3'">
+                                                        Completed</p>
                                                 </template>
 
                                             </Column>
@@ -135,18 +148,30 @@
                                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                                        <Column field="sto_Name" header="DO No.">
+                                                        <Column field="rawMaterialName" header="DO No.">
+
                                                             <template #body="searchRawMaterial">
                                                                 <p
-                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
+                                                                    v-if="searchRawMaterial.data.rawMaterialSku === '#F123'">
                                                                     D0-00001</p>
+
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialSku === '#C123'">
+                                                                    D0-00002</p>
+
                                                             </template>
                                                         </Column>
                                                         <Column field="stockOrderOutletDetailsStatus" header="Date">
+
                                                             <template #body="searchRawMaterial">
                                                                 <p
-                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
-                                                                    14/07/2022</p>
+                                                                    v-if="searchRawMaterial.data.rawMaterialSku === '#F123'">
+                                                                    14/07/2022 15:55</p>
+
+                                                                <p
+                                                                    v-if="searchRawMaterial.data.rawMaterialSku === '#C123'">
+                                                                    14/07/2022 15:55</p>
+
                                                             </template>
                                                         </Column>
 
@@ -176,21 +201,11 @@
                                                         </Column>
 
                                                         <Column field="stockOrderOutletDetailsStatus"
-                                                            header="Total Price">
+                                                            header="Total Price (RM)">
                                                             <template #body="searchRawMaterial">
                                                                 <p
                                                                     v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
                                                                     123.00</p>
-                                                            </template>
-                                                        </Column>
-                                                        <Column field="stockOrderOutletDetailsStatus"
-                                                            header="Destination">
-                                                            <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.stockOrderOutletDetailsStatus === null">
-                                                                    He & She
-                                                                    University of
-                                                                    Malaya</p>
                                                             </template>
                                                         </Column>
 

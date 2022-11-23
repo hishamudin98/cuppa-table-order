@@ -24,7 +24,7 @@
                 </div>
                 <div class="w-full h-1/4 flex flex-col">
                     <div class="w-full flex flex-row mb-0">
-                        <div class="inline-block w-1/2 pr-10">
+                        <!-- <div class="inline-block w-1/2 pr-10">
                             <rs-card>
                                 <div class="text-center pt-10 pb-2">
                                     <strong>Total of Raw Material </strong>
@@ -43,7 +43,7 @@
                                     {{ formatPrice(this.sumPrice) }}
                                 </div>
                             </rs-card>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="w-full" style="flex-direction: column">
                         <!-- UNTUK ATAS BAWAH -->
@@ -67,8 +67,7 @@
                                 <div>
                                     <div>
                                         <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
-
+                                            v-model:expandedRows="expandedRows"
                                             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -81,8 +80,7 @@
                                                     <p v-if="searchRawMaterial.data.suppOrderDetailsQuantity">
                                                         20/{{ searchRawMaterial.data.suppOrderDetailsQuantity }}
                                                     </p>
-                                                    <p
-                                                        v-if="searchRawMaterial.data.suppOrderDetailsQuantity === '2'">
+                                                    <p v-if="searchRawMaterial.data.suppOrderDetailsQuantity === '2'">
                                                         Packet</p>
                                                 </template>
                                             </Column>
@@ -141,7 +139,7 @@
                                                 <template #body="searchOrderStock">
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchOrderStock)" />
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchOrderStock)" />
                                                 </template>
@@ -160,76 +158,55 @@
                                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                                         <Column field="rawMaterialName" header="DO No.">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     D0-00001</p>
                                                             </template>
                                                         </Column>
                                                         <Column field="rawMaterialName" header="Date">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     14/07/2022</p>
                                                             </template>
                                                         </Column>
 
-                                                        <Column field="rawMaterialName"
-                                                            header="Order No.">
+                                                        <Column field="rawMaterialName" header="Order No.">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     #QwDer</p>
                                                             </template>
                                                         </Column>
 
                                                         <Column field="rawMaterialName" header="Staff">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     Staff HQ</p>
                                                             </template>
                                                         </Column>
                                                         <Column field="rawMaterialName" header="Quantity">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     5</p>
                                                             </template>
                                                         </Column>
-                                                        <Column field="rawMaterialName"
-                                                            header="Total Price">
+                                                        <Column field="rawMaterialName" header="Total Price">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     123.00</p>
-                                                            </template>
-                                                        </Column>
-                                                        <Column field="rawMaterialName"
-                                                            header="Destination">
-                                                            <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
-                                                                    He & She
-                                                                    University of
-                                                                    Malaya</p>
                                                             </template>
                                                         </Column>
 
                                                         <Column field="rawMaterialName" header="PIC Name">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     Customer
                                                                     Name</p>
                                                             </template>
 
                                                         </Column>
 
-                                                        <Column field="rawMaterialName"
-                                                            header="PIC Phone No.">
+                                                        <Column field="rawMaterialName" header="PIC Phone No.">
                                                             <template #body="searchRawMaterial">
-                                                                <p
-                                                                    v-if="searchRawMaterial.data.rawMaterialName">
+                                                                <p v-if="searchRawMaterial.data.rawMaterialName">
                                                                     0123123123
                                                                 </p>
                                                             </template>
@@ -240,8 +217,12 @@
                                                             <template #body="searchRawMaterial">
                                                                 <rs-badges variant="success"
                                                                     v-if="searchRawMaterial.data.rawMaterialName">
-                                                                    Approved</rs-badges>
-
+                                                                    Received</rs-badges>
+                                                                {{ "" }}
+                                                                <Button icon="pi pi-info"
+                                                                    class="p-button-rounded p-button-info"
+                                                                    style="width: 25px;height:25px"
+                                                                    @click="clickBtnInfo()" />
                                                             </template>
 
                                                         </Column>
@@ -290,6 +271,15 @@
             </rs-button>
         </rs-modal><!-- INSERT -->
 
+        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
+            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
+            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
+            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
+            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
+
     </rs-layout>
 </template>
 <script>
@@ -303,10 +293,12 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
+import RsBadges from "@/components/Badges.vue";
 
 export default {
     name: "RawMaterial",
     components: {
+        RsBadges,
         RsButton,
         DataTable,
         RsModal,
@@ -357,7 +349,7 @@ export default {
             menuDrop: false,
             /* BARU */
             expandedRows: [],
-
+            modalInfo: false,
             name: null,
             sku: null,
             quantity: null,
@@ -376,6 +368,10 @@ export default {
     },
 
     methods: {
+        async clickBtnInfo() {
+            // this.users1 = user.data;
+            this.modalInfo = true;
+        },
 
         async getdata() {
             var axios = require("axios");

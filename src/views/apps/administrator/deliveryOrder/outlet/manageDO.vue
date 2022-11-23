@@ -55,24 +55,18 @@
                                             :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                             <Column :expander="true" headerStyle="width: 3rem" />
-
                                             <Column field="sto_Name" header="DO No.">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type">D0-00001</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store A'">D0-00001</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store B'">D0-00002</p>
                                                 </template>
                                             </Column>
                                             <Column field="sto_Email" header="Date">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type">14/07/2022</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                                </template>
-                                            </Column>
-
-                                            <Column field="sto_PhoneNo" header="Order No.">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type">#QwDer</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store A'">14/07/2022 12:00
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store B'">15/07/2022 12:00
+                                                    </p>
                                                 </template>
                                             </Column>
 
@@ -89,32 +83,40 @@
                                                 </template>
                                             </Column>
 
-                                            <Column field="sto_Status" header="PIC Name">
+
+                                            <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">Customer Name</p>
+                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
+                                                        Approved</rs-badges>
+                                                    {{ "" }}
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
                                                     <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
                                                 </template>
 
+                                            </Column>
+
+                                            <Column field="sto_Status" header="PIC Name">
+                                                <template #body="searchStore">
+                                                    <p v-if="searchStore.data.sto_Status === '1'">
+                                                        Customer Name
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
+                                                </template>
                                             </Column>
 
                                             <Column field="sto_Status" header="PIC Phone No.">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">0123123123</p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                    <p v-if="searchStore.data.sto_Status === '1'">
+                                                        0123123123
+                                                    </p>
+                                                    <p v-if="searchStore.data.sto_Status === '2'">
+                                                        Inactive
+                                                    </p>
                                                 </template>
-
                                             </Column>
-
-                                            <Column field="sto_Status" header="Status">
-                                                <template #body="searchStore">
-                                                    <rs-badges variant="success" v-if="searchStore.data.sto_Status">
-                                                        Approved</rs-badges>
-
-                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
-                                                </template>
-
-                                            </Column>
-
 
                                             <Column :exportable="false" header="Details">
                                                 <template #body="searchStore">
@@ -128,15 +130,19 @@
 
                                             <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                                 <template #body="searchStore">
+                                                    <Button icon="pi pi-print"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
                                                     <Button icon="pi pi-pencil"
                                                         class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchStore)" />
+                                                        @click="editUser(searchStore)" /> {{ "" }}
                                                     <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                                         @click="deleteUser(searchStore)" />
 
 
                                                 </template>
                                             </Column>
+
 
                                             <template #expansion="searchStore12">
                                                 <div class="orders-subtable">
@@ -151,16 +157,22 @@
                                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
                                                         <Column field="sto_Status" header="Order No.">
+
                                                             <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Status == '1'">
+                                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
                                                                     #QwDer</p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                                    #ASDqwe</p>
                                                             </template>
+
                                                         </Column>
 
                                                         <Column field="sto_Status" header="Order Datetime">
                                                             <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Status == '1'">
-                                                                    14/07/2022</p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                                    14/07/2022 12:00</p>
+                                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                                    15/07/2022 12:00</p>
                                                             </template>
                                                         </Column>
 
@@ -168,6 +180,19 @@
                                                             <template #body="searchStore">
                                                                 <p v-if="searchStore.data.sto_Status == '1'">
                                                                     Wrap </p>
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="sto_Status" header="Status Delivery">
+                                                            <template #body="searchStore">
+                                                                <rs-badges variant="warning"
+                                                                    v-if="searchStore.data.sto_Status">
+                                                                    Prepairing</rs-badges>
+                                                                {{ "" }}
+                                                                <Button icon="pi pi-info"
+                                                                    class="p-button-rounded p-button-info"
+                                                                    style="width: 25px;height:25px"
+                                                                    @click="clickBtnInfo()" />
                                                             </template>
                                                         </Column>
 
@@ -204,55 +229,121 @@
         <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="md">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
-            <FormKit label="Destination" type="select" v-model="minquantity" :options="[
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-                'He & She University of Malaya',
-            ]" />
 
-            <FormKit label="Order No." type="select" v-model="minquantity" :options="[
-                '#QwDer',
-                '#ASDqwe',
-            ]" />
 
-            <table>
-                <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <FormKit type="text" hidden />
-                            </td>
-                            <td>
-                                <FormKit type="select" label="Stock Name" :options="[
-                                    'Fanta 1.5L',
-                                    'Pasta 1kg',
-                                    'Coca Cola 1.5L',
-                                    'Milo 1kg',
-                                ]" />
-                            </td>
-                            <td>
-                                <FormKit type="number" label="Quantity" />
-                            </td>
-                            <td>
-                                <FormKit type="text" label="Remarks" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                    @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                    @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </div>
-            </table>
+            <label>Order No.</label>
+            <Multiselect v-model="fruit" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
+                :options="[
+                    '#QwDer',
+                    '#ASDqwe',
+                ]" @select="papar()" @deselect="padam()" @clear="padam()" />
+
+            <div v-if="this.order1 == true">
+                <table class="border-2">
+                    <tr>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[0] }}</th>
+                    </tr>
+                    <tr>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Fanta 1.5L" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="5" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity PO" value="5" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Pasta" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="10" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity PO" value="20" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Coca-cola" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="7" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity PO" value="10" readonly />
+                            </div>
+                        </div>
+                    </tr>
+                </table>
+            </div>
+            <div v-if="this.order2 == true">
+                <table class="border-2">
+                    <tr>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[1] }}</th>
+                    </tr>
+                    <tr>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Mushroom" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="3" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity PO" value="15" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Tea" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="9" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity PO" value="20" readonly />
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div>
+                                <FormKit type="text" label="Stock Name" value="Coffee" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity DO" value="7" />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity PO" value="10" readonly />
+                            </div>
+                        </div>
+                    </tr>
+                </table>
+            </div>
+            <br />
 
             <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
+
+        <rs-modal title="DO No." v-model="modalDO" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>#ASDqwe</b> (Open)</p>
+            <p>2022-11-18 12:00 : <b>#ASDqwe</b> (Approved)</p>
+            <p>2022-11-18 13:00 : <b>#ASDqwe</b> (Received)</p>
+        </rs-modal>
+
+        <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
+
+            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
+            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
+            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
+            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
+            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
 
     </rs-layout>
 </template>
@@ -268,7 +359,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 import RsBadges from "@/components/Badges.vue";
-
+import Multiselect from "@vueform/multiselect";
 
 export default {
     name: "RawMaterial",
@@ -280,6 +371,8 @@ export default {
         Column,
         Button,
         'arbitrary': Menu,
+        Multiselect,
+
     },
     setup() {
         const store = ref([]);
@@ -335,6 +428,12 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
+            modalDO: false,
+            modalInfo: false,
+
+            fruit: null,
+            order1: false,
+            order2: false,
         };
     },
     async created() {
@@ -343,6 +442,23 @@ export default {
     },
 
     methods: {
+        async papar() {
+            for (var i = 0; i < this.fruit.length; i++) {
+                console.log("data", this.fruit.length);
+                console.log("data2", this.fruit);
+                if (this.fruit[i] == "#QwDer") {
+                    this.order1 = true;
+                }
+                if (this.fruit[i] == "#ASDqwe") {
+                    this.order2 = true;
+                }
+            }
+        },
+
+        async padam() {
+            this.order1 = false;
+            this.order2 = false;
+        },
 
         async getdata() {
             var axios = require("axios");
@@ -406,6 +522,16 @@ export default {
             this.modalRawMaterial = true;
         },
 
+        async clickBtnDO() {
+            // this.users1 = user.data;
+            this.modalDO = true;
+        },
+
+        async clickBtnInfo() {
+            // this.users1 = user.data;
+            this.modalInfo = true;
+        },
+
         async insertRawMaterial() {
             var axios = require("axios");
             var data = JSON.stringify({
@@ -459,4 +585,7 @@ export default {
     },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css">
+
+</style>
   
