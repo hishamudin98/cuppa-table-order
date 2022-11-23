@@ -76,6 +76,14 @@ export default [{
         component: () =>
             import ("@/views/apps/administrator/outlet/adminTable.vue"),
     },
+
+    {
+        path: "/admin/station",
+        name: "admin-station",
+        component: () =>
+            import ("@/views/apps/administrator/outlet/adminStation.vue"),
+    },
+
     {
         path: "/admin/order",
         name: "admin-order",

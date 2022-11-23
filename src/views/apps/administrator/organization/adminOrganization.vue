@@ -28,7 +28,7 @@
         </div>
         <div class="w-full flex flex-col">
           <div class="w-full flex flex-row mb-1">
-            <div class="inline-block w-1/2 pr-10 h-2/4">
+            <!-- <div class="inline-block w-1/2 pr-10 h-2/4">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Number of active staff</strong>
@@ -49,7 +49,7 @@
                   {{ this.totalStaff }} Active Users
                 </div></rs-card
               >
-            </div>
+            </div> -->
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
