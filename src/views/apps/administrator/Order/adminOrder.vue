@@ -210,6 +210,10 @@
       <br />
       {{ this.data.receipt_no }}
       <br />
+      <label><strong>Order Type</strong></label>
+      <br />
+      {{ this.data.order_type }}
+      <br />
       <label><strong>Payment Method</strong></label>
       <br />
       {{ this.data.payment_method }}
@@ -601,6 +605,7 @@ export default {
                 order_from: response.data.data.Order_det[i].order_from,
                 payment_method: this.payment,
                 receipt_no: response.data.data.Order_det[i].transaction_no,
+                order_type: response.data.data.Order_det[i].order_type
               });
             }
             this.totalData = this.order.length;

@@ -77,6 +77,13 @@
                   }"
                 />
               </div>
+              <div class="w-1/12" >
+                <rs-button
+                  @click="clickBtnAdd()"
+                  class="bg-heandshe hover:bg-heandshe"
+                  >Add Raw Material</rs-button
+                >
+              </div>
             </div>
             <div class="">
               <rs-card style="margin-top: 40px">
@@ -161,17 +168,10 @@
       size="md"
     >
       <FormKit label="Name" type="text" v-model="name" />
-      <FormKit label="SKU" type="text" v-model="sku" />
-      <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
+      
+      
       <FormKit label="Quantity" type="number" v-model="quantity" />
-      <FormKit label="Price (RM)" type="number" v-model="price" />
-      <FormKit
-        type="select"
-        label="Packaging Type"
-        v-model="packaging_type"
-        placeholder="Choose Packaging Type"
-        :options="this.typePackaging"
-      />
+     
       <FormKit
         type="select"
         label="Unit Measurement"
@@ -188,6 +188,7 @@
         Save
       </rs-button> </rs-modal
     ><!-- INSERT -->
+    
   </rs-layout>
 </template>
 <script>

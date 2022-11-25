@@ -207,7 +207,7 @@
         v-model="category"
         type="radio"
         label="Category Status"
-        :options="['HQ', 'Branch', 'Supplier' , 'Customer']"
+        :options="['HQ', 'Branch', 'Supplier', 'Customer']"
       />
 
       <rs-button
@@ -226,7 +226,12 @@
       </rs-button>
     </rs-modal>
 
-    <rs-modal title="Add Organization's Owner" v-model="modalPOS" position="middle" size="md">
+    <rs-modal
+      title="Add Organization's Owner"
+      v-model="modalPOS"
+      position="middle"
+      size="md"
+    >
       <FormKit label="Fullname" type="text" v-model="fullname" />
       <FormKit label="Phone No." type="number" v-model="phone" />
       <FormKit label="Email" type="email" v-model="email" />
@@ -241,9 +246,22 @@
       <FormKit label="Date of Birth." type="date" v-model="dob" />
       <FormKit
         type="select"
-        label="Staff Role"
-        :options="this.staffPosition"
-        v-model="position"
+        label="Staff Position"
+        :options="[
+          { label: 'Admin', value: '2' },
+          { label: 'User/Staff', value: '3' },
+        ]"
+        v-model="users1.user_position"
+      />
+      <FormKit
+        type="select"
+        label="Staff Category"
+        :options="[
+          { label: 'HQ', value: '2' },
+          { label: 'Outlet', value: '3' },
+          { label: 'Supplier', value: '4' },
+        ]"
+        v-model="users1.user_position"
       />
       <rs-button style="float: right" @click="insertUser()">
         Save
@@ -274,9 +292,23 @@
       <FormKit
         type="select"
         label="Staff Position"
-        :options="this.staffPosition"
+        :options="[
+          { label: 'Admin', value: '2' },
+          { label: 'User/Staff', value: '3' },
+        ]"
         v-model="users1.user_position"
       />
+      <FormKit
+        type="select"
+        label="Staff Category"
+        :options="[
+          { label: 'HQ', value: '2' },
+          { label: 'Outlet', value: '3' },
+          { label: 'Supplier', value: '4' },
+        ]"
+        v-model="users1.user_position"
+      />
+      
       <rs-button style="float: right" @click="updateUser(users1)">
         Save
       </rs-button> </rs-modal
@@ -621,22 +653,22 @@ export default {
       await axios(config)
         .then(
           function (response) { */
-          
+
       /* if (response.data.status == "Success") { */
-        this.modalPOS = false;
-        this.fullname = "";
-        this.phone = "";
-        this.email = "";
-        this.address = "";
-        this.password = "";
-        this.pincode = "";
-        this.dob = "";
-        this.position = "";
-        /* alert(response.data.message); */
-        alert("Successfully Insert New Organization's Owner")
-       /*  this.users.splice(0);
+      this.modalPOS = false;
+      this.fullname = "";
+      this.phone = "";
+      this.email = "";
+      this.address = "";
+      this.password = "";
+      this.pincode = "";
+      this.dob = "";
+      this.position = "";
+      /* alert(response.data.message); */
+      alert("Successfully Insert New Organization's Owner");
+      /*  this.users.splice(0);
         this.getuser(); */
-     /*  } else {
+      /*  } else {
         alert(response.data.message);
       } */
       /*   }.bind(this)

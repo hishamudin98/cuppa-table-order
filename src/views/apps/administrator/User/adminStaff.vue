@@ -234,9 +234,22 @@
       <FormKit label="Date of Birth." type="date" v-model="dob" />
       <FormKit
         type="select"
-        label="Staff Role"
-        :options="this.staffPosition"
-        v-model="position"
+        label="Staff Position"
+        :options="[
+          { label: 'Admin', value: '2' },
+          { label: 'User/Staff', value: '3' },
+        ]"
+        v-model="users1.user_position"
+      />
+      <FormKit
+        type="select"
+        label="Staff Category"
+        :options="[
+          { label: 'HQ', value: '2' },
+          { label: 'Outlet', value: '3' },
+          { label: 'Supplier', value: '4' },
+        ]"
+        v-model="users1.user_position"
       />
       <FormKit label="Outlet" type="text" v-model="this.searchUsers[0].outlet_name" readonly/>
 
