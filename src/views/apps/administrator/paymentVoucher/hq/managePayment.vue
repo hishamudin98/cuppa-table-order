@@ -88,7 +88,8 @@
 
                                             <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
-                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
+                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status"
+                                                        @click="clickBtnStatus()">
                                                         Approved</rs-badges>
                                                     {{ "" }}
                                                     <Button icon="pi pi-info" class="p-button-rounded p-button-info"
@@ -333,6 +334,20 @@
             <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
         </rs-modal>
 
+        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
+            <FormKit type="select" label="Status" :options="[
+                'Open',
+                'Approved',
+                'Accepted',
+                'Delivery',
+                'Received',
+            ]" />
+
+            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                Save
+            </rs-button>
+        </rs-modal>
+
     </rs-layout>
 </template>
 <script>
@@ -420,6 +435,7 @@ export default {
             measurement: null,
             modalRawMaterial: false,
             modalDO: false,
+            modalStatus: false,
             modalInfo: false,
             fruit: null,
             order1: false,
@@ -434,6 +450,12 @@ export default {
     },
 
     methods: {
+
+        async clickBtnStatus() {
+            // this.users1 = user.data;
+            this.modalStatus = true;
+        },
+
         async papar() {
             for (var i = 0; i < this.fruit.length; i++) {
                 console.log("data", this.fruit.length);

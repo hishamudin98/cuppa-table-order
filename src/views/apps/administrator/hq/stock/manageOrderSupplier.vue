@@ -84,7 +84,7 @@
                                             <Column field="suppOrderTotalPrice" header="Total Order (RM)">
                                                 <template #body="searchOrderStock">
                                                     {{
-                                                            formatPrice(searchOrderStock.data.suppOrderTotalPrice)
+                                                    formatPrice(searchOrderStock.data.suppOrderTotalPrice)
                                                     }}
                                                 </template>
                                             </Column>
@@ -153,7 +153,7 @@
                                             <template #expansion="searchOrderStock12">
                                                 <div class="orders-subtable">
                                                     <h5 style="margin-bottom:20px">DO No. Record for {{
-                                                            searchOrderStock12.data.suppOrderNo
+                                                    searchOrderStock12.data.suppOrderNo
                                                     }}</h5>
 
                                                     <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
@@ -338,6 +338,9 @@
                                     </td>
                                     <td>
                                         <FormKit type="text" label="Quantity Available" value="5" readonly />
+                                    </td>
+                                    <td>
+                                        <FormKit type="text" label="Min. Quantity" value="5" readonly />
                                     </td>
                                     <td>
                                         <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"

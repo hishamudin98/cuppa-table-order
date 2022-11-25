@@ -86,7 +86,8 @@
 
                                             <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
-                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
+                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status"
+                                                        @click="clickBtnStatus()">
                                                         Approved</rs-badges>
                                                     {{ "" }}
                                                     <Button icon="pi pi-info" class="p-button-rounded p-button-info"
@@ -226,7 +227,7 @@
             </div>
         </div>
 
-        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="md">
+        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="lg">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
 
@@ -241,7 +242,6 @@
             <div v-if="this.order1 == true">
                 <table class="border-2">
                     <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[0] }}</th>
                     </tr>
                     <tr>
                         <div class="flex flex-row">
@@ -253,6 +253,12 @@
                             </div>
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
                             </div>
                         </div>
                         <div class="flex flex-row">
@@ -345,6 +351,21 @@
             <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
         </rs-modal>
 
+
+        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
+            <FormKit type="select" label="Status" :options="[
+                'Open',
+                'Approved',
+                'Accepted',
+                'Delivery',
+                'Received',
+            ]" />
+
+            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                Save
+            </rs-button>
+        </rs-modal>
+
     </rs-layout>
 </template>
 <script>
@@ -430,6 +451,7 @@ export default {
             modalRawMaterial: false,
             modalDO: false,
             modalInfo: false,
+            modalStatus: false,
 
             fruit: null,
             order1: false,
@@ -531,6 +553,12 @@ export default {
             // this.users1 = user.data;
             this.modalInfo = true;
         },
+
+        async clickBtnStatus() {
+            // this.users1 = user.data;
+            this.modalStatus = true;
+        },
+
 
         async insertRawMaterial() {
             var axios = require("axios");

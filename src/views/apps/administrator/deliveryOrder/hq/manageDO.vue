@@ -86,7 +86,8 @@
 
                                             <Column field="sto_Status" header="Status">
                                                 <template #body="searchStore">
-                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
+                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status"
+                                                        @click="clickBtnStatus()">
                                                         Approved</rs-badges>
                                                     {{ "" }}
                                                     <Button icon="pi pi-info" class="p-button-rounded p-button-info"
@@ -226,7 +227,7 @@
             </div>
         </div>
 
-        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="md">
+        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="lg">
             <FormKit label="PIC Name" type="text" v-model="name" />
             <FormKit label="PIC Phone No." type="text" v-model="sku" />
 
@@ -254,6 +255,12 @@
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="5" readonly />
                             </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                            </div>
                         </div>
                         <div class="flex flex-row">
                             <div>
@@ -265,6 +272,12 @@
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="20" readonly />
                             </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                            </div>
                         </div>
                         <div class="flex flex-row">
                             <div>
@@ -275,6 +288,12 @@
                             </div>
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="10" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
                             </div>
                         </div>
                     </tr>
@@ -296,6 +315,12 @@
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="15" readonly />
                             </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                            </div>
                         </div>
                         <div class="flex flex-row">
                             <div>
@@ -307,6 +332,12 @@
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="20" readonly />
                             </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                            </div>
                         </div>
                         <div class="flex flex-row">
                             <div>
@@ -317,6 +348,12 @@
                             </div>
                             <div>
                                 <FormKit type="text" label="Quantity PO" value="10" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                            </div>
+                            <div>
+                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
                             </div>
                         </div>
                     </tr>
@@ -343,6 +380,20 @@
             <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
             <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
             <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+        </rs-modal>
+
+        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
+            <FormKit type="select" label="Status" :options="[
+                'Open',
+                'Approved',
+                'Accepted',
+                'Delivery',
+                'Received',
+            ]" />
+
+            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                Save
+            </rs-button>
         </rs-modal>
 
     </rs-layout>
@@ -430,6 +481,7 @@ export default {
             modalRawMaterial: false,
             modalDO: false,
             modalInfo: false,
+            modalStatus: false,
 
             fruit: null,
             order1: false,
@@ -530,6 +582,11 @@ export default {
         async clickBtnInfo() {
             // this.users1 = user.data;
             this.modalInfo = true;
+        },
+
+        async clickBtnStatus() {
+            // this.users1 = user.data;
+            this.modalStatus = true;
         },
 
         async insertRawMaterial() {

@@ -110,7 +110,7 @@
 
                       <Column field="sto_Status" header="Status">
                         <template #body="searchStore">
-                          <rs-badges variant="warning" v-if="searchStore.data.sto_Status">
+                          <rs-badges variant="warning" v-if="searchStore.data.sto_Status" @click="clickBtnStatus()">
                             Approved</rs-badges>
                           {{ "" }}
                           <Button icon="pi pi-info" class="p-button-rounded p-button-info"
@@ -363,6 +363,20 @@
       <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
       <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
     </rs-modal>
+
+    <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
+      <FormKit type="select" label="Status" :options="[
+        'Open',
+        'Approved',
+        'Accepted',
+        'Delivery',
+        'Received',
+      ]" />
+
+      <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+        Save
+      </rs-button>
+    </rs-modal>
   </rs-layout>
 </template>
 <script>
@@ -452,6 +466,7 @@ export default {
       fruit: null,
       order1: false,
       order2: false,
+      modalStatus: false,
       modalInfo: false,
     };
   },
@@ -492,6 +507,11 @@ export default {
     async getDO() {
       const response = ["D0-00001", "D0-00002"];
       this.deliveryOrders = response;
+    },
+
+    async clickBtnStatus() {
+      // this.users1 = user.data;
+      this.modalStatus = true;
     },
 
     async getdata() {
