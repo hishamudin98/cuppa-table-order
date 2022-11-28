@@ -58,7 +58,8 @@
                                     }" />
                             </div>
                             <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add New
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Purchase
+                                    Order
                                 </rs-button>
                             </div>
                         </div>
@@ -84,7 +85,7 @@
                                             <Column field="suppOrderTotalPrice" header="Total Order (RM)">
                                                 <template #body="searchOrderStock">
                                                     {{
-                                                    formatPrice(searchOrderStock.data.suppOrderTotalPrice)
+                                                            formatPrice(searchOrderStock.data.suppOrderTotalPrice)
                                                     }}
                                                 </template>
                                             </Column>
@@ -153,7 +154,7 @@
                                             <template #expansion="searchOrderStock12">
                                                 <div class="orders-subtable">
                                                     <h5 style="margin-bottom:20px">DO No. Record for {{
-                                                    searchOrderStock12.data.suppOrderNo
+                                                            searchOrderStock12.data.suppOrderNo
                                                     }}</h5>
 
                                                     <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
@@ -272,51 +273,78 @@
                         'Store Sg Buloh',
                     ]" />
 
-                    <FormKit type="textarea" label="Remarks" />
 
-                    <table>
-                        <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                            <tbody>
+                    <FormKit v-model="orderByOutlet" type="radio" label="Order By Outlet" :options="[
+                        { label: 'Yes', value: 'y' },
+                        { label: 'No', value: 'n' },
+                    ]" />
 
-                                <tr>
-                                    <td>
-                                        <FormKit type="text" hidden />
-                                    </td>
-                                    <td>
-                                        <FormKit type="select" label="Stock Name" :options="[
-                                            'Fanta 1.5L',
-                                            'Pasta 1kg',
-                                            'Coca Cola 1.5L',
-                                            'Milo 1kg',
-                                        ]" />
-                                    </td>
-                                    <td>
-                                        <FormKit type="number" label="Quantity Order" />
-                                    </td>
-                                    <td>
-                                        <FormKit type="text" label="Quantity Available" value="35" readonly />
-                                    </td>
-                                    <td>
-                                        <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                                    </td>
-                                    <td>
-                                        <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                            @click="removeRawMaterial(l)"
-                                            v-show="l || (!l && this.rawMaterial.length > 1)" />
-                                    </td>
-                                    <td>
-                                        <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                            @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </div>
-                    </table>
+                    <div v-if="orderByOutlet == 'y'">
+                        <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select order no."
+                            :options="[
+                                { label: 'He & She University of Malaya', value: 'um' },
+                                { label: 'He & She UiTM Shah Alam', value: 'um' },
+                                { label: 'He & She UPM', value: 'um' },
+                            ]" />
+                    </div>
+
+                    <div v-if="selectOutlet == 'um' && orderByOutlet == 'y'" class="mb-4">
+                        <label>Order No.</label>
+                        <Multiselect mode="tags" :close-on-select="false" :searchable="false" :create-option="true"
+                            :options="this.orderNo" @select="papar()" @deselect="padam()" @clear="padam()" />
+                    </div>
+
+                    <div v-if="this.order1 == true || orderByOutlet == 'n'">
+                        <table>
+                            <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                                <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <FormKit type="text" hidden />
+                                        </td>
+                                        <td>
+                                            <FormKit type="select" label="Stock Name" :options="[
+                                                'Fanta 1.5L',
+                                                'Pasta 1kg',
+                                                'Coca Cola 1.5L',
+                                                'Milo 1kg',
+                                            ]" />
+                                        </td>
+                                        <td>
+                                            <FormKit type="number" label="Quantity Order" />
+                                        </td>
+                                        <td>
+                                            <FormKit type="text" label="Quantity Available" value="35" readonly />
+                                        </td>
+                                        <td>
+                                            <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                                        </td>
+                                        <td>
+                                            <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                                @click="removeRawMaterial(l)"
+                                                v-show="l || (!l && this.rawMaterial.length > 1)" />
+                                        </td>
+                                        <td>
+                                            <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                                @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </div>
+                        </table>
+
+                        <FormKit type="textarea" label="Remarks" />
+
+                    </div>
+
+
+
 
 
 
                 </rs-tab-item>
-                <rs-tab-item title="Stock">
+                <rs-tab-item title="Low Stock">
                     <table>
                         <div v-for="(rm, l) in this.rawMaterial" :key="l">
                             <tbody>
@@ -493,6 +521,7 @@ import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 import RsBadges from "@/components/Badges.vue";
 import RsTab from "@/components/Tab.vue";
 import RsTabItem from "@/components/TabItem.vue";
+import Multiselect from "@vueform/multiselect";
 
 export default {
     name: "RawMaterial",
@@ -506,6 +535,8 @@ export default {
         Column,
         Button,
         'arbitrary': Menu,
+        Multiselect,
+
     },
     setup() {
         const orderStock = ref([]);
@@ -564,6 +595,10 @@ export default {
             modalStatus: false,
             modalInfo: false,
             modalDO: false,
+            orderByOutlet: "",
+            selectOutlet: "",
+            orderNo: ['#OpGwe2', '#hasASd'],
+            order1: false,
 
         };
     },
@@ -575,6 +610,9 @@ export default {
     },
 
     methods: {
+        async papar() {
+            this.order1 = true;
+        },
 
         async getdata() {
             var axios = require("axios");
@@ -758,4 +796,7 @@ export default {
     },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css">
+
+</style>
   

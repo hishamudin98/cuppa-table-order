@@ -283,49 +283,111 @@
         </div>
 
         <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="lg">
-            <FormKit type="select" label="Store" :options="[
-                'Store Shah Alam',
-                'Store Sg Besi',
-                'Store Sg Buloh',
+            <FormKit v-model="orderTo" type="radio" label="Order To" :options="[
+                { label: 'HQ', value: 'hq' },
+                { label: 'Supplier', value: 'supplier' },
             ]" />
-            <FormKit type="textarea" label="Remarks" />
 
-            <table>
-                <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <FormKit type="text" hidden />
-                            </td>
-                            <td>
-                                <FormKit type="select" label="Stock Name" :options="[
-                                    'Fanta 1.5L',
-                                    'Pasta 1kg',
-                                    'Coca Cola 1.5L',
-                                    'Milo 1kg',
-                                ]" />
-                            </td>
-                            <td>
-                                <FormKit type="number" label="Quantity" />
-                            </td>
-                            <td>
-                                <FormKit type="text" label="Quantity Available" value="35" readonly />
-                            </td>
-                            <td>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                    @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                    @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </div>
-            </table>
+            <div v-if="this.orderTo == 'hq'">
+                <FormKit type="select" label="Store" :options="[
+                    'Store Shah Alam',
+                    'Store Sg Besi',
+                    'Store Sg Buloh',
+                ]" />
+                <FormKit type="textarea" label="Remarks" />
+
+                <table>
+                    <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <FormKit type="text" hidden />
+                                </td>
+                                <td>
+                                    <FormKit type="select" label="Stock Name" :options="[
+                                        'Fanta 1.5L',
+                                        'Pasta 1kg',
+                                        'Coca Cola 1.5L',
+                                        'Milo 1kg',
+                                    ]" />
+                                </td>
+                                <td>
+                                    <FormKit type="number" label="Quantity" />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Quantity Available" value="35" readonly />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                        @click="removeRawMaterial(l)"
+                                        v-show="l || (!l && this.rawMaterial.length > 1)" />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                        @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </div>
+                </table>
+            </div>
+
+            <div v-if="this.orderTo == 'supplier'">
+                <FormKit type="select" label="Supplier" :options="[
+                    'Supplier A',
+                    'Supplier B',
+                    'Supplier C',
+                ]" />
+
+                <FormKit type="select" label="Store" :options="[
+                    'Store Shah Alam',
+                    'Store Sg Besi',
+                    'Store Sg Buloh',
+                ]" />
+                <FormKit type="textarea" label="Remarks" />
+
+                <table>
+                    <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <FormKit type="text" hidden />
+                                </td>
+                                <td>
+                                    <FormKit type="select" label="Stock Name" :options="[
+                                        'Fanta 1.5L',
+                                        'Pasta 1kg',
+                                        'Coca Cola 1.5L',
+                                        'Milo 1kg',
+                                    ]" />
+                                </td>
+                                <td>
+                                    <FormKit type="number" label="Quantity" />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Quantity Available" value="35" readonly />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                        @click="removeRawMaterial(l)"
+                                        v-show="l || (!l && this.rawMaterial.length > 1)" />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                        @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </div>
+                </table>
+            </div>
+
 
 
             <!-- 
@@ -478,9 +540,10 @@ export default {
             orderStock,
             formatPrice,
             typePackaging,
-            unitMeasurement
+            unitMeasurement,
         };
     },
+
     data() {
         return {
             staffid: "",
@@ -508,6 +571,7 @@ export default {
             modalStatus: false,
             modalDO: false,
             modalInfo: false,
+            orderTo: "",
         };
     },
     async created() {
@@ -697,6 +761,8 @@ export default {
             console.log("REMOVE", index);
             this.rawMaterial.splice(index, 1);
         },
+
+
     },
 };
 </script>
