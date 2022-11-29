@@ -601,7 +601,25 @@
             </router-link>
           </li>
 
-          <!-- HQ -->
+          <!-- Supplier -->
+          <li v-if="this.staff_category == 4">
+            <router-link :to="{ name: 'manage-order-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Organization</span>
+              </a>
+            </router-link>
+          </li>
 
           <li v-if="this.staff_category == 4">
             <router-link :to="{ name: 'manage-order-supplier' }">
@@ -617,7 +635,26 @@
                   hover:bg-gray-300
                   dark:hover:bg-gray-700
                 ">
-                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order (HQ)</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">User</span>
+              </a>
+            </router-link>
+          </li>
+
+          <li v-if="this.staff_category == 4">
+            <router-link :to="{ name: 'manage-order-supplier' }">
+              <a href="#" class="
+                  flex
+                  items-center
+                  p-2
+                  text-base
+                  font-normal
+                  text-gray-900
+                  rounded-lg
+                  dark:text-white
+                  hover:bg-gray-300
+                  dark:hover:bg-gray-700
+                ">
+                <span class="flex-1 ml-3 whitespace-nowrap">Purchase Order</span>
               </a>
             </router-link>
           </li>

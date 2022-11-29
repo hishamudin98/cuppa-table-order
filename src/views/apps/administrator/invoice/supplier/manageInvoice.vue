@@ -219,6 +219,7 @@
     <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
       <FormKit label="PIC Name" type="text" v-model="name" />
       <FormKit label="PIC Phone No." type="text" v-model="sku" />
+      <FormKit label="Invoice No." type="text" v-model="sku" />
       <label for="sto_Type">Delivery Order No.</label>
       <!-- <vue-taggable-select
         v-model="fruit"
