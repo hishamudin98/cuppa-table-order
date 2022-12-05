@@ -1,59 +1,30 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-           <div class="welcome text-lg font-semibold text-white">
-             Dashboard
-            </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="w-full flex flex-col">
-      <div style="display: flex; flex-direction: row">
-        <div class="inline-block w-1/6">
-          <arbitrary />
+      <div class="inline-block pt-4 w-5/6">
+        <div class="inline-block w-1/2 pr-10">
+          <rs-card>
+            <canvas id="myChart" width="700" height="300"></canvas>
+          </rs-card>
         </div>
-        <div class="inline-block pt-4 w-5/6">
-          <div class="inline-block w-1/2 pr-10">
-            <rs-card>
-              <canvas id="myChart" width="700" height="300"></canvas>
-            </rs-card>
-          </div>
 
-          <div class="inline-block w-1/2 pr-10">
-            <rs-card>
-              <canvas id="myChart1" width="700" height="300"></canvas>
-            </rs-card>
-          </div>
+        <div class="inline-block w-1/2 pr-10">
+          <rs-card>
+            <canvas id="myChart1" width="700" height="300"></canvas>
+          </rs-card>
         </div>
       </div>
     </div>
   </rs-layout>
 </template>
 <script>
+/* eslint-disable */
 import Chart from "chart.js/auto";
 import { onMounted } from "vue";
 import moment from "moment";
-import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 
 export default {
   name: "AdminDashboard",
-  components: {
-    'arbitrary': Menu,
-  },
-
   setup() {
     onMounted(() => {});
   },

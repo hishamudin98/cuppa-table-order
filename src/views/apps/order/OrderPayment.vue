@@ -1,479 +1,408 @@
 <template>
-  <rs-layout>
-    <div class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div v-if="this.status != 'FAIL'">
-          <div class="flex items-center gap-x-2" v-if="this.time == null">
-            <router-link
-              class="flex items-center justify-center"
-              :to="{
-                name: 'order',
-                params: {
-                  branchID: this.branch,
-                  table: this.tableNo,
-                  orderID: this.MenuID,
-                },
-              }"
-            >
-              <vue-feather class="text-white" type="chevron-left"></vue-feather>
-            </router-link>
-            <p class="font-semibold text-white text-lg">Order Confirmation</p>
-          </div>
-
-          <div class="flex items-center gap-x-2" v-else>
-            <router-link
-              class="flex items-center justify-center"
-              :to="{
-                name: 'takeaway',
-                params: {
-                  branchID: this.branch,
-                  table: this.tableNo,
-                  orderID: this.MenuID,
-                },
-              }"
-            >
-              <vue-feather class="text-white" type="chevron-left"></vue-feather>
-            </router-link>
-            <p class="font-semibold text-white text-lg">Order Confirmation</p>
-          </div>
+  <div class="bg-heandshe after:content-[''] p-4">
+    <div class="flex justify-between items-center">
+      <div v-if="this.status != 'FAIL'">
+        <div class="flex items-center gap-x-2" v-if="this.time == null">
+          <router-link
+            class="flex items-center justify-center"
+            :to="{
+              name: 'order',
+              params: {
+                branchID: this.branch,
+                table: this.tableNo,
+                orderID: this.MenuID,
+              },
+            }"
+          >
+            <vue-feather class="text-white" type="chevron-left"></vue-feather>
+          </router-link>
+          <p class="font-semibold text-white text-lg">Order Confirmation</p>
         </div>
-        <div class="flex items-center gap-x-2" v-else></div>
-        <div class="bg-white px-3 py-1 rounded-full text-heandshe">
-          {{ this.tableNo }}
+
+        <div class="flex items-center gap-x-2" v-else>
+          <router-link
+            class="flex items-center justify-center"
+            :to="{
+              name: 'takeaway',
+              params: {
+                branchID: this.branch,
+                table: this.tableNo,
+                orderID: this.MenuID,
+              },
+            }"
+          >
+            <vue-feather class="text-white" type="chevron-left"></vue-feather>
+          </router-link>
+          <p class="font-semibold text-white text-lg">Order Confirmation</p>
         </div>
       </div>
+      <div class="flex items-center gap-x-2" v-else></div>
+      <div class="bg-white px-3 py-1 rounded-full text-heandshe">
+        {{ this.tableNo }}
+      </div>
     </div>
-    <div v-if="this.orders.length != 0">
-      <div class="font-semibold text-xl mx-3 mt-5 mb-3">Dine In</div>
-      <perfect-scrollbar style="height: 17rem">
-        <div class="gap-4">
-          <rs-card
-            class="relative mb-5 cursor-pointer"
-            v-for="(product, index) in orders"
-            :key="index"
-            @click="viewDetailItem(product)"
-          >
-            <div class="flex justify-center items-center">
-              <div class="product-image relative w-30 h-30 p-4 rounded-lg">
-                <img
-                  class="object-scale-down w-full"
-                  :src="
-                    product.menu_image && product.menu_image.length > 0
-                      ? product.menu_image[0]
-                      : ''
-                  "
-                  :alt="product.menu_name"
-                  style="width: 80px; height: 80px"
-                  @error="setAltImg"
-                />
+  </div>
+  <div v-if="this.orders.length != 0">
+    <div class="font-semibold text-xl mx-3 mt-5 mb-3">Dine In</div>
+    <perfect-scrollbar style="height: 17rem">
+      <div class="gap-4">
+        <rs-card
+          class="relative mb-5 cursor-pointer"
+          v-for="(product, index) in orders"
+          :key="index"
+          @click="viewDetailItem(product)"
+        >
+          <div class="flex justify-center items-center">
+            <div class="product-image relative w-30 h-30 p-4 rounded-lg">
+              <img
+                class="object-scale-down w-full"
+                :src="
+                  product.menu_image && product.menu_image.length > 0
+                    ? product.menu_image[0]
+                    : ''
+                "
+                :alt="product.menu_name"
+                style="width: 80px; height: 80px"
+                @error="setAltImg"
+              />
+            </div>
+            <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
+              <div
+                class="product-title mt-4"
+                v-if="product.menu_variation[1] != null"
+              >
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.menu_name }} ({{
+                    product.menu_variation[0].name
+                  }}
+                  , {{ product.menu_variation[1].name }})
+                </span>
               </div>
               <div
-                class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
+                class="product-title mt-4"
+                v-else-if="product.menu_variation[0] != null"
               >
-                <div
-                  class="product-title mt-4"
-                  v-if="product.menu_variation[1] != null"
-                >
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} ({{
-                      product.menu_variation[0].name
-                    }}
-                    , {{ product.menu_variation[1].name }})
-                  </span>
-                </div>
-                <div
-                  class="product-title mt-4"
-                  v-else-if="product.menu_variation[0] != null"
-                >
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} ({{
-                      product.menu_variation[0].name
-                    }})
-                  </span>
-                </div>
-                <div class="product-title mt-4" v-else>
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }}
-                  </span>
-                </div>
-                <div class="product-content flex flex-col">
-                  <div class="product-price flex justify-between items-center">
-                    <div class="truncate">
-                      <div class="text-sm text-heandshe">
-                        RM {{ product.currency
-                        }}<span class="text-lg">
-                          {{
-                            (
-                              product.menu_quantity *
-                              (product.discountedPrice
-                                ? formatPrice(product.discountedPrice)
-                                : formatPrice(product.menu_price))
-                            ).toFixed(2)
-                          }}</span
-                        >
-                      </div>
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.menu_name }} ({{
+                    product.menu_variation[0].name
+                  }})
+                </span>
+              </div>
+              <div class="product-title mt-4" v-else>
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.menu_name }}
+                </span>
+              </div>
+              <div class="product-content flex flex-col">
+                <div class="product-price flex justify-between items-center">
+                  <div class="truncate">
+                    <div class="text-sm text-heandshe">
+                      RM {{ product.currency
+                      }}<span class="text-lg">
+                        {{
+                          (
+                            product.menu_quantity *
+                            (product.discountedPrice
+                              ? formatPrice(product.discountedPrice)
+                              : formatPrice(product.menu_price))
+                          ).toFixed(2)
+                        }}</span
+                      >
                     </div>
-                    <div
-                      class="
-                        flex
-                        items-center
-                        justify-center
-                        h-7
-                        w-7
-                        bg-heandshe
-                        text-primary-100
-                        rounded-full
-                        text-sm
-                      "
-                    >
-                      x{{ product.menu_quantity }}
-                    </div>
+                  </div>
+                  <div
+                    class="flex items-center justify-center h-7 w-7 bg-heandshe text-primary-100 rounded-full text-sm"
+                  >
+                    x{{ product.menu_quantity }}
                   </div>
                 </div>
               </div>
             </div>
-          </rs-card>
-        </div>
-      </perfect-scrollbar>
-    </div>
-    <div v-if="this.orders2.length != 0">
-      <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
-      <perfect-scrollbar style="height: 17rem">
-        <div class="gap-4">
-          <rs-card
-            class="relative mb-5 cursor-pointer"
-            v-for="(product, index) in orders2"
-            :key="index"
-            @click="viewDetailItem(product)"
-          >
-            <div class="flex justify-center items-center">
-              <div class="product-image relative w-30 h-30 p-4 rounded-lg">
-                <img
-                  class="object-scale-down w-full"
-                  :src="
-                    product.menu_image && product.menu_image.length > 0
-                      ? product.menu_image[0]
-                      : ''
-                  "
-                  style="width: 80px; height: 80px"
-                  :alt="product.menu_name"
-                  @error="setAltImg"
-                />
+          </div>
+        </rs-card>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <div v-if="this.orders2.length != 0">
+    <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
+    <perfect-scrollbar style="height: 17rem">
+      <div class="gap-4">
+        <rs-card
+          class="relative mb-5 cursor-pointer"
+          v-for="(product, index) in orders2"
+          :key="index"
+          @click="viewDetailItem(product)"
+        >
+          <div class="flex justify-center items-center">
+            <div class="product-image relative w-30 h-30 p-4 rounded-lg">
+              <img
+                class="object-scale-down w-full"
+                :src="
+                  product.menu_image && product.menu_image.length > 0
+                    ? product.menu_image[0]
+                    : ''
+                "
+                style="width: 80px; height: 80px"
+                :alt="product.menu_name"
+                @error="setAltImg"
+              />
+            </div>
+            <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
+              <div
+                class="product-title mt-4"
+                v-if="product.menu_variation[1] != null"
+              >
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.menu_name }} ({{
+                    product.menu_variation[0].name
+                  }}
+                  , {{ product.menu_variation[1].name }})
+                </span>
               </div>
               <div
-                class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
+                class="product-title mt-4"
+                v-else-if="product.menu_variation[0] != null"
               >
-                <div
-                  class="product-title mt-4"
-                  v-if="product.menu_variation[1] != null"
-                >
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} ({{
-                      product.menu_variation[0].name
-                    }}
-                    , {{ product.menu_variation[1].name }})
-                  </span>
-                </div>
-                <div
-                  class="product-title mt-4"
-                  v-else-if="product.menu_variation[0] != null"
-                >
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }} ({{
-                      product.menu_variation[0].name
-                    }})
-                  </span>
-                </div>
-                <div class="product-title mt-4" v-else>
-                  <span class="block text-base font-semibold line-clamp-2"
-                    >{{ product.menu_name }}
-                  </span>
-                </div>
-                <div class="product-content flex flex-col">
-                  <div class="product-price flex justify-between items-center">
-                    <div class="truncate">
-                      <div class="text-sm text-heandshe">
-                        RM {{ product.currency
-                        }}<span class="text-lg">
-                          {{
-                            (
-                              product.menu_quantity *
-                              (product.discountedPrice
-                                ? formatPrice(product.discountedPrice)
-                                : formatPrice(product.menu_price))
-                            ).toFixed(2)
-                          }}</span
-                        >
-                      </div>
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.menu_name }} ({{
+                    product.menu_variation[0].name
+                  }})
+                </span>
+              </div>
+              <div class="product-title mt-4" v-else>
+                <span class="block text-base font-semibold line-clamp-2"
+                  >{{ product.menu_name }}
+                </span>
+              </div>
+              <div class="product-content flex flex-col">
+                <div class="product-price flex justify-between items-center">
+                  <div class="truncate">
+                    <div class="text-sm text-heandshe">
+                      RM {{ product.currency
+                      }}<span class="text-lg">
+                        {{
+                          (
+                            product.menu_quantity *
+                            (product.discountedPrice
+                              ? formatPrice(product.discountedPrice)
+                              : formatPrice(product.menu_price))
+                          ).toFixed(2)
+                        }}</span
+                      >
                     </div>
-                    <div
-                      class="
-                        flex
-                        items-center
-                        justify-center
-                        h-7
-                        w-7
-                        bg-heandshe
-                        text-primary-100
-                        rounded-full
-                        text-sm
-                      "
-                    >
-                      x{{ product.menu_quantity }}
-                    </div>
+                  </div>
+                  <div
+                    class="flex items-center justify-center h-7 w-7 bg-heandshe text-primary-100 rounded-full text-sm"
+                  >
+                    x{{ product.menu_quantity }}
                   </div>
                 </div>
               </div>
             </div>
-          </rs-card>
-        </div>
-      </perfect-scrollbar>
-    </div>
-    <div class="px-4 pb-6">
-      <rs-card class="p-4 mt-4">
-        <div class="subtotal flex justify-between">
-          <div class="font-semibold">Subtotal</div>
-          <div>RM {{ formatPrice(this.totalAmount) }}</div>
-        </div>
-        <!--  <div class="discount flex justify-between my-2">
+          </div>
+        </rs-card>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <div class="px-4 pb-6">
+    <rs-card class="p-4 mt-4">
+      <div class="subtotal flex justify-between">
+        <div class="font-semibold">Subtotal</div>
+        <div>RM {{ formatPrice(this.totalAmount) }}</div>
+      </div>
+      <!--  <div class="discount flex justify-between my-2">
           <div class="font-semibold">Membership Discount (7%)</div>
           <div>RM {{ formatPrice(this.discountedP) }}</div>
         </div> -->
-        <!-- <div class="discount flex justify-between my-2">
+      <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Outlet Discount (10%)</div>
           <div>RM {{ formatPrice(this.outletDisc) }}</div>
         </div> -->
-        <div class="discount flex justify-between my-2">
-          <div class="font-semibold">SST(6%)</div>
-          <div class="text-red-500">RM {{ formatPrice(this.sst) }}</div>
-        </div>
-        <!-- <div class="discount flex justify-between my-2">
+      <div class="discount flex justify-between my-2">
+        <div class="font-semibold">SST(6%)</div>
+        <div class="text-red-500">RM {{ formatPrice(this.sst) }}</div>
+      </div>
+      <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Service Charges(10%)</div>
           <div class="text-red-500">RM {{ formatPrice(this.service) }}</div>
         </div> -->
-        <!-- <div class="discount flex justify-between my-2">
+      <!-- <div class="discount flex justify-between my-2">
           <div class="font-semibold">Infaq</div>
           <div class="text-red-500">RM 0.00</div>
         </div> -->
-        <hr />
-        <div class="total flex justify-between my-2 text-xl">
-          <div class="font-semibold">Total</div>
-          <div class="font-semibold">RM {{ formatPrice(this.totalPay) }}</div>
-        </div>
-      </rs-card>
+      <hr />
+      <div class="total flex justify-between my-2 text-xl">
+        <div class="font-semibold">Total</div>
+        <div class="font-semibold">RM {{ formatPrice(this.totalPay) }}</div>
+      </div>
+    </rs-card>
 
-      <div class="text-base font-semibold">Payment Type</div>
-      <div class="flex mb-2">
-        <div class="w-full">
-          <ul class="flex mb-0 list-none pt-4 pb-3 flex-col">
-            <li
-              class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
-            >
-              <a
-                class="
-                  text-xs
-                  font-bold
-                  uppercase
-                  px-5
-                  py-4
-                  shadow
-                  block
-                  leading-normal
-                "
-                @click="toggleTabs(1)"
-                :class="{
-                  'text-primary bg-white': paymentMethod !== 1,
-                  'text-white bg-heandshe': paymentMethod === 1,
-                }"
-              >
-                Online Banking (FPX)
-                <img
-                  src="@/assets/images/fpx-default.png"
-                  class="w-16 float-right invisible md:visible"
-                  style="position: absolute; top: 9px; right: 15px"
-                  alt=""
-                  v-if="paymentMethod !== 1"
-                />
-                <img
-                  src="@/assets/images/fpx-white.png"
-                  class="w-16 float-right invisible md:visible"
-                  style="position: absolute; top: 9px; right: 15px"
-                  alt=""
-                  v-if="paymentMethod === 1"
-                />
-              </a>
-            </li>
-            <li
-              class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
-            >
-              <a
-                class="
-                  text-xs
-                  font-bold
-                  uppercase
-                  px-5
-                  py-4
-                  shadow
-                  block
-                  leading-normal
-                "
-                @click="toggleTabs(2)"
-                :class="{
-                  'text-primary bg-white': paymentMethod !== 2,
-                  'text-white bg-heandshe': paymentMethod === 2,
-                }"
-              >
-                Kad Kredit / Debit
-
-                <img
-                  src="@/assets/images/card-credit-trans.png"
-                  class="w-16 float-right invisible md:visible"
-                  style="position: absolute; top: 14px; right: 15px"
-                  alt=""
-                />
-              </a>
-            </li>
-            <li
-              class="
-                -mb-px
-                mr-2
-                last:mr-0
-                flex-auto
-                text-left
-                sm:text-center
-                relative
-              "
-            >
-              <a
-                class="
-                  text-xs
-                  font-bold
-                  uppercase
-                  px-5
-                  py-4
-                  shadow
-                  block
-                  leading-normal
-                "
-                @click="toggleTabs(3)"
-                :class="{
-                  'text-primary bg-white': paymentMethod !== 3,
-                  'text-white bg-heandshe': paymentMethod === 3,
-                }"
-              >
-                Payment Link
-
-                <img
-                  src="@/assets/images/card-credit-trans.png"
-                  class="w-16 float-right invisible md:visible"
-                  style="position: absolute; top: 14px; right: 15px"
-                  alt=""
-                />
-              </a>
-            </li>
-          </ul>
-          <div
-            class="payment-card"
-            :class="{
-              hidden: paymentMethod == '',
-              block: paymentMethod != '',
-            }"
+    <div class="text-base font-semibold">Payment Type</div>
+    <div class="flex mb-2">
+      <div class="w-full">
+        <ul class="flex mb-0 list-none pt-4 pb-3 flex-col">
+          <li
+            class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
           >
-            <div class="relative flex flex-col min-w-0 break-words w-full">
-              <div class="">
-                <div class="tab-content tab-space">
-                  <div
-                    :class="{
-                      hidden: paymentMethod !== 1,
-                      block: paymentMethod === 1,
-                    }"
-                  >
-                    <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
-                      <div v-for="val in getBankCode" :key="val.CODE">
-                        <button
-                          class="
-                            px-4
-                            pb-2
-                            pt-3
-                            bg-gray-200
-                            hover:bg-gray-300
-                            text-sm
-                            font-medium
-                            w-full
-                            h-full
-                          "
-                          @click="SetBank(val.CODE)"
-                          :class="{
-                            '!bg-heandshe text-white': bankcode === val.CODE,
-                          }"
-                        >
-                          <img
-                            :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
-                            class="w-10 mx-auto"
-                            v-if="val.CODE !== 'BIMB0340'"
-                          />
-                          <img
-                            :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
-                            class="w-20 mx-auto"
-                            v-if="val.CODE === 'BIMB0340'"
-                          />
-                          <br />
-                          <span> {{ val.NAME }}</span>
-                        </button>
-                      </div>
-                    </div>
-                    <br />
-                    <rs-button
-                      class="w-full bg-heandshe hover:bg-heandshe"
-                      @click="sentBank()"
-                      :disabled="loading"
-                    >
-                      <span v-if="loading"> Loading </span>
-                      <span v-else
-                        >Pay Online RM {{ formatPrice(this.totalPay) }}</span
+            <a
+              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              @click="toggleTabs(1)"
+              :class="{
+                'text-primary bg-white': paymentMethod !== 1,
+                'text-white bg-heandshe': paymentMethod === 1,
+              }"
+            >
+              Online Banking (FPX)
+              <img
+                src="@/assets/images/fpx-default.png"
+                class="w-16 float-right invisible md:visible"
+                style="position: absolute; top: 9px; right: 15px"
+                alt=""
+                v-if="paymentMethod !== 1"
+              />
+              <img
+                src="@/assets/images/fpx-white.png"
+                class="w-16 float-right invisible md:visible"
+                style="position: absolute; top: 9px; right: 15px"
+                alt=""
+                v-if="paymentMethod === 1"
+              />
+            </a>
+          </li>
+          <li
+            class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
+          >
+            <a
+              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              @click="toggleTabs(2)"
+              :class="{
+                'text-primary bg-white': paymentMethod !== 2,
+                'text-white bg-heandshe': paymentMethod === 2,
+              }"
+            >
+              Kad Kredit / Debit
+
+              <img
+                src="@/assets/images/card-credit-trans.png"
+                class="w-16 float-right invisible md:visible"
+                style="position: absolute; top: 14px; right: 15px"
+                alt=""
+              />
+            </a>
+          </li>
+          <li
+            class="-mb-px mr-2 last:mr-0 flex-auto text-left sm:text-center relative"
+          >
+            <a
+              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              @click="toggleTabs(3)"
+              :class="{
+                'text-primary bg-white': paymentMethod !== 3,
+                'text-white bg-heandshe': paymentMethod === 3,
+              }"
+            >
+              Payment Link
+
+              <img
+                src="@/assets/images/card-credit-trans.png"
+                class="w-16 float-right invisible md:visible"
+                style="position: absolute; top: 14px; right: 15px"
+                alt=""
+              />
+            </a>
+          </li>
+        </ul>
+        <div
+          class="payment-card"
+          :class="{
+            hidden: paymentMethod == '',
+            block: paymentMethod != '',
+          }"
+        >
+          <div class="relative flex flex-col min-w-0 break-words w-full">
+            <div class="">
+              <div class="tab-content tab-space">
+                <div
+                  :class="{
+                    hidden: paymentMethod !== 1,
+                    block: paymentMethod === 1,
+                  }"
+                >
+                  <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
+                    <div v-for="val in getBankCode" :key="val.CODE">
+                      <button
+                        class="px-4 pb-2 pt-3 bg-gray-200 hover:bg-gray-300 text-sm font-medium w-full h-full"
+                        @click="SetBank(val.CODE)"
+                        :class="{
+                          '!bg-heandshe text-white': bankcode === val.CODE,
+                        }"
                       >
-                    </rs-button>
-                  </div>
-                  <div
-                    :class="{
-                      hidden: paymentMethod !== 2,
-                      block: paymentMethod === 2,
-                    }"
-                  >
-                    <!-- CREDIT CARD -->
-                    <div class="bg-gray-300 w-full p-4 rounded-md">
-                      <ul>
-                        <li>
-                          Payment using credit/debit card will be using iServe
-                          platform.
-                        </li>
-                      </ul>
+                        <img
+                          :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
+                          class="w-10 mx-auto"
+                          v-if="val.CODE !== 'BIMB0340'"
+                        />
+                        <img
+                          :src="`https://assets-toyyibinfaq.s3.ap-southeast-1.amazonaws.com/logobank/${val.CODE}.png`"
+                          class="w-20 mx-auto"
+                          v-if="val.CODE === 'BIMB0340'"
+                        />
+                        <br />
+                        <span> {{ val.NAME }}</span>
+                      </button>
                     </div>
                   </div>
-                  <div
-                    :class="{
-                      hidden: paymentMethod !== 3,
-                      block: paymentMethod === 3,
-                    }"
+                  <br />
+                  <rs-button
+                    class="w-full bg-heandshe hover:bg-heandshe"
+                    @click="sentBank()"
+                    :disabled="loading"
                   >
-                    <!-- CREDIT CARD -->
-                    <div class="bg-white w-full p-4 rounded-md">
-                      <!-- <form-kit
+                    <span v-if="loading"> Loading </span>
+                    <span v-else
+                      >Pay Online RM {{ formatPrice(this.totalPay) }}</span
+                    >
+                  </rs-button>
+                </div>
+                <div
+                  :class="{
+                    hidden: paymentMethod !== 2,
+                    block: paymentMethod === 2,
+                  }"
+                >
+                  <!-- CREDIT CARD -->
+                  <div class="bg-gray-300 w-full p-4 rounded-md">
+                    <ul>
+                      <li>
+                        Payment using credit/debit card will be using iServe
+                        platform.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div
+                  :class="{
+                    hidden: paymentMethod !== 3,
+                    block: paymentMethod === 3,
+                  }"
+                >
+                  <!-- CREDIT CARD -->
+                  <div class="bg-white w-full p-4 rounded-md">
+                    <!-- <form-kit
                         type="number"
                         placeholder="Enter your phone number"
                         v-model="phone"
                         @keydown="nameKeydown($event)"
                       ></form-kit> -->
-                      <rs-button
-                        class="w-full"
-                        @click="sentPaymentLink()"
-                        variant="primary-outline"
-                        :disabled="loading"
-                      >
-                        <span v-if="loading"> Loading </span>
-                        <span v-else> Get Payment Link</span></rs-button
-                      >
-                    </div>
+                    <rs-button
+                      class="w-full"
+                      @click="sentPaymentLink()"
+                      variant="primary-outline"
+                      :disabled="loading"
+                    >
+                      <span v-if="loading"> Loading </span>
+                      <span v-else> Get Payment Link</span></rs-button
+                    >
                   </div>
                 </div>
               </div>
@@ -481,8 +410,9 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!--  <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
+    <!--  <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
         >Pay Now with min infaq RM {{ formatPrice(Math.ceil(this.totalPay)) }}
       </rs-button>
       <rs-button
@@ -492,83 +422,70 @@
         >Pay Now with more infaq RM
         {{ formatPrice(Math.ceil(this.totalPay)) }}</rs-button
       > -->
-      <!-- <router-link :to="{ name: 'order-confirm' }"> -->
-      <hr class="my-1" />
-      <center>OR</center>
-      <hr class="mb-4" />
-      <rs-button
-        class="w-full my-2"
-        variant="primary-outline"
-        @click="sentPOS()"
-        :disabled="loading"
-      >
-        <span v-if="loading"> Loading </span>
-        <span v-else> Pay at counter RM {{ formatPrice(this.totalPay) }}</span>
-      </rs-button>
-      <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
+    <!-- <router-link :to="{ name: 'order-confirm' }"> -->
+    <hr class="my-1" />
+    <center>OR</center>
+    <hr class="mb-4" />
+    <rs-button
+      class="w-full my-2"
+      variant="primary-outline"
+      @click="sentPOS()"
+      :disabled="loading"
+    >
+      <span v-if="loading"> Loading </span>
+      <span v-else> Pay at counter RM {{ formatPrice(this.totalPay) }}</span>
+    </rs-button>
+    <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
         Pay Online RM {{ formatPrice(this.totalPay) }}
       </rs-button> -->
-      <!-- </router-link> -->
-    </div>
-    <rs-modal
-      title="This is a modal"
-      v-model="openModal"
-      position="bottom"
-      size="full"
-    >
-      <template #custom>
-        <div class="rounded-t-3xl" style="min-height: 90vh">
-          <perfect-scrollbar class="mb-4" style="height: 90vh">
-            <button
-              class="
-                flex
-                justify-center
-                items-center
-                p-1
-                bg-heandshe
-                absolute
-                top-2
-                right-2
-                rounded-full
-                z-50
-              "
+    <!-- </router-link> -->
+  </div>
+  <rs-modal
+    title="This is a modal"
+    v-model="openModal"
+    position="bottom"
+    size="full"
+  >
+    <template #custom>
+      <div class="rounded-t-3xl" style="min-height: 90vh">
+        <perfect-scrollbar class="mb-4" style="height: 90vh">
+          <button
+            class="flex justify-center items-center p-1 bg-heandshe absolute top-2 right-2 rounded-full z-50"
+          >
+            <vue-feather
+              @click="openModal = false"
+              class="text-primary-100"
+              type="x"
+            ></vue-feather>
+          </button>
+          <div class="relative">
+            <img
+              class="w-full h-60 object-cover rounded-t-xl"
+              :src="modalData ? modalData.menu_image[0] : ''"
+              alt=""
+            />
+            <rs-button class="absolute bottom-2 right-2 py-1 !px-4 bg-heandshe">
+              RM
+              {{
+                modalData && modalData.discountedPrice
+                  ? formatPrice(modalData.discountedPrice)
+                  : formatPrice(modalData.menu_price)
+              }}</rs-button
             >
-              <vue-feather
-                @click="openModal = false"
-                class="text-primary-100"
-                type="x"
-              ></vue-feather>
-            </button>
-            <div class="relative">
-              <img
-                class="w-full h-60 object-cover rounded-t-xl"
-                :src="modalData ? modalData.menu_image[0] : ''"
-                alt=""
-              />
-              <rs-button
-                class="absolute bottom-2 right-2 py-1 !px-4 bg-heandshe"
-              >
-                RM
-                {{
-                  modalData && modalData.discountedPrice
-                    ? formatPrice(modalData.discountedPrice)
-                    : formatPrice(modalData.menu_price)
-                }}</rs-button
-              >
-            </div>
+          </div>
 
-            <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
-              <div class="modal-item-header">
-                <span class="font-semibold text-lg line-clamp-2 mb-2">{{
-                  modalData ? modalData.menu_name : ""
-                }}</span>
-                <p class="line-clamp-2 text-sm text-gray-400">
-                  {{ modalData ? modalData.menu_description : "" }}
-                </p>
-              </div>
-              <hr class="my-4" />
-              <div class="modal-item-content">
-                <!-- <div
+          <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
+            <div class="modal-item-header">
+              <span class="font-semibold text-lg line-clamp-2 mb-2">{{
+                modalData ? modalData.menu_name : ""
+              }}</span>
+              <p class="line-clamp-2 text-sm text-gray-400">
+                {{ modalData ? modalData.menu_description : "" }}
+              </p>
+            </div>
+            <hr class="my-4" />
+            <div class="modal-item-content">
+              <!-- <div
                   class="
                     membership
                     flex
@@ -590,87 +507,58 @@
                   <rs-button>Apply</rs-button>
                 </div> -->
 
-                <div v-if="modalData.variants" class="modal-item-variance">
-                  <div v-for="(val, index) in modalData.variants" :key="index">
-                    <div class="font-semibold text-lg mb-4">
-                      {{ val.title }}
-                      <span
-                        class="text-gray-400 font-normal text-sm"
-                        v-if="val.required"
-                        >(required)</span
+              <div v-if="modalData.variants" class="modal-item-variance">
+                <div v-for="(val, index) in modalData.variants" :key="index">
+                  <div class="font-semibold text-lg mb-4">
+                    {{ val.title }}
+                    <span
+                      class="text-gray-400 font-normal text-sm"
+                      v-if="val.required"
+                      >(required)</span
+                    >
+                  </div>
+                  <div class="variant-choice">
+                    <form-kit
+                      v-if="val.type == 'radio'"
+                      :type="val.type"
+                      :options="val.data"
+                      :classes="{
+                        fieldset: '!border-0 !p-0',
+                      }"
+                    />
+                    <div v-else>
+                      <div
+                        class="flex justify-between items-center mb-3"
+                        v-for="(val, index) in val.data"
+                        :key="index"
                       >
-                    </div>
-                    <div class="variant-choice">
-                      <form-kit
-                        v-if="val.type == 'radio'"
-                        :type="val.type"
-                        :options="val.data"
-                        :classes="{
-                          fieldset: '!border-0 !p-0',
-                        }"
-                      />
-                      <div v-else>
-                        <div
-                          class="flex justify-between items-center mb-3"
-                          v-for="(val, index) in val.data"
-                          :key="index"
-                        >
-                          <div class="flex items-center cursor-pointer">
-                            <input
-                              class="rs-checkbox"
-                              type="checkbox"
-                              :id="modalData.sku + '-check-' + index"
-                              :value="val"
-                            />
-                            <label
-                              class="
-                                text-gray-700
-                                dark:text-gray-200
-                                text-sm
-                                formkit-disabled:text-gray-300
-                                dark:formkit-disabled:text-gray-700
-                              "
-                              :for="modalData.sku + '-check-' + index"
-                            >
-                              {{ val }}
-                              <span class="text-primary-500">( +1.00 )</span>
-                            </label>
-                          </div>
-                          <div class="flex items-center gap-x-2">
-                            <button
-                              class="
-                                flex
-                                items-center
-                                justify-center
-                                bg-primary-400
-                                text-primary-50
-                                p-1
-                                rounded-lg
-                              "
-                            >
-                              <vue-feather
-                                size="1rem"
-                                type="minus"
-                              ></vue-feather>
-                            </button>
-                            <span class="text-gray-500">x1</span>
-                            <button
-                              class="
-                                flex
-                                items-center
-                                justify-center
-                                bg-primary-400
-                                text-primary-50
-                                p-1
-                                rounded-lg
-                              "
-                            >
-                              <vue-feather
-                                size="1rem"
-                                type="plus"
-                              ></vue-feather>
-                            </button>
-                          </div>
+                        <div class="flex items-center cursor-pointer">
+                          <input
+                            class="rs-checkbox"
+                            type="checkbox"
+                            :id="modalData.sku + '-check-' + index"
+                            :value="val"
+                          />
+                          <label
+                            class="text-gray-700 dark:text-gray-200 text-sm formkit-disabled:text-gray-300 dark:formkit-disabled:text-gray-700"
+                            :for="modalData.sku + '-check-' + index"
+                          >
+                            {{ val }}
+                            <span class="text-primary-500">( +1.00 )</span>
+                          </label>
+                        </div>
+                        <div class="flex items-center gap-x-2">
+                          <button
+                            class="flex items-center justify-center bg-primary-400 text-primary-50 p-1 rounded-lg"
+                          >
+                            <vue-feather size="1rem" type="minus"></vue-feather>
+                          </button>
+                          <span class="text-gray-500">x1</span>
+                          <button
+                            class="flex items-center justify-center bg-primary-400 text-primary-50 p-1 rounded-lg"
+                          >
+                            <vue-feather size="1rem" type="plus"></vue-feather>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -678,7 +566,8 @@
                 </div>
               </div>
             </div>
-            <!--  <div class="modal-item-type mb-6 px-2">
+          </div>
+          <!--  <div class="modal-item-type mb-6 px-2">
               <div class="font-semibold text-lg mb-4">Order Type</div>
               <div class="flex gap-4">
                 <rs-button variant="primary" class="h-10">Dine-In</rs-button>
@@ -687,216 +576,179 @@
                 >
               </div>
             </div> -->
-            <div v-if="this.status != 'FAIL'">
-              <div
-                class="
-                  modal-item-action
-                  flex
-                  w-full
-                  justify-between
-                  items-center
-                  overflow-auto
-                  px-2
-                  gap-x-2
-                "
+          <div v-if="this.status != 'FAIL'">
+            <div
+              class="modal-item-action flex w-full justify-between items-center overflow-auto px-2 gap-x-2"
+            >
+              <button
+                class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
+                @click="addToCart(modalData)"
               >
+                Save to Cart - RM
+                {{
+                  modalData && modalData.discountedPrice
+                    ? formatPrice(modalData.discountedPrice)
+                    : formatPrice(modalData.menu_price)
+                }}
+              </button>
+              <div class="flex gap-x-2">
                 <button
-                  class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
-                  @click="addToCart(modalData)"
+                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  @click="decrement()"
                 >
-                  Save to Cart - RM
-                  {{
-                    modalData && modalData.discountedPrice
-                      ? formatPrice(modalData.discountedPrice)
-                      : formatPrice(modalData.menu_price)
-                  }}
+                  <vue-feather type="minus"></vue-feather>
                 </button>
-                <div class="flex gap-x-2">
-                  <button
-                    class="
-                      flex
-                      items-center
-                      justify-center
-                      bg-heandshe
-                      text-primary-50
-                      p-1
-                      rounded-lg
-                    "
-                    @click="decrement()"
-                  >
-                    <vue-feather type="minus"></vue-feather>
-                  </button>
-                  {{ modalData.menu_quantity }}
-                  <button
-                    class="
-                      flex
-                      items-center
-                      justify-center
-                      bg-heandshe
-                      text-primary-50
-                      p-1
-                      rounded-lg
-                    "
-                    @click="increment()"
-                  >
-                    <vue-feather type="plus"></vue-feather>
-                  </button>
-                </div>
+                {{ modalData.menu_quantity }}
+                <button
+                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  @click="increment()"
+                >
+                  <vue-feather type="plus"></vue-feather>
+                </button>
               </div>
             </div>
-          </perfect-scrollbar>
-        </div>
-      </template>
-    </rs-modal>
-    <rs-modal
-      title="This is a modal"
-      position="bottom"
-      size="full"
-      v-model="openModalConfirmation"
-    >
-      <template #custom>
-        <div class="rounded-t-3xl" style="min-height: 50vh">
-          <button
-            class="
-              flex
-              justify-center
-              items-center
-              p-1
-              bg-primary-400
-              absolute
-              top-2
-              right-2
-              rounded-full
-              z-50
-            "
-          >
-            <vue-feather
-              @click="openModalConfirmation = false"
-              class="text-primary-100"
-              type="x"
-            ></vue-feather>
-          </button>
-
+          </div>
+        </perfect-scrollbar>
+      </div>
+    </template>
+  </rs-modal>
+  <rs-modal
+    title="This is a modal"
+    position="bottom"
+    size="full"
+    v-model="openModalConfirmation"
+  >
+    <template #custom>
+      <div class="rounded-t-3xl" style="min-height: 50vh">
+        <button
+          class="flex justify-center items-center p-1 bg-primary-400 absolute top-2 right-2 rounded-full z-50"
+        >
           <vue-feather
-            v-if="infaqtype == 'choose'"
-            @click="infaqtype = ''"
-            class="text-primary-400 absolute top-3 left-3"
-            type="chevron-left"
+            @click="openModalConfirmation = false"
+            class="text-primary-100"
+            type="x"
           ></vue-feather>
+        </button>
 
-          <div v-if="infaqtype != 'choose'" class="h-full p-4">
-            <div class="font-semibold text-xl text-center mt-6 mb-4">
-              Infaq Type
-            </div>
-            <form-kit type="number" value="2">
-              <template #prefix>
-                <div
-                  class="bg-slate-100 dark:bg-slate-700 h-full rounded-l-md p-3"
-                >
-                  RM
-                </div>
-              </template>
-            </form-kit>
-            <rs-button class="w-full mb-4" @click="infaqtype = 'choose'">
-              Choose organization to infaq
-            </rs-button>
-            <hr class="my-6" />
-            <rs-button
-              @click="navigateConfirm({ name: 'order-confirm' })"
-              class="w-full"
-              variant="primary-outline"
-              >Let Us Choose for You</rs-button
-            >
+        <vue-feather
+          v-if="infaqtype == 'choose'"
+          @click="infaqtype = ''"
+          class="text-primary-400 absolute top-3 left-3"
+          type="chevron-left"
+        ></vue-feather>
+
+        <div v-if="infaqtype != 'choose'" class="h-full p-4">
+          <div class="font-semibold text-xl text-center mt-6 mb-4">
+            Infaq Type
           </div>
-          <div v-else class="p-4 h-full">
-            <div class="font-semibold text-xl text-center mt-6 mb-4">
-              Choose Organization
-            </div>
-            <div class="p-4">
-              <swiper
-                :slidesPerView="2"
-                :spaceBetween="20"
-                :freeMode="true"
-                :modules="modules"
+          <form-kit type="number" value="2">
+            <template #prefix>
+              <div
+                class="bg-slate-100 dark:bg-slate-700 h-full rounded-l-md p-3"
               >
-                <swiper-slide
-                  v-for="(org, index) in organizationList"
-                  :key="index"
-                >
-                  <div class="shadow-md w-full rounded-lg h-full relative">
-                    <input
-                      class="rs-radio !mr-0 absolute top-2 right-2"
-                      type="radio"
-                      name="organization"
-                      :id="'infaq-check-' + index"
-                      :value="org.name"
-                    />
-                    <label
-                      class="absolute after:content-[''] w-full h-full"
-                      :for="'infaq-check-' + index"
-                    >
-                    </label>
-                    <img
-                      class="h-26 object-cover w-full rounded-t-lg"
-                      :src="org.image"
-                      alt=""
-                    />
-                    <div class="p-2">
-                      <span class="text-sm font-semibold line-clamp-1">{{
-                        org.name
-                      }}</span>
-                      <p class="text-xs text-primary-400 uppercase">
-                        {{ org.type }}
-                      </p>
-                    </div>
+                RM
+              </div>
+            </template>
+          </form-kit>
+          <rs-button class="w-full mb-4" @click="infaqtype = 'choose'">
+            Choose organization to infaq
+          </rs-button>
+          <hr class="my-6" />
+          <rs-button
+            @click="navigateConfirm({ name: 'order-confirm' })"
+            class="w-full"
+            variant="primary-outline"
+            >Let Us Choose for You</rs-button
+          >
+        </div>
+        <div v-else class="p-4 h-full">
+          <div class="font-semibold text-xl text-center mt-6 mb-4">
+            Choose Organization
+          </div>
+          <div class="p-4">
+            <swiper
+              :slidesPerView="2"
+              :spaceBetween="20"
+              :freeMode="true"
+              :modules="modules"
+            >
+              <swiper-slide
+                v-for="(org, index) in organizationList"
+                :key="index"
+              >
+                <div class="shadow-md w-full rounded-lg h-full relative">
+                  <input
+                    class="rs-radio !mr-0 absolute top-2 right-2"
+                    type="radio"
+                    name="organization"
+                    :id="'infaq-check-' + index"
+                    :value="org.name"
+                  />
+                  <label
+                    class="absolute after:content-[''] w-full h-full"
+                    :for="'infaq-check-' + index"
+                  >
+                  </label>
+                  <img
+                    class="h-26 object-cover w-full rounded-t-lg"
+                    :src="org.image"
+                    alt=""
+                  />
+                  <div class="p-2">
+                    <span class="text-sm font-semibold line-clamp-1">{{
+                      org.name
+                    }}</span>
+                    <p class="text-xs text-primary-400 uppercase">
+                      {{ org.type }}
+                    </p>
                   </div>
-                </swiper-slide>
-              </swiper>
-            </div>
-            <rs-button
-              @click="navigateConfirm({ name: 'order-confirm' })"
-              class="w-full mt-4"
-              >Pay RM 885.00 with RM 5.00 infaq</rs-button
-            >
+                </div>
+              </swiper-slide>
+            </swiper>
           </div>
-        </div>
-      </template>
-    </rs-modal>
-    <rs-modal
-      title="Payment Link"
-      v-model="modalOpen"
-      position="middle"
-      size="full"
-    >
-      <div>
-        <div>
-          <center>
-            <qrcode-vue :value="this.value" :size="size" level="L" />
-          </center>
-        </div>
-        <div class="my-4 text-center">
-          <div>{{ this.link }}</div>
-          <input type="hidden" id="testing-code" :value="this.link" />
-          <div class="mt-4">
-            <rs-button
-              class="w-full bg-heandshe"
-              @click.stop.prevent="copyTestingCode"
-            >
-              Copy
-            </rs-button>
-          </div>
+          <rs-button
+            @click="navigateConfirm({ name: 'order-confirm' })"
+            class="w-full mt-4"
+            >Pay RM 885.00 with RM 5.00 infaq</rs-button
+          >
         </div>
       </div>
-    </rs-modal>
-    <rs-modal
-      title="Payment Counter"
-      v-model="modalPOS"
-      position="middle"
-      size="full"
-    >
-      Please pay for Order No. {{ this.MenuID }} , Table No {{ this.tableNo }}
-    </rs-modal>
-  </rs-layout>
+    </template>
+  </rs-modal>
+  <rs-modal
+    title="Payment Link"
+    v-model="modalOpen"
+    position="middle"
+    size="full"
+  >
+    <div>
+      <div>
+        <center>
+          <qrcode-vue :value="this.value" :size="size" level="L" />
+        </center>
+      </div>
+      <div class="my-4 text-center">
+        <div>{{ this.link }}</div>
+        <input type="hidden" id="testing-code" :value="this.link" />
+        <div class="mt-4">
+          <rs-button
+            class="w-full bg-heandshe"
+            @click.stop.prevent="copyTestingCode"
+          >
+            Copy
+          </rs-button>
+        </div>
+      </div>
+    </div>
+  </rs-modal>
+  <rs-modal
+    title="Payment Counter"
+    v-model="modalPOS"
+    position="middle"
+    size="full"
+  >
+    Please pay for Order No. {{ this.MenuID }} , Table No {{ this.tableNo }}
+  </rs-modal>
 </template>
 
 <script>

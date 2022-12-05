@@ -1,39 +1,18 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            Outlet Management
+    <div style="display: flex; flex-direction: row">
+      <div class="w-full h-1/4 flex flex-col">
+        <div class="w-full flex flex-row mb-0">
+          <div class="inline-block w-full pr-10">
+            <rs-card>
+              <div class="text-center pt-10 pb-2">
+                <strong>Total of Outlet Under HQ </strong>
+              </div>
+              <hr />
+              <div class="text-center py-8">{{ this.totalData }} outlets</div>
+            </rs-card>
           </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-full flex flex-col">
-      <div style="display: flex; flex-direction: row">
-        <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
-        <div class="w-full h-1/4 flex flex-col">
-          <div class="w-full flex flex-row mb-0">
-            <div class="inline-block w-full pr-10">
-              <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Total of Outlet Under HQ </strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">{{ this.totalData }} outlets</div>
-              </rs-card>
-            </div>
-            <!-- <div class="inline-block w-1/2 pr-10">
+          <!-- <div class="inline-block w-1/2 pr-10">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Total of outlets income ( RM )</strong>
@@ -44,91 +23,137 @@
                 </div>
               </rs-card>
             </div> -->
-          </div>
-          <div class="w-full" style="flex-direction: column">
-            <!-- UNTUK ATAS BAWAH -->
-            <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-11/12 h-1">
-                <FormKit v-model="search" id="search-sticky" placeholder="Search for a outlet..." type="search"
-                  :classes="{
-                    inner:
-                      'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                    outer: 'flex-1 mb-0',
-                    input: 'h-10',
-                  }" />
-              </div>
-              <div class="w-1/12">
-                <rs-button @click="addOutlet()" class="bg-heandshe hover:bg-heandshe">Add Outlet</rs-button>
-              </div>
+        </div>
+        <div class="w-full" style="flex-direction: column">
+          <!-- UNTUK ATAS BAWAH -->
+          <div style="display: flex; flex-direction: row; padding-top: 10px">
+            <div class="w-11/12 h-1">
+              <FormKit
+                v-model="search"
+                id="search-sticky"
+                placeholder="Search for a outlet..."
+                type="search"
+                :classes="{
+                  inner:
+                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                  outer: 'flex-1 mb-0',
+                  input: 'h-10',
+                }"
+              />
             </div>
-            <div class="">
-              <rs-card style="margin-top: 40px">
+            <div class="w-1/12">
+              <rs-button
+                @click="addOutlet()"
+                class="bg-heandshe hover:bg-heandshe"
+                >Add Outlet</rs-button
+              >
+            </div>
+          </div>
+          <div class="">
+            <rs-card style="margin-top: 40px">
+              <div>
                 <div>
-                  <div>
-                    <DataTable :value="searchOutlet" :paginator="true" :rows="10"
-                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                      :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                      <Column field="outlet_code" header="Outlet Code"></Column>
-                      <Column field="outlet_name" header="Outlet Name"></Column>
-                      <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
-                      <Column field="outlet_phone" header="Phone No."></Column>
-                      <Column field="outlet_address" header="Address"></Column>
-                      <Column field="outlet_email" header="Email"></Column>
-                      <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                        <template #body="searchOutlet">
-                          <Button icon="pi pi-pencil" class="p-button-rounded p-button-success"
-                            @click="editOutlet(searchOutlet)" /> {{ "" }}
-                          <router-link :to="{ name: 'admin-table' }">
-                            <Button icon="pi pi-table" class="p-button-rounded p-button-success" />
-                          </router-link>
-                          {{ "" }}
-                          <router-link :to="{ name: 'admin-station' }">
-                            <Button icon="pi pi-bars" class="p-button-rounded p-button-success" />
-                          </router-link>
+                  <DataTable
+                    :value="searchOutlet"
+                    :paginator="true"
+                    :rows="10"
+                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                    :rowsPerPageOptions="[10, 20, 50]"
+                    responsiveLayout="scroll"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                  >
+                    <Column field="outlet_code" header="Outlet Code"></Column>
+                    <Column field="outlet_name" header="Outlet Name"></Column>
+                    <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
+                    <Column field="outlet_phone" header="Phone No."></Column>
+                    <Column field="outlet_address" header="Address"></Column>
+                    <Column field="outlet_email" header="Email"></Column>
+                    <Column
+                      :exportable="false"
+                      style="min-width: 8rem"
+                      header="Actions"
+                    >
+                      <template #body="searchOutlet">
+                        <Button
+                          icon="pi pi-pencil"
+                          class="p-button-rounded p-button-success"
+                          @click="editOutlet(searchOutlet)"
+                        />
+                        {{ "" }}
+                        <router-link :to="{ name: 'admin-table' }">
+                          <Button
+                            icon="pi pi-table"
+                            class="p-button-rounded p-button-success"
+                          />
+                        </router-link>
+                        {{ "" }}
+                        <router-link :to="{ name: 'admin-station' }">
+                          <Button
+                            icon="pi pi-bars"
+                            class="p-button-rounded p-button-success"
+                          />
+                        </router-link>
 
-                          <!-- <Button
+                        <!-- <Button
                             icon="pi pi-trash"
                             class="p-button-rounded p-button-warning"
                             @click="deleteTable(searchOutlet)"
                           /> -->
-                        </template>
-                      </Column>
+                      </template>
+                    </Column>
 
-                      <template #paginatorstart>
-                        <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                      </template>
-                      <template #paginatorend>
-                        <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-                      </template>
-                    </DataTable>
-                  </div>
+                    <template #paginatorstart>
+                      <Button
+                        type="button"
+                        icon="pi pi-refresh"
+                        class="p-button-text"
+                      />
+                    </template>
+                    <template #paginatorend>
+                      <Button
+                        type="button"
+                        icon="pi pi-cloud"
+                        class="p-button-text"
+                      />
+                    </template>
+                  </DataTable>
                 </div>
-              </rs-card>
-            </div>
-
-            <!-- UNTUK ATAS BAWAH -->
+              </div>
+            </rs-card>
           </div>
+
+          <!-- UNTUK ATAS BAWAH -->
         </div>
-        <!-- UNTUK SEBELAH2 -->
       </div>
+      <!-- UNTUK SEBELAH2 -->
     </div>
-    <rs-modal title="Add Outlet" v-model="modalInsert" position="middle" size="md">
+    <rs-modal
+      title="Add Outlet"
+      v-model="modalInsert"
+      position="middle"
+      size="md"
+    >
       <FormKit label="Outlet Name" type="text" v-model="outlet_name" />
       <FormKit label="Phone No." type="number" v-model="outlet_phone" />
       <FormKit label="Email" type="email" v-model="outlet_email" />
       <FormKit label="Postcode" type="number" v-model="outlet_postcode" />
       <FormKit label="Address" type="textarea" v-model="outlet_address" />
-      <FormKit type="radio" label="Outlet Type" :options="[
-        'HQ',
-        'Branch',
-      ]" />
-      <FormKit type="file" label="Images" v-model="outlet_images" accept=".jpg, .png, .jpeg" />
+      <FormKit type="radio" label="Outlet Type" :options="['HQ', 'Branch']" />
+      <FormKit
+        type="file"
+        label="Images"
+        v-model="outlet_images"
+        accept=".jpg, .png, .jpeg"
+      />
       <hr />
       <br />
       <label><strong>Organization's Information</strong></label>
       <br />
-      <FormKit label="Owner" type="select" :options="['Owner Branch UM', 'Owner SME Bank']" />
+      <FormKit
+        label="Owner"
+        type="select"
+        :options="['Owner Branch UM', 'Owner SME Bank']"
+      />
       <!-- <FormKit label="Phone No." type="number" />
       <FormKit label="Email" type="email" />
       <FormKit label="Address" type="textarea" /> -->
@@ -136,18 +161,44 @@
       <br />
       <label><strong>Social Media's URL</strong></label>
       <br />
-      <FormKit type="url" label="Official Website" placeholder="https://www.example.com..." />
-      <FormKit type="url" label="Facebook" placeholder="https://www.example.com..." validation="url" />
-      <FormKit type="url" label="Instagram" placeholder="https://www.example.com..." />
-      <FormKit type="url" label="Twitter" placeholder="https://www.example.com..." />
+      <FormKit
+        type="url"
+        label="Official Website"
+        placeholder="https://www.example.com..."
+      />
+      <FormKit
+        type="url"
+        label="Facebook"
+        placeholder="https://www.example.com..."
+        validation="url"
+      />
+      <FormKit
+        type="url"
+        label="Instagram"
+        placeholder="https://www.example.com..."
+      />
+      <FormKit
+        type="url"
+        label="Twitter"
+        placeholder="https://www.example.com..."
+      />
       <rs-button style="float: right" @click="insertOutlet()"> Save </rs-button>
     </rs-modal>
     <!-- EDIT -->
-    <rs-modal title="Edit Outlet" v-model="modalEdit" position="middle" size="md">
+    <rs-modal
+      title="Edit Outlet"
+      v-model="modalEdit"
+      position="middle"
+      size="md"
+    >
       <FormKit label="Outlet Name" type="text" v-model="outlet1.outlet_name" />
       <FormKit label="Phone No." type="number" v-model="outlet1.outlet_phone" />
       <FormKit label="Email" type="email" v-model="outlet1.outlet_email" />
-      <FormKit label="Address" type="textarea" v-model="outlet1.outlet_address" />
+      <FormKit
+        label="Address"
+        type="textarea"
+        v-model="outlet1.outlet_address"
+      />
       <rs-button style="float: right" @click="editOutlets(outlet1)">
         Save
       </rs-button>
@@ -165,7 +216,6 @@ import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
 import "primeicons/primeicons.css";
 /* import moment from "moment"; */
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 
 export default {
   name: "AdminDashboard",
@@ -175,7 +225,6 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
   },
   setup() {
     const outlet = ref([]);

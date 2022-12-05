@@ -7,7 +7,7 @@
       'text-base px-10 py-4': size === 'lg',
 
       // Filled Button
-      'text-white bg-primary-400 hover:bg-primary-500 disabled:bg-primary-50 disabled:text-primary-100 disabled:border-primary-50 disabled:cursor-default dark:disabled:bg-slate-700 dark:disabled:text-slate-800 dark:disabled:border-slate-700':
+      'text-white bg-[#1A1819] hover:bg-[#1A1819] disabled:bg-primary-50 disabled:text-primary-100 disabled:border-primary-50 disabled:cursor-default dark:disabled:bg-slate-700 dark:disabled:text-slate-800 dark:disabled:border-slate-700':
         variant === 'primary',
       'text-white bg-secondary hover:bg-gray-500 disabled:bg-gray-50 disabled:text-gray-100 disabled:border-gray-50 disabled:cursor-default dark:disabled:bg-slate-700 dark:disabled:text-slate-800 dark:disabled:border-slate-700':
         variant === 'secondary',

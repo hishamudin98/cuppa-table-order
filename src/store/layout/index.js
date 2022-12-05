@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 export const state = {
-  layoutType: 'bottom',
+  layoutType: 'vertical',
   windowWidth: window.innerWidth,
   mobileWidth: "1024",
 };

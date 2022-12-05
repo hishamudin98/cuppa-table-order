@@ -1,92 +1,96 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            <router-link class="flex items-center justify-center" :to="{
-              name: 'admin-outlet',
-            }">
-              <vue-feather class="text-white" type="chevron-left"> </vue-feather>Table Management
-            </router-link>
-          </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-full flex flex-col">
-      <div style="display: flex; flex-direction: row">
-        <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
-        <div class="w-full h-1/4 flex flex-col">
-          <div class="w-full flex flex-row mb-1">
-            <div class="inline-block w-full pr-10">
-              <!-- <rs-card>
+    <div style="display: flex; flex-direction: row">
+      <div class="w-full h-1/4 flex flex-col">
+        <div class="w-full flex flex-row mb-1">
+          <div class="inline-block w-full pr-10">
+            <!-- <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Number of active tables</strong>
                 </div>
                 <hr />
                 <div class="text-center py-8">4 Active tables</div>
               </rs-card> -->
-            </div>
           </div>
-          <div class="w-full" style="flex-direction: column">
-            <!-- UNTUK ATAS BAWAH -->
-            <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-10">
-                <FormKit v-model="search" id="search-sticky" placeholder="Search for a table..." type="search" :classes="{
+        </div>
+        <div class="w-full" style="flex-direction: column">
+          <!-- UNTUK ATAS BAWAH -->
+          <div style="display: flex; flex-direction: row">
+            <div class="w-11/12 h-10">
+              <FormKit
+                v-model="search"
+                id="search-sticky"
+                placeholder="Search for a table..."
+                type="search"
+                :classes="{
                   inner:
                     'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
                   outer: 'flex-1 mb-0',
                   input: 'h-12',
-                }" />
-              </div>
-              <div class="w-1/12" style="padding-top: 10px">
-                <rs-button class="bg-heandshe hover:bg-heandshe">Add Station</rs-button>
-              </div>
+                }"
+              />
             </div>
-            <div class="h-4/6">
-              <div>
-                <DataTable :value="searchTables" :paginator="true" :rows="10"
-                  paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                  :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                  <Column field="outletTNAME" header="Station Name"></Column>
-                  <Column field="outletTSTATUS" header="Station Status"></Column>
-                  <Column field="outletTTYPE" header="Station Type"></Column>
-                  <Column :exportable="false" style="min-width: 8rem">
-                    <template #body="searchTables">
-                      <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                        @click="editTable(searchTables)" />
-                      <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                        @click="deleteTable(searchTables)" />
-                      <Button icon="pi pi-qrcode" class="p-button-rounded p-button-success"
-                        @click="print(searchTables)" />
-                    </template>
-                  </Column>
-                  <template #paginatorstart>
-                    <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                  </template>
-                  <template #paginatorend>
-                    <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-                  </template>
-                </DataTable>
-              </div>
+            <div class="w-1/12" style="padding-top: 10px">
+              <rs-button class="bg-heandshe hover:bg-heandshe"
+                >Add Station</rs-button
+              >
             </div>
-
-            <!-- UNTUK ATAS BAWAH -->
           </div>
+          <div class="h-4/6">
+            <div>
+              <DataTable
+                :value="searchTables"
+                :paginator="true"
+                :rows="10"
+                paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                :rowsPerPageOptions="[10, 20, 50]"
+                responsiveLayout="scroll"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+              >
+                <Column field="outletTNAME" header="Station Name"></Column>
+                <Column field="outletTSTATUS" header="Station Status"></Column>
+                <Column field="outletTTYPE" header="Station Type"></Column>
+                <Column :exportable="false" style="min-width: 8rem">
+                  <template #body="searchTables">
+                    <Button
+                      icon="pi pi-pencil"
+                      class="p-button-rounded p-button-success mr-2"
+                      @click="editTable(searchTables)"
+                    />
+                    <Button
+                      icon="pi pi-trash"
+                      class="p-button-rounded p-button-warning"
+                      @click="deleteTable(searchTables)"
+                    />
+                    <Button
+                      icon="pi pi-qrcode"
+                      class="p-button-rounded p-button-success"
+                      @click="print(searchTables)"
+                    />
+                  </template>
+                </Column>
+                <template #paginatorstart>
+                  <Button
+                    type="button"
+                    icon="pi pi-refresh"
+                    class="p-button-text"
+                  />
+                </template>
+                <template #paginatorend>
+                  <Button
+                    type="button"
+                    icon="pi pi-cloud"
+                    class="p-button-text"
+                  />
+                </template>
+              </DataTable>
+            </div>
+          </div>
+
+          <!-- UNTUK ATAS BAWAH -->
         </div>
-        <!-- UNTUK SEBELAH2 -->
       </div>
+      <!-- UNTUK SEBELAH2 -->
     </div>
     <!-- QR CODE -->
     <rs-modal title="QR CODE" v-model="qrcode" position="middle" size="md">
@@ -98,10 +102,22 @@
         </center>
       </div>
       <div>
-        <vue3-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="false"
-          :paginate-elements-by-height="1400" :filename=this.printName :pdf-quality="2" :manual-pagination="false"
-          pdf-format="a4" pdf-orientation="portrait" pdf-content-width="800px"
-          @hasStartedGeneration="hasStartedGeneration()" @hasGenerated="hasGenerated($event)" ref="html2Pdf">
+        <vue3-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="false"
+          :paginate-elements-by-height="1400"
+          :filename="this.printName"
+          :pdf-quality="2"
+          :manual-pagination="false"
+          pdf-format="a4"
+          pdf-orientation="portrait"
+          pdf-content-width="800px"
+          @hasStartedGeneration="hasStartedGeneration()"
+          @hasGenerated="hasGenerated($event)"
+          ref="html2Pdf"
+        >
           <template v-slot:pdf-content>
             <center>
               <h1>{{ this.printName }}</h1>
@@ -112,7 +128,11 @@
         </vue3-html2pdf>
       </div>
       <div>
-        <rs-button class="bg-heandshe hover:bg-heandshe w-full" @click="generateReport()">Print PDF</rs-button>
+        <rs-button
+          class="bg-heandshe hover:bg-heandshe w-full"
+          @click="generateReport()"
+          >Print PDF</rs-button
+        >
       </div>
     </rs-modal>
     <!-- QR CODE -->
@@ -120,7 +140,12 @@
     <rs-modal title="Add Table" v-model="tableADD" position="middle" size="md">
       <FormKit label="Table No" type="number" v-model="tableno" />
       <FormKit label="Table Name" type="text" v-model="tablename" />
-      <FormKit v-model="tableRefNo" type="radio" label="Drive In or Dine In" :options="['Drive In', 'Dine In']" />
+      <FormKit
+        v-model="tableRefNo"
+        type="radio"
+        label="Drive In or Dine In"
+        :options="['Drive In', 'Dine In']"
+      />
       <rs-button style="float: right" @click="insertTable()"> Save </rs-button>
     </rs-modal>
     <!-- ADD TABLES -->
@@ -138,7 +163,6 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import QrcodeVue from "qrcode.vue";
 import Vue3Html2pdf from "vue3-html2pdf";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 
 export default {
   name: "AdminDashboard",
@@ -150,7 +174,6 @@ export default {
     Button,
     QrcodeVue,
     Vue3Html2pdf,
-    'arbitrary': Menu,
   },
   setup() {
     const tables = ref([]);
@@ -160,9 +183,9 @@ export default {
       return tables.value.filter((table) => {
         return (
           table.outletTNAME.toLowerCase().indexOf(search.value.toLowerCase()) !=
-          -1 ||
+            -1 ||
           table.outletTNAME.toLowerCase().indexOf(search.value.toLowerCase()) !=
-          -1
+            -1
         );
       });
     });

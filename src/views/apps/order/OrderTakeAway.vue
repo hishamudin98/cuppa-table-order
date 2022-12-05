@@ -1,7 +1,6 @@
 <template>
-  <rs-layout>
-    <!-- Get Customer and Phone -->
-    <!-- <div v-if="customerProceed == false" class="order-customer">
+  <!-- Get Customer and Phone -->
+  <!-- <div v-if="customerProceed == false" class="order-customer">
       <div
         style="
           height: 56vh;
@@ -132,184 +131,134 @@
       </div>
     </div> -->
 
-    <!-- v-elseOrder Menu Page -->
-    <div class="order-menu-page">
-      <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-x-2">
-            <!-- <vue-feather
+  <!-- v-elseOrder Menu Page -->
+  <div class="order-menu-page">
+    <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-x-2">
+          <!-- <vue-feather
               class="text-white"
               type="chevron-left"
               @click="customerProceed = false"
             ></vue-feather> -->
-            <div class="welcome text-lg font-semibold text-white">
-              Table #{{ this.table }}
-            </div>
+          <div class="welcome text-lg font-semibold text-white">
+            Table #{{ this.table }}
           </div>
+        </div>
 
-          <div class="flex gap-x-2 items-center">
-            <!-- <div class="text-white" v-if="guestMode == false">
+        <div class="flex gap-x-2 items-center">
+          <!-- <div class="text-white" v-if="guestMode == false">
               Hishammudin Ali
             </div>
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
-            <div class="text-white">He & She UM</div>
-            <div class="bg-black h-10 w-10 p-1 rounded-full">
-              <img
-                class="flex-1"
-                src="@/assets/images/logo/heandshe.jpg"
-                alt=""
-              />
-            </div>
+          <div class="text-white">He & She UM</div>
+          <div class="bg-black h-10 w-10 p-1 rounded-full">
+            <img
+              class="flex-1"
+              src="@/assets/images/logo/heandshe.jpg"
+              alt=""
+            />
           </div>
         </div>
-
-        <div style="height: 32vh" class="advertisment flex items-center">
-          <swiper
-            :modules="modules"
-            :slides-per-view="1"
-            :centeredSlides="true"
-            :autoplay="{
-              delay: 4000,
-            }"
-          >
-            <swiper-slide v-for="n in 4" :key="n">
-              <div
-                class="w-full h-40 flex justify-center items-center rounded-xl"
-              >
-                <img
-                  :src="'https://pbs.twimg.com/media/D8-2w8dUIAApoHt?format=jpg&name=large'"
-                />
-              </div>
-            </swiper-slide>
-          </swiper>
-        </div>
       </div>
+
+      <div style="height: 32vh" class="advertisment flex items-center">
+        <swiper
+          :modules="modules"
+          :slides-per-view="1"
+          :centeredSlides="true"
+          :autoplay="{
+            delay: 4000,
+          }"
+        >
+          <swiper-slide v-for="n in 4" :key="n">
+            <div
+              class="w-full h-40 flex justify-center items-center rounded-xl"
+            >
+              <img
+                :src="'https://pbs.twimg.com/media/D8-2w8dUIAApoHt?format=jpg&name=large'"
+              />
+            </div>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+    <FormKit
+      v-model="search"
+      id="search"
+      placeholder="Search for a menu..."
+      type="search"
+      :classes="{
+        inner:
+          'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+        outer: 'flex-1 mb-0 relative -top-6 mx-4',
+        input: 'h-12',
+      }"
+    />
+    <div class="bg-white hidden sticky top-0">
       <FormKit
         v-model="search"
-        id="search"
+        id="search-sticky"
         placeholder="Search for a menu..."
         type="search"
         :classes="{
           inner:
             'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-          outer: 'flex-1 mb-0 relative -top-6 mx-4',
+          outer: 'flex-1 mb-0',
           input: 'h-12',
         }"
       />
-      <div class="bg-white hidden sticky top-0">
-        <FormKit
-          v-model="search"
-          id="search-sticky"
-          placeholder="Search for a menu..."
-          type="search"
-          :classes="{
-            inner:
-              'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-            outer: 'flex-1 mb-0',
-            input: 'h-12',
-          }"
-        />
+    </div>
+    <div class="menu">
+      <div class="filter-top-wrapper flex pb-4">
+        <perfect-scrollbar style="width: 100%">
+          <div class="category-wrapper flex gap-x-4">
+            <button
+              class="flex items-center rounded-lg py-2 px-3 bg-white dark:bg-slate-800 dark:text-gray-300 hover:bg-slate-200 font-semibold text-sm shadow-md shadow-slate-200 dark:shadow-slate-900 whitespace-nowrap"
+              @click="_filterByCategory(0)"
+            >
+              <div
+                class="flex items-center bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 w-10 h-10 rounded-lg mr-2"
+              >
+                <img
+                  class="h-full w-full object-scale-down rounded-full"
+                  src="@/assets/images/logo/heandshe.jpg"
+                />
+              </div>
+              <span>All Menu</span>
+            </button>
+            <button
+              class="flex items-center rounded-lg py-2 px-3 bg-white dark:bg-slate-800 dark:text-gray-300 hover:bg-slate-200 font-semibold text-sm shadow-md shadow-slate-200 dark:shadow-slate-900 whitespace-nowrap"
+              v-for="(category, index) in categories"
+              :key="index"
+              @click="_filterByCategory(category.id)"
+            >
+              <div
+                class="flex items-center bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 w-10 h-10 rounded-lg mr-2"
+              >
+                <img
+                  class="h-full w-full object-scale-down rounded-full"
+                  :src="category.image"
+                />
+              </div>
+              <span>{{ category.name }}</span>
+            </button>
+          </div>
+        </perfect-scrollbar>
       </div>
-      <div class="menu">
-        <div class="filter-top-wrapper flex pb-4">
-          <perfect-scrollbar style="width: 100%">
-            <div class="category-wrapper flex gap-x-4">
-              <button
-                class="
-                  flex
-                  items-center
-                  rounded-lg
-                  py-2
-                  px-3
-                  bg-white
-                  dark:bg-slate-800 dark:text-gray-300
-                  hover:bg-slate-200
-                  font-semibold
-                  text-sm
-                  shadow-md shadow-slate-200
-                  dark:shadow-slate-900
-                  whitespace-nowrap
-                "
-                @click="_filterByCategory(0)"
-              >
-                <div
-                  class="
-                    flex
-                    items-center
-                    bg-slate-100
-                    dark:bg-slate-700
-                    border border-slate-200
-                    dark:border-slate-700
-                    w-10
-                    h-10
-                    rounded-lg
-                    mr-2
-                  "
-                >
-                  <img
-                    class="h-full w-full object-scale-down rounded-full"
-                    src="@/assets/images/logo/heandshe.jpg"
-                  />
-                </div>
-                <span>All Menu</span>
-              </button>
-              <button
-                class="
-                  flex
-                  items-center
-                  rounded-lg
-                  py-2
-                  px-3
-                  bg-white
-                  dark:bg-slate-800 dark:text-gray-300
-                  hover:bg-slate-200
-                  font-semibold
-                  text-sm
-                  shadow-md shadow-slate-200
-                  dark:shadow-slate-900
-                  whitespace-nowrap
-                "
-                v-for="(category, index) in categories"
-                :key="index"
-                @click="_filterByCategory(category.id)"
-              >
-                <div
-                  class="
-                    flex
-                    items-center
-                    bg-slate-100
-                    dark:bg-slate-700
-                    border border-slate-200
-                    dark:border-slate-700
-                    w-10
-                    h-10
-                    rounded-lg
-                    mr-2
-                  "
-                >
-                  <img
-                    class="h-full w-full object-scale-down rounded-full"
-                    :src="category.image"
-                  />
-                </div>
-                <span>{{ category.name }}</span>
-              </button>
-            </div>
-          </perfect-scrollbar>
-        </div>
+      <div
+        class="gap-4"
+        :class="{
+          'pb-10': order && order.length > 0,
+        }"
+      >
         <div
-          class="gap-4"
-          :class="{
-            'pb-10': order && order.length > 0,
-          }"
+          class="relative"
+          v-for="(product, index) in searchMenus"
+          :key="index"
+          @click="viewDetailItem(product)"
         >
-          <div
-            class="relative"
-            v-for="(product, index) in searchMenus"
-            :key="index"
-            @click="viewDetailItem(product)"
-          >
-            <!-- <div
+          <!-- <div
               v-if="index == menus.length - 1"
               class="
                 bg-red-500
@@ -341,85 +290,73 @@
             >
               Out of Stock
             </div> -->
-            <rs-card class="mb-5 cursor-pointer"
-              ><!-- :class="{
+          <rs-card class="mb-5 cursor-pointer"
+            ><!-- :class="{
                 'bg-gray-100 opacity-40':
                   index == menus.length - 1 || index == menus.length - 2,
               }" -->
-              <div class="flex justify-center items-center">
-                <div class="product-image relative w-30 h-30 p-4 rounded-lg">
-                  <img
-                    class="object-scale-down w-full"
-                    :src="
-                      product.images && product.images.length > 0
-                        ? product.images
-                        : ''
-                    "
-                    style="width: 80px; height: 80px"
-                    :alt="product.name"
-                  />
+            <div class="flex justify-center items-center">
+              <div class="product-image relative w-30 h-30 p-4 rounded-lg">
+                <img
+                  class="object-scale-down w-full"
+                  :src="
+                    product.images && product.images.length > 0
+                      ? product.images
+                      : ''
+                  "
+                  style="width: 80px; height: 80px"
+                  :alt="product.name"
+                />
 
-                  <span
-                    v-if="product.discount && product.discount != 0"
-                    class="
-                      product-discount
-                      text-sm
-                      bg-heandshe
-                      text-white
-                      absolute
-                      top-3
-                      -right-2
-                      px-2
-                      py-1
-                      rounded-md
-                    "
-                  >
-                    {{ product.discount }}% off
+                <span
+                  v-if="product.discount && product.discount != 0"
+                  class="product-discount text-sm bg-heandshe text-white absolute top-3 -right-2 px-2 py-1 rounded-md"
+                >
+                  {{ product.discount }}% off
+                </span>
+              </div>
+              <div
+                class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
+              >
+                <div class="product-title mt-4">
+                  <span class="block text-base font-semibold line-clamp-2"
+                    >{{ product.sku }} {{ product.name }}
                   </span>
                 </div>
-                <div
-                  class="product-content-wrapper flex-1 flex flex-col px-4 mb-4"
-                >
-                  <div class="product-title mt-4">
-                    <span class="block text-base font-semibold line-clamp-2"
-                      >{{ product.sku }} {{ product.name }}
-                    </span>
-                  </div>
-                  <div class="product-content flex flex-col">
-                    <div class="product-price flex justify-between">
-                      <div class="truncate leading-tight">
-                        <div class="text-sm text-heandshe flex items-center">
-                          {{ product.currency }}
-                          <span class="text-lg">
-                            {{
-                              product.discountedPrice
-                                ? formatPrice(product.discountedPrice)
-                                : formatPrice(product.price)
-                            }}
-                          </span>
-                        </div>
-                        <div
-                          v-if="product.discountedPrice"
-                          class="text-xs md:text-md text-gray-400"
-                        >
-                          <span class="line-through">
-                            {{ product.currency
-                            }}{{ formatPrice(product.price) }}
-                          </span>
-                          | {{ product.stock }} Left
-                        </div>
-                        <div
-                          v-if="product.duration"
-                          class="duration text-primary-400 text-xs md:text-md"
-                        >
-                          ({{ product.duration }} remaining)
-                        </div>
+                <div class="product-content flex flex-col">
+                  <div class="product-price flex justify-between">
+                    <div class="truncate leading-tight">
+                      <div class="text-sm text-heandshe flex items-center">
+                        {{ product.currency }}
+                        <span class="text-lg">
+                          {{
+                            product.discountedPrice
+                              ? formatPrice(product.discountedPrice)
+                              : formatPrice(product.price)
+                          }}
+                        </span>
+                      </div>
+                      <div
+                        v-if="product.discountedPrice"
+                        class="text-xs md:text-md text-gray-400"
+                      >
+                        <span class="line-through">
+                          {{ product.currency }}{{ formatPrice(product.price) }}
+                        </span>
+                        | {{ product.stock }} Left
+                      </div>
+                      <div
+                        v-if="product.duration"
+                        class="duration text-primary-400 text-xs md:text-md"
+                      >
+                        ({{ product.duration }} remaining)
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- <div
+            </div>
+            <!-- <div
                 class="
                   tag
                   bg-primary-400
@@ -451,246 +388,199 @@
               >
                 RECOMMEND
               </div> -->
-            </rs-card>
-          </div>
+          </rs-card>
         </div>
       </div>
+    </div>
 
-      <rs-modal
-        title="This is a modal"
-        v-model="openModal"
-        position="bottom"
-        size="full"
-      >
-        <template #custom>
-          <div class="rounded-t-3xl" style="min-height: 90vh">
-            <perfect-scrollbar class="mb-4" style="height: 90vh">
-              <button
-                class="
-                  flex
-                  justify-center
-                  items-center
-                  p-1
-                  bg-heandshe
-                  absolute
-                  top-2
-                  right-2
-                  rounded-full
-                  z-50
-                "
-              >
-                <vue-feather
-                  @click="openModal = false"
-                  class="text-primary-100"
-                  type="x"
-                ></vue-feather>
-              </button>
-              <div class="relative">
-                <img
-                  class="w-full h-60 object-cover rounded-t-xl"
-                  :src="modalData ? modalData.images : ''"
-                  alt=""
-                />
+    <rs-modal
+      title="This is a modal"
+      v-model="openModal"
+      position="bottom"
+      size="full"
+    >
+      <template #custom>
+        <div class="rounded-t-3xl" style="min-height: 90vh">
+          <perfect-scrollbar class="mb-4" style="height: 90vh">
+            <button
+              class="flex justify-center items-center p-1 bg-heandshe absolute top-2 right-2 rounded-full z-50"
+            >
+              <vue-feather
+                @click="openModal = false"
+                class="text-primary-100"
+                type="x"
+              ></vue-feather>
+            </button>
+            <div class="relative">
+              <img
+                class="w-full h-60 object-cover rounded-t-xl"
+                :src="modalData ? modalData.images : ''"
+                alt=""
+              />
+            </div>
+
+            <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
+              <div class="modal-item-header">
+                <span class="font-semibold text-lg line-clamp-2 mb-2">{{
+                  modalData ? modalData.name : ""
+                }}</span>
+                <p class="line-clamp-2 text-sm text-gray-400">
+                  {{ modalData ? modalData.description : "" }}
+                </p>
+              </div>
+              <div class="flex justify-start items-center mt-2">
+                <div class="truncate leading-tight">
+                  <div class="text-lg text-heandshe">
+                    {{ modalData.currency
+                    }}<span class="text-xl">
+                      {{
+                        modalData.discountedPrice
+                          ? formatPrice(modalData.discountedPrice)
+                          : formatPrice(modalData.price)
+                      }}</span
+                    >
+                  </div>
+                  <div
+                    v-if="modalData.discountedPrice"
+                    class="text-lg md:text-xl text-gray-400"
+                  >
+                    <span class="line-through">
+                      {{ modalData.currency }}{{ formatPrice(modalData.price) }}
+                    </span>
+                    | {{ modalData.stock }} Left
+                  </div>
+                </div>
               </div>
 
-              <div class="modal-item-wrapper pt-4 px-2 overflow-hidden">
-                <div class="modal-item-header">
-                  <span class="font-semibold text-lg line-clamp-2 mb-2">{{
-                    modalData ? modalData.name : ""
-                  }}</span>
-                  <p class="line-clamp-2 text-sm text-gray-400">
-                    {{ modalData ? modalData.description : "" }}
-                  </p>
+              <hr class="my-4" />
+              <div class="modal-item-content">
+                <div
+                  class="membership flex gap-3 rounded-md shadow-md w-full p-3 mb-4"
+                >
+                  <form-kit
+                    type="text"
+                    placeholder="Got membership code?"
+                    :classes="{
+                      outer: 'flex-1 mb-0',
+                    }"
+                    :disabled="isDisabled"
+                    v-model="mmberShip"
+                  />
+                  <rs-button
+                    class="bg-heandshe"
+                    @click="checkMembership()"
+                    :disabled="isDisabled"
+                    >Apply</rs-button
+                  >
                 </div>
-                <div class="flex justify-start items-center mt-2">
-                  <div class="truncate leading-tight">
-                    <div class="text-lg text-heandshe">
-                      {{ modalData.currency
-                      }}<span class="text-xl">
-                        {{
-                          modalData.discountedPrice
-                            ? formatPrice(modalData.discountedPrice)
-                            : formatPrice(modalData.price)
-                        }}</span
+                <div>
+                  <input type="hidden" v-model="modalData.station" />
+                </div>
+
+                <div v-if="modalData.variants" class="modal-item-variance">
+                  <div v-for="(val, index) in modalData.variants" :key="index">
+                    <div class="font-semibold text-lg mb-4">
+                      {{ val.title }}
+                      <span
+                        class="text-gray-400 font-normal text-sm"
+                        v-if="val.required"
+                        >(required)</span
                       >
                     </div>
-                    <div
-                      v-if="modalData.discountedPrice"
-                      class="text-lg md:text-xl text-gray-400"
-                    >
-                      <span class="line-through">
-                        {{ modalData.currency
-                        }}{{ formatPrice(modalData.price) }}
-                      </span>
-                      | {{ modalData.stock }} Left
-                    </div>
-                  </div>
-                </div>
-
-                <hr class="my-4" />
-                <div class="modal-item-content">
-                  <div
-                    class="
-                      membership
-                      flex
-                      gap-3
-                      rounded-md
-                      shadow-md
-                      w-full
-                      p-3
-                      mb-4
-                    "
-                  >
-                    <form-kit
-                      type="text"
-                      placeholder="Got membership code?"
-                      :classes="{
-                        outer: 'flex-1 mb-0',
-                      }"
-                      :disabled="isDisabled"
-                      v-model="mmberShip"
-                    />
-                    <rs-button
-                      class="bg-heandshe"
-                      @click="checkMembership()"
-                      :disabled="isDisabled"
-                      >Apply</rs-button
-                    >
-                  </div>
-                  <div>
-                    <input type="hidden" v-model="modalData.station" />
-                  </div>
-
-                  <div v-if="modalData.variants" class="modal-item-variance">
-                    <div
-                      v-for="(val, index) in modalData.variants"
-                      :key="index"
-                    >
-                      <div class="font-semibold text-lg mb-4">
-                        {{ val.title }}
-                        <span
-                          class="text-gray-400 font-normal text-sm"
-                          v-if="val.required"
-                          >(required)</span
-                        >
-                      </div>
-                      <div class="variant-choice">
-                        <form-kit
-                          v-if="val.type == 'radio'"
-                          :type="val.type"
-                          v-model="variasi"
-                          :value="val.data"
-                          :options="val.data"
-                          :classes="{
-                            fieldset: '!border-0 !p-0',
-                          }"
-                          :checked="papar(variasi)"
-                        />
+                    <div class="variant-choice">
+                      <form-kit
+                        v-if="val.type == 'radio'"
+                        :type="val.type"
+                        v-model="variasi"
+                        :value="val.data"
+                        :options="val.data"
+                        :classes="{
+                          fieldset: '!border-0 !p-0',
+                        }"
+                        :checked="papar(variasi)"
+                      />
+                      <div
+                        v-if="modalData.variants2"
+                        class="modal-item-variance"
+                      >
                         <div
-                          v-if="modalData.variants2"
-                          class="modal-item-variance"
+                          v-for="(val, index) in modalData.variants2"
+                          :key="index"
                         >
-                          <div
-                            v-for="(val, index) in modalData.variants2"
-                            :key="index"
-                          >
-                            <div class="font-semibold text-lg mb-4">
-                              {{ val.title }}
-                              <span
-                                class="text-gray-400 font-normal text-sm"
-                                v-if="val.required"
-                                >(required)</span
-                              >
-                              <div class="variant-choice">
-                                <form-kit
-                                  v-if="val.type == 'radio'"
-                                  :type="val.type"
-                                  v-model="variasi2"
-                                  :value="val.data"
-                                  :options="val.value"
-                                  :classes="{
-                                    fieldset: '!border-0 !p-0',
-                                  }"
-                                />
-                              </div>
+                          <div class="font-semibold text-lg mb-4">
+                            {{ val.title }}
+                            <span
+                              class="text-gray-400 font-normal text-sm"
+                              v-if="val.required"
+                              >(required)</span
+                            >
+                            <div class="variant-choice">
+                              <form-kit
+                                v-if="val.type == 'radio'"
+                                :type="val.type"
+                                v-model="variasi2"
+                                :value="val.data"
+                                :options="val.value"
+                                :classes="{
+                                  fieldset: '!border-0 !p-0',
+                                }"
+                              />
                             </div>
                           </div>
                         </div>
-                        <div v-else>
-                          <!-- index == 1
+                      </div>
+                      <div v-else>
+                        <!-- index == 1
                               ? 'Nasi Arab'
                               : index == 2
                               ? 'Spicy Level 2'
                               : index == 3
                               ? 'Tomato'
                               : '' -->
-                          <div
-                            class="flex justify-between items-center mb-3"
-                            v-for="(val, index) in val.data"
-                            :key="index"
-                          >
-                            <div class="flex items-center cursor-pointer">
-                              <input
-                                class="rs-checkbox"
-                                type="checkbox"
-                                :id="menus.sku + '-check-' + index"
-                                :value="val"
-                              />
-                              <label
-                                class="
-                                  text-gray-700
-                                  dark:text-gray-200
-                                  text-sm
-                                  formkit-disabled:text-gray-300
-                                  dark:formkit-disabled:text-gray-700
-                                "
-                                :for="menus.sku + '-check-' + index"
-                              >
-                                {{ val }}
-                                <span class="text-primary-500">( +1.00 )</span>
-                              </label>
-                            </div>
-                            <div class="flex items-center gap-x-2">
-                              <button
-                                class="
-                                  flex
-                                  items-center
-                                  justify-center
-                                  bg-heandshe
-                                  text-primary-50
-                                  p-1
-                                  rounded-lg
-                                "
-                              >
-                                <vue-feather
-                                  size="1rem"
-                                  type="minus"
-                                ></vue-feather>
-                              </button>
-                              <span class="text-gray-500"
-                                ><input
-                                  type="number"
-                                  min="0.00"
-                                  :value="quantity"
-                              /></span>
-                              <button
-                                class="
-                                  flex
-                                  items-center
-                                  justify-center
-                                  bg-heandshe
-                                  text-primary-50
-                                  p-1
-                                  rounded-lg
-                                "
-                                @click="increment()"
-                              >
-                                <vue-feather
-                                  size="1rem"
-                                  type="plus"
-                                ></vue-feather>
-                              </button>
-                            </div>
+                        <div
+                          class="flex justify-between items-center mb-3"
+                          v-for="(val, index) in val.data"
+                          :key="index"
+                        >
+                          <div class="flex items-center cursor-pointer">
+                            <input
+                              class="rs-checkbox"
+                              type="checkbox"
+                              :id="menus.sku + '-check-' + index"
+                              :value="val"
+                            />
+                            <label
+                              class="text-gray-700 dark:text-gray-200 text-sm formkit-disabled:text-gray-300 dark:formkit-disabled:text-gray-700"
+                              :for="menus.sku + '-check-' + index"
+                            >
+                              {{ val }}
+                              <span class="text-primary-500">( +1.00 )</span>
+                            </label>
+                          </div>
+                          <div class="flex items-center gap-x-2">
+                            <button
+                              class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                            >
+                              <vue-feather
+                                size="1rem"
+                                type="minus"
+                              ></vue-feather>
+                            </button>
+                            <span class="text-gray-500"
+                              ><input
+                                type="number"
+                                min="0.00"
+                                :value="quantity"
+                            /></span>
+                            <button
+                              class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                              @click="increment()"
+                            >
+                              <vue-feather
+                                size="1rem"
+                                type="plus"
+                              ></vue-feather>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -698,84 +588,57 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="
-                  membership
-                  flex
-                  gap-3
-                  rounded-md
-                  shadow-md
-                  w-full
-                  p-3
-                  mb-4
+            </div>
+            <div
+              class="membership flex gap-3 rounded-md shadow-md w-full p-3 mb-4"
+            >
+              <h4>Remarks</h4>
+              <textarea
+                class="border-heandshe"
+                style="
+                  width: 100%;
+                  border: solid 1px;
+                  font-family: ui-sans-serif;
                 "
-              >
-                <h4>Remarks</h4>
-                <textarea
-                  class="border-heandshe"
-                  style="
-                    width: 100%;
-                    border: solid 1px;
-                    font-family: ui-sans-serif;
-                  "
-                  v-model="remarks"
-                ></textarea>
-              </div>
-              <div class="modal-item-type mb-6 px-2">
-                
-              </div>
-              <div
-                class="
-                  modal-item-action
-                  flex
-                  w-full
-                  justify-between
-                  items-center
-                  overflow-auto
-                  px-2
-                  gap-x-2
+                v-model="remarks"
+              ></textarea>
+            </div>
+            <div class="modal-item-type mb-6 px-2"></div>
+            <div
+              class="modal-item-action flex w-full justify-between items-center overflow-auto px-2 gap-x-2"
+            >
+              <button
+                class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
+                @click="
+                  addToCart(
+                    modalData,
+                    picked,
+                    discount,
+                    mmbershipNo,
+                    remarks,
+                    variasi,
+                    variasi2
+                  )
                 "
+                :disabled="isdisabled"
               >
+                Add to Cart - RM
+                {{
+                  modalData && modalData.price
+                    ? formatPrice(modalData.price)
+                    : formatPrice(modalData.price)
+                }}
+              </button>
+              <div class="flex gap-x-2">
                 <button
-                  class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
-                  @click="
-                    addToCart(
-                      modalData,
-                      picked,
-                      discount,
-                      mmbershipNo,
-                      remarks,
-                      variasi,
-                      variasi2
-                    )
-                  "
-                  :disabled="isdisabled"
+                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  @click="decrement()"
                 >
-                  Add to Cart - RM
-                  {{
-                    modalData && modalData.price
-                      ? formatPrice(modalData.price)
-                      : formatPrice(modalData.price)
-                  }}
+                  <!-- @click="quantity > 0 ? quantity-- : (quantity = 0)" -->
+                  <vue-feather type="minus"></vue-feather>
                 </button>
-                <div class="flex gap-x-2">
-                  <button
-                    class="
-                      flex
-                      items-center
-                      justify-center
-                      bg-heandshe
-                      text-primary-50
-                      p-1
-                      rounded-lg
-                    "
-                    @click="decrement()"
-                  >
-                    <!-- @click="quantity > 0 ? quantity-- : (quantity = 0)" -->
-                    <vue-feather type="minus"></vue-feather>
-                  </button>
-                  {{ this.quantity }}
-                  <!-- <form-kit
+                {{ this.quantity }}
+                <!-- <form-kit
                     type="text"
                     :value="quantity"
                     :classes="{
@@ -783,68 +646,38 @@
                       input: 'w-10 h-10 text-center',
                     }"
                   /> -->
-                  <button
-                    class="
-                      flex
-                      items-center
-                      justify-center
-                      bg-heandshe
-                      text-primary-50
-                      p-1
-                      rounded-lg
-                    "
-                    @click="increment()"
-                  >
-                    <!-- @click="quantity = quantity + 1" -->
-                    <vue-feather type="plus"></vue-feather>
-                  </button>
-                </div>
+                <button
+                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  @click="increment()"
+                >
+                  <!-- @click="quantity = quantity + 1" -->
+                  <vue-feather type="plus"></vue-feather>
+                </button>
               </div>
-            </perfect-scrollbar>
-          </div>
-        </template>
-      </rs-modal>
+            </div>
+          </perfect-scrollbar>
+        </div>
+      </template>
+    </rs-modal>
 
-      <div
-        v-if="order && order.length > 0"
-        class="button-to-cart p-2 flex w-full z-50 rounded-full"
+    <div
+      v-if="order && order.length > 0"
+      class="button-to-cart p-2 flex w-full z-50 rounded-full"
+    >
+      <button
+        class="bg-heandshe py-4 px-5 rounded-l-full text-white whitespace-nowrap shadow-md shadow-heandshe"
       >
-        <button
-          class="
-            bg-heandshe
-            py-4
-            px-5
-            rounded-l-full
-            text-white
-            whitespace-nowrap
-            shadow-md shadow-heandshe
-          "
-        >
-          RM {{ formatPrice(this.totalPrice) }}
-        </button>
-        <rs-button
-          class="
-            flex
-            justify-between
-            items-center
-            w-full
-            bg-heandshe
-            py-4
-            px-5
-            rounded-r-full
-            text-white
-            whitespace-nowrap
-            shadow-md shadow-heandshe
-            hover:bg-heandshe
-          "
-          v-on:click="insertOrder(discount)"
-        >
-          <div>Submit Order ({{ order.length }})</div>
-          <vue-feather type="shopping-cart"></vue-feather>
-        </rs-button>
-      </div>
+        RM {{ formatPrice(this.totalPrice) }}
+      </button>
+      <rs-button
+        class="flex justify-between items-center w-full bg-heandshe py-4 px-5 rounded-r-full text-white whitespace-nowrap shadow-md shadow-heandshe hover:bg-heandshe"
+        v-on:click="insertOrder(discount)"
+      >
+        <div>Submit Order ({{ order.length }})</div>
+        <vue-feather type="shopping-cart"></vue-feather>
+      </rs-button>
     </div>
-  </rs-layout>
+  </div>
 </template>
 
 <script>
@@ -942,7 +775,7 @@ export default {
     };
 
     const addToCart = (product, picked, discount, mmbershipNo, remarks) => {
-     var exist = "";
+      var exist = "";
       var check = 0;
       /* CHECK FOR NAME AND PHONE NUMBER */
       if (localStorage.name != "") {
@@ -960,7 +793,6 @@ export default {
       }
 
       if (variasi.value == "") {
-        
       } else {
         if (variasi2.value == "") {
           variation.value.push(variasi.value);
@@ -978,8 +810,7 @@ export default {
               item.orderType == picked &&
               item.menu_price == product.price + check
           );
-        }
-        else if (variasi2.value == "") {
+        } else if (variasi2.value == "") {
           exist = order.value.find(
             (item) =>
               item.sku === product.sku &&
@@ -1108,7 +939,7 @@ export default {
     }
 
     const searchMenus = computed(() => {
-     if (defaultCatID.value === 0) {
+      if (defaultCatID.value === 0) {
         return menus.value.filter((product) => {
           return (
             product.name.toLowerCase().indexOf(search.value.toLowerCase()) !=
@@ -1227,8 +1058,7 @@ export default {
     if (this.branch != "") {
       this.getOutlet(this.branch);
     }
-    if(localStorage.order != "" && localStorage.order != undefined)
-    {
+    if (localStorage.order != "" && localStorage.order != undefined) {
       this.orderArray = localStorage.order;
     }
     window.addEventListener("beforeunload", () => {
@@ -1253,7 +1083,7 @@ export default {
     },
   },
   methods: {
-     async getOutlet(branch) {
+    async getOutlet(branch) {
       var axios = require("axios");
       var data = JSON.stringify({
         branch_ID: branch,
@@ -1281,7 +1111,9 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL+"/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
+        url:
+          process.env.VUE_APP_FNB_URL +
+          "/tbl/getCategory" /*  http://localhost:3000tbl/getCategory*/,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1306,7 +1138,9 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL+"/getMenu" /* http://localhost:3000/getMenu   */,
+        url:
+          process.env.VUE_APP_FNB_URL +
+          "/getMenu" /* http://localhost:3000/getMenu   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1464,7 +1298,9 @@ export default {
 
         var config = {
           method: "post",
-          url: process.env.VUE_APP_FNB_URL+"/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
+          url:
+            process.env.VUE_APP_FNB_URL +
+            "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1493,10 +1329,12 @@ export default {
           table: this.table,
           branch: localStorage.branch,
         });
-       
+
         var config = {
           method: "post",
-          url: process.env.VUE_APP_FNB_URL+"/tbl/insertOrder", /* http://localhost:3000tbl/insertOrder */
+          url:
+            process.env.VUE_APP_FNB_URL +
+            "/tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
           },
@@ -1526,7 +1364,9 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL+"/tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
+        url:
+          process.env.VUE_APP_FNB_URL +
+          "/tbl/getMembership" /* http://localhost:3000tbl/getMembership */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1576,7 +1416,9 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL+"/tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
+        url:
+          process.env.VUE_APP_FNB_URL +
+          "/tbl/getOrderCart" /* http://localhost:3000tbl/getOrderCart */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -1617,15 +1459,11 @@ export default {
           console.log(error);
         });
     },
-    async papar(variasi)
-    {
-      if(variasi == "")
-      {
+    async papar(variasi) {
+      if (variasi == "") {
         this.isdisabled = true;
-      }
-      else
-      {
-        this.isdisabled = false
+      } else {
+        this.isdisabled = false;
       }
     },
   },

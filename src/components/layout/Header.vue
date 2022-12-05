@@ -1,19 +1,22 @@
 <template>
   <div
-    class="w-header z-20 bg-gray-900 dark:bg-slate-800 fixed top-0 right-0 px-5 duration-300 shadow-md shadow-slate-200 dark:shadow-slate-900"
+    class="w-header z-20 bg-[#1A1819] dark:bg-slate-800 fixed top-0 right-0 px-5 duration-300 shadow-md shadow-slate-200 dark:shadow-slate-900 py-3"
   >
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-between">
       <div class="flex">
-        <div class="flex flex-auto gap-3 justify-center items-center">
-          <img
-            class="h-16 w-16"
-            src="@/assets/images/logo/logo-white.png"
-            alt=""
-          />
-        </div>
+        <span class="flex items-center justify-center"
+          ><button
+            class="icon-btn h-10 w-10 rounded-full"
+            @click="toggleMenuOpened"
+          >
+            <vue-feather type="menu" mb-2></vue-feather></button
+        ></span>
       </div>
 
-      <div class="flex gap-2 item-center justify-items-end"></div>
+      <div class="flex gap-2 items-center justify-items-end">
+        <div class="text-white">{{ this.staffName }}</div>
+        <img src="@/assets/images/logo/heandshe.jpg" style="width: 40px" />
+      </div>
     </div>
   </div>
 
@@ -41,6 +44,7 @@ export default {
   emits: ["toggleMenu"],
   setup(_, { emit }) {
     const dark = ref(false);
+    const staffName = ref("");
 
     // Get darkmode from localstorage and toggle dark mode
     dark.value = state.getters.darkMode;
@@ -66,10 +70,11 @@ export default {
     });
 
     // Toggle default setting after component mounted
-    onMounted(() => {
+    onMounted(async () => {
       if (!isDesktop.value) {
         toggleMenuOpened();
       }
+      await getData();
     });
 
     // Change Layout Type
@@ -91,6 +96,28 @@ export default {
       document.getElementById("header-search").focus();
     }
 
+    const getData = async () => {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffid: localStorage.staff,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/dashboard" /*  */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(function (response) {
+          staffName.value = response.data.data[0].staff_name;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
     return {
       dark: dark,
       isDesktop,
@@ -98,6 +125,7 @@ export default {
       toggleMenuOpened,
       toggleSearch,
       changeLayout,
+      staffName,
     };
   },
 };

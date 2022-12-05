@@ -1,50 +1,50 @@
 <template>
-  <rs-layout>
-    <div class="order-customer">
+  <div class="order-customer">
+    <div
+      style="
+        height: 56vh;
+        border-bottom-left-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+      "
+      class="bg-heandshe after:content-['']"
+    >
+      <div class="flex justify-between items-center p-2"></div>
       <div
-        style="
-          height: 56vh;
-          border-bottom-left-radius: 2rem;
-          border-bottom-right-radius: 2rem;
-        "
-        class="bg-heandshe after:content-['']"
+        style="height: 40vh"
+        class="flex flex-col justify-center items-center"
       >
-        <div class="flex justify-between items-center p-2"></div>
-        <div
-          style="height: 40vh"
-          class="flex flex-col justify-center items-center"
-        >
-          <div class="w-70 bg-black rounded-full">
-            <img
-              class="object-scale-down"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="m-8">
-        <div>
-          <form-kit
-            type="text"
-            placeholder="Enter your username"
-            validation="required"
-            :validation-messages="{
-              required: 'Please enter a valid username',
-            }"
-            v-model="username"
+        <div class="w-70 bg-black rounded-full">
+          <img
+            class="object-scale-down"
+            src="@/assets/images/logo/heandshe.jpg"
+            alt=""
           />
-          <form-kit
-            type="password"
-            placeholder="Enter your password"
-            v-model="password"
-          />
-          <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="login()">Login</rs-button>
         </div>
       </div>
     </div>
-  </rs-layout>
+
+    <div class="m-8">
+      <div>
+        <form-kit
+          type="text"
+          placeholder="Enter your username"
+          validation="required"
+          :validation-messages="{
+            required: 'Please enter a valid username',
+          }"
+          v-model="username"
+        />
+        <form-kit
+          type="password"
+          placeholder="Enter your password"
+          v-model="password"
+        />
+        <rs-button class="w-full bg-heandshe hover:bg-heandshe" @click="login()"
+          >Login</rs-button
+        >
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 /* eslint-disable */
@@ -111,7 +111,6 @@ export default {
       await axios(config)
         .then(
           function (response) {
-          
             if (response.data.message == "Success") {
               this.$router.push({
                 name: "dashboard",

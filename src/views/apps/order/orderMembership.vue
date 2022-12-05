@@ -1,69 +1,62 @@
 <template>
-  <rs-layout>
-    <div class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center text-center">
-        <div class="flex items-center gap-x-2">
-          <router-link
-            class="flex items-center justify-center"
-            :to="{ name: 'orderLogin', params: { branchID: this.branch } }"
-          >
-            <vue-feather class="text-white" type="chevron-left"></vue-feather>
-          </router-link>
-          <p class="font-semibold text-white text-lg">Register Member</p>
-        </div>
-      </div>
-    </div>
-    <div class="p-3">
-      <FormKit
-        type="text"
-        name="name"
-        label="Full Name"
-        validation="required"
-        v-model="fullname"
-      />
-      <FormKit
-        type="text"
-        name="email"
-        label="Email"
-        validation="required|email"
-        v-model="email"
-      />
-      <FormKit type="number" label="Phone number" v-model="phone" />
-      <div class="double">
-        <FormKit
-          type="password"
-          name="password"
-          label="Password"
-          validation="required|length:6|matches:/[^a-zA-Z]/"
-          :validation-messages="{
-            matches: 'Please include at least one symbol',
-          }"
-          placeholder="Your password"
-          v-model="password"
-        />
-      </div>
-      <hr class="my-3" />
-      <rs-button class="bg-heandshe w-full" @click="registerMmbership()"
-        >Register</rs-button
-      >
-      <hr class="my-2" />
-      <p class="text-center">
-        Already a member?<router-link :to="{ name: 'orderLogin' }">
-          <a
-            href="#"
-            class="
-              underline
-              text-blue-600
-              hover:text-blue-800
-              visited:text-purple-600
-            "
-          >
-            Log in</a
-          ></router-link
+  <div class="bg-heandshe after:content-[''] p-4">
+    <div class="flex justify-between items-center text-center">
+      <div class="flex items-center gap-x-2">
+        <router-link
+          class="flex items-center justify-center"
+          :to="{ name: 'orderLogin', params: { branchID: this.branch } }"
         >
-      </p>
+          <vue-feather class="text-white" type="chevron-left"></vue-feather>
+        </router-link>
+        <p class="font-semibold text-white text-lg">Register Member</p>
+      </div>
     </div>
-  </rs-layout>
+  </div>
+  <div class="p-3">
+    <FormKit
+      type="text"
+      name="name"
+      label="Full Name"
+      validation="required"
+      v-model="fullname"
+    />
+    <FormKit
+      type="text"
+      name="email"
+      label="Email"
+      validation="required|email"
+      v-model="email"
+    />
+    <FormKit type="number" label="Phone number" v-model="phone" />
+    <div class="double">
+      <FormKit
+        type="password"
+        name="password"
+        label="Password"
+        validation="required|length:6|matches:/[^a-zA-Z]/"
+        :validation-messages="{
+          matches: 'Please include at least one symbol',
+        }"
+        placeholder="Your password"
+        v-model="password"
+      />
+    </div>
+    <hr class="my-3" />
+    <rs-button class="bg-heandshe w-full" @click="registerMmbership()"
+      >Register</rs-button
+    >
+    <hr class="my-2" />
+    <p class="text-center">
+      Already a member?<router-link :to="{ name: 'orderLogin' }">
+        <a
+          href="#"
+          class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+        >
+          Log in</a
+        ></router-link
+      >
+    </p>
+  </div>
 </template>
 
 <script>
@@ -139,5 +132,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

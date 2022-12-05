@@ -1,69 +1,66 @@
 <template>
-  <rs-layout>
-    <div class="order-customer">
-      <div
-        style="
-          height: 56vh;
-          border-bottom-left-radius: 2rem;
-          border-bottom-right-radius: 2rem;
-        "
-        class="bg-heandshe after:content-['']"
-      >
-        <div class="flex justify-between items-center p-2">
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-          <div class="text-white">{{ this.branch_Name }}</div>
+  <div class="order-customer">
+    <div
+      style="
+        height: 56vh;
+        border-bottom-left-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+      "
+      class="bg-heandshe after:content-['']"
+    >
+      <div class="flex justify-between items-center p-2">
+        <div class="bg-black h-10 w-10 p-1 rounded-full">
+          <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
         </div>
-        <div
-          style="height: 40vh"
-          class="flex flex-col justify-center items-center"
-        >
-          <div class="w-70 items-center">
-            <!-- <img
+        <div class="text-white">{{ this.branch_Name }}</div>
+      </div>
+      <div
+        style="height: 40vh"
+        class="flex flex-col justify-center items-center"
+      >
+        <div class="w-70 items-center">
+          <!-- <img
               class="object-scale-down"
               src="@/assets/images/logo/heandshe.jpg"
               alt=""
             /> -->
-            <center>
-              <qrcode-vue :value="this.value" :size="size" level="L" />
-            </center>
-          </div>
+          <center>
+            <qrcode-vue :value="this.value" :size="size" level="L" />
+          </center>
         </div>
-      </div>
-
-      <div class="m-8">
-        <div class="flex items-center justify-center">
-          <h4 style="font-weight: normal">Please pay at counter</h4>
-        </div>
-        <hr />
-        <br />
-        <div class="flex items-center justify-center">
-          <h4 style="font-weight: normal">Order No.</h4>
-        </div>
-        <div class="flex items-center justify-center">
-          <h4>{{ OrderID }}</h4>
-        </div>
-        <div class="flex items-center justify-center">
-          <h4>{{this.tblNo}}</h4>
-        </div>
-        <br />
-        <div class="flex items-center justify-center">
-          <h4 style="font-weight: normal">Thank you !</h4>
-        </div>
-        <br />
-        <router-link
-          :to="{ name: 'orderLogin', params: { branchID: this.branch, table: this.table } }"
-        >
-          <rs-button class="w-full bg-heandshe"> Order Again? </rs-button>
-        </router-link>
       </div>
     </div>
-  </rs-layout>
+
+    <div class="m-8">
+      <div class="flex items-center justify-center">
+        <h4 style="font-weight: normal">Please pay at counter</h4>
+      </div>
+      <hr />
+      <br />
+      <div class="flex items-center justify-center">
+        <h4 style="font-weight: normal">Order No.</h4>
+      </div>
+      <div class="flex items-center justify-center">
+        <h4>{{ OrderID }}</h4>
+      </div>
+      <div class="flex items-center justify-center">
+        <h4>{{ this.tblNo }}</h4>
+      </div>
+      <br />
+      <div class="flex items-center justify-center">
+        <h4 style="font-weight: normal">Thank you !</h4>
+      </div>
+      <br />
+      <router-link
+        :to="{
+          name: 'orderLogin',
+          params: { branchID: this.branch, table: this.table },
+        }"
+      >
+        <rs-button class="w-full bg-heandshe"> Order Again? </rs-button>
+      </router-link>
+    </div>
+  </div>
 </template>
 <script>
 /* eslint-disable */

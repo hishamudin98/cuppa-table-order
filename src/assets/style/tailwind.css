@@ -101,12 +101,12 @@
            appearance-none h-5 w-5 mr-2
            border-2 border-slate-200
          dark:border-slate-700
-           checked:border-none checked:bg-primary-400
+           checked:border-none checked:bg-[#1A1819]
          bg-white
          dark:bg-slate-800
-         dark:checked:bg-primary-400
+         dark:checked:bg-[#1A1819]
            rounded-md
-           checked:shadow-sm checked:shadow-primary-500/30 focus:outline-none focus:ring-0 transition duration-200;
+           checked:shadow-sm checked:shadow-[#1A1819] focus:outline-none focus:ring-0 transition duration-200;
   }
 
   .rs-radio {
@@ -115,11 +115,11 @@
              appearance-none h-5 w-5 mr-2
              border-2 border-slate-200
            dark:border-slate-700
-             checked:border-none checked:bg-primary-400
+             checked:border-none checked:bg-[#1A1819]
            bg-white
            dark:bg-slate-800
-           dark:checked:bg-primary-400
+           dark:checked:bg-[#1A1819]
              rounded-full
-             checked:shadow-sm checked:shadow-primary-500/30 focus:outline-none focus:ring-0 transition duration-200;
+             checked:shadow-sm checked:shadow-[#1A1819] focus:outline-none focus:ring-0 transition duration-200;
   }
 }

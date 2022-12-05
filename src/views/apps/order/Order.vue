@@ -1,6 +1,4 @@
-<template>
-  <rs-layout>
-   
+<template>   
     <div class="order-menu-page">
       <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
         <div class="flex justify-between items-center">
@@ -823,7 +821,6 @@
         </rs-button>
       </div>
     </div>
-  </rs-layout>
 </template>
 
 <script>

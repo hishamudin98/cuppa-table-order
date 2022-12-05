@@ -1,79 +1,84 @@
 <template>
-  <rs-layout>
-    <div class="order-customer">
-      <div style="height: 100vh" class="bg-gradient-to-b from-black via-gray-600 to-white after:content-['']">
-        <div class="flex flex-col">
-          <div class="pt-20 flex justify-center text-white">
-            <h3>Share the payment link</h3>
+  <div class="order-customer">
+    <div
+      style="height: 100vh"
+      class="bg-gradient-to-b from-black via-gray-600 to-white after:content-['']"
+    >
+      <div class="flex flex-col">
+        <div class="pt-20 flex justify-center text-white">
+          <h3>Share the payment link</h3>
+        </div>
+        <div class="flex justify-center text-white">
+          <h6 class="text-center font-light">
+            Scan the QR code or share link to family and friends to allow them
+            to pay for this order.
+          </h6>
+        </div>
+        <div class="flex justify-center mt-10">
+          <!-- ORDER NO -->
+          <div class="w-5/6 h-14 bg-white rounded-md flex justify-center pt-3">
+            <h4 class="text-center">
+              <strong>#{{ this.orderno }}</strong>
+            </h4>
           </div>
-          <div class="flex justify-center text-white">
-            <h6 class="text-center font-light">
-              Scan the QR code or share link to family and friends to allow them
-              to pay for this order.
-            </h6>
-          </div>
-          <div class="flex justify-center mt-10">
-            <!-- ORDER NO -->
-            <div
-              class="w-5/6 h-14 bg-white rounded-md flex justify-center pt-3"
-            >
-              <h4 class="text-center">
-                <strong>#{{ this.orderno }}</strong>
-              </h4>
+        </div>
+        <!-- SHARE -->
+        <div class="flex justify-center mt-10">
+          <div class="w-5/6 h-2/3 bg-white rounded-md flex flex-col">
+            <div class="flex justify-center mb-5">
+              <h4 class="pl-3 pt-1"><strong>Scan here</strong></h4>
             </div>
-          </div>
-          <!-- SHARE -->
-          <div class="flex justify-center mt-10">
-            <div class="w-5/6 h-2/3 bg-white rounded-md flex flex-col">
-              <div class="flex justify-center mb-5">
-                <h4 class="pl-3 pt-1"><strong>Scan here</strong></h4>
-              </div>
 
-              <div class="flex justify-center mb-5">
-                <qrcode-vue :value="this.link" :size="size" level="L" />
+            <div class="flex justify-center mb-5">
+              <qrcode-vue :value="this.link" :size="size" level="L" />
+            </div>
+            <div class="flex flex-row mt-3">
+              <div class="w-2/3 pl-3">
+                <FormKit type="text" v-model="this.link" />
               </div>
-              <div class="flex flex-row mt-3">
-                <div class="w-2/3 pl-3">
-                  <FormKit type="text" v-model="this.link" />
-                </div>
-                <div>
-                  <input type="hidden" id="testing-code" :value="this.link" />
-                  <rs-button
-                    class="w-full bg-heandshe"
-                    @click.stop.prevent="copyTestingCode"
-                  >
-                    Copy
-                  </rs-button>
-                </div>
+              <div>
+                <input type="hidden" id="testing-code" :value="this.link" />
+                <rs-button
+                  class="w-full bg-heandshe"
+                  @click.stop.prevent="copyTestingCode"
+                >
+                  Copy
+                </rs-button>
               </div>
             </div>
           </div>
-          <!-- BUTTON -->
-          <div class="flex justify-center mt-10">
-            <div class="pt-10 w-5/6">
-            <router-link class="w-full" :to="{ name: 'order-payment', params: {id: this.OrderID} }">
+        </div>
+        <!-- BUTTON -->
+        <div class="flex justify-center mt-10">
+          <div class="pt-10 w-5/6">
+            <router-link
+              class="w-full"
+              :to="{ name: 'order-payment', params: { id: this.OrderID } }"
+            >
               <rs-button class="w-full bg-heandshe">
                 Try another method?
               </rs-button>
             </router-link>
-            </div>
           </div>
-          <div class="flex justify-center mt-5">
-            <div class="w-5/6">
-            <router-link class="w-full" :to="{ name: 'order-previous', params: {orderID: this.orderno} }">
-              <rs-button
-                class="w-full"
-                variant="primary-outline"
-              >
+        </div>
+        <div class="flex justify-center mt-5">
+          <div class="w-5/6">
+            <router-link
+              class="w-full"
+              :to="{
+                name: 'order-previous',
+                params: { orderID: this.orderno },
+              }"
+            >
+              <rs-button class="w-full" variant="primary-outline">
                 Check order status
               </rs-button>
             </router-link>
-            </div>
           </div>
         </div>
       </div>
     </div>
-  </rs-layout>
+  </div>
 </template>
 <script>
 /* eslint-disable */
@@ -141,7 +146,6 @@ export default {
     localStorage.status = "FAIL";
     this.getOrder();
     this.sentPaymentLink();
-    
   },
 
   methods: {
