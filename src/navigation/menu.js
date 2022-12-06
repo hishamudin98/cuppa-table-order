@@ -102,8 +102,8 @@ export default [{
           staffCategory: [1, 2, 3],
         },
       },
-    ],
-  },
+    
+  
   {
     child: [
       {
