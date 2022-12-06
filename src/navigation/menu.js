@@ -1,110 +1,98 @@
-export default [
-  {
-    child: [
-      {
-        title: "Dashboard",
-        route: { name: "dashboard" },
-        icon: "home",
-        child: [],
-        meta: {
-          staffCategory: "all",
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "Organization",
-        route: { name: "admin-organization" },
-        icon: "",
-        child: [],
-        meta: {
-          staffCategory: [1, 2],
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "Outlet",
-        route: { name: "admin-outlet" },
-        icon: "",
-        child: [],
-        meta: {
-          staffCategory: [1, 2, 3],
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "User",
-        route: { name: "admin-staff" },
-        icon: "",
-        child: [],
-        meta: {
-          staffCategory: [1, 2, 3, 4],
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "Menu",
-        route: { name: "admin-menu" },
-        icon: "",
-        child: [],
-        meta: {
-          staffCategory: [1, 2, 3],
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "Membership",
-        route: { name: "admin-user" },
-        icon: "",
-        child: [],
-        meta: {
-          staffCategory: [1, 2, 3],
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "Order",
-        route: { name: "admin-order" },
-        icon: "",
-        child: [],
-        meta: {
-          staffCategory: [1, 2, 3],
-        },
-      },
-    ],
-  },
-  {
-    child: [
-      {
-        title: "Stock (HQ)",
-        child: [
-          {
-            title: "Manage Stock",
-            route: { name: "manage-stock" },
+export default [{
+        child: [{
+            title: "Dashboard",
+            route: { name: "dashboard" },
+            icon: "home",
+            child: [],
             meta: {
-              staffCategory: [1, 2, 3],
-            },
-          },
-          {
-            title: "Manage Order Outlet",
-            route: { name: "manage-order-stock-outlet-hq" },
+                staffCategory: "all"
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "Organization",
+            route: { name: "admin-organization" },
+            icon: "",
+            child: [],
+            meta: {
+                staffCategory: [1, 2]
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "Outlet",
+            route: { name: "admin-outlet" },
+            icon: "",
+            child: [],
+            meta: {
+                staffCategory: [1, 2, 3]
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "User",
+            route: { name: "admin-staff" },
+            icon: "",
+            child: [],
+            meta: {
+                staffCategory: [1, 2, 3, 4]
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "Menu",
+            route: { name: "admin-menu" },
+            icon: "",
+            child: [],
+            meta: {
+                staffCategory: [1, 2, 3]
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "Membership",
+            route: { name: "admin-user" },
+            icon: "",
+            child: [],
+            meta: {
+                staffCategory: [1, 2, 3]
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "Order",
+            route: { name: "admin-order" },
+            icon: "",
+            child: [],
+            meta: {
+                staffCategory: [1, 2, 3]
+            }
+        }]
+    },
+    {
+        child: [{
+            title: "Stock (HQ)",
+            child: [{
+                    title: "Manage Stock",
+                    route: { name: "hq-manage-stock" },
+                    meta: {
+                        staffCategory: [1, 2, 3]
+                    }
+                },
+                {
+                    title: "Manage Order Outlet",
+                    route: { name: "manage-order-stock-outlet-hq" },
+                    meta: {
+                        staffCategory: [1, 2, 3]
+                    }
+                }
+            ],
             meta: {
               staffCategory: [1, 2, 3],
             },
@@ -122,7 +110,7 @@ export default [
         title: "Purchase Order",
         route: { name: "manage-order-stock-supplier" },
         meta: {
-          staffCategory: [1, 2, 3 , 4],
+          staffCategory: [1, 2, 3],
         },
       },
     ],
@@ -133,7 +121,7 @@ export default [
         title: "Delivery Order",
         route: { name: "manage-delivery-order" },
         meta: {
-          staffCategory: [1, 2, 3, 4],
+          staffCategory: [1, 2, 3],
         },
       },
     ],
@@ -144,7 +132,7 @@ export default [
         title: "Invoice",
         route: { name: "manage-invoice" },
         meta: {
-          staffCategory: [1, 2, 3, 4],
+          staffCategory: [1, 2, 3],
         },
       },
     ],
@@ -191,7 +179,7 @@ export default [
             title: "Report Transaction",
             route: { name: "admin-report-t" },
             meta: {
-              staffCategory: [1, 2, 3, 4],
+              staffCategory: [1, 2, 3],
             },
           },
           {
@@ -203,7 +191,7 @@ export default [
           },
         ],
         meta: {
-          staffCategory: [1, 2, 3, 4],
+          staffCategory: [1, 2, 3],
         },
       },
     ],
@@ -214,7 +202,7 @@ export default [
         title: "Settings",
         route: { name: "login" },
         meta: {
-          staffCategory: [1, 2, 3, 4],
+          staffCategory: [1, 2, 3],
         },
       },
     ],
@@ -225,7 +213,7 @@ export default [
         title: "Log Out",
         route: { name: "login" },
         meta: {
-          staffCategory: [1, 2, 3, 4],
+          staffCategory: [1, 2, 3],
         },
       },
     ],

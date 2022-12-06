@@ -1,161 +1,136 @@
 <template>
     <rs-layout>
-        <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-x-2">
-                    <div class="welcome text-lg font-semibold text-white">
-                        Manage Order Outlet - HQ
-                    </div>
-                </div>
+        <div style="display: flex; flex-direction: row">
 
-                <div class="flex gap-x-2 items-center">
-                    <div class="text-white">{{ this.staffName }}</div>
-                    <div class="bg-black h-10 w-10 p-1 rounded-full">
-                        <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
+            <div class="w-full h-1/4 flex flex-col">
+                <div class="w-full flex flex-row mb-0">
+                    <div class="inline-block w-1/2 pr-10">
+                        <rs-card>
+                            <div class="text-center pt-10 pb-2">
+                                <strong>Total of Stock Order </strong>
+                            </div>
+                            <hr />
+                            <div class="text-center py-8">{{ this.totalData }} shifts</div>
+                        </rs-card>
+                    </div>
+                    <div class="inline-block w-1/2 pr-10">
+                        <rs-card>
+                            <div class="text-center pt-10 pb-2">
+                                <strong>Total Price Stock Order ( RM )</strong>
+                            </div>
+                            <hr />
+                            <div class="text-center py-8">
+                                {{ formatPrice(this.sumPrice) }}
+                            </div>
+                        </rs-card>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="w-full flex flex-col">
-            <div style="display: flex; flex-direction: row">
-                <!-- UNTUK SEBELAH2 -->
-                <div>
-                    <arbitrary />
-                </div>
-                <div class="w-full h-1/4 flex flex-col">
-                    <div class="w-full flex flex-row mb-0">
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total of Stock Order </strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">{{ this.totalData }} shifts</div>
-                            </rs-card>
+                <div class="w-full" style="flex-direction: column">
+                    <!-- UNTUK ATAS BAWAH -->
+                    <div style="display: flex; flex-direction: row; padding-top: 10px">
+                        <div class="w-full h-1">
+                            <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
+                                inner:
+                                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                                outer: 'flex-1 mb-0',
+                                input: 'h-10',
+                            }" />
                         </div>
-                        <div class="inline-block w-1/2 pr-10">
-                            <rs-card>
-                                <div class="text-center pt-10 pb-2">
-                                    <strong>Total Price Stock Order ( RM )</strong>
-                                </div>
-                                <hr />
-                                <div class="text-center py-8">
-                                    {{ formatPrice(this.sumPrice) }}
-                                </div>
-                            </rs-card>
+                        <div class="w-1/12" style="padding-top: 10px">
+                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Order Stock
+                            </rs-button>
                         </div>
                     </div>
-                    <div class="w-full" style="flex-direction: column">
-                        <!-- UNTUK ATAS BAWAH -->
-                        <div style="display: flex; flex-direction: row; padding-top: 10px">
-                            <div class="w-full h-1">
-                                <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search"
-                                    :classes="{
-                                        inner:
-                                            'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                                        outer: 'flex-1 mb-0',
-                                        input: 'h-10',
-                                    }" />
-                            </div>
-                            <div class="w-1/12" style="padding-top: 10px">
-                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Order Stock
-                                </rs-button>
-                            </div>
-                        </div>
-                        <div class="">
-                            <rs-card style="margin-top: 40px">
+                    <div class="">
+                        <rs-card style="margin-top: 40px">
+                            <div>
                                 <div>
-                                    <div>
-                                        <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
-                                            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                                            :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                            <Column field="outletName" header="Outlet Name"></Column>
-                                            <Column field="stockOrderOutletNo" header="Order No."></Column>
-                                            <Column field="stockOrderOutletDatetime" header="Order Datetime"></Column>
-                                            <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
-                                            <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
-                                                <template #body="searchOrderStock">
-                                                    {{
-                                                            formatPrice(searchOrderStock.data.stockOrderOutletTotalPrice)
-                                                    }}
-                                                </template>
-                                            </Column>
-                                            <Column field="stockOrderOutletStatusCode" header="Status">
-                                                <template #body="searchOrderStock">
-                                                    <div
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
-                                                        <rs-badges variant="warning">
-                                                            Open</rs-badges> {{ " " }}
-
-                                                        <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                            style="width: 25px;height:25px" @click="clickBtnInfo()" />
-
-                                                    </div>
-
-                                                    <div
-                                                        v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
-                                                        <rs-badges variant="warning">
-                                                            Approved</rs-badges> {{ " " }}
-
-                                                        <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                            style="width: 25px;height:25px" @click="clickBtnInfo()" />
-
-                                                    </div>
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
-                                                        Accepted</p>
-
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
-                                                        Delivery</p>
-
-                                                    <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
-                                                        Received</p>
-                                                </template>
-
-                                            </Column>
-
-
-                                            <Column :exportable="false" header="Details">
-
-                                                <template #body="searchOrderStock">
-
-                                                    <router-link
-                                                        :to="{ name: 'order-stock-outlet-hq', params: { id: searchOrderStock.data.stockOrderOutletId } }">
-                                                        <Button icon="pi pi-truck"
-                                                            class="p-button-rounded p-button-info" />
-                                                    </router-link>
-                                                </template>
-
-
-                                            </Column>
-
-                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                                                <template #body="searchOrderStock">
-                                                    <Button icon="pi pi-pencil"
-                                                        class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchOrderStock)" /> {{ " " }}
-                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                        @click="deleteUser(searchOrderStock)" />
-                                                </template>
-                                            </Column>
-
-                                            <template #paginatorstart>
-                                                <Button type="button" icon="pi pi-refresh" class="p-button-text" />
+                                    <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                        <Column field="outletName" header="Outlet Name"></Column>
+                                        <Column field="stockOrderOutletNo" header="Order No."></Column>
+                                        <Column field="stockOrderOutletDatetime" header="Order Datetime"></Column>
+                                        <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
+                                        <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
+                                            <template #body="searchOrderStock">
+                                                {{
+                                                        formatPrice(searchOrderStock.data.stockOrderOutletTotalPrice)
+                                                }}
                                             </template>
-                                            <template #paginatorend>
-                                                <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                                        </Column>
+                                        <Column field="stockOrderOutletStatusCode" header="Status">
+                                            <template #body="searchOrderStock">
+                                                <div v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
+                                                    <rs-badges variant="warning" @click="clickBtnStatus()">
+                                                        Open</rs-badges> {{ " " }}
+
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
+                                                </div>
+
+                                                <div v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
+                                                    <rs-badges variant="warning" @click="clickBtnStatus()">
+                                                        Approved</rs-badges> {{ " " }}
+
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
+                                                </div>
+                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
+                                                    Accepted</p>
+
+                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
+                                                    Delivery</p>
+
+                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
+                                                    Received</p>
                                             </template>
-                                        </DataTable>
-                                    </div>
+
+                                        </Column>
+
+
+                                        <Column :exportable="false" header="Details">
+
+                                            <template #body="searchOrderStock">
+
+                                                <router-link
+                                                    :to="{ name: 'order-stock-outlet-hq', params: { id: searchOrderStock.data.stockOrderOutletId } }">
+                                                    <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                                                </router-link>
+                                            </template>
+
+
+                                        </Column>
+
+                                        <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                                            <template #body="searchOrderStock">
+                                                <Button icon="pi pi-pencil"
+                                                    class="p-button-rounded p-button-success mr-2"
+                                                    @click="editUser(searchOrderStock)" /> {{ " " }}
+                                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                                    @click="deleteUser(searchOrderStock)" />
+                                            </template>
+                                        </Column>
+
+                                        <template #paginatorstart>
+                                            <Button type="button" icon="pi pi-refresh" class="p-button-text" />
+                                        </template>
+                                        <template #paginatorend>
+                                            <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                                        </template>
+                                    </DataTable>
                                 </div>
-                            </rs-card>
-                        </div>
-
-                        <!-- UNTUK ATAS BAWAH -->
+                            </div>
+                        </rs-card>
                     </div>
+
+                    <!-- UNTUK ATAS BAWAH -->
                 </div>
-                <!-- UNTUK SEBELAH2 -->
             </div>
+            <!-- UNTUK SEBELAH2 -->
         </div>
 
         <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="md">
@@ -229,6 +204,20 @@
             <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
         </rs-modal>
 
+        <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
+            <FormKit type="select" label="Status" :options="[
+                'Open',
+                'Approved',
+                'Accepted',
+                'Delivery',
+                'Received',
+            ]" />
+
+            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                Save
+            </rs-button>
+        </rs-modal>
+
     </rs-layout>
 </template>
 <script>
@@ -241,7 +230,6 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 import RsBadges from "@/components/Badges.vue";
 
 export default {
@@ -253,7 +241,6 @@ export default {
         RsModal,
         Column,
         Button,
-        'arbitrary': Menu,
     },
     setup() {
         const orderStock = ref([]);
@@ -309,6 +296,7 @@ export default {
             measurement: null,
             modalRawMaterial: false,
             modalInfo: false,
+            modalStatus: false,
 
         };
     },
@@ -323,6 +311,11 @@ export default {
         async clickBtnInfo() {
             // this.users1 = user.data;
             this.modalInfo = true;
+        },
+
+        async clickBtnStatus() {
+            // this.users1 = user.data;
+            this.modalStatus = true;
         },
 
         async getdata() {
