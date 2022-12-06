@@ -1,48 +1,12 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            Membership Management
-          </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
+        
         <div class="w-full h-1/4 flex flex-col">
-          <div class="w-full flex flex-row mb-1">
-            <!-- <div class="inline-block w-1/2 pr-10">
-              <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Number of active users</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">64 Active Users</div>
-              </rs-card>
-            </div>
-            <div class="inline-block w-1/2 pr-10 pb-2">
-              <rs-card>
-                <div class="text-center pt-10">
-                  <strong>Number of users by Outlet</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">10 Active Users</div>
-              </rs-card>
-            </div> -->
-          </div>
+          
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
@@ -138,7 +102,6 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 
 export default {
   name: "AdminDashboard",
@@ -148,7 +111,6 @@ export default {
     DataTable,
     Column,
     Button,
-    'arbitrary': Menu,
   },
   setup() {
     const users = ref([]);

@@ -1,6 +1,7 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
+    <rs-breadcrumb />
+    <!-- <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-x-2">
           <div class="welcome text-lg font-semibold text-white">
@@ -19,13 +20,13 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="w-full flex flex-col">
+    </div> -->
+    <!-- <div class="w-full flex flex-col"> -->
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
+       <!--  <div>
           <arbitrary />
-        </div>
+        </div> -->
         <div class="w-full flex flex-col">
           <div class="w-full flex flex-row mb-1">
             <!-- <div class="inline-block w-1/2 pr-10 h-2/4">
@@ -167,7 +168,7 @@
         </div>
         <!-- UNTUK SEBELAH2 -->
       </div>
-    </div>
+    <!-- </div> -->
 
     <rs-modal title="Staff" v-model="selectStaff" position="middle" size="md">
       <label><strong>Name</strong></label>
@@ -207,7 +208,7 @@
         v-model="category"
         type="radio"
         label="Category Status"
-        :options="['HQ', 'Branch', 'Supplier', 'Customer']"
+        :options="[{ label :'HQ', value: 	2 } ,{ label: 'Branch', value: 3 }, { label: 'Supplier' , value: 4 }]"
       />
 
       <rs-button
@@ -251,7 +252,7 @@
           { label: 'Admin', value: '2' },
           { label: 'User/Staff', value: '3' },
         ]"
-        v-model="users1.user_position"
+        v-model="user_position"
       />
       <FormKit
         type="select"
@@ -261,7 +262,7 @@
           { label: 'Outlet', value: '3' },
           { label: 'Supplier', value: '4' },
         ]"
-        v-model="users1.user_position"
+        v-model="user_category"
       />
       <rs-button style="float: right" @click="insertUser()">
         Save
@@ -348,7 +349,7 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
+/* import Menu from "@/views/apps/administrator/adminSidemenu.vue"; */
 
 export default {
   name: "AdminDashboard",
@@ -358,7 +359,7 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
+    /* arbitrary: Menu, */
   },
   setup() {
     const users = ref([]);
@@ -427,6 +428,8 @@ export default {
       menuDrop: false,
       totalStaff: 2,
       outlet: 0,
+      user_position: "",
+      user_category: "",
     };
   },
   async created() {
@@ -630,7 +633,7 @@ export default {
     },
 
     async insertUser() {
-      /* var axios = require("axios");
+      var axios = require("axios");
       var data = JSON.stringify({
         fullname: this.fullname,
         phone: this.phone,
@@ -639,12 +642,14 @@ export default {
         password: this.password,
         pincode: this.pincode,
         dob: this.dob,
-        position: this.position,
+        position: this.user_position,
+        category: this.user_category,
         staffid: localStorage.staff,
       });
+      console.log(data)
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertStaff",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertOrganizationOwner",
         headers: {
           "Content-Type": "application/json",
         },
@@ -652,9 +657,9 @@ export default {
       };
       await axios(config)
         .then(
-          function (response) { */
+          function (response) {
 
-      /* if (response.data.status == "Success") { */
+      if (response.data.status == "Success") {
       this.modalPOS = false;
       this.fullname = "";
       this.phone = "";
@@ -664,18 +669,20 @@ export default {
       this.pincode = "";
       this.dob = "";
       this.position = "";
-      /* alert(response.data.message); */
-      alert("Successfully Insert New Organization's Owner");
-      /*  this.users.splice(0);
-        this.getuser(); */
-      /*  } else {
+      this.user_category = "";
+      this.user_position = "";
+      alert(response.data.message);
+      /* alert("Successfully Insert New Organization's Owner"); */ 
+       this.users.splice(0);
+        this.getuser();
+       } else {
         alert(response.data.message);
-      } */
-      /*   }.bind(this)
+      }
+        }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
-        }); */
+        });
     },
   },
 };

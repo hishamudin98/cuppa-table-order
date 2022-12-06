@@ -1,54 +1,12 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            Outlet 
-          </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <!--  -->
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
+        
         <div class="w-full h-1/4 flex flex-col">
-          <div class="w-full flex flex-row mb-0">
-            <div class="inline-block w-full pr-10">
-              <!-- <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Total of Outlet Under HQ </strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">{{ this.totalData }} outlets</div>
-              </rs-card> -->
-            </div>
-            <!-- <div class="inline-block w-1/2 pr-10">
-              <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Total of outlets income ( RM )</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">
-                  {{ formatPrice(this.sumShifts) }}
-                </div>
-              </rs-card>
-            </div> -->
-          </div>
+         
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -212,8 +170,8 @@
       <FormKit
         v-model="role"
         type="radio"
-        label="Role Status"
-        :options="['HQ', 'Outlet', 'Supplier']"
+        label="Organization Type"
+        :options="['HQ' , 'Outlet' , 'Supplier']"
       />
 
       <rs-button
@@ -244,7 +202,6 @@ import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
 import "primeicons/primeicons.css";
 /* import moment from "moment"; */
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 
 export default {
   name: "AdminDashboard",
@@ -254,22 +211,20 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
   },
   setup() {
     const outlet = ref([]);
     const search = ref("");
     const filterModal = ref(false);
+    const role = ref("");
 
     const searchOutlet = computed(() => {
-      return outlet.value.filter((shifts) => {
+      return outlet.value.filter((outlets) => {
         return (
-          shifts.outlet_name
+          outlets.org_type
             .toLowerCase()
-            .indexOf(search.value.toLowerCase()) != -1 ||
-          shifts.outlet_code
-            .toLowerCase()
-            .indexOf(search.value.toLowerCase()) != -1
+            .indexOf(role.value.toLowerCase()) != -1 
+         
         );
       });
     });
@@ -281,7 +236,7 @@ export default {
     };
 
     const filters = () => {
-      
+      role.value = "";
       filterModal.value = false;
     };
 
@@ -297,6 +252,7 @@ export default {
       filter,
       filters,
       filterModal,
+      role,
     };
   },
   data() {
@@ -316,6 +272,7 @@ export default {
       outlet_postcode: "",
       outlet_address: "",
       outlet_images: "",
+      orgType: "",
     };
   },
   async created() {
@@ -366,10 +323,21 @@ export default {
       await axios(config)
         .then(
           function (response) {
-
+            
             this.outlet_details = response.data.data.Outlet_det;
-            console.log(this.outlet_details)
             for (let i = 0; i < this.outlet_details.length; i++) {
+              if(this.outlet_details[i].org_type == 2)
+              {
+                this.orgType = "HQ"
+              }
+              else if(this.outlet_details[i].org_type == 3)
+              {
+                this.orgType = "Outlet"
+              }
+              else if(this.outlet_details[i].org_type == 4)
+              {
+                this.orgType = "Supplier"
+              }
               this.outlet.push({
                 outlet_id: this.outlet_details[i].outlet_id,
                 outlet_code: this.outlet_details[i].outlet_code,
@@ -378,6 +346,7 @@ export default {
                 outlet_email: this.outlet_details[i].outlet_email,
                 outlet_address: this.outlet_details[i].outlet_address,
                 staff_name: this.outlet_details[i].staff_name,
+                org_type : this.orgType,
               });
             }
             this.totalData = this.outlet.length;

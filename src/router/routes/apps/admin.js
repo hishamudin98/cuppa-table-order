@@ -39,12 +39,40 @@ export default [{
         name: "admin-menu-outlet",
         component: () =>
             import ("@/views/apps/administrator/Menu/adminMenuOutlet.vue"),
+            meta: {
+                title: "Menu Price Management",
+                breadcrumb: [{
+                        title: "Menu",
+                        route: { name: "admin-menu" }
+                    },
+                    {
+                        title: "Menu Price Management",
+                        route: {
+                            name: "admin-menu-outlet"
+                        }
+                    }
+                ]
+            }
     },
     {
         path: "/admin/menu/raw-material/:menuid?",
         name: "admin-menu-rawmaterial",
         component: () =>
             import ("@/views/apps/administrator/Menu/adminMenuRawMaterial.vue"),
+            meta: {
+                title: "Menu Raw Material Management",
+                breadcrumb: [{
+                        title: "Menu",
+                        route: { name: "admin-menu" }
+                    },
+                    {
+                        title: "Menu Raw Material Management",
+                        route: {
+                            name: "admin-menu-rawmaterial"
+                        }
+                    }
+                ]
+            }
     },
     {
         path: "/admin/user",
@@ -195,6 +223,20 @@ export default [{
         name: "admin-organization",
         component: () =>
             import ("@/views/apps/administrator/organization/adminOrganization.vue"),
+            /* meta: {
+                title: "Manage Stock",
+                breadcrumb: [{
+                        title: "Home",
+                        route: { name: "dashboard" }
+                    },
+                    {
+                        title: "Stock",
+                        route: {
+                            name: "hq-manage-stock"
+                        }
+                    }
+                ]
+            } */
     },
 
     {

@@ -1,74 +1,16 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">Menu</div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
+        
         <div class="w-full flex flex-col">
-          <div class="w-full flex flex-row mb-1">
-            <!-- <div class="inline-block w-1/2 pr-10 h-2/4">
-              <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Number of active Menu</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">60 Active Menu</div>
-              </rs-card>
-            </div>
-            <div class="inline-block w-1/2 pr-10 pb-2">
-              <rs-card>
-                <div class="text-center pt-10">
-                  <strong>Number of Menu by Outlet</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">43 Active Menu</div>
-              </rs-card>
-            </div> -->
-          </div>
+          
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-10">
-                <!-- <FormKit
-                  v-model="search"
-                  id="search-sticky"
-                  placeholder="Search for Menu..."
-                  type="search"
-                  :classes="{
-                    inner:
-                      'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                    outer: 'flex-1 mb-0',
-                    input: 'h-12',
-                  }"
-                /> -->
-              </div>
-              <div class="w-1/12" style="padding-top: 10px">
-                <!-- <rs-button
-                  @click="addMenu()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Add Menu</rs-button
-                > -->
-              </div>
+             
             </div>
             <div class="h-4/6">
               <div>
@@ -385,7 +327,6 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 import VueTaggableSelect from "vue-taggable-select";
 import Multiselect from "@vueform/multiselect";
 
@@ -397,7 +338,6 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
     VueTaggableSelect,
     Multiselect,
   },

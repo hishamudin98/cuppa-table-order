@@ -138,7 +138,15 @@
       <FormKit label="Email" type="email" v-model="outlet_email" />
       <FormKit label="Postcode" type="number" v-model="outlet_postcode" />
       <FormKit label="Address" type="textarea" v-model="outlet_address" />
-      <FormKit type="radio" label="Outlet Type" :options="['HQ', 'Branch']" />
+      <FormKit
+        type="radio"
+        label="Outlet Type"
+        v-model="outlet_type"
+        :options="[
+          { label: 'HQ', value: 2 },
+          { label: 'Branch', value: 3 },
+        ]"
+      />
       <FormKit
         type="file"
         label="Images"
@@ -152,7 +160,8 @@
       <FormKit
         label="Owner"
         type="select"
-        :options="['Owner Branch UM', 'Owner SME Bank']"
+        v-model="Organizationowner"
+        :options="this.owner"
       />
       <!-- <FormKit label="Phone No." type="number" />
       <FormKit label="Email" type="email" />
@@ -229,6 +238,7 @@ export default {
   setup() {
     const outlet = ref([]);
     const search = ref("");
+    const owner = ref([]);
 
     const searchOutlet = computed(() => {
       return outlet.value.filter((shifts) => {
@@ -252,6 +262,7 @@ export default {
       search,
       searchOutlet,
       outlet,
+      owner,
       formatPrice,
     };
   },
@@ -272,11 +283,14 @@ export default {
       outlet_postcode: "",
       outlet_address: "",
       outlet_images: "",
+       outlet_type: "",
+      Organizationowner: "",
     };
   },
   async created() {
     this.getdata();
     this.getOutlethq();
+    this.getOrganizationOwner();
   },
 
   methods: {
@@ -344,6 +358,34 @@ export default {
         });
     },
 
+    async getOrganizationOwner() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL +
+          "/admin/getOrganizationOwner" /*   */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.owner.push({
+                label: response.data.data[i].org_name,
+                value: response.data.data[i].org_id,
+              });
+            }
+            
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     async addOutlet() {
       this.modalInsert = true;
     },
@@ -362,6 +404,8 @@ export default {
         outlet_postcode: this.outlet_postcode,
         outlet_address: this.outlet_address,
         staffid: localStorage.staff,
+        outlet_type: this.outlet_type,
+        Organizationowner: this.Organizationowner,
       });
       var config = {
         method: "post",
