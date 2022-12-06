@@ -1,39 +1,10 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            <router-link
-              class="flex items-center justify-center"
-              :to="{
-                name: 'admin-staff',
-              }"
-            >
-              <vue-feather class="text-white" type="chevron-left"> </vue-feather
-              >User Management
-            </router-link>
-          </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <rs-breadcrumb />
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
+        
         <div class="w-full flex flex-col">
           <!--  <div class="w-full flex flex-row mb-1">
             <div class="inline-block w-1/2 pr-10 h-2/4">
@@ -324,7 +295,6 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 
 export default {
   name: "AdminDashboard",
@@ -334,7 +304,6 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
   },
   setup() {
     const users = ref([]);

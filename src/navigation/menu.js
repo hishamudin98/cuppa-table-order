@@ -46,7 +46,7 @@ export default [
         icon: "",
         child: [],
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3, 4],
         },
       },
     ],
@@ -122,7 +122,7 @@ export default [
         title: "Purchase Order",
         route: { name: "manage-order-stock-supplier" },
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3 , 4],
         },
       },
     ],
@@ -133,7 +133,7 @@ export default [
         title: "Delivery Order",
         route: { name: "manage-delivery-order" },
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3, 4],
         },
       },
     ],
@@ -144,7 +144,7 @@ export default [
         title: "Invoice",
         route: { name: "manage-invoice" },
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3, 4],
         },
       },
     ],
@@ -191,7 +191,7 @@ export default [
             title: "Report Transaction",
             route: { name: "admin-report-t" },
             meta: {
-              staffCategory: [1, 2, 3],
+              staffCategory: [1, 2, 3, 4],
             },
           },
           {
@@ -203,7 +203,7 @@ export default [
           },
         ],
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3, 4],
         },
       },
     ],
@@ -214,7 +214,7 @@ export default [
         title: "Settings",
         route: { name: "login" },
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3, 4],
         },
       },
     ],
@@ -225,7 +225,7 @@ export default [
         title: "Log Out",
         route: { name: "login" },
         meta: {
-          staffCategory: [1, 2, 3],
+          staffCategory: [1, 2, 3, 4],
         },
       },
     ],

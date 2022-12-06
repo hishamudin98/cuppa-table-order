@@ -1,10 +1,9 @@
 <template>
   <rs-layout>
-    
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        
+
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-0">
             <div class="inline-block w-1/2 pr-10">
@@ -305,37 +304,40 @@
         >
           <template v-slot:pdf-content>
             <div class="text-center mt-10">
-        <h5><strong> Receipt </strong></h5>
+              <h5><strong> Receipt </strong></h5>
 
-        <strong>Order Date :</strong>
-        {{ this.receiptData.data.orderDatetime }}
-        <br />
-        <strong>Receipt No :</strong>
-        {{ this.receiptData.data.receipt_no }}
-        <br />
-        <strong>Order Status :</strong>
-        {{ this.receiptData.data.order_status }}
-        <br />
-        <strong>Staff Name :</strong>
-        {{ this.receiptData.data.staffName }}
-        <br />
-        <strong>Order From :</strong>
-        {{ this.receiptData.data.order_from }}
-        <br />
-        <strong>Payment Method :</strong>
-        {{ this.receiptData.data.payment_method }}
-        <br />
+              <strong>Order Date :</strong>
+              {{ this.receiptData.data.orderDatetime }}
+              <br />
+              <strong>Receipt No :</strong>
+              {{ this.receiptData.data.receipt_no }}
+              <br />
+              <strong>Order Status :</strong>
+              {{ this.receiptData.data.order_status }}
+              <br />
+              <strong>Staff Name :</strong>
+              {{ this.receiptData.data.staffName }}
+              <br />
+              <strong>Order From :</strong>
+              {{ this.receiptData.data.order_from }}
+              <br />
+              <strong>Payment Method :</strong>
+              {{ this.receiptData.data.payment_method }}
+              <br />
 
-        <br />
-        <label><strong>Order Details</strong></label>
-        <div v-for="(input, k) in this.receiptData.data.order_detail" :key="k">
-          <p>
-            {{ input.menu_name }} x {{ input.menu_quantity }} - RM
-            {{ formatPrice(input.menu_price) }}
-          </p>
-        </div>
-        <br />
-      </div>
+              <br />
+              <label><strong>Order Details</strong></label>
+              <div
+                v-for="(input, k) in this.receiptData.data.order_detail"
+                :key="k"
+              >
+                <p>
+                  {{ input.menu_name }} x {{ input.menu_quantity }} - RM
+                  {{ formatPrice(input.menu_price) }}
+                </p>
+              </div>
+              <br />
+            </div>
           </template>
         </vue3-html2pdf>
       </div>
@@ -383,20 +385,27 @@ export default {
 
     const searchOrder = computed(() => {
       return order.value.filter((orders) => {
-        return (
-          orders.outlet_id.toString().indexOf(outlet_id.value.toString()) !=
-            -1 &&
-          orders.order_status
-            .toString()
-            .indexOf(order_status.value.toString()) != -1 &&
-          orders.order_from.toString().indexOf(order_from.value.toString()) !=
-            -1 &&
-          orders.order_customer
-            .toLowerCase()
-            .indexOf(search.value.toLowerCase()) != -1 /* ||
+        if (search.value == "") {
+          return (
+            orders.outlet_id.toString().indexOf(outlet_id.value.toString()) !=
+              -1 &&
+            orders.order_status
+              .toString()
+              .indexOf(order_status.value.toString()) != -1 &&
+            orders.order_from.toString().indexOf(order_from.value.toString()) !=
+              -1 &&
+            orders.order_customer
+              .toLowerCase()
+              .indexOf(search.value.toLowerCase()) != -1 /* ||
           orders.staffName.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
           orders.order_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1  */
-        );
+          );
+        } else {
+          return (
+            orders.order_no.toString().indexOf(search.value.toString()) !=
+            -1
+          );
+        }
       });
     });
 
@@ -584,7 +593,7 @@ export default {
                 order_from: response.data.data.Order_det[i].order_from,
                 payment_method: this.payment,
                 receipt_no: response.data.data.Order_det[i].transaction_no,
-                order_type: response.data.data.Order_det[i].order_type
+                order_type: response.data.data.Order_det[i].order_type,
               });
             }
             this.totalData = this.order.length;
