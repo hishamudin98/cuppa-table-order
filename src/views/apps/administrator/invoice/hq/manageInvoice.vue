@@ -1,83 +1,66 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">Invoice</div>
-        </div>
 
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-full flex flex-col">
-      <div style="display: flex; flex-direction: row">
-        <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
-        <div class="w-full h-1/4 flex flex-col">
-          <div class="w-full flex flex-row mb-0"></div>
-          <div class="w-full" style="flex-direction: column">
-            <!-- UNTUK ATAS BAWAH -->
-            <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-full h-1">
-                <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
-                  inner:
-                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                  outer: 'flex-1 mb-0',
-                  input: 'h-10',
-                }" />
-              </div>
+    <div style="display: flex; flex-direction: row">
 
-              <div class="w-1/12" style="padding-top: 10px">
-                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Invoice
-                </rs-button>
-              </div>
+      <div class="w-full h-1/4 flex flex-col">
+        <div class="w-full flex flex-row mb-0"></div>
+        <div class="w-full" style="flex-direction: column">
+          <!-- UNTUK ATAS BAWAH -->
+          <div style="display: flex; flex-direction: row; padding-top: 10px">
+            <div class="w-full h-1">
+              <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
+                inner:
+                  'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                outer: 'flex-1 mb-0',
+                input: 'h-10',
+              }" />
             </div>
-            <div class="">
-              <rs-card style="margin-top: 40px">
+
+            <div class="w-1/12" style="padding-top: 10px">
+              <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Invoice
+              </rs-button>
+            </div>
+          </div>
+          <div class="">
+            <rs-card style="margin-top: 40px">
+              <div>
                 <div>
-                  <div>
-                    <DataTable :value="searchStore" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
-                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                      :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                      <Column :expander="true" headerStyle="width: 3rem" />
-                      <Column field="sto_Name" header="Invoice No.">
-                        <template #body="searchStore">
-                          <p v-if="searchStore.data.sto_Name === 'Store A'">
-                            Inv-00001</p>
-                          <p v-if="searchStore.data.sto_Name === 'Store B'">
-                            Inv-00002</p>
-                        </template>
-                      </Column>
-                      <Column field="sto_Email" header="Date">
-                        <template #body="searchStore">
-                          <p v-if="searchStore.data.sto_Type">14/07/2022</p>
-                          <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                        </template>
-                      </Column>
+                  <DataTable :value="searchStore" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
+                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                    :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                    <Column :expander="true" headerStyle="width: 3rem" />
+                    <Column field="sto_Name" header="Invoice No.">
+                      <template #body="searchStore">
+                        <p v-if="searchStore.data.sto_Name === 'Store A'">
+                          Inv-00001</p>
+                        <p v-if="searchStore.data.sto_Name === 'Store B'">
+                          Inv-00002</p>
+                      </template>
+                    </Column>
+                    <Column field="sto_Email" header="Date">
+                      <template #body="searchStore">
+                        <p v-if="searchStore.data.sto_Type">14/07/2022</p>
+                        <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                      </template>
+                    </Column>
 
-                      <Column field="sto_PhoneNo" header="Staff">
-                        <template #body="searchStore">
-                          <p v-if="searchStore.data.sto_Type">Staff HQ</p>
-                          <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                        </template>
-                      </Column>
+                    <Column field="sto_PhoneNo" header="Staff">
+                      <template #body="searchStore">
+                        <p v-if="searchStore.data.sto_Type">Staff HQ</p>
+                        <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                      </template>
+                    </Column>
 
-                      <Column field="sto_Type" header="Total Price">
-                        <template #body="searchStore">
-                          <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
-                          <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                        </template>
-                      </Column>
+                    <Column field="sto_Type" header="Total Price">
+                      <template #body="searchStore">
+                        <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
+                        <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                      </template>
+                    </Column>
 
-                      <!-- <Column field="sto_Level" header="Bill To">
+                    <!-- <Column field="sto_Level" header="Bill To">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.sto_Type === '1'">
                                                         He & She University of Malaya
@@ -108,112 +91,110 @@
                                                 </template>
                                             </Column> -->
 
-                      <Column field="sto_Status" header="Status">
-                        <template #body="searchStore">
-                          <rs-badges variant="warning" v-if="searchStore.data.sto_Status" @click="clickBtnStatus()">
-                            Approved</rs-badges>
-                          {{ "" }}
-                          <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                            style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                          <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                    <Column field="sto_Status" header="Status">
+                      <template #body="searchStore">
+                        <rs-badges variant="warning" v-if="searchStore.data.sto_Status" @click="clickBtnStatus()">
+                          Approved</rs-badges>
+                        {{ "" }}
+                        <Button icon="pi pi-info" class="p-button-rounded p-button-info" style="width: 25px;height:25px"
+                          @click="clickBtnInfo()" />
+                        <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
 
-                        </template>
-                      </Column>
-
-                      <Column :exportable="false" header="Details">
-                        <template #body="searchStore">
-                          <p v-if="searchStore.data.rm_Status === '1'" hidden>
-                            Level 1
-                          </p>
-                          <router-link :to="{ name: 'manage-stock' }">
-                            <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
-                          </router-link>
-                        </template>
-                      </Column>
-
-                      <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                        <template #body="searchStore">
-                          <Button icon="pi pi-print" class="p-button-rounded p-button-warning mr-2"
-                            @click="editUser(searchOrderStock)" /> {{ "" }}
-
-                          <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                            @click="editUser(searchStore)" />
-                          {{ "" }}
-                          <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                            @click="deleteUser(searchStore)" />
-                        </template>
-                      </Column>
-
-                      <template #expansion="searchStore12">
-                        <div class="orders-subtable">
-                          <h5 style="margin-bottom: 20px">
-                            Delivery Order Record for Inv-00001
-                            {{ searchStore12.data.sto_Status2 }}
-                          </h5>
-
-                          <DataTable :value="searchStore" :paginator="true" :rows="10"
-                            v-model:expandedRows="expandedRows"
-                            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                            :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                            <Column field="sto_Status" header="DO No.">
-                              <template #body="searchStore">
-                                <p v-if="searchStore.data.sto_Name === 'Store A'">
-                                  D0-00001</p>
-                                <p v-if="searchStore.data.sto_Name === 'Store B'">
-                                  D0-00002</p>
-                              </template>
-                            </Column>
-
-                            <Column field="sto_Status" header="DO Datetime">
-                              <template #body="searchStore">
-                                <p v-if="searchStore.data.sto_Name === 'Store A'">
-                                  14/07/2022 12:00</p>
-                                <p v-if="searchStore.data.sto_Name === 'Store B'">
-                                  15/07/2022 12:00</p>
-                              </template>
-                            </Column>
-
-                            <Column field="sto_Status" header="Remarks">
-                              <template #body="searchStore">
-                                <p v-if="searchStore.data.sto_Status == '1'">
-                                  Wrap
-                                </p>
-                              </template>
-                            </Column>
-
-                            <Column field="sto_Status" header="Status">
-                              <template #body="searchStore">
-                                <rs-badges variant="success" v-if="searchStore.data.sto_Status">
-                                  Received</rs-badges>
-                                {{ "" }}
-                                <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                  style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                                <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
-
-                              </template>
-                            </Column>
-
-                            <template #paginatorstart>
-                              <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-                            </template>
-                            <template #paginatorend>
-                              <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-                            </template>
-                          </DataTable>
-                        </div>
                       </template>
-                    </DataTable>
-                  </div>
-                </div>
-              </rs-card>
-            </div>
+                    </Column>
 
-            <!-- UNTUK ATAS BAWAH -->
+                    <Column :exportable="false" header="Details">
+                      <template #body="searchStore">
+                        <p v-if="searchStore.data.rm_Status === '1'" hidden>
+                          Level 1
+                        </p>
+                        <router-link :to="{ name: 'manage-stock' }">
+                          <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                        </router-link>
+                      </template>
+                    </Column>
+
+                    <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                      <template #body="searchStore">
+                        <Button icon="pi pi-print" class="p-button-rounded p-button-warning mr-2"
+                          @click="editUser(searchOrderStock)" /> {{ "" }}
+
+                        <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                          @click="editUser(searchStore)" />
+                        {{ "" }}
+                        <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                          @click="deleteUser(searchStore)" />
+                      </template>
+                    </Column>
+
+                    <template #expansion="searchStore12">
+                      <div class="orders-subtable">
+                        <h5 style="margin-bottom: 20px">
+                          Delivery Order Record for Inv-00001
+                          {{ searchStore12.data.sto_Status2 }}
+                        </h5>
+
+                        <DataTable :value="searchStore" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
+                          paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                          :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                          <Column field="sto_Status" header="DO No.">
+                            <template #body="searchStore">
+                              <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                D0-00001</p>
+                              <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                D0-00002</p>
+                            </template>
+                          </Column>
+
+                          <Column field="sto_Status" header="DO Datetime">
+                            <template #body="searchStore">
+                              <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                14/07/2022 12:00</p>
+                              <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                15/07/2022 12:00</p>
+                            </template>
+                          </Column>
+
+                          <Column field="sto_Status" header="Remarks">
+                            <template #body="searchStore">
+                              <p v-if="searchStore.data.sto_Status == '1'">
+                                Wrap
+                              </p>
+                            </template>
+                          </Column>
+
+                          <Column field="sto_Status" header="Status">
+                            <template #body="searchStore">
+                              <rs-badges variant="success" v-if="searchStore.data.sto_Status">
+                                Received</rs-badges>
+                              {{ "" }}
+                              <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                              <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+
+                            </template>
+                          </Column>
+
+                          <template #paginatorstart>
+                            <Button type="button" icon="pi pi-refresh" class="p-button-text" />
+                          </template>
+                          <template #paginatorend>
+                            <Button type="button" icon="pi pi-cloud" class="p-button-text" />
+                          </template>
+                        </DataTable>
+                      </div>
+                    </template>
+                  </DataTable>
+                </div>
+              </div>
+            </rs-card>
           </div>
+
+          <!-- UNTUK ATAS BAWAH -->
         </div>
-        <!-- UNTUK SEBELAH2 -->
       </div>
+      <!-- UNTUK SEBELAH2 -->
     </div>
 
     <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
@@ -389,7 +370,6 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 import RsBadges from "@/components/Badges.vue";
 
 import Multiselect from "@vueform/multiselect";
@@ -403,7 +383,6 @@ export default {
     RsModal,
     Column,
     Button,
-    arbitrary: Menu,
     Multiselect,
   },
   setup() {
