@@ -64,7 +64,12 @@
             >
               <a
                 href="#"
-                class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                class="
+                  underline
+                  text-blue-600
+                  hover:text-blue-800
+                  visited:text-purple-600
+                "
               >
                 Sign Up</a
               ></router-link
@@ -156,7 +161,6 @@
           Take Away
         </rs-button>
         <hr class="my-2" />
-        <hr class="my-2" />
         <rs-button
           class="w-full"
           variant="primary-outline"
@@ -164,10 +168,28 @@
         >
           Book a Table
         </rs-button>
+        <hr class="my-2" />
+        <rs-button
+          class="w-full"
+          variant="primary-outline"
+          @click="pickDelivery()"
+        >
+          Delivery
+        </rs-button>
       </div>
       <div v-if="picktable == true">
         <div
-          class="order-table-number flex items-center justify-center font-semibold text-2xl md:text-3xl mb-4 gap-x-2"
+          class="
+            order-table-number
+            flex
+            items-center
+            justify-center
+            font-semibold
+            text-2xl
+            md:text-3xl
+            mb-4
+            gap-x-2
+          "
         >
           <!-- <span v-if="changetable == false"
               >Table #{{ this.table ? this.table : "0" }}</span
@@ -243,39 +265,18 @@
       </div>
       <div v-if="preordertime == true">
         <div
-          class="order-table-number flex items-center justify-center font-semibold text-2xl md:text-3xl mb-4 gap-x-2"
+          class="
+            order-table-number
+            flex
+            items-center
+            justify-center
+            font-semibold
+            text-2xl
+            md:text-3xl
+            mb-4
+            gap-x-2
+          "
         >
-          <!-- <span v-if="changetable == false"
-              >Table #{{ table ? table : "0" }}</span
-            >
-            <div v-else class="flex justify-center items-center">
-              Table #
-              <form-kit
-                type="number"
-                :classes="{
-                  input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
-                  outer: 'mb-0',
-                }"
-                v-model.number="table2"
-                @keypress="onlyNumber"
-              />
-            </div>
-            <button
-              class="
-                p-1
-                px-2
-                bg-heandshe
-                text-white
-                rounded-xl
-                text-sm
-                hover:bg-heandshe
-              "
-              @click="
-                changetable ? (changetable = false) : (changetable = true)
-              "
-            >
-              Change table
-            </button> -->
           <FormKit
             type="select"
             label="Table Number"
@@ -298,6 +299,39 @@
           class="w-full"
           variant="primary-outline"
           @click="backOrdertype2()"
+        >
+          Back
+        </rs-button>
+      </div>
+
+      <div v-if="deliveryTime == true">
+        <FormKit
+          type="time"
+          label="Delivery time"
+          v-model="timer3"
+          value="23:15"
+        />
+        <FormKit
+          type="date"
+          label="Delivery Date"
+          validation="required"
+          v-model="datepicker"
+        />
+        <FormKit
+          type="select"
+          label="Location"
+          v-model="location"
+          :options="['Kampus ', 'Lotus Bandar Puteri Bangi', 'PR1MA Bandar Bukit Mahkota', 'Apartment Putra', 'Apartment Seri Melati']"
+        />
+
+        <rs-button class="w-full bg-heandshe" @click="addDelivery()"
+          >Proceed</rs-button
+        >
+        <hr class="my-3" />
+        <rs-button
+          class="w-full"
+          variant="primary-outline"
+          @click="backOrdertype()"
         >
           Back
         </rs-button>
@@ -381,6 +415,7 @@ export default {
       picktimer: false,
       customerProceed: false,
       preordertime: false,
+      deliveryTime: false,
 
       /* DATA NULL */
       name: "",
@@ -389,6 +424,9 @@ export default {
       password: "",
       timestamp: "",
       timer: "",
+      datepicker: "",
+      location: "",
+      timer3: "",
       timer2: "",
       table2: "",
       table: 0,
@@ -550,6 +588,11 @@ export default {
       this.preordertime = true;
     },
 
+    async pickDelivery() {
+      this.pickOrdertype = false;
+      this.deliveryTime = true;
+    },
+
     async backOrdertype() {
       this.pickOrdertype = true;
       this.picktimer = false;
@@ -591,22 +634,45 @@ export default {
     },
     async addTime() {
       const today = moment();
-      if (this.timer <= today.format("HH:mm")) {
+      /* if (this.timer <= today.format("HH:mm")) {
         alert("Please pick above current time");
-      } else {
-        if (this.timer < "10:30" || this.timer > "20:00") {
-          alert("Outside Working Hours");
-        } else {
-          localStorage.time = this.timer;
-          localStorage.branch = this.branch;
-          this.customerProceed = true;
-          this.$router.push({
-            name: "takeaway",
-            params: { branchID: this.branch, orderID: "", table: 0 },
-          });
-        }
-      }
+      } else { */
+      /*  if (this.timer < "10:30" || this.timer > "20:00") { */
+      /* alert("Outside Working Hours"); */
+      /*  } else { */
+      localStorage.time = this.timer;
+      localStorage.branch = this.branch;
+      this.customerProceed = true;
+      this.$router.push({
+        name: "takeaway",
+        params: { branchID: this.branch, orderID: "", table: 0 },
+      });
+      /* } */
+      /* } */
     },
+
+    async addDelivery() {
+      const today = moment();
+
+      /* if (this.timer <= today.format("HH:mm")) {
+        alert("Please pick above current time");
+      } else { */
+      /*  if (this.timer < "10:30" || this.timer > "20:00") { */
+      /* alert("Outside Working Hours"); */
+      /*  } else { */
+      localStorage.time = this.timer3;
+      localStorage.date = this.datepicker;
+      localStorage.branch = this.branch;
+      localStorage.location = this.location;
+      this.customerProceed = true;
+      this.$router.push({
+        name: "delivery",
+        params: { branchID: this.branch, orderID: "", table: 0 },
+      });
+      /* } */
+      /* } */
+    },
+
     async pickOrder(table) {
       if (table != 0 && table > 0) {
         this.customerProceed = true;

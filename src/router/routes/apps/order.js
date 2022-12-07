@@ -49,4 +49,14 @@ export default [
     name: "paymentlink",
     component: () => import("@/views/apps/order/OrderPaymentLink.vue"),
   },
+  {
+    path: "/Delivery/:branchID?/:table?/:orderID?",
+    name: "delivery",
+    component: () => import("@/views/apps/order/OrderDelivery.vue"),
+  },
+  {
+    path: "/Delivery/payment/:id",
+    name: "order-payment-delivery",
+    component: () => import("@/views/apps/order/OrderPaymentDelivery.vue"),
+  },
 ];
