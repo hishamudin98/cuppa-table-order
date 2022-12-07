@@ -199,7 +199,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>    
         </rs-card>
       </div>
     </perfect-scrollbar>
