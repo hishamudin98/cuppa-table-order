@@ -151,7 +151,10 @@ export default {
             for (let i = 0; i < this.orderData.length; i++) {
               if (this.orderData[i].orderType == "2") {
                 this.order_type = "Take Away";
-              } else {
+              }else if (this.orderData[i].orderType == "4"){
+                this.order_type = "Delivery";
+              }
+               else {
                 this.order_type = "Dine In";
               }
               this.orders.push({

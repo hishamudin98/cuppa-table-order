@@ -1203,7 +1203,7 @@ export default {
         var config = {
           method: "post",
           url:
-            process.env.VUE_APP_FNB_URL_LOCAL +
+            process.env.VUE_APP_FNB_URL +
             "/tbl/insertOrder" /* http://localhost:3000tbl/insertOrder */,
           headers: {
             "Content-Type": "application/json",
