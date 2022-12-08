@@ -23,7 +23,7 @@
           <router-link
             class="flex items-center justify-center"
             :to="{
-              name: 'takeaway',
+              name: 'delivery',
               params: {
                 branchID: this.branch,
                 table: this.tableNo,
@@ -111,7 +111,17 @@
                     </div>
                   </div>
                   <div
-                    class="flex items-center justify-center h-7 w-7 bg-heandshe text-primary-100 rounded-full text-sm"
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      h-7
+                      w-7
+                      bg-heandshe
+                      text-primary-100
+                      rounded-full
+                      text-sm
+                    "
                   >
                     x{{ product.menu_quantity }}
                   </div>
@@ -124,7 +134,7 @@
     </perfect-scrollbar>
   </div>
   <div v-if="this.orders2.length != 0">
-    <div class="font-semibold text-xl mx-3 mt-4 mb-3">Takeaway</div>
+    <div class="font-semibold text-xl mx-3 mt-4 mb-3">Delivery</div>
     <perfect-scrollbar style="height: 17rem">
       <div class="gap-4">
         <rs-card
@@ -192,14 +202,24 @@
                     </div>
                   </div>
                   <div
-                    class="flex items-center justify-center h-7 w-7 bg-heandshe text-primary-100 rounded-full text-sm"
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      h-7
+                      w-7
+                      bg-heandshe
+                      text-primary-100
+                      rounded-full
+                      text-sm
+                    "
                   >
                     x{{ product.menu_quantity }}
                   </div>
                 </div>
               </div>
             </div>
-          </div>    
+          </div>
         </rs-card>
       </div>
     </perfect-scrollbar>
@@ -237,9 +257,23 @@
       <hr />
       <div class="total flex justify-between my-2 text-xl">
         <div class="font-semibold">Total</div>
-        <div class="font-semibold">RM {{ formatPrice(this.totalPay + 4.00) }}</div>
+        <div class="font-semibold">
+          RM {{ formatPrice(this.totalPay + 4.0) }}
+        </div>
       </div>
     </rs-card>
+
+    <div class="text-base font-semibold">Delivery Address</div>
+    <div class="flex mb-2">
+      <div class="w-full">
+        <FormKit
+          type="text"
+          label="Postcode"
+          placeholder="Postcode"
+        />
+        <FormKit type="textarea" rows="5" label="Address" placeholder="Delivery Address..." />
+      </div>
+    </div>
 
     <div class="text-base font-semibold">Payment Type</div>
     <div class="flex mb-2">
@@ -249,7 +283,16 @@
             class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
           >
             <a
-              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              class="
+                text-xs
+                font-bold
+                uppercase
+                px-5
+                py-4
+                shadow
+                block
+                leading-normal
+              "
               @click="toggleTabs(1)"
               :class="{
                 'text-primary bg-white': paymentMethod !== 1,
@@ -277,7 +320,16 @@
             class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
           >
             <a
-              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              class="
+                text-xs
+                font-bold
+                uppercase
+                px-5
+                py-4
+                shadow
+                block
+                leading-normal
+              "
               @click="toggleTabs(2)"
               :class="{
                 'text-primary bg-white': paymentMethod !== 2,
@@ -295,10 +347,27 @@
             </a>
           </li>
           <li
-            class="-mb-px mr-2 last:mr-0 flex-auto text-left sm:text-center relative"
+            class="
+              -mb-px
+              mr-2
+              last:mr-0
+              flex-auto
+              text-left
+              sm:text-center
+              relative
+            "
           >
             <a
-              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              class="
+                text-xs
+                font-bold
+                uppercase
+                px-5
+                py-4
+                shadow
+                block
+                leading-normal
+              "
               @click="toggleTabs(3)"
               :class="{
                 'text-primary bg-white': paymentMethod !== 3,
@@ -335,7 +404,17 @@
                   <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
                     <div v-for="val in getBankCode" :key="val.CODE">
                       <button
-                        class="px-4 pb-2 pt-3 bg-gray-200 hover:bg-gray-300 text-sm font-medium w-full h-full"
+                        class="
+                          px-4
+                          pb-2
+                          pt-3
+                          bg-gray-200
+                          hover:bg-gray-300
+                          text-sm
+                          font-medium
+                          w-full
+                          h-full
+                        "
                         @click="SetBank(val.CODE)"
                         :class="{
                           '!bg-heandshe text-white': bankcode === val.CODE,
@@ -427,7 +506,7 @@
         {{ formatPrice(Math.ceil(this.totalPay)) }}</rs-button
       > -->
     <!-- <router-link :to="{ name: 'order-confirm' }"> -->
-    <hr class="my-1" />
+    <!--  <hr class="my-1" />
     <center>OR</center>
     <hr class="mb-4" />
     <rs-button
@@ -438,7 +517,7 @@
     >
       <span v-if="loading"> Loading </span>
       <span v-else> Pay at counter RM {{ formatPrice(this.totalPay) }}</span>
-    </rs-button>
+    </rs-button> -->
     <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
         Pay Online RM {{ formatPrice(this.totalPay) }}
       </rs-button> -->
@@ -454,7 +533,18 @@
       <div class="rounded-t-3xl" style="min-height: 90vh">
         <perfect-scrollbar class="mb-4" style="height: 90vh">
           <button
-            class="flex justify-center items-center p-1 bg-heandshe absolute top-2 right-2 rounded-full z-50"
+            class="
+              flex
+              justify-center
+              items-center
+              p-1
+              bg-heandshe
+              absolute
+              top-2
+              right-2
+              rounded-full
+              z-50
+            "
           >
             <vue-feather
               @click="openModal = false"
@@ -544,7 +634,13 @@
                             :value="val"
                           />
                           <label
-                            class="text-gray-700 dark:text-gray-200 text-sm formkit-disabled:text-gray-300 dark:formkit-disabled:text-gray-700"
+                            class="
+                              text-gray-700
+                              dark:text-gray-200
+                              text-sm
+                              formkit-disabled:text-gray-300
+                              dark:formkit-disabled:text-gray-700
+                            "
                             :for="modalData.sku + '-check-' + index"
                           >
                             {{ val }}
@@ -553,13 +649,29 @@
                         </div>
                         <div class="flex items-center gap-x-2">
                           <button
-                            class="flex items-center justify-center bg-primary-400 text-primary-50 p-1 rounded-lg"
+                            class="
+                              flex
+                              items-center
+                              justify-center
+                              bg-primary-400
+                              text-primary-50
+                              p-1
+                              rounded-lg
+                            "
                           >
                             <vue-feather size="1rem" type="minus"></vue-feather>
                           </button>
                           <span class="text-gray-500">x1</span>
                           <button
-                            class="flex items-center justify-center bg-primary-400 text-primary-50 p-1 rounded-lg"
+                            class="
+                              flex
+                              items-center
+                              justify-center
+                              bg-primary-400
+                              text-primary-50
+                              p-1
+                              rounded-lg
+                            "
                           >
                             <vue-feather size="1rem" type="plus"></vue-feather>
                           </button>
@@ -582,7 +694,16 @@
             </div> -->
           <div v-if="this.status != 'FAIL'">
             <div
-              class="modal-item-action flex w-full justify-between items-center overflow-auto px-2 gap-x-2"
+              class="
+                modal-item-action
+                flex
+                w-full
+                justify-between
+                items-center
+                overflow-auto
+                px-2
+                gap-x-2
+              "
             >
               <button
                 class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
@@ -597,14 +718,30 @@
               </button>
               <div class="flex gap-x-2">
                 <button
-                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-heandshe
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
                   @click="decrement()"
                 >
                   <vue-feather type="minus"></vue-feather>
                 </button>
                 {{ modalData.menu_quantity }}
                 <button
-                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-heandshe
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
                   @click="increment()"
                 >
                   <vue-feather type="plus"></vue-feather>
@@ -625,7 +762,18 @@
     <template #custom>
       <div class="rounded-t-3xl" style="min-height: 50vh">
         <button
-          class="flex justify-center items-center p-1 bg-primary-400 absolute top-2 right-2 rounded-full z-50"
+          class="
+            flex
+            justify-center
+            items-center
+            p-1
+            bg-primary-400
+            absolute
+            top-2
+            right-2
+            rounded-full
+            z-50
+          "
         >
           <vue-feather
             @click="openModalConfirmation = false"
@@ -962,7 +1110,7 @@ export default {
   },
 
   mounted() {
-   /*  document.onclick = () => {
+    /*  document.onclick = () => {
       this.idleSecondsCounter = 0;
     };
     document.onmousemove = () => {
@@ -977,8 +1125,8 @@ export default {
   methods: {
     /* async idleChecker() {
       this.idleSecondsCounter++; */
-      /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
-     /*  if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
+    /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
+    /*  if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
         clearInterval(this.idleSecondsTimer);
         this.idleSecondsTimer = null;
         this.idleSecondsCounter = 0;

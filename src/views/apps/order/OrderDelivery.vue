@@ -1,135 +1,5 @@
 <template>
-  <!-- Get Customer and Phone -->
-  <!-- <div v-if="customerProceed == false" class="order-customer">
-      <div
-        style="
-          height: 56vh;
-          border-bottom-left-radius: 2rem;
-          border-bottom-right-radius: 2rem;
-        "
-        class="bg-primary-400 after:content-['']"
-      >
-        <div class="flex justify-between items-center p-2">
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/logo-white.png"
-              alt=""
-            />
-          </div>
-          <div class="text-white">Malaya Grill Sungai Buloh </div>
-        </div>
-        <div
-          style="height: 40vh"
-          class="flex flex-col justify-center items-center"
-        >
-          <div class="w-70">
-            <img
-              class="object-scale-down"
-              src="@/assets/images/illustration/eating.svg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="m-8">
-        <div
-          class="
-            order-table-number
-            flex
-            items-center
-            justify-center
-            font-semibold
-            text-2xl
-            md:text-3xl
-            mb-4
-            gap-x-2
-          "
-        >
-          <span v-if="changetable == false"
-            >Table #{{ table ? table : "0" }}</span
-          >
-          <div v-else class="flex justify-center items-center">
-            Table #
-            <form-kit
-              type="number"
-              validation="min:0"
-              :validation-messages="{
-                min: 'Please enter table number',
-              }"
-              :classes="{
-                input: 'w-12 !h-8 !text-2xl !text-center !font-semibold !p-0',
-                outer: 'mb-0',
-              }"
-              v-model.number="table"
-              @keydown="nameKeydown($event)"
-            />
-          </div>
-          <button
-            class="
-              p-1
-              px-2
-              bg-primary-400
-              text-white
-              rounded-xl
-              text-sm
-              hover:bg-primary-300
-            "
-            @click="changetable ? (changetable = false) : (changetable = true)"
-          >
-            Change table
-          </button>
-        </div>
-        <div v-if="guestMode == true">
-          <div class="h-full p-4">
-            <rs-button
-              class="w-full mb-4"
-              @click="customerAdvanced((dataUser = 'Guest'))"
-            >
-              Enter Customer Details
-            </rs-button>
-            <hr class="my-6" />
-            <rs-button
-              @click="customerAdvancedOrder(table)"
-              class="w-full"
-              variant="primary-outline"
-              >Guest
-            </rs-button>
-          </div>
-        </div>
-        <div v-else>
-          <form-kit
-            type="text"
-            placeholder="Enter your name"
-            validation="required"
-            :validation-messages="{
-              required: 'Please enter a name',
-            }"
-            v-model="name"
-          />
-          <form-kit
-            type="number"
-            placeholder="Enter your phone number"
-            v-model="phone"
-          />
-          <rs-button
-            :disabled="isDisabled"
-            class="w-full"
-            @click="customerAdvancedOrder(table)"
-            >Proceed Order</rs-button
-          >
-          <hr class="my-3" />
-          <rs-button
-            class="w-full"
-            variant="primary-outline"
-            @click="guestMode = true"
-          >
-            Back
-          </rs-button>
-        </div>
-      </div>
-    </div> -->
+  
 
   <!-- v-elseOrder Menu Page -->
   <div class="order-menu-page">
@@ -151,11 +21,11 @@
               Hishammudin Ali
             </div>
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
-          <div class="text-white">He & She UM</div>
+          <div class="text-white">Cuppa 365 Coffee</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
             <img
               class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
+              src="@/assets/images/logo/cuppa.png"
               alt=""
             />
           </div>
@@ -222,7 +92,7 @@
               >
                 <img
                   class="h-full w-full object-scale-down rounded-full"
-                  src="@/assets/images/logo/heandshe.jpg"
+                  src="@/assets/images/logo/cuppa.png"
                 />
               </div>
               <span>All Menu</span>
@@ -901,7 +771,7 @@ export default {
         }
         totalPrice.value = total;
       }
-      picked = 2;
+      picked = 4;
       quantity.value = 1;
       openModal.value = false;
       variasi.value = "";
@@ -1010,7 +880,7 @@ export default {
       name: "",
       phone: "",
       table: 0,
-      picked: "2",
+      picked: "4",
       IDMENU: 0,
       quantity: 1,
       mmberShip: "",
@@ -1124,7 +994,7 @@ export default {
             for (let i = 0; i < response.data.data.length; i++) {
               this.categories.push({
                 name: response.data.data[i].category_name,
-                image: `https://s3.ap-southeast-1.amazonaws.com/cdn.heandshe.toyyibfnb.com/logo.jpg`,
+                image: `https://s3.ap-southeast-1.amazonaws.com/cdn.ngam.my/cuppa-coffee/logo.png`,
                 id: response.data.data[i].category_id,
               });
             }
@@ -1298,7 +1168,7 @@ export default {
         var config = {
           method: "post",
           url:
-            process.env.VUE_APP_FNB_URL_LOCAL +
+            process.env.VUE_APP_FNB_URL +
             "/tbl/updateOrdertbl" /* http://localhost:3000tbl/updateOrdertbl*/,
           headers: {
             "Content-Type": "application/json",
