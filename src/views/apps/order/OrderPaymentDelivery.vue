@@ -231,7 +231,7 @@
         <div>RM {{ formatPrice(this.totalAmount) }}</div>
       </div>
       <div class="subtotal flex justify-between my-2">
-        <div class="font-semibold">Delivery</div>
+        <div class="font-semibold">Delivery Charges</div>
         <div>RM 4.00</div>
       </div>
       <!--  <div class="discount flex justify-between my-2">
@@ -443,7 +443,7 @@
                   >
                     <span v-if="loading"> Loading </span>
                     <span v-else
-                      >Pay Online RM {{ formatPrice(this.totalPay) }}</span
+                      >Pay Online RM {{ formatPrice(this.totalPay + 4.00) }}</span
                     >
                   </rs-button>
                 </div>

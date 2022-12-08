@@ -319,7 +319,7 @@
         />
         <FormKit
           type="select"
-          label="Location"
+          label="Location Area"
           v-model="location"
           :options="['Kampus ', 'Lotus Bandar Puteri Bangi', 'PR1MA Bandar Bukit Mahkota', 'Apartment Putra', 'Apartment Seri Melati']"
         />
