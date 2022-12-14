@@ -58,7 +58,6 @@ export default [{
         path: "/admin/menu/raw-material/:menuid?",
         name: "admin-menu-rawmaterial",
         component: () =>
-
             import ("@/views/apps/administrator/Menu/adminMenuRawMaterial.vue"),
         meta: {
             title: "Menu Raw Material Management",
@@ -124,8 +123,16 @@ export default [{
         path: "/admin/supplier",
         name: "admin-supplier",
         component: () =>
-            import ("@/views/apps/administrator/supplier/manageSupplier.vue")
+            import ("@/views/apps/administrator/supplier/hq/manageSupplier.vue")
     },
+
+    {
+        path: "/admin/outlet/supplier",
+        name: "outlet-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/supplier/outlet/manageSupplier.vue")
+    },
+
 
     {
         path: "/admin/manage-stock",
@@ -159,14 +166,18 @@ export default [{
         path: "/admin/manage-order-stock",
         name: "manage-order-stock-supplier",
         component: () =>
-            import ("@/views/apps/administrator/purchaseOrder/hq/manageOrderSupplier.vue")
+            import (
+                "@/views/apps/administrator/purchaseOrder/hq/manageOrderSupplier.vue"
+            )
     },
 
     {
         path: "/admin/manage-order-stock/:id",
         name: "order-stock-supplier",
         component: () =>
-            import ("@/views/apps/administrator/purchaseOrder/hq/manageStockOrderSupplier.vue")
+            import (
+                "@/views/apps/administrator/purchaseOrder/hq/manageStockOrderSupplier.vue"
+            )
     },
 
     {
@@ -194,14 +205,28 @@ export default [{
         path: "/admin/outlet/manage-stock",
         name: "outlet-manage-stock",
         component: () =>
-            import ("@/views/apps/administrator/stock/outlet/manageStock.vue")
+            import ("@/views/apps/administrator/stock/outlet/manageStock.vue"),
+        meta: {
+            title: "Manage Stock",
+            breadcrumb: [{
+                    title: "Home",
+                    route: { name: "dashboard" }
+                },
+                {
+                    title: "Stock",
+                    route: {
+                        name: "outlet-manage-stock"
+                    }
+                }
+            ]
+        }
     },
 
     {
         path: "/admin/manage-order-stock-outlet",
         name: "manage-order-stock-outlet",
         component: () =>
-            import ("@/views/apps/administrator/stock/outlet/manageOrder.vue")
+            import ("@/views/apps/administrator/purchaseOrder/outlet/manageOrder.vue")
     },
 
     {
@@ -215,7 +240,7 @@ export default [{
         path: "/admin/store",
         name: "manage-store",
         component: () =>
-            import ("@/views/apps/administrator/store/manageStore.vue"),
+            import ("@/views/apps/administrator/store/hq/manageStore.vue"),
         meta: {
             title: "Store",
             breadcrumb: [{
@@ -225,6 +250,25 @@ export default [{
                 {
                     title: "Store",
                     route: { name: "manage-store" }
+                }
+            ]
+        }
+    },
+
+    {
+        path: "/admin/outlet/store",
+        name: "outlet-manage-store",
+        component: () =>
+            import ("@/views/apps/administrator/store/outlet/manageStore.vue"),
+        meta: {
+            title: "Store",
+            breadcrumb: [{
+                    title: "Home",
+                    route: { name: "dashboard" }
+                },
+                {
+                    title: "Store",
+                    route: { name: "outlet-manage-store" }
                 }
             ]
         }
@@ -255,25 +299,25 @@ export default [{
         path: "/admin/organization",
         name: "admin-organization",
         component: () =>
-            import ("@/views/apps/administrator/organization/adminOrganization.vue"),
-        /* meta: {
-            title: "Manage Stock",
-            breadcrumb: [{
-                    title: "Home",
-                    route: { name: "dashboard" }
-                },
-                {
-                    title: "Stock",
-                    route: {
-                        name: "hq-manage-stock"
-                    }
-                }
-            ]
-        } */
+            import ("@/views/apps/administrator/organization/adminOrganization.vue")
+            /* meta: {
+                    title: "Manage Stock",
+                    breadcrumb: [{
+                            title: "Home",
+                            route: { name: "dashboard" }
+                        },
+                        {
+                            title: "Stock",
+                            route: {
+                                name: "hq-manage-stock"
+                            }
+                        }
+                    ]
+                } */
     },
 
     {
-        path: "/admin/delivery-order-outlet",
+        path: "/admin/outlet/delivery-order",
         name: "manage-delivery-order-outlet",
         component: () =>
             import ("@/views/apps/administrator/deliveryOrder/outlet/manageDO.vue")
@@ -316,10 +360,31 @@ export default [{
         name: "manage-invoice-supplier",
         component: () =>
             import ("@/views/apps/administrator/invoice/supplier/manageInvoice.vue")
-    }
+    },
     /*{
-                          path: "/order/previous/:orderID?",
-                          name: "order-previous",
-                          component: () => import("@/views/apps/order/OrderPrevious.vue"),
-                        }, */
+                            path: "/order/previous/:orderID?",
+                            name: "order-previous",
+                            component: () => import("@/views/apps/order/OrderPrevious.vue"),
+                          }, */
+
+    {
+        path: "/admin/supplier/stock-details/:id",
+        name: "supplier-stock-details",
+        component: () =>
+            import ("@/views/apps/administrator/stock/supplier/manageStock.vue"),
+        meta: {
+            title: "Stock Details",
+            breadcrumb: [{
+                    title: "Supplier",
+                    route: { name: "admin-supplier" }
+                },
+                {
+                    title: "Stock",
+                    route: {
+                        name: "supplier-stock-details"
+                    }
+                }
+            ]
+        }
+    }
 ];
