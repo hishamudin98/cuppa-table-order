@@ -19,7 +19,7 @@
                             }" />
                         </div>
 
-                        <div class="w-1/12" style="padding-top: 10px">
+                        <div class="w-1/12" style="">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Store
                             </rs-button>
                         </div>
@@ -36,20 +36,7 @@
                                         <Column field="sto_Name" header="Name"></Column>
                                         <Column field="sto_Email" header="Email"></Column>
                                         <Column field="sto_PhoneNo" header="PhoneNo"></Column>
-                                        <Column field="sto_Type" header="Type">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Type === '1'">HQ</p>
-                                                <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                            </template>
-                                        </Column>
-
-                                        <Column field="sto_outletName" header="Owned By">
-                                            <template #body="searchStore">
-                                                <p v-if="(searchStore.data.sto_outletName === null)">HQ</p>
-                                                <p v-if="searchStore.data.sto_outletName !== ''">
-                                                    {{ searchStore.data.sto_outletName }}</p>
-                                            </template>
-                                        </Column>
+                                       
 
                                         <Column field="sto_Status" header="Status">
                                             <template #body="searchStore">
@@ -61,7 +48,8 @@
 
 
                                         <Column :exportable="false" header="Details Stock">
-                                            <template #body="">
+                                            <template #body="searchStore">
+                                                <p v-if="searchStore.data.sto_Status === '1'" hidden>Active</p>
                                                 <router-link :to="{ name: 'hq-manage-stock' }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
@@ -106,15 +94,6 @@
             <FormKit label="Postcode" type="text" v-model="postcode" />
             <FormKit label="Address" type="textarea" v-model="address" />
             <FormKit label="PIC Name" type="text" v-model="pic" />
-            <FormKit v-model="storeType" type="radio" label="Store Type" :options="[
-                { label: 'HQ', value: 1 },
-                { label: 'Outlet', value: 2 },
-            ]" />
-
-            <div v-if="(storeType == 2)">
-                <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
-                    :options="this.listOutlet" />
-            </div>
 
             <rs-button style="float: right" @click="insertStore()" class="bg-heandshe hover:bg-heandshe">
                 Save
@@ -176,7 +155,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -201,8 +180,7 @@ export default {
     },
     async created() {
         this.getdata();
-        this.getStore();
-        this.getOutlet();
+
     },
 
     methods: {
@@ -225,6 +203,10 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+
+                        this.getStore();
+                        this.getOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -236,11 +218,12 @@ export default {
             var axios = require("axios");
             var data = JSON.stringify({
                 type: 0,
+                staffId: this.staffId,
             });
             var config = {
                 method: "post",
 
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -301,8 +284,9 @@ export default {
                 postcode: this.postcode,
                 address: this.address,
                 pic: this.pic,
-                storeType: this.storeType,
+                storeType: 2,
                 selectOutlet: this.selectOutlet,
+                staffId: this.staffId,
             });
             console.log("Insert data :", data);
             var config = {
