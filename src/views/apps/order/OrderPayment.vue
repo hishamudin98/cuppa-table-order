@@ -931,10 +931,10 @@ export default {
       status: "",
 
       /* TIMER IDLE */
-      IDLE_COUNTER: 60,
+      /* IDLE_COUNTER: 60,
       LOADING_COUNTER: 30,
       idleSecondsTimer: 0,
-      idleSecondsCounter: 0,
+      idleSecondsCounter: 0, */
       tablNo: 0,
 
       /* LOADING */
@@ -958,7 +958,7 @@ export default {
   },
 
   mounted() {
-    document.onclick = () => {
+    /* document.onclick = () => {
       this.idleSecondsCounter = 0;
     };
     document.onmousemove = () => {
@@ -967,14 +967,14 @@ export default {
     document.ontouchmove = () => {
       this.idleSecondsCounter = 0;
     };
-    this.idleSecondsTimer = setInterval(this.idleChecker, 1000);
+    this.idleSecondsTimer = setInterval(this.idleChecker, 1000); */
   },
 
   methods: {
-    async idleChecker() {
-      this.idleSecondsCounter++;
+    /* async idleChecker() {
+      this.idleSecondsCounter++; */
       /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
-      if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
+      /* if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
         clearInterval(this.idleSecondsTimer);
         this.idleSecondsTimer = null;
         this.idleSecondsCounter = 0;
@@ -984,7 +984,7 @@ export default {
           params: { branchID: this.branch, table: this.tablNo },
         });
       }
-    },
+    }, */
     async SetBank(code) {
       this.bankcode = code;
     },
