@@ -2,9 +2,29 @@
     <rs-layout>
         <rs-breadcrumb />
         <div style="display: flex; flex-direction: row">
-
             <div class="w-full h-1/4 flex flex-col">
-
+                <!-- <div class="w-full flex flex-row mb-0">
+                        <div class="inline-block w-1/2 pr-10">
+                            <rs-card>
+                                <div class="text-center pt-10 pb-2">
+                                    <strong>Total of Raw Material </strong>
+                                </div>
+                                <hr />
+                                <div class="text-center py-8">{{ this.totalData }} Raw Material</div>
+                            </rs-card>
+                        </div>
+                        <div class="inline-block w-1/2 pr-10">
+                            <rs-card>
+                                <div class="text-center pt-10 pb-2">
+                                    <strong>Total Price Raw Material ( RM )</strong>
+                                </div>
+                                <hr />
+                                <div class="text-center py-8">
+                                    {{ formatPrice(this.sumPrice) }}
+                                </div>
+                            </rs-card>
+                        </div>
+                    </div> -->
                 <div class="w-full" style="flex-direction: column">
                     <!-- UNTUK ATAS BAWAH -->
                     <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -16,12 +36,10 @@
                                 input: 'h-10',
                             }" />
                         </div>
-
-                        <div class="w-1/12" style="">
-                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Stock
+                        <div class="w-1/12" style="padding-top: 10px">
+                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Raw Material
                             </rs-button>
                         </div>
-
                     </div>
                     <div class="">
                         <rs-card style="margin-top: 40px">
@@ -37,19 +55,20 @@
                                         <Column field="rm_Sku" header="SKU"></Column>
                                         <Column field="rm_Quantity" header="Quantity">
                                             <template #body="searchRawMaterial">
-                                                <p v-if="searchRawMaterial.data.rm_Quantity <= 5"
+                                                <p v-if="(searchRawMaterial.data.rm_Quantity <= searchRawMaterial.data.rm_MinQuantity)"
                                                     style="color:red; font-weight: bold;">
                                                     {{ searchRawMaterial.data.rm_Quantity }}</p>
                                                 <p v-else>{{ searchRawMaterial.data.rm_Quantity }}</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_MinQuantity" header="Min. Quantity"></Column>
-                                        <Column field="rm_MinQuantity" header="Quantity By Packaging Type">
+                                        <Column field="rm_quanityByPackagingType" header="Quantity By Packaging Type">
                                         </Column>
                                         <Column field="rm_Packaging" header="Packaging Type">
                                             <template #body="searchRawMaterial">
                                                 <p v-if="searchRawMaterial.data.rm_Packaging === '1'">Box</p>
                                                 <p v-if="searchRawMaterial.data.rm_Packaging === '2'">Packet</p>
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '3'">Carton</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_Unit" header="Measurement">
@@ -76,27 +95,10 @@
                                         <Column field="rm_Status" header="Status">
                                             <template #body="searchRawMaterial">
                                                 <rs-badges variant="danger"
-                                                    v-if="searchRawMaterial.data.rm_Quantity <= searchRawMaterial.data.rm_MinQuantity">
+                                                    v-if="(searchRawMaterial.data.rm_Quantity <= searchRawMaterial.data.rm_MinQuantity)">
                                                     Low Stock</rs-badges>
                                                 <rs-badges variant="success" v-else>
                                                     In Stock</rs-badges>
-
-                                            </template>
-
-                                        </Column>
-
-                                        <Column field="rm_StoreName" header="Store">
-                                            <template #body="searchRawMaterial">
-                                                <p>{{ searchRawMaterial.data.rm_StoreName }}</p>
-                                            </template>
-
-                                        </Column>
-
-                                        <Column field="rm_Status" header="Level">
-                                            <template #body="searchRawMaterial">
-                                                <p v-if="searchRawMaterial.data.rm_Status === '1'">
-                                                    1</p>
-                                                <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
 
                                             </template>
 
@@ -230,14 +232,41 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Stock" v-model="modalRawMaterial" position="middle" size="md">
-            <FormKit type="select" label="Stock" placeholder="Select Stock" v-model="selectRawMaterial"
-                :options="this.rawMaterialHq" />
+        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
+            <FormKit label="Name" type="text" v-model="name" />
+
+            <FormKit type="select" label="Category" v-model="selectCategory" :options="[
+                { label: 'Product', value: 1 },
+                { label: 'Services', value: 2 },
+            ]" />
+            <FormKit label="SKU" type="text" v-model="sku" />
             <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
             <FormKit label="Quantity" type="number" v-model="quantity" />
+
             <FormKit label="Price (RM)" type="number" v-model="price" />
-            <FormKit type="select" v-model="selectStoreOutlet" label="Store" :options="this.listStoreOutlet"
-                placeholder="Select Store" />
+            <FormKit class="" type="file" label="Images" accept=".jpg, .png, .jpeg" v-model="image" />
+            <FormKit type="select" label="Packaging Type" v-model="packaging_type" placeholder="Choose Packaging Type"
+                :options="this.typePackaging" />
+            <FormKit label="Quantity By Packaging Type" type="number" v-model="quantity_packaging_type" />
+            <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
+                :options="this.unitMeasurement" />
+
+            <FormKit type="select" label="Type Store" v-model="selectType" placeholder="Select Store Type" :options="[
+                { label: 'HQ', value: 1 },
+                { label: 'Outlet', value: 2 },
+            ]" />
+
+            <div v-if="(selectType == 1)">
+                <FormKit type="select" v-model="selectStore" label="Store" :options="this.listStoreHQ"
+                    placeholder="Select Store" />
+            </div>
+
+            <div v-if="(selectType == 2)">
+                <FormKit type="select" v-model="selectStore" label="Store" :options="this.listStoreOutlet"
+                    placeholder="Select Store" />
+            </div>
+
+            <!-- {{ this.listStore }} -->
 
             <FormKit label="Level 1" type="text" v-model="level_1" />
             <FormKit label="Level 2" type="text" v-model="level_2" />
@@ -267,10 +296,10 @@ export default {
     components: {
         RsButton,
         DataTable,
+        RsBadges,
         RsModal,
         Column,
         Button,
-        RsBadges
     },
     setup() {
         const rawMaterial = ref([]);
@@ -306,7 +335,7 @@ export default {
     },
     data() {
         return {
-            staffId: "",
+            staffid: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -317,22 +346,33 @@ export default {
             expandedRows: [],
 
             name: null,
+            selectCategory: null,
+            sku: null,
             quantity: null,
             minquantity: null,
             price: null,
+            image: null,
+            packaging_type: null,
+            measurement: null,
+            selectType: '',
+            selectStore: '',
             modalRawMaterial: false,
-            selectRawMaterial: null,
-            selectStoreOutlet: null,
             level_1: null,
             level_2: null,
             level_3: null,
+            quantity_packaging_type: null,
 
-            rawMaterialHq: [],
+            listStore: [],
+            listStoreHQ: [],
             listStoreOutlet: [],
         };
     },
     async created() {
         this.getdata();
+        this.getStore();
+        this.getStoreHQ();
+        this.getStoreOutlet();
+        this.getRawMaterialBySupplierId();
         this.getTypePackaging();
         this.getUnitMeasurement();
     },
@@ -357,10 +397,111 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
-                        this.staffId = response.data.data[0].staff_id;
-                        this.getRawMaterial();
-                        this.getRawMaterialHq();
-                        this.getStoreOutlet();
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStore(value) {
+            this.listStore = [];
+            // let value = this.selectStore;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStore.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStoreHQ() {
+            this.listStore = [];
+            let value = 1;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStoreHQ.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStoreOutlet() {
+            this.listStore = [];
+            let value = 2;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStoreOutlet.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -420,14 +561,14 @@ export default {
                 });
         },
 
-        async getRawMaterial() {
+        async getRawMaterialBySupplierId() {
             var axios = require("axios");
             var data = JSON.stringify({
-                staffId: this.staffId,
+                supplierId: this.$route.params.id
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialBySupplier",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -439,7 +580,7 @@ export default {
                         // console.log("price", response.data.data.rm_Price[0]);
                         this.rawMaterial = response.data.data;
                         this.totalData = this.rawMaterial.length;
-                        console.log("respons 123e", response);
+
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
                             price += response.data.data[i].rm_Price;
@@ -453,59 +594,33 @@ export default {
                 });
         },
 
-        async getRawMaterialHq() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialHq",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        // console.log("price", response.data.data.rm_Price[0]);
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.rawMaterialHq.push({
-                                label: response.data.data[i].rm_Name,
-                                value: response.data.data[i].rm_Id,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
         async clickBtnAdd() {
             // this.users1 = user.data;
             this.modalRawMaterial = true;
         },
 
         async insertRawMaterial() {
+            console.log("Insert Raw Material", this.selectCategory);
             var axios = require("axios");
             var data = JSON.stringify({
-                staffId: this.staffId,
-                rawMaterialId: this.selectRawMaterial,
+                name: this.name,
+                selectCategory: this.selectCategory,
+                sku: this.sku,
                 quantity: this.quantity,
                 minquantity: this.minquantity,
                 price: this.price,
-                store: this.selectStoreOutlet,
+                packaging_type: this.packaging_type,
+                quantity_packaging_type: this.quantity_packaging_type,
+                measurement: this.measurement,
+                store: this.selectStore,
                 level_1: this.level_1,
                 level_2: this.level_2,
                 level_3: this.level_3,
-
             });
             console.log("Insert data :", data);
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterialOutlet",
+                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -520,37 +635,6 @@ export default {
                             this.getRawMaterial();
                         } else {
                             alert(response.data.message);
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getStoreOutlet() {
-            this.listStoreOutlet = [];
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        console.log('response', response.data.data);
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listStoreOutlet.push({
-                                label: response.data.data[i].sto_Name,
-                                value: response.data.data[i].sto_Id,
-                            });
                         }
                     }.bind(this)
                 )
