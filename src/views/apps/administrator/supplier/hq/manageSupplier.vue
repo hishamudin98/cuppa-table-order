@@ -75,15 +75,17 @@
 
                     <Column :exportable="false" header="Details">
                       <template #body="searchSupplier">
-                        <Button icon="pi pi-truck" class="p-button-rounded p-button-info"
-                          @click="deleteUser(searchSupplier)" />
+                        <router-link
+                          :to="{ name: 'supplier-stock-details', params: { id: searchSupplier.data.sup_Id } }">
+                          <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                        </router-link>
                       </template>
                     </Column>
 
-                    <Column :exportable="false" style="min-width: 8rem">
+                    <Column header="Actions" :exportable="false" style="min-width: 8rem">
                       <template #body="searchSupplier">
                         <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                          @click="editUser(searchSupplier)" />
+                          @click="editUser(searchSupplier)" /> {{ " " }}
                         <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
                           @click="deleteUser(searchSupplier)" />
                       </template>
@@ -111,12 +113,14 @@
       <FormKit label="Name" type="text" v-model="name" />
       <FormKit label="Code" type="text" v-model="code" />
       <FormKit label="Phone No." type="number" v-model="phone" />
-      <FormKit label="Organization" type="select" v-model="phone" placeholder="Select Organization" :options="['Bank Islam']" />
-      <FormKit label="Bank" type="select" v-model="phone" placeholder="Select Bank" :options="['Bank Islam']" />
+      <FormKit label="Email" type="text" v-model="email" />
 
-      <FormKit label="Account No." type="number" v-model="phone" />
-      <FormKit label="Email" type="number" v-model="email" />
-      <FormKit label="Postcode" type="text" v-model="address" />
+      <FormKit label="Organization" type="select" v-model="selectOrganization" placeholder="Select Organization"
+        :options="this.listOrganization" />
+      <FormKit label="Bank" type="select" v-model="selectBank" placeholder="Select Bank" :options="this.listBank" />
+
+      <FormKit label="Account No." type="number" v-model="accNo" />
+      <FormKit label="Postcode" type="text" v-model="postcode" />
       <FormKit label="Address" type="textarea" v-model="address" />
       <FormKit v-model="supplierType" type="radio" label="Supplier Type" :options="[
         { label: 'HQ', value: 1 },
@@ -185,7 +189,7 @@ export default {
   },
   data() {
     return {
-      staffid: "",
+      staffId: "",
       staffName: "",
       totalData: 0,
       show: false,
@@ -200,16 +204,24 @@ export default {
       phone: null,
       email: null,
       address: null,
-
+      postcode: null,
+      accNo: null,
+      selectOrganization: null,
+      selectBank: null,
       supplierType: null,
+      selectOutlet: null,
+
       listOutlet: [],
       listOrganization: [],
+      listBank: [],
+
+
     };
   },
   async created() {
     this.getdata();
-    this.getSupplier();
-    this.getOutlet();
+
+    this.getBank();
   },
 
   methods: {
@@ -232,6 +244,11 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+            this.staffId = response.data.data[0].staff_id;
+            console.log('staff id', this.staffId);
+            this.getSupplier();
+            this.getOutlet();
+            this.getOrganization();
           }.bind(this)
         )
         .catch(function (error) {
@@ -241,15 +258,17 @@ export default {
 
     async getSupplier() {
       var axios = require("axios");
-      // var data = JSON.stringify({
-      //     staffid: localStorage.staff,
-      // });
+      var data = JSON.stringify({
+        rawMaterialId: null,
+        staffId: this.staffId,
+      });
       var config = {
-        method: "get",
-        url: process.env.VUE_APP_FNB_URL + "/getSupplier",
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getSupplier",
         headers: {
           "Content-Type": "application/json",
         },
+        data: data,
       };
       await axios(config)
         .then(
@@ -257,6 +276,60 @@ export default {
             this.supplier = response.data.data;
             this.totalData = response.data.data.length;
 
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getOrganization() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOrganizationOwner",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listOrganization.push({
+                label: response.data.data[i].org_name,
+                value: response.data.data[i].org_id,
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getBank() {
+      var axios = require("axios");
+      // var data = JSON.stringify({
+      //     staffid: localStorage.staff,
+      // });
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL + "/getBank",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listBank.push({
+                label: response.data.data[i].bank_name,
+                value: response.data.data[i].bank_id,
+              });
+            }
           }.bind(this)
         )
         .catch(function (error) {
@@ -303,6 +376,13 @@ export default {
         phone: this.phone,
         email: this.email,
         address: this.address,
+        postcode: this.postcode,
+        organization: this.selectOrganization,
+        bank: this.selectBank,
+        accNo: this.accNo,
+        supplierType: this.supplierType,
+        staffId: this.staffId,
+        outletId: this.selectOutlet,
       });
       console.log("Insert data :", data);
       var config = {
@@ -316,11 +396,10 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == "Success") {
-              this.modalPOS = false;
+            if (response.data.status == 200) {
               alert(response.data.message);
-              this.users.splice(0);
-              this.getuser();
+              this.modalSupplier = false;
+              this.getSupplier();
             } else {
               alert(response.data.message);
             }
