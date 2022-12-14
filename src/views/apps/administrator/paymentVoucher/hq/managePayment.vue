@@ -9,7 +9,7 @@
                 <div class="w-full" style="flex-direction: column">
                     <!-- UNTUK ATAS BAWAH -->
                     <div style="display: flex; flex-direction: row; padding-top: 10px">
-                        <div class="w-full h-1">
+                        <div class="w-5/6 h-1">
                             <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
                                 inner:
                                     'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
@@ -18,7 +18,7 @@
                             }" />
                         </div>
 
-                        <div class="w-1/12" style="padding-top: 10px">
+                        <div class="w-1/6" style="">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Payment
                                 Voucher
                             </rs-button>
