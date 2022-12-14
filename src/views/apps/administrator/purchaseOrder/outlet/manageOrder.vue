@@ -10,7 +10,7 @@
                                     <strong>Total of Stock Order </strong>
                                 </div>
                                 <hr />
-                                <div class="text-center py-8">{{ this.totalData }} shifts</div>
+                                <div class="text-center py-8">{{ this.totalData }} Stock Order</div>
                             </rs-card>
                         </div>
                         <div class="inline-block w-1/2 pr-10">
@@ -37,7 +37,7 @@
                             }" />
                         </div>
                         <div class="w-1/12" style="">
-                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add PO
+                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">New PO
                             </rs-button>
                         </div>
                     </div>
@@ -45,54 +45,62 @@
                         <rs-card style="margin-top: 40px">
                             <div>
                                 <div>
+
                                     <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
                                         v-model:expandedRows="expandedRows"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                         <Column :expander="true" headerStyle="width: 3rem" />
-                                        <Column field="suppOrderNo" header="Order No."></Column>
-                                        <Column field="supplierName" header="Supplier Name"></Column>
-                                        <Column field="suppOrderDatetime" header="Order Datetime">
+
+                                        <Column field="stockOrderOutletNo" header="Order No."></Column>
+                                        <Column field="stockOrderOutletDatetime" header="Order Datetime">
                                             <template #body="searchOrderStock">
-                                                <p v-if="searchOrderStock.data.suppOrderDatetime">
-                                                    14/07/2022 17:55</p>
+                                                <p v-if="searchOrderStock.data.stockOrderOutletRemarks">
+                                                    14/07/2022 12:00</p>
                                             </template>
                                         </Column>
-                                        <Column field="suppOrderRemarks" header="Remarks"></Column>
-                                        <Column field="suppOrderTotalPrice" header="Total Order (RM)">
+                                        <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
+                                        <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
                                             <template #body="searchOrderStock">
                                                 {{
-                                                        formatPrice(searchOrderStock.data.suppOrderTotalPrice)
+                                                        formatPrice(searchOrderStock.data.stockOrderOutletTotalPrice)
                                                 }}
                                             </template>
                                         </Column>
 
-                                        <Column field="suppOrderRemarks" header="Staff">
+                                        <Column field="stockOrderOutletRemarks" header="Staff">
                                             <template #body="searchOrderStock">
-                                                <p v-if="searchOrderStock.data.suppOrderRemarks">
+                                                <p v-if="searchOrderStock.data.stockOrderOutletRemarks">
                                                     Staff A</p>
                                             </template>
 
                                         </Column>
-
-                                        <Column field="suppOrderStatusCode" header="Status">
+                                        <Column field="stockOrderOutletStatusCode" header="Status">
                                             <template #body="searchOrderStock">
                                                 <rs-badges variant="success"
-                                                    v-if="searchOrderStock.data.suppOrderStatusCode === '1'"
+                                                    v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
                                                     @click="clickBtnStatus()">
                                                     Partial Delivered</rs-badges>
                                                 {{ "" }}
                                                 <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                    v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'"
                                                     style="width: 25px;height:25px" @click="clickBtnInfo()" />
 
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '2'">
-                                                    Approved</p>
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '3'">
+                                                <rs-badges variant="success"
+                                                    v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
+                                                    @click="clickBtnStatus()">
+                                                    Partial Delivered</rs-badges>
+                                                {{ "" }}
+                                                <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                    v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'"
+                                                    style="width: 25px;height:25px" @click="clickBtnInfo()" />
+
+                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
                                                     Accepted</p>
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '4'">
+                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
                                                     Delivery</p>
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '5'">
+                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
                                                     Received</p>
                                             </template>
 
@@ -103,7 +111,7 @@
                                             <template #body="searchOrderStock">
 
                                                 <router-link
-                                                    :to="{ name: 'order-stock-supplier', params: { id: searchOrderStock.data.suppOrderId } }">
+                                                    :to="{ name: 'order-stock-outlet', params: { id: searchOrderStock.data.stockOrderOutletId } }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
@@ -113,7 +121,6 @@
 
                                         <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                             <template #body="searchOrderStock">
-
                                                 <Button icon="pi pi-send" class="p-button-rounded p-button-warning mr-2"
                                                     @click="editUser(searchOrderStock)" /> {{ "" }}
                                                 <Button icon="pi pi-print"
@@ -121,9 +128,9 @@
                                                     @click="editUser(searchOrderStock)" /> {{ "" }}
                                                 <Button icon="pi pi-pencil"
                                                     class="p-button-rounded p-button-success mr-2"
-                                                    @click="editUser(searchOrderStock)" /> {{ "" }}
+                                                    @click="editUser(searchOrderStock)" />
                                                 <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                    @click="deleteUser(searchOrderStock)" /> {{ "" }}
+                                                    @click="deleteUser(searchOrderStock)" />
                                             </template>
                                         </Column>
 
@@ -142,38 +149,65 @@
                                                     <Column field="sto_Status" header="DO No.">
                                                         <template #body="searchOrderStock">
 
-                                                            <p v-if="searchOrderStock.data.suppOrderNo === '#OpGwe2'">
+                                                            <p
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
                                                                 D0-00001</p>
 
-                                                            <p v-if="searchOrderStock.data.suppOrderNo === '#hasASd'">
+                                                            <p
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
                                                                 D0-00002</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="DO Datetime">
                                                         <template #body="searchOrderStock">
-                                                            <p v-if="searchOrderStock.data.suppOrderNo">
+                                                            <p
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
                                                                 14/07/2022 18:32</p>
+
+                                                            <p
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                15/07/2022 18:32</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Total Price (RM)">
                                                         <template #body="searchOrderStock">
-                                                            <p v-if="searchOrderStock.data.suppOrderNo">
+                                                            <p
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
                                                                 300.00</p>
+
+                                                            <p
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                250.00</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Status">
                                                         <template #body="searchOrderStock">
-                                                            <rs-badges variant="success"
-                                                                v-if="searchOrderStock.data.suppOrderStatusCode">
-                                                                Received</rs-badges>
-                                                            {{ "" }}
-                                                            <Button icon="pi pi-info"
-                                                                class="p-button-rounded p-button-info"
-                                                                style="width: 25px;height:25px"
-                                                                @click="clickBtnInfo()" />
+
+                                                            <div
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#QwDer'">
+                                                                <rs-badges variant="success">
+                                                                    Received</rs-badges>
+                                                                {{ "" }}
+                                                                <Button icon="pi pi-info"
+                                                                    class="p-button-rounded p-button-info"
+                                                                    style="width: 25px;height:25px"
+                                                                    @click="clickBtnInfo()" />
+                                                            </div>
+
+                                                            <div
+                                                                v-if="searchOrderStock.data.stockOrderOutletNo === '#ASDqwe'">
+                                                                <rs-badges variant="warning">
+                                                                    Open</rs-badges>
+                                                                {{ "" }}
+                                                                <Button icon="pi pi-info"
+                                                                    class="p-button-rounded p-button-info"
+                                                                    style="width: 25px;height:25px"
+                                                                    @click="clickBtnInfo()" />
+                                                            </div>
+
 
                                                         </template>
                                                     </Column>
@@ -224,161 +258,99 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="lg">
+        <rs-modal title="Add Purchase Order" v-model="modalPO" position="middle" size="lg">
+            <FormKit v-model="orderTo" type="radio" label="Order To" :options="[
+                { label: 'HQ', value: 'hq' },
+                { label: 'Supplier', value: 'supplier' },
+            ]" />
 
-            <rs-tab>
-                <rs-tab-item title="Supplier">
+            <div v-if="this.orderTo == 'hq'">
+                <FormKit type="select" label="Store" :options="this.listStore" />
+                <FormKit type="textarea" label="Remarks" />
 
-                    <FormKit type="select" label="Supplier" :options="[
-                        'Supplier A',
-                        'Supplier B',
-                        'Supplier C',
-                    ]" />
-
-                    <FormKit type="select" label="Type Store" :options="[
-                        'HQ',
-                        'Outlet',
-                    ]" />
-
-                    <FormKit type="select" label="Store" :options="[
-                        'Store Shah Alam',
-                        'Store Sg Besi',
-                        'Store Sg Buloh',
-                    ]" />
-
-
-                    <FormKit v-model="orderByOutlet" type="radio" label="Order By Outlet" :options="[
-                        { label: 'Yes', value: 'y' },
-                        { label: 'No', value: 'n' },
-                    ]" />
-
-                    <div v-if="orderByOutlet == 'y'">
-                        <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select order no."
-                            :options="[
-                                { label: 'He & She University of Malaya', value: 'um' },
-                                { label: 'He & She UiTM Shah Alam', value: 'um' },
-                                { label: 'He & She UPM', value: 'um' },
-                            ]" />
+                <table>
+                    <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <FormKit type="text" hidden />
+                                </td>
+                                <td>
+                                    <FormKit type="select" label="Stock Name" :options="[
+                                        'Fanta 1.5L',
+                                        'Pasta 1kg',
+                                        'Coca Cola 1.5L',
+                                        'Milo 1kg',
+                                    ]" />
+                                </td>
+                                <td>
+                                    <FormKit type="number" label="Quantity" />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Quantity Available" value="35" readonly />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                        @click="removeRawMaterial(l)"
+                                        v-show="l || (!l && this.rawMaterial.length > 1)" />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                        @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                                </td>
+                            </tr>
+                        </tbody>
                     </div>
+                </table>
+            </div>
 
-                    <div v-if="selectOutlet == 'um' && orderByOutlet == 'y'" class="mb-4">
-                        <label>Order No.</label>
-                        <Multiselect mode="tags" :close-on-select="false" :searchable="false" :create-option="true"
-                            :options="this.orderNo" @select="papar()" @deselect="padam()" @clear="padam()" />
+            <div v-if="this.orderTo == 'supplier'">
+                <FormKit type="select" label="Supplier" :options="this.listSupplier" />
+
+                <FormKit type="select" label="Store" :options="this.listStore" />
+                <FormKit type="textarea" label="Remarks" />
+
+                <table>
+                    <div v-for="(rm, l) in this.rawMaterial" :key="l">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <FormKit type="text" hidden />
+                                </td>
+                                <td>
+                                    <FormKit type="select" label="Stock Name" :options="[
+                                        'Fanta 1.5L',
+                                        'Pasta 1kg',
+                                        'Coca Cola 1.5L',
+                                        'Milo 1kg',
+                                    ]" />
+                                </td>
+                                <td>
+                                    <FormKit type="number" label="Quantity" />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Quantity Available" value="35" readonly />
+                                </td>
+                                <td>
+                                    <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                        @click="removeRawMaterial(l)"
+                                        v-show="l || (!l && this.rawMaterial.length > 1)" />
+                                </td>
+                                <td>
+                                    <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
+                                        @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                                </td>
+                            </tr>
+                        </tbody>
                     </div>
-
-                    <div v-if="this.order1 == true || orderByOutlet == 'n'">
-                        <table>
-                            <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                                <tbody>
-
-                                    <tr>
-                                        <td>
-                                            <FormKit type="text" hidden />
-                                        </td>
-                                        <td>
-                                            <FormKit type="select" label="Stock Name" :options="[
-                                                'Fanta 1.5L',
-                                                'Pasta 1kg',
-                                                'Coca Cola 1.5L',
-                                                'Milo 1kg',
-                                            ]" />
-                                        </td>
-                                        <td>
-                                            <FormKit type="number" label="Quantity Order" />
-                                        </td>
-                                        <td>
-                                            <FormKit type="text" label="Quantity Available" value="35" readonly />
-                                        </td>
-                                        <td>
-                                            <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                                        </td>
-                                        <td>
-                                            <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                                @click="removeRawMaterial(l)"
-                                                v-show="l || (!l && this.rawMaterial.length > 1)" />
-                                        </td>
-                                        <td>
-                                            <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                                @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </div>
-                        </table>
-
-                        <FormKit type="textarea" label="Remarks" />
-
-                    </div>
-
-
-
-
-
-
-                </rs-tab-item>
-                <rs-tab-item title="Low Stock">
-                    <table>
-                        <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                            <tbody>
-
-                                <tr>
-                                    <td>
-                                        <FormKit type="text" hidden />
-                                    </td>
-                                    <td>
-                                        <FormKit type="select" label="Stock Name" :options="[
-                                            'Fanta 1.5L',
-                                            'Pasta 1kg',
-                                            'Coca Cola 1.5L',
-                                            'Milo 1kg',
-                                        ]" />
-                                    </td>
-                                    <td>
-                                        <FormKit type="number" label="Quantity Order" />
-                                    </td>
-                                    <td>
-                                        <FormKit type="text" label="Quantity Available" value="5" readonly />
-                                    </td>
-                                    <td>
-                                        <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                                    </td>
-                                    <td>
-                                        <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                            @click="removeRawMaterial(l)"
-                                            v-show="l || (!l && this.rawMaterial.length > 1)" />
-                                    </td>
-                                    <td>
-                                        <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                            @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </div>
-                    </table>
-
-                    <FormKit type="select" label="Supplier" :options="[
-                        'Supplier A',
-                        'Supplier B',
-                        'Supplier C',
-                    ]" />
-
-                    <FormKit type="select" label="Type Store" :options="[
-                        'HQ',
-                        'Outlet',
-                    ]" />
-
-                    <FormKit type="select" label="Store" :options="[
-                        'Store Shah Alam',
-                        'Store Sg Besi',
-                        'Store Sg Buloh',
-                    ]" />
-
-                    <FormKit type="textarea" label="Remarks" />
-
-                </rs-tab-item>
-            </rs-tab>
-
+                </table>
+            </div>
 
 
 
@@ -397,7 +369,6 @@
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
-
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
             <FormKit type="select" label="Status" :options="[
@@ -490,24 +461,17 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import RsBadges from "@/components/Badges.vue";
-import RsTab from "@/components/Tab.vue";
-import RsTabItem from "@/components/TabItem.vue";
-import Multiselect from "@vueform/multiselect";
+import RsBadges from '@/components/Badges.vue';
 
 export default {
     name: "RawMaterial",
     components: {
         RsButton,
-        DataTable,
         RsBadges,
-        RsTab,
-        RsTabItem,
+        DataTable,
         RsModal,
         Column,
         Button,
-        Multiselect,
-
     },
     setup() {
         const orderStock = ref([]);
@@ -518,9 +482,9 @@ export default {
         const searchOrderStock = computed(() => {
             return orderStock.value.filter((orderStock) => {
                 return (
-                    orderStock.suppOrderNo.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    orderStock.stockOrderOutletNo.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    orderStock.suppOrderNo
+                    orderStock.stockOrderOutletNo
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -538,9 +502,10 @@ export default {
             orderStock,
             formatPrice,
             typePackaging,
-            unitMeasurement
+            unitMeasurement,
         };
     },
+
     data() {
         return {
             staffid: "",
@@ -550,8 +515,10 @@ export default {
             outletDrop: false,
             sumPrice: 0,
             menuDrop: false,
+            counter: 1,
             /* BARU */
             expandedRows: [],
+
             rawMaterial: [{
                 type: "",
             }],
@@ -562,27 +529,26 @@ export default {
             price: null,
             packaging_type: null,
             measurement: null,
-            modalRawMaterial: false,
+            modalPO: false,
             modalStatus: false,
-            modalInfo: false,
             modalDO: false,
-            orderByOutlet: "",
-            selectOutlet: "",
-            orderNo: ['#OpGwe2', '#hasASd'],
-            order1: false,
+            modalInfo: false,
+            orderTo: "",
 
+            listStore: [],
+            listSupplier: [],
         };
     },
     async created() {
         this.getdata();
-        this.getSupplierOrderByHq();
         this.getTypePackaging();
         this.getUnitMeasurement();
     },
 
     methods: {
-        async papar() {
-            this.order1 = true;
+        async clickBtnDO() {
+            // this.users1 = user.data;
+            this.modalDO = true;
         },
 
         async getdata() {
@@ -603,6 +569,10 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getOrderStock();
+                        this.getStore();
+                        this.getSupplier();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -662,14 +632,14 @@ export default {
                 });
         },
 
-        async getSupplierOrderByHq() {
+        async getOrderStock() {
             var axios = require("axios");
             // var data = JSON.stringify({
             //     staffid: localStorage.staff,
             // });
             var config = {
                 method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getSupplierOrderByHq",
+                url: process.env.VUE_APP_FNB_URL + "/outlet/getOrderStock",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -683,7 +653,7 @@ export default {
 
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].suppOrderTotalPrice;
+                            price += response.data.data[i].stockOrderOutletTotalPrice;
 
                         }
                         this.sumPrice = price;
@@ -696,12 +666,7 @@ export default {
 
         async clickBtnAdd() {
             // this.users1 = user.data;
-            this.modalRawMaterial = true;
-        },
-
-        async clickBtnStatus() {
-            // this.users1 = user.data;
-            this.modalStatus = true;
+            this.modalPO = true;
         },
 
         async clickBtnInfo() {
@@ -709,9 +674,9 @@ export default {
             this.modalInfo = true;
         },
 
-        async clickBtnDO() {
+        async clickBtnStatus() {
             // this.users1 = user.data;
-            this.modalDO = true;
+            this.modalStatus = true;
         },
 
         async insertRawMaterial() {
@@ -738,10 +703,10 @@ export default {
                 .then(
                     function (response) {
                         if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
+                            this.modalPO = false;
                             alert(response.data.message);
                             this.users.splice(0);
-                            this.getSupplierOrderByHq();
+                            this.getOrderStock();
                         } else {
                             alert(response.data.message);
                         }
@@ -764,10 +729,74 @@ export default {
             console.log("REMOVE", index);
             this.rawMaterial.splice(index, 1);
         },
+
+        async getStore() {
+            this.listStore = [];
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        console.log("data : ", response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStore.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getSupplier() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                rawMaterialId: null,
+                staffid: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getSupplierOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        if (response.data.status == 200) {
+                            this.supplier = response.data.data;
+                            this.totalData = response.data.data.length;
+
+                        } else {
+                            alert(response.data.message);
+                        }
+
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
     },
 };
 </script>
-<style src="@vueform/multiselect/themes/default.css">
-
-</style>
   
