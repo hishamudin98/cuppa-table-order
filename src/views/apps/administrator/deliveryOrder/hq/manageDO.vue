@@ -19,7 +19,7 @@
                             }" />
                         </div>
 
-                        <div class="w-1/12" style="padding-top: 10px">
+                        <div class="w-1/12" style="">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add DO
                             </rs-button>
                         </div>

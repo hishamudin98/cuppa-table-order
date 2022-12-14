@@ -1,27 +1,8 @@
 <template>
     <rs-layout>
-        <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-x-2">
-                    <div class="welcome text-lg font-semibold text-white">
-                        Delivery Order
-                    </div>
-                </div>
-
-                <div class="flex gap-x-2 items-center">
-                    <div class="text-white">{{ this.staffName }}</div>
-                    <div class="bg-black h-10 w-10 p-1 rounded-full">
-                        <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="w-full flex flex-col">
             <div style="display: flex; flex-direction: row">
-                <!-- UNTUK SEBELAH2 -->
-                <div>
-                    <arbitrary />
-                </div>
+
                 <div class="w-full h-1/4 flex flex-col">
                     <div class="w-full flex flex-row mb-0">
 
@@ -39,7 +20,7 @@
                                     }" />
                             </div>
 
-                            <div class="w-1/12" style="padding-top: 10px">
+                            <div class="w-1/12" style="">
                                 <rs-button class="bg-heandshe hover:bg-heandshe">Filter
                                 </rs-button>
                             </div>
@@ -57,15 +38,15 @@
                                             <Column :expander="true" headerStyle="width: 3rem" />
                                             <Column field="sto_Name" header="DO No.">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Name === 'Store A'">D0-00001</p>
-                                                    <p v-if="searchStore.data.sto_Name === 'Store B'">D0-00002</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'store outlet'">D0-00001</p>
+                                                    <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">D0-00002</p>
                                                 </template>
                                             </Column>
                                             <Column field="sto_Email" header="Date">
                                                 <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Name === 'Store A'">14/07/2022 12:00
+                                                    <p v-if="searchStore.data.sto_Name === 'store outlet'">14/07/2022 12:00
                                                     </p>
-                                                    <p v-if="searchStore.data.sto_Name === 'Store B'">15/07/2022 12:00
+                                                    <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">15/07/2022 12:00
                                                     </p>
                                                 </template>
                                             </Column>
@@ -122,10 +103,10 @@
                                             <Column :exportable="false" header="Details">
                                                 <template #body="searchStore">
                                                     <p v-if="searchStore.data.rm_Status === '1'" hidden>Level 1</p>
-                                                    <router-link :to="{ name: 'manage-stock' }">
+                                                    <!-- <router-link :to="{ name: 'manage-stock' }"> -->
                                                         <Button icon="pi pi-truck"
                                                             class="p-button-rounded p-button-info" />
-                                                    </router-link>
+                                                    <!-- </router-link> -->
                                                 </template>
                                             </Column>
 
@@ -160,9 +141,9 @@
                                                         <Column field="sto_Status" header="Order No.">
 
                                                             <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                                <p v-if="searchStore.data.sto_Name === 'store outlet'">
                                                                     #QwDer</p>
-                                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                                <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">
                                                                     #ASDqwe</p>
                                                             </template>
 
@@ -170,9 +151,9 @@
 
                                                         <Column field="sto_Status" header="Order Datetime">
                                                             <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                                <p v-if="searchStore.data.sto_Name === 'store outlet'">
                                                                     14/07/2022 12:00</p>
-                                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                                <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">
                                                                     15/07/2022 12:00</p>
                                                             </template>
                                                         </Column>
@@ -378,7 +359,6 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Menu from '@/views/apps/administrator/adminSidemenu.vue';
 import RsBadges from "@/components/Badges.vue";
 import Multiselect from "@vueform/multiselect";
 
@@ -391,7 +371,6 @@ export default {
         RsModal,
         Column,
         Button,
-        'arbitrary': Menu,
         Multiselect,
 
     },
@@ -429,7 +408,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -460,7 +439,6 @@ export default {
     },
     async created() {
         this.getdata();
-        this.getStore();
     },
 
     methods: {
@@ -500,6 +478,9 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getStore();
+
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -509,15 +490,16 @@ export default {
 
         async getStore() {
             var axios = require("axios");
-            // var data = JSON.stringify({
-            //     staffid: localStorage.staff,
-            // });
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
             var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                data: data,
             };
             await axios(config)
                 .then(
