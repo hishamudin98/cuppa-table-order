@@ -614,7 +614,6 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        // console.log("price", response.data.data.rm_Price[0]);
                         this.rawMaterial = response.data.data;
                         this.totalData = this.rawMaterial.length;
 
