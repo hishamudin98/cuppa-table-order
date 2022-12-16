@@ -243,7 +243,7 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
+        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="lg">
             <FormKit label="Name" type="text" v-model="name" />
 
             <FormKit type="select" label="Category" placeholder="Select Category" v-model="selectCategory" :options="[

@@ -224,50 +224,47 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Stock Order" v-model="modalRawMaterial" position="middle" size="lg">
+        <rs-modal title="Add Purchase Order" v-model="modalPO" position="middle" size="lg">
 
             <rs-tab>
                 <rs-tab-item title="Supplier">
 
-                    <FormKit type="select" label="Supplier" :options="[
-                        'Supplier A',
-                        'Supplier B',
-                        'Supplier C',
-                    ]" />
-
-                    <FormKit type="select" label="Type Store" :options="[
-                        'HQ',
-                        'Outlet',
-                    ]" />
-
-                    <FormKit type="select" label="Store" :options="[
-                        'Store Shah Alam',
-                        'Store Sg Besi',
-                        'Store Sg Buloh',
-                    ]" />
+                    <FormKit type="select" label="Supplier" placeholder="Select Supplier" v-model="selectSupplier"
+                        :options="this.listSupplier" />
 
 
-                    <FormKit v-model="orderByOutlet" type="radio" label="Order By Outlet" :options="[
-                        { label: 'Yes', value: 'y' },
-                        { label: 'No', value: 'n' },
-                    ]" />
+                    <FormKit v-model="selectType" type="radio" label="Order By Outlet" :options="[
+                        { label: 'Yes', value: 2 },
+                        { label: 'No', value: 1 },
+                    ]" @change="clearValue(selectType)" />
 
-                    <div v-if="orderByOutlet == 'y'">
-                        <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select order no."
-                            :options="[
-                                { label: 'He & She University of Malaya', value: 'um' },
-                                { label: 'He & She UiTM Shah Alam', value: 'um' },
-                                { label: 'He & She UPM', value: 'um' },
-                            ]" />
+                    <div v-if="(selectType == 1)">
+                        <FormKit type="select" v-model="selectStoreHq" label="Store" :options="this.listStoreHQ"
+                            placeholder="Select Store" />
                     </div>
 
-                    <div v-if="selectOutlet == 'um' && orderByOutlet == 'y'" class="mb-4">
+                    <div v-if="(selectType == 2)">
+                        <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
+                            :options="this.listOutlet" @change="getStoreOutlet()" />
+
+                        <div v-if="(selectOutlet && listStoreOutlet.length != 0)">
+                            <FormKit type="select" v-model="selectStoreOutlet" label="Store"
+                                :options="this.listStoreOutlet" placeholder="Select Store" />
+                        </div>
+
+                        <div v-if="(selectOutlet && listStoreOutlet.length == 0)">
+                            <FormKit type="select" placeholder="Select Store" label="Store"
+                                :options="[{ label: 'No Store', value: '0', attrs: { disabled: true } },]" />
+                        </div>
+
+
                         <label>Order No.</label>
                         <Multiselect mode="tags" :close-on-select="false" :searchable="false" :create-option="true"
                             :options="this.orderNo" @select="papar()" @deselect="padam()" @clear="padam()" />
+
                     </div>
 
-                    <div v-if="this.order1 == true || orderByOutlet == 'n'">
+                    <div v-if="this.order1 == true || selectType == 1">
                         <table>
                             <div v-for="(rm, l) in this.rawMaterial" :key="l">
                                 <tbody>
@@ -555,22 +552,29 @@ export default {
             rawMaterial: [{
                 type: "",
             }],
-            name: null,
-            sku: null,
-            quantity: null,
-            minquantity: null,
-            price: null,
-            packaging_type: null,
-            measurement: null,
-            modalRawMaterial: false,
+
+            selectSupplier: null,
+            selectStore: null,
+            selectStoreType: null,
+            selectOutlet: null,
+            selectType: null,
+            selectStoreHq: null,
+            selectStoreOutlet: null,
+
+
+            modalPO: false,
             modalStatus: false,
             modalInfo: false,
             modalDO: false,
             orderByOutlet: "",
-            selectOutlet: "",
             orderNo: ['#OpGwe2', '#hasASd'],
             order1: false,
 
+            listSupplier: [],
+            listStore: [],
+            listOutlet: [],
+            listStoreOutlet: [],
+            listStoreHq: [],
         };
     },
     async created() {
@@ -603,6 +607,128 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getStore();
+                        this.getStoreHQ();
+                        this.getStoreOutlet();
+                        this.getOutlet();
+                        this.getSupplier();
+
+
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async clearValue(value) {
+            // HQ is 1, Outlet is 2
+            if (value == 1) {
+                this.selectOutlet = '';
+                this.selectStoreOutlet = '';
+
+            } else {
+                this.selectStoreHq = '';
+            }
+        },
+
+        async getStore(value) {
+            this.listStore = [];
+            // let value = this.selectStore;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStore.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStoreHQ() {
+            console.log('getStoreHQ');
+            this.listStoreHQ = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                outletId: 0,
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStoreHQ.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStoreHQ', this.listStoreHQ);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStoreOutlet() {
+            this.listStoreOutlet = [];
+            var axios = require("axios");
+            var data = JSON.stringify({
+                outletId: this.selectOutlet,
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStoreOutlet.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStoreOutlet', this.listStoreOutlet);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -696,7 +822,7 @@ export default {
 
         async clickBtnAdd() {
             // this.users1 = user.data;
-            this.modalRawMaterial = true;
+            this.modalPO = true;
         },
 
         async clickBtnStatus() {
@@ -738,12 +864,74 @@ export default {
                 .then(
                     function (response) {
                         if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
+                            this.modalPO = false;
                             alert(response.data.message);
                             this.users.splice(0);
                             this.getSupplierOrderByHq();
                         } else {
                             alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        console.log("data12 : ", response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listOutlet.push({
+                                label: response.data.data[i].outlet_name,
+                                value: response.data.data[i].outlet_id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getSupplier() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getSupplierHq",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        console.log("dd :", response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listSupplier.push({
+                                label: response.data.data[i].sup_Name,
+                                value: response.data.data[i].sup_Id,
+                            });
                         }
                     }.bind(this)
                 )
@@ -765,6 +953,8 @@ export default {
             this.rawMaterial.splice(index, 1);
         },
     },
+
+
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css">
