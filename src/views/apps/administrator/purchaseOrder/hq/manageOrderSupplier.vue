@@ -45,54 +45,54 @@
                         <rs-card style="margin-top: 40px">
                             <div>
                                 <div>
-                                    <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                    <DataTable :value="searchPO" :paginator="true" :rows="10"
                                         v-model:expandedRows="expandedRows"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                         <Column :expander="true" headerStyle="width: 3rem" />
-                                        <Column field="suppOrderNo" header="Order No."></Column>
-                                        <Column field="supplierName" header="Supplier Name"></Column>
-                                        <Column field="suppOrderDatetime" header="Order Datetime">
-                                            <template #body="searchOrderStock">
-                                                <p v-if="searchOrderStock.data.suppOrderDatetime">
-                                                    14/07/2022 17:55</p>
+                                        <Column field="po_No" header="Order No."></Column>
+                                        <Column field="supplier_Name" header="Supplier Name"></Column>
+                                        <Column field="po_Date" header="Order Datetime">
+                                            <template #body="searchPO">
+                                                <p>
+                                                    {{ searchPO.data.po_Date }}</p>
                                             </template>
                                         </Column>
-                                        <Column field="suppOrderRemarks" header="Remarks"></Column>
-                                        <Column field="suppOrderTotalPrice" header="Total Order (RM)">
-                                            <template #body="searchOrderStock">
+                                        <Column field="po_Remarks" header="Remarks"></Column>
+                                        <Column field="po_TotalPrice" header="Total Order (RM)">
+                                            <template #body="searchPO">
                                                 {{
-                                                        formatPrice(searchOrderStock.data.suppOrderTotalPrice)
+                                                        formatPrice(searchPO.data.po_TotalPrice)
                                                 }}
                                             </template>
                                         </Column>
 
-                                        <Column field="suppOrderRemarks" header="Staff">
-                                            <template #body="searchOrderStock">
-                                                <p v-if="searchOrderStock.data.suppOrderRemarks">
-                                                    Staff A</p>
+                                        <Column field="staff_Name" header="Staff">
+                                            <template #body="searchPO">
+                                                <p>
+                                                    {{ searchPO.data.staff_Name }}</p>
                                             </template>
 
                                         </Column>
 
-                                        <Column field="suppOrderStatusCode" header="Status">
-                                            <template #body="searchOrderStock">
+                                        <Column field="po_Status" header="Status">
+                                            <template #body="searchPO">
                                                 <rs-badges variant="success"
-                                                    v-if="searchOrderStock.data.suppOrderStatusCode === '1'"
+                                                    v-if="searchPO.data.po_Status === '1'"
                                                     @click="clickBtnStatus()">
                                                     Partial Delivered</rs-badges>
                                                 {{ "" }}
                                                 <Button icon="pi pi-info" class="p-button-rounded p-button-info"
                                                     style="width: 25px;height:25px" @click="clickBtnInfo()" />
 
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '2'">
+                                                <p v-if="searchPO.data.po_Status === '2'">
                                                     Approved</p>
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '3'">
+                                                <p v-if="searchPO.data.po_Status === '3'">
                                                     Accepted</p>
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '4'">
+                                                <p v-if="searchPO.data.po_Status === '4'">
                                                     Delivery</p>
-                                                <p v-if="searchOrderStock.data.suppOrderStatusCode === '5'">
+                                                <p v-if="searchPO.data.po_Status === '5'">
                                                     Received</p>
                                             </template>
 
@@ -100,10 +100,10 @@
 
                                         <Column :exportable="false" header="Details">
 
-                                            <template #body="searchOrderStock">
+                                            <template #body="searchPO">
 
                                                 <router-link
-                                                    :to="{ name: 'order-stock-supplier', params: { id: searchOrderStock.data.suppOrderId } }">
+                                                    :to="{ name: 'order-stock-supplier', params: { id: searchPO.data.po_No } }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
@@ -112,62 +112,62 @@
                                         </Column>
 
                                         <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                                            <template #body="searchOrderStock">
+                                            <template #body="searchPO">
 
                                                 <Button icon="pi pi-send" class="p-button-rounded p-button-warning mr-2"
-                                                    @click="editUser(searchOrderStock)" /> {{ "" }}
+                                                    @click="editUser(searchPO)" /> {{ "" }}
                                                 <Button icon="pi pi-print"
                                                     class="p-button-rounded p-button-warning mr-2"
-                                                    @click="editUser(searchOrderStock)" /> {{ "" }}
+                                                    @click="editUser(searchPO)" /> {{ "" }}
                                                 <Button icon="pi pi-pencil"
                                                     class="p-button-rounded p-button-success mr-2"
-                                                    @click="editUser(searchOrderStock)" /> {{ "" }}
+                                                    @click="editUser(searchPO)" /> {{ "" }}
                                                 <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                    @click="deleteUser(searchOrderStock)" /> {{ "" }}
+                                                    @click="deleteUser(searchPO)" /> {{ "" }}
                                             </template>
                                         </Column>
 
-                                        <template #expansion="searchOrderStock12">
+                                        <template #expansion="searchPO12">
                                             <div class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">DO No. Record for {{
-                                                        searchOrderStock12.data.suppOrderNo
+                                                        searchPO12.data.suppOrderNo
                                                 }}</h5>
 
-                                                <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                                <DataTable :value="searchPO" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
                                                     <Column field="sto_Status" header="DO No.">
-                                                        <template #body="searchOrderStock">
+                                                        <template #body="searchPO">
 
-                                                            <p v-if="searchOrderStock.data.suppOrderNo === '#OpGwe2'">
+                                                            <p v-if="searchPO.data.suppOrderNo === '#OpGwe2'">
                                                                 D0-00001</p>
 
-                                                            <p v-if="searchOrderStock.data.suppOrderNo === '#hasASd'">
+                                                            <p v-if="searchPO.data.suppOrderNo === '#hasASd'">
                                                                 D0-00002</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="DO Datetime">
-                                                        <template #body="searchOrderStock">
-                                                            <p v-if="searchOrderStock.data.suppOrderNo">
+                                                        <template #body="searchPO">
+                                                            <p v-if="searchPO.data.suppOrderNo">
                                                                 14/07/2022 18:32</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Total Price (RM)">
-                                                        <template #body="searchOrderStock">
-                                                            <p v-if="searchOrderStock.data.suppOrderNo">
+                                                        <template #body="searchPO">
+                                                            <p v-if="searchPO.data.suppOrderNo">
                                                                 300.00</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Status">
-                                                        <template #body="searchOrderStock">
+                                                        <template #body="searchPO">
                                                             <rs-badges variant="success"
-                                                                v-if="searchOrderStock.data.suppOrderStatusCode">
+                                                                v-if="searchPO.data.suppOrderStatusCode">
                                                                 Received</rs-badges>
                                                             {{ "" }}
                                                             <Button icon="pi pi-info"
@@ -230,7 +230,7 @@
                 <rs-tab-item title="Supplier">
 
                     <FormKit type="select" label="Supplier" placeholder="Select Supplier" v-model="selectSupplier"
-                        :options="this.listSupplier" />
+                        :options="this.listSupplier" @change="getRawMaterialHqBySupplier()" />
 
 
                     <FormKit v-model="selectType" type="radio" label="Order By Outlet" :options="[
@@ -269,49 +269,53 @@
                             <div v-for="(rm, l) in this.rawMaterial" :key="l">
                                 <tbody>
 
-                                    <tr>
+                                    <tr v-for="(purchase, index) in this.listPurchase" :key="index">
                                         <td>
-                                            <FormKit type="text" hidden />
+                                            <FormKit type="text" label="Stock Name"
+                                                v-model="this.listPurchase[index].rm_Name"
+                                                :value=this.listPurchase[index].rm_Name readonly />
                                         </td>
                                         <td>
-                                            <FormKit type="select" label="Stock Name" :options="[
-                                                'Fanta 1.5L',
-                                                'Pasta 1kg',
-                                                'Coca Cola 1.5L',
-                                                'Milo 1kg',
-                                            ]" />
+                                            <FormKit type="number" label="Quantity Order"
+                                                v-model="this.listPurchase[index].rm_QuantityRequested" />
                                         </td>
                                         <td>
-                                            <FormKit type="number" label="Quantity Order" />
+                                            <FormKit type="text" label="Quantity Available"
+                                                v-model="this.listPurchase[index].rm_Quantity"
+                                                :value=this.listPurchase[index].rm_Quantity readonly />
                                         </td>
                                         <td>
-                                            <FormKit type="text" label="Quantity Available" value="35" readonly />
-                                        </td>
-                                        <td>
-                                            <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                                        </td>
-                                        <td>
-                                            <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                                @click="removeRawMaterial(l)"
-                                                v-show="l || (!l && this.rawMaterial.length > 1)" />
-                                        </td>
-                                        <td>
-                                            <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                                @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
+                                            <FormKit type="text" label="Min. Quantity"
+                                                v-model="this.listPurchase[index].rm_MinQuantity"
+                                                :value=this.listPurchase[index].rm_MinQuantity readonly />
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td>
+                                            <FormKit type="select" label="Stock Name" placeholder="Select Stock"
+                                                v-model="selectRawMaterial"
+                                                :options="this.listRawMaterialHqBySupplier" />
+                                        </td>
+                                        <td v-if="selectRawMaterial">
+                                            <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
+                                                @click="removeRawMaterial(l, selectRawMaterial)"
+                                                v-show="l || (!l && this.rawMaterial.length > 1)" />
+                                        </td>
+                                        <td v-if="selectRawMaterial">
+                                            <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-2"
+                                                @click="addRawMaterial(l, selectRawMaterial)"
+                                                v-show="l == this.rawMaterial.length - 1" />
+                                        </td>
+                                    </tr>
+
                                 </tbody>
                             </div>
                         </table>
 
-                        <FormKit type="textarea" label="Remarks" />
+                        <FormKit type="textarea" label="Remarks" placeholder="Remarks" v-model="orderRemarks" />
 
                     </div>
-
-
-
-
-
 
                 </rs-tab-item>
                 <rs-tab-item title="Low Stock">
@@ -323,14 +327,7 @@
                                     <td>
                                         <FormKit type="text" hidden />
                                     </td>
-                                    <td>
-                                        <FormKit type="select" label="Stock Name" :options="[
-                                            'Fanta 1.5L',
-                                            'Pasta 1kg',
-                                            'Coca Cola 1.5L',
-                                            'Milo 1kg',
-                                        ]" />
-                                    </td>
+
                                     <td>
                                         <FormKit type="number" label="Quantity Order" />
                                     </td>
@@ -390,7 +387,7 @@
             <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
                 :options="this.unitMeasurement" /> -->
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="insertPO()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
@@ -405,7 +402,7 @@
                 'Received',
             ]" />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="insertPO()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal>
@@ -467,7 +464,7 @@
                     </tbody>
 
 
-                    <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+                    <rs-button style="float: right" @click="insertPO()" class="bg-heandshe hover:bg-heandshe">
                         Save
                     </rs-button>
 
@@ -507,17 +504,17 @@ export default {
 
     },
     setup() {
-        const orderStock = ref([]);
+        const listPurchaseOrder = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
-        const searchOrderStock = computed(() => {
-            return orderStock.value.filter((orderStock) => {
+        const searchPO = computed(() => {
+            return listPurchaseOrder.value.filter((listPurchaseOrder) => {
                 return (
-                    orderStock.suppOrderNo.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    listPurchaseOrder.po_No.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    orderStock.suppOrderNo
+                    listPurchaseOrder.po_No
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -531,8 +528,8 @@ export default {
         };
         return {
             search,
-            searchOrderStock,
-            orderStock,
+            searchPO,
+            listPurchaseOrder,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -540,7 +537,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -555,12 +552,12 @@ export default {
 
             selectSupplier: null,
             selectStore: null,
-            selectStoreType: null,
             selectOutlet: null,
             selectType: null,
             selectStoreHq: null,
             selectStoreOutlet: null,
-
+            selectRawMaterial: null,
+            orderRemarks: null,
 
             modalPO: false,
             modalStatus: false,
@@ -575,11 +572,14 @@ export default {
             listOutlet: [],
             listStoreOutlet: [],
             listStoreHq: [],
+            listRawMaterialHqBySupplier: [],
+            listPurchase: [],
+            listAllData: [],
+
         };
     },
     async created() {
         this.getdata();
-        this.getSupplierOrderByHq();
         this.getTypePackaging();
         this.getUnitMeasurement();
     },
@@ -608,12 +608,11 @@ export default {
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
-                        this.getStore();
                         this.getStoreHQ();
                         this.getStoreOutlet();
                         this.getOutlet();
                         this.getSupplier();
-
+                        this.getPOHq();
 
                     }.bind(this)
                 )
@@ -633,43 +632,9 @@ export default {
             }
         },
 
-        async getStore(value) {
-            this.listStore = [];
-            // let value = this.selectStore;
-            console.log('value', value);
 
-            var axios = require("axios");
-            var data = JSON.stringify({
-                type: value
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        console.log('response', response.data.data);
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listStore.push({
-                                label: response.data.data[i].sto_Name,
-                                value: response.data.data[i].sto_Id,
-                            });
-                        }
-                        console.log('listStore', this.listStore);
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
 
         async getStoreHQ() {
-            console.log('getStoreHQ');
             this.listStoreHQ = [];
 
             var axios = require("axios");
@@ -688,14 +653,12 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        console.log('response', response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listStoreHQ.push({
                                 label: response.data.data[i].sto_Name,
                                 value: response.data.data[i].sto_Id,
                             });
                         }
-                        console.log('listStoreHQ', this.listStoreHQ);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -721,14 +684,12 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        console.log('response', response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listStoreOutlet.push({
                                 label: response.data.data[i].sto_Name,
                                 value: response.data.data[i].sto_Id,
                             });
                         }
-                        console.log('listStoreOutlet', this.listStoreOutlet);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -788,28 +749,30 @@ export default {
                 });
         },
 
-        async getSupplierOrderByHq() {
+        async getPOHq() {
+            console.log("getPOHq");
             var axios = require("axios");
-            // var data = JSON.stringify({
-            //     staffid: localStorage.staff,
-            // });
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
             var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/getSupplierOrderByHq",
+                method: "POST",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPO",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                data: data,
             };
             await axios(config)
                 .then(
                     function (response) {
-                        console.log("data : ", response.data.data);
-                        this.orderStock = response.data.data;
-                        this.totalData = this.orderStock.length;
+                        console.log('response', response);
+                        this.listPurchaseOrder = response.data.data;
+                        this.totalData = this.listPurchaseOrder.length;
 
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].suppOrderTotalPrice;
+                            price += response.data.data[i].po_TotalPrice;
 
                         }
                         this.sumPrice = price;
@@ -840,21 +803,24 @@ export default {
             this.modalDO = true;
         },
 
-        async insertRawMaterial() {
+        async insertPO() {
+
+            console.log("insertPO", this.listPurchase);
+
             var axios = require("axios");
             var data = JSON.stringify({
-                name: this.name,
-                sku: this.sku,
-                quantity: this.quantity,
-                minquantity: this.minquantity,
-                price: this.price,
-                packaging_type: this.packaging_type,
-                measurement: this.measurement,
+                staffId: this.staffId,
+                order: this.listPurchase,
+                remarks: this.orderRemarks,
+                supplier: this.selectSupplier,
+                orderTo: this.selectType,
+                store: this.selectStoreHq ? this.selectStoreHq : this.selectStoreOutlet,
+
+
             });
-            console.log("Insert data :", data);
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/insertPO",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -867,7 +833,7 @@ export default {
                             this.modalPO = false;
                             alert(response.data.message);
                             this.users.splice(0);
-                            this.getSupplierOrderByHq();
+                            this.getPOHq();
                         } else {
                             alert(response.data.message);
                         }
@@ -895,7 +861,6 @@ export default {
                 .then(
                     function (response) {
 
-                        console.log("data12 : ", response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listOutlet.push({
                                 label: response.data.data[i].outlet_name,
@@ -926,7 +891,6 @@ export default {
                 .then(
                     function (response) {
 
-                        console.log("dd :", response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listSupplier.push({
                                 label: response.data.data[i].sup_Name,
@@ -940,16 +904,58 @@ export default {
                 });
         },
 
-        addRawMaterial(index) {
+        async getRawMaterialHqBySupplier() {
+            this.listRawMaterialHqBySupplier = [];
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                supplierId: this.selectSupplier,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialHqBySupplier",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        this.listAllData = response.data.data;
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listRawMaterialHqBySupplier.push({
+                                label: response.data.data[i].rm_Name,
+                                value: response.data.data[i].rm_Id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        addRawMaterial(index, rawMaterialId) {
             this.counter++;
-            console.log("ADD", index);
-            this.rawMaterial.push({
-                type: "",
+            console.log("ADD", index, rawMaterialId);
+
+            let rawMaterial = this.listAllData.find((item) => item.rm_Id == rawMaterialId);
+
+            this.listPurchase.push({
+                rm_Id: rawMaterial.rm_Id,
+                rm_Name: rawMaterial.rm_Name,
+                rm_Quantity: rawMaterial.rm_Quantity,
+                rm_MinQuantity: rawMaterial.rm_MinQuantity,
+                rm_Price: rawMaterial.rm_Price,
+                rm_QuantityRequested: null,
+
             });
         },
-        removeRawMaterial(index) {
+        removeRawMaterial(index, rawMaterialId) {
             this.counter--;
-            console.log("REMOVE", index);
+            console.log("REMOVE", index, rawMaterialId);
             this.rawMaterial.splice(index, 1);
         },
     },
