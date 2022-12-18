@@ -103,7 +103,7 @@
                                             <template #body="searchPO">
 
                                                 <router-link
-                                                    :to="{ name: 'order-stock-supplier', params: { id: searchPO.data.po_No } }">
+                                                    :to="{ name: 'details-purchase-order-hq', params: { id: searchPO.data.po_No } }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
@@ -832,7 +832,6 @@ export default {
                         if (response.data.status == 200) {
                             this.modalPO = false;
                             alert(response.data.message);
-                            this.users.splice(0);
                             this.getPOHq();
                         } else {
                             alert(response.data.message);
@@ -923,6 +922,8 @@ export default {
                 .then(
                     function (response) {
                         this.listAllData = response.data.data;
+
+                        console.log("listAllData : ", this.listAllData);
 
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listRawMaterialHqBySupplier.push({
