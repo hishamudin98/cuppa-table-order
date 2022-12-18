@@ -211,11 +211,8 @@
 
 
             <label>Order No.</label>
-            <Multiselect v-model="fruit" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
-                :options="[
-                    '#QwDer',
-                    '#ASDqwe',
-                ]" @select="papar()" @deselect="padam()" @clear="padam()" />
+            <Multiselect v-model="selectPO" mode="tags" :close-on-select="false" :searchable="true"
+                :create-option="true" :options="this.listPO" @select="papar()" @deselect="padam()" @clear="padam()" />
 
             <div v-if="this.order1 == true">
                 <table class="border-2">
@@ -435,7 +432,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -462,11 +459,13 @@ export default {
             fruit: null,
             order1: false,
             order2: false,
+
+            selectPO: null,
+            listPO: [],
         };
     },
     async created() {
         this.getdata();
-        this.getStore();
     },
 
     methods: {
@@ -506,6 +505,8 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getPOOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -513,31 +514,30 @@ export default {
                 });
         },
 
-        async getStore() {
+
+        async getPOOutlet() {
             var axios = require("axios");
-            // var data = JSON.stringify({
-            //     staffid: localStorage.staff,
-            // });
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
             var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPO",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                data: data, 
             };
             await axios(config)
                 .then(
                     function (response) {
-                        console.log("resp", response.data.data);
-                        this.store = response.data.data;
-                        this.totalData = this.store.length;
-
-                        let price = 0;
+                        console.log("resp 213", response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].rm_Price;
-
+                            this.listPO.push({
+                                label: response.data.data[i].po_No,
+                                value: response.data.data[i].po_Id,
+                            });
                         }
-                        this.sumPrice = price;
                     }.bind(this)
                 )
                 .catch(function (error) {
