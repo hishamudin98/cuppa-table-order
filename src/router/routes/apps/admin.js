@@ -163,20 +163,20 @@ export default [{
     },
 
     {
-        path: "/admin/manage-order-stock",
-        name: "manage-order-stock-supplier",
+        path: "/admin/purchase-order",
+        name: "purchase-order-hq",
         component: () =>
             import (
-                "@/views/apps/administrator/purchaseOrder/hq/manageOrderSupplier.vue"
+                "@/views/apps/administrator/purchaseOrder/hq/purchaseOrder.vue"
             )
     },
 
     {
-        path: "/admin/manage-order-stock/:id",
-        name: "order-stock-supplier",
+        path: "/admin/purchase-order/:id",
+        name: "details-purchase-order-hq",
         component: () =>
             import (
-                "@/views/apps/administrator/purchaseOrder/hq/manageStockOrderSupplier.vue"
+                "@/views/apps/administrator/purchaseOrder/hq/purchaseOrderDetails.vue"
             )
     },
 
@@ -223,17 +223,17 @@ export default [{
     },
 
     {
-        path: "/admin/manage-order-stock-outlet",
-        name: "manage-order-stock-outlet",
+        path: "/admin/purchase-order-outlet",
+        name: "purchase-order-outlet",
         component: () =>
-            import ("@/views/apps/administrator/purchaseOrder/outlet/manageOrder.vue")
+            import ("@/views/apps/administrator/purchaseOrder/outlet/purchaseOrder.vue")
     },
 
     {
-        path: "/admin/order-stock-outlet/:id",
-        name: "order-stock-outlet",
+        path: "/admin/purchase-order-outlet/:id",
+        name: "details-purchase-order-outlet",
         component: () =>
-            import ("@/views/apps/administrator/stock/outlet/stockOrder.vue")
+            import ("@/views/apps/administrator/purchaseOrder/outlet/purchaseOrderDetails.vue")
     },
 
     {
@@ -386,5 +386,19 @@ export default [{
                 }
             ]
         }
-    }
+    },
+
+    {
+        path: "/admin/purchase-order-supplier",
+        name: "purchase-order-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/purchaseOrder/supplier/purchaseOrder.vue")
+    },
+
+    {
+        path: "/admin/purchase-order-supplier/:id",
+        name: "details-purchase-order-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/purchaseOrder/supplier/purchaseOrderDetails.vue")
+    },
 ];

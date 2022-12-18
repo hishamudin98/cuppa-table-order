@@ -122,7 +122,7 @@ export default [{
     {
         child: [{
             title: "Purchase Order",
-            route: { name: "manage-order-stock-supplier" },
+            route: { name: "purchase-order-hq" },
             icon: "shopping-cart",
             meta: {
                 staffCategory: [1, 2]
@@ -133,10 +133,21 @@ export default [{
     {
         child: [{
             title: "Purchase Order",
-            route: { name: "manage-order-stock-outlet" },
+            route: { name: "purchase-order-outlet" },
             icon: "shopping-cart",
             meta: {
                 staffCategory: [3]
+            }
+        }]
+    },
+
+    {
+        child: [{
+            title: "Purchase Order",
+            route: { name: "purchase-order-supplier" },
+            icon: "shopping-cart",
+            meta: {
+                staffCategory: [4]
             }
         }]
     },
