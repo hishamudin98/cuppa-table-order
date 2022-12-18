@@ -205,143 +205,61 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="lg">
-            <FormKit label="PIC Name" type="text" v-model="name" />
-            <FormKit label="PIC Phone No." type="text" v-model="sku" />
-
+        <rs-modal title="Add DO" v-model="modalDO" position="middle" size="lg">
+            <FormKit label="PIC Name" type="text" v-model="pic_name" />
+            <FormKit label="PIC Phone No." type="text" v-model="pic_phone" />
+            <FormKit type="select" label="Outlet Name" placeholder="Select Outlet" v-model="selectOutlet"
+                :options="this.listOutlet" @change="getPOOutlet()" />
 
             <label>Order No.</label>
             <Multiselect v-model="selectPO" mode="tags" :close-on-select="false" :searchable="true"
-                :create-option="true" :options="this.listPO" @select="papar()" @deselect="padam()" @clear="padam()" />
+                :create-option="true" :options="this.listPO" @select="papar(selectPO)"
+                @deselect="padamOrderNo(selectPO)" @clear="padam()" />
 
-            <div v-if="this.order1 == true">
+
+            <div v-for="(rm, l) in this.selectPO" :key="l">
                 <table class="border-2">
                     <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[0] }}</th>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ this.selectOrderNo[l] }}</th>
                     </tr>
                     <tr>
-                        <div class="flex flex-row">
+                        <div class="flex flex-row" v-for="(item, index) in this.listSelectPO" :key="index">
                             <div>
-                                <FormKit type="text" label="Stock Name" value="Fanta 1.5L" readonly />
+                                <FormKit type="text" label="Stock Name" v-model="this.item[l][index].rm_Name"
+                                    :value=this.item[l][index].rm_Name readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity DO" value="5" />
+                                <FormKit type="number" label="Quantity DO"
+                                    v-model="this.item[l][index].rm_QuantityRequested"
+                                    :value=this.item[l][index].rm_QuantityRequested />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity PO" value="5" readonly />
+                                <FormKit type="text" label="Quantity PO" v-model="this.item[l][index].rm_Quantity"
+                                    :value=this.item[l][index].rm_Quantity readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                                <FormKit type="text" label="Quantity Available"
+                                    v-model="this.item[l][index].rm_QuantityHq" :value=this.item[l][index].rm_QuantityHq
+                                    readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Pasta" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="10" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="20" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Coca-cola" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="7" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="10" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
+                                <FormKit type="text" label="Min. Quantity"
+                                    v-model="this.item[l][index].rm_MinQuantityHq"
+                                    :value=this.item[l][index].rm_MinQuantityHq readonly />
                             </div>
                         </div>
                     </tr>
                 </table>
             </div>
-            <div v-if="this.order2 == true">
-                <table class="border-2">
-                    <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[1] }}</th>
-                    </tr>
-                    <tr>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Mushroom" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="3" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="15" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Tea" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="9" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="20" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Coffee" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="7" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="10" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </div>
-                        </div>
-                    </tr>
-                </table>
-            </div>
+
             <br />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="insertDO()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
 
-        <rs-modal title="DO No." v-model="modalDO" position="middle" size="md">
+        <rs-modal title="DO No." v-model="modalStatusDO" position="middle" size="md">
 
             <p>2022-11-18 12:00 : <b>#ASDqwe</b> (Open)</p>
             <p>2022-11-18 12:00 : <b>#ASDqwe</b> (Approved)</p>
@@ -449,10 +367,8 @@ export default {
             quantity: null,
             minquantity: null,
             price: null,
-            packaging_type: null,
-            measurement: null,
-            modalRawMaterial: false,
             modalDO: false,
+            modalStatusDO: false,
             modalInfo: false,
             modalStatus: false,
 
@@ -461,7 +377,13 @@ export default {
             order2: false,
 
             selectPO: null,
+            listSelectPO: [],
             listPO: [],
+            listPOItem: [],
+            item: [],
+            selectOrderNo: [],
+            listOutlet: [],
+            selectOutlet: null,
         };
     },
     async created() {
@@ -469,16 +391,76 @@ export default {
     },
 
     methods: {
-        async papar() {
-            for (var i = 0; i < this.fruit.length; i++) {
-                console.log("data", this.fruit.length);
-                console.log("data2", this.fruit);
-                if (this.fruit[i] == "#QwDer") {
-                    this.order1 = true;
+        async papar(PO_id) {
+
+            this.listSelectPO = [];
+            this.item = [];
+            this.selectOrderNo = [];
+
+            let rawMaterial = null;
+
+            for (var i = 0; i < PO_id.length; i++) {
+                rawMaterial = this.listPOItem.filter((item) => {
+                    return item.po_id == PO_id[i];
+                });
+
+                this.selectOrderNo.push(rawMaterial[0].po_No);
+                this.listSelectPO = [];
+
+                for (let i = 0; i < rawMaterial.length; i++) {
+
+                    this.listSelectPO.push({
+                        rm_Id: rawMaterial[i].rm_Id,
+                        rm_Name: rawMaterial[i].rm_Name,
+                        rm_Quantity: rawMaterial[i].rm_QuantityRequested,
+                        rm_Price: rawMaterial[i].rm_Price,
+                        rm_QuantityRequested: rawMaterial[i].rm_QuantityRequested,
+                        rm_QuantityHq: rawMaterial[i].rm_QuantityHq,
+                        rm_MinQuantityHq: rawMaterial[i].rm_MinQuantityHq,
+                        po_Id: rawMaterial[i].po_Id,
+                        po_No: rawMaterial[i].po_No,
+                        po_outlet_details_id: rawMaterial[i].po_outlet_details_id,
+
+                    });
+
                 }
-                if (this.fruit[i] == "#ASDqwe") {
-                    this.order2 = true;
+                this.item.push(this.listSelectPO);
+            }
+        },
+
+        async padamOrderNo(PO_id) {
+            this.listSelectPO = [];
+            this.item = [];
+            this.selectOrderNo = [];
+
+            let rawMaterial = null;
+
+            for (var i = 0; i < PO_id.length; i++) {
+                rawMaterial = this.listPOItem.filter((item) => {
+                    return item.po_id == PO_id[i];
+                });
+
+                this.selectOrderNo.push(rawMaterial[0].po_No);
+                this.listSelectPO = [];
+
+                for (let i = 0; i < rawMaterial.length; i++) {
+
+                    this.listSelectPO.push({
+                        rm_Id: rawMaterial[i].rm_Id,
+                        rm_Name: rawMaterial[i].rm_Name,
+                        rm_Quantity: rawMaterial[i].rm_QuantityRequested,
+                        rm_Price: rawMaterial[i].rm_Price,
+                        rm_QuantityRequested: rawMaterial[i].rm_QuantityRequested,
+                        rm_QuantityHq: rawMaterial[i].rm_QuantityHq,
+                        rm_MinQuantityHq: rawMaterial[i].rm_MinQuantityHq,
+                        po_Id: rawMaterial[i].po_Id,
+                        po_No: rawMaterial[i].po_No,
+                        po_outlet_details_id: rawMaterial[i].po_outlet_details_id,
+
+                    });
+
                 }
+                this.item.push(this.listSelectPO);
             }
         },
 
@@ -506,7 +488,9 @@ export default {
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
-                        this.getPOOutlet();
+                        // this.getPOOutlet();
+                        this.getPOItem();
+                        this.getOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -516,22 +500,29 @@ export default {
 
 
         async getPOOutlet() {
+            this.listPO = [];
+            this.listSelectPO = [];
+            this.item = [];
+            this.selectOrderNo = [];
+            this.padam();
+
+
             var axios = require("axios");
             var data = JSON.stringify({
                 staffId: this.staffId,
+                outletId: this.selectOutlet,
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getPO",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPOOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                data: data, 
+                data: data,
             };
             await axios(config)
                 .then(
                     function (response) {
-                        console.log("resp 213", response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listPO.push({
                                 label: response.data.data[i].po_No,
@@ -545,14 +536,68 @@ export default {
                 });
         },
 
+        async getPOItem() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPOItem",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        this.listPOItem = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listOutlet.push({
+                                label: response.data.data[i].outlet_name,
+                                value: response.data.data[i].outlet_id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
         async clickBtnAdd() {
             // this.users1 = user.data;
-            this.modalRawMaterial = true;
+            this.modalDO = true;
         },
 
         async clickBtnDO() {
             // this.users1 = user.data;
-            this.modalDO = true;
+            this.modalStatusDO = true;
         },
 
         async clickBtnInfo() {
@@ -565,21 +610,19 @@ export default {
             this.modalStatus = true;
         },
 
-        async insertRawMaterial() {
+        async insertDO() {
             var axios = require("axios");
             var data = JSON.stringify({
-                name: this.name,
-                sku: this.sku,
-                quantity: this.quantity,
-                minquantity: this.minquantity,
-                price: this.price,
-                packaging_type: this.packaging_type,
-                measurement: this.measurement,
+                staffId: this.staffId,
+                picName: this.pic_name,
+                picPhone: this.pic_phone,
+                order: this.item,
+                remarks: this.remarks,
+                outlet: this.selectOutlet,
             });
-            console.log("Insert data :", data);
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/insertDOHq",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -589,13 +632,37 @@ export default {
                 .then(
                     function (response) {
                         if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
+                            this.modalDO = false;
                             alert(response.data.message);
                             this.users.splice(0);
                             this.getRawMaterial();
                         } else {
                             alert(response.data.message);
                         }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getDOHq() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        this.listDO = response.data.data;
                     }.bind(this)
                 )
                 .catch(function (error) {
