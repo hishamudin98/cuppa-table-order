@@ -239,7 +239,7 @@ export default {
         async getStore() {
             var axios = require("axios");
             var data = JSON.stringify({
-                type: 0,
+                outletId: 0,
                 staffId: this.staffId,
             });
             var config = {
