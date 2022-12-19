@@ -29,108 +29,81 @@
                         <rs-card style="margin-top: 40px">
                             <div>
                                 <div>
-                                    <DataTable :value="searchStore" :paginator="true" :rows="10"
+                                    <DataTable :value="searchDO" :paginator="true" :rows="10"
                                         v-model:expandedRows="expandedRows"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                                         <Column :expander="true" headerStyle="width: 3rem" />
-                                        <Column field="sto_Name" header="DO No.">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Name === 'Store A'">D0-00001</p>
-                                                <p v-if="searchStore.data.sto_Name === 'Store B'">D0-00002</p>
-                                            </template>
+                                        <Column field="do_No" header="DO No.">
                                         </Column>
-                                        <Column field="sto_Email" header="Date">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Name === 'Store A'">14/07/2022 12:00
-                                                </p>
-                                                <p v-if="searchStore.data.sto_Name === 'Store B'">15/07/2022 12:00
-                                                </p>
+                                        <Column field="do_CreatedDate" header="Date">
+                                        </Column>
+
+                                        <Column field="staff_Name" header="Staff">
+                                        </Column>
+
+                                        <Column field="do_TotalPrice" header="Total Price">
+                                            <template #body="searchDO">
+                                                {{ formatPrice(searchDO.data.do_TotalPrice) }}
                                             </template>
                                         </Column>
 
-                                        <Column field="sto_PhoneNo" header="Staff">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Type">Staff HQ</p>
-                                                <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                            </template>
-                                        </Column>
-                                        <Column field="sto_Type" header="Total Price">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
-                                                <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                            </template>
-                                        </Column>
+
 
 
                                         <Column field="sto_Status" header="Status">
-                                            <template #body="searchStore">
-                                                <rs-badges variant="warning" v-if="searchStore.data.sto_Status"
+                                            <template #body="searchDO">
+                                                <rs-badges variant="warning" v-if="searchDO.data.do_Status"
                                                     @click="clickBtnStatus()">
                                                     Approved</rs-badges>
                                                 {{ "" }}
                                                 <Button icon="pi pi-info" class="p-button-rounded p-button-info"
                                                     style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                                                <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                                                <p v-if="searchDO.data.sto_Status === '2'">Inactive</p>
                                             </template>
 
                                         </Column>
 
-                                        <Column field="sto_Status" header="PIC Name">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Status === '1'">
-                                                    Customer Name
-                                                </p>
-                                                <p v-if="searchStore.data.sto_Status === '2'">
-                                                    Inactive
-                                                </p>
-                                            </template>
+                                        <Column field="do_PIC" header="PIC Name">
                                         </Column>
 
-                                        <Column field="sto_Status" header="PIC Phone No.">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Status === '1'">
-                                                    0123123123
-                                                </p>
-                                                <p v-if="searchStore.data.sto_Status === '2'">
-                                                    Inactive
-                                                </p>
-                                            </template>
+                                        <Column field="do_PICPhoneNo" header="PIC Phone No.">
                                         </Column>
 
                                         <Column :exportable="false" header="Details">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.rm_Status === '1'" hidden>Level 1</p>
-                                                <router-link :to="{ name: 'manage-stock' }">
+                                            <template #body="searchDO">
+                                                <p v-if="searchDO.data.do_Status === '1'" hidden>Level 1</p>
+                                                <router-link
+                                                    :to="{ name: 'manage-delivery-order-details', params: { id: searchDO.data.do_Id } }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
                                         </Column>
 
                                         <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                                            <template #body="searchStore">
+                                            <template #body="searchDO">
                                                 <Button icon="pi pi-print"
                                                     class="p-button-rounded p-button-warning mr-2"
                                                     @click="editUser(searchOrderStock)" /> {{ "" }}
                                                 <Button icon="pi pi-pencil"
                                                     class="p-button-rounded p-button-success mr-2"
-                                                    @click="editUser(searchStore)" /> {{ "" }}
+                                                    @click="editUser(searchDO)" /> {{ "" }}
                                                 <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                    @click="deleteUser(searchStore)" />
+                                                    @click="deleteUser(searchDO)" />
 
 
                                             </template>
                                         </Column>
 
 
-                                        <template #expansion="searchStore12">
+                                        <template #expansion="searchDO12">
                                             <div class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">Order No. Record for D0-00001 {{
-                                                        searchStore12.data.sto_Status2
+                                                        searchDO12.data.sto_Status2
                                                 }}</h5>
 
-                                                <DataTable :value="searchStore" :paginator="true" :rows="10"
+                                                <DataTable :value="searchDO" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
@@ -138,35 +111,35 @@
 
                                                     <Column field="sto_Status" header="Order No.">
 
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                        <template #body="searchDO">
+                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
                                                                 #QwDer</p>
-                                                            <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
                                                                 #ASDqwe</p>
                                                         </template>
 
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Order Datetime">
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.sto_Name === 'Store A'">
+                                                        <template #body="searchDO">
+                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
                                                                 14/07/2022 12:00</p>
-                                                            <p v-if="searchStore.data.sto_Name === 'Store B'">
+                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
                                                                 15/07/2022 12:00</p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Remarks">
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.sto_Status == '1'">
+                                                        <template #body="searchDO">
+                                                            <p v-if="searchDO.data.sto_Status == '1'">
                                                                 Wrap </p>
                                                         </template>
                                                     </Column>
 
                                                     <Column field="sto_Status" header="Status Delivery">
-                                                        <template #body="searchStore">
+                                                        <template #body="searchDO">
                                                             <rs-badges variant="warning"
-                                                                v-if="searchStore.data.sto_Status">
+                                                                v-if="searchDO.data.sto_Status">
                                                                 Prepairing</rs-badges>
                                                             {{ "" }}
                                                             <Button icon="pi pi-info"
@@ -317,17 +290,17 @@ export default {
 
     },
     setup() {
-        const store = ref([]);
+        const deliveryOrder = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
-        const searchStore = computed(() => {
-            return store.value.filter((store) => {
+        const searchDO = computed(() => {
+            return deliveryOrder.value.filter((deliveryOrder) => {
                 return (
-                    store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    deliveryOrder.do_No.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    store.sto_Name
+                    deliveryOrder.do_No
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -341,8 +314,8 @@ export default {
         };
         return {
             search,
-            searchStore,
-            store,
+            searchDO,
+            deliveryOrder,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -372,7 +345,6 @@ export default {
             modalInfo: false,
             modalStatus: false,
 
-            fruit: null,
             order1: false,
             order2: false,
 
@@ -384,6 +356,8 @@ export default {
             selectOrderNo: [],
             listOutlet: [],
             selectOutlet: null,
+            pic_name: null,
+            pic_phone: null,
         };
     },
     async created() {
@@ -491,6 +465,7 @@ export default {
                         // this.getPOOutlet();
                         this.getPOItem();
                         this.getOutlet();
+                        this.getDOHq();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -634,8 +609,7 @@ export default {
                         if (response.data.status == 200) {
                             this.modalDO = false;
                             alert(response.data.message);
-                            this.users.splice(0);
-                            this.getRawMaterial();
+                            this.getDOHq();
                         } else {
                             alert(response.data.message);
                         }
@@ -662,7 +636,7 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        this.listDO = response.data.data;
+                        this.deliveryOrder = response.data.data;
                     }.bind(this)
                 )
                 .catch(function (error) {

@@ -1,322 +1,238 @@
 <template>
     <rs-layout>
-        <div class="w-full flex flex-col">
-            <div style="display: flex; flex-direction: row">
 
-                <div class="w-full h-1/4 flex flex-col">
-                    <div class="w-full flex flex-row mb-0">
+        <div style="display: flex; flex-direction: row">
+
+            <div class="w-full h-1/4 flex flex-col">
+                <div class="w-full flex flex-row mb-0">
+
+                </div>
+                <div class="w-full" style="flex-direction: column">
+                    <!-- UNTUK ATAS BAWAH -->
+                    <div style="display: flex; flex-direction: row; padding-top: 10px">
+                        <div class="w-full h-1">
+                            <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
+                                inner:
+                                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                                outer: 'flex-1 mb-0',
+                                input: 'h-10',
+                            }" />
+                        </div>
+
+                        <div class="w-1/12" style="">
+                            <rs-button class="bg-heandshe hover:bg-heandshe">Filter
+                            </rs-button>
+                        </div>
 
                     </div>
-                    <div class="w-full" style="flex-direction: column">
-                        <!-- UNTUK ATAS BAWAH -->
-                        <div style="display: flex; flex-direction: row; padding-top: 10px">
-                            <div class="w-full h-1">
-                                <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search"
-                                    :classes="{
-                                        inner:
-                                            'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                                        outer: 'flex-1 mb-0',
-                                        input: 'h-10',
-                                    }" />
-                            </div>
-
-                            <div class="w-1/12" style="">
-                                <rs-button class="bg-heandshe hover:bg-heandshe">Filter
-                                </rs-button>
-                            </div>
-
-                        </div>
-                        <div class="">
-                            <rs-card style="margin-top: 40px">
+                    <div class="">
+                        <rs-card style="margin-top: 40px">
+                            <div>
                                 <div>
-                                    <div>
-                                        <DataTable :value="searchStore" :paginator="true" :rows="10"
-                                            v-model:expandedRows="expandedRows"
-                                            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                                            :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                            <Column :expander="true" headerStyle="width: 3rem" />
-                                            <Column field="sto_Name" header="DO No.">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Name === 'store outlet'">D0-00001</p>
-                                                    <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">D0-00002</p>
-                                                </template>
-                                            </Column>
-                                            <Column field="sto_Email" header="Date">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Name === 'store outlet'">14/07/2022 12:00
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">15/07/2022 12:00
-                                                    </p>
-                                                </template>
-                                            </Column>
+                                    <DataTable :value="searchDO" :paginator="true" :rows="10"
+                                        v-model:expandedRows="expandedRows"
+                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                        <Column :expander="true" headerStyle="width: 3rem" />
+                                        <Column field="do_No" header="DO No.">
+                                        </Column>
+                                        <Column field="do_CreatedDate" header="Date">
+                                        </Column>
 
-                                            <Column field="sto_PhoneNo" header="Staff">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type">Staff HQ</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                                </template>
-                                            </Column>
-                                            <Column field="sto_Type" header="Total Price">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                                </template>
-                                            </Column>
+                                        <Column field="staff_Name" header="Staff">
+                                        </Column>
 
-
-                                            <Column field="sto_Status" header="Status">
-                                                <template #body="searchStore">
-                                                    <rs-badges variant="warning" v-if="searchStore.data.sto_Status"
-                                                        @click="clickBtnStatus()">
-                                                        Approved</rs-badges>
-                                                    {{ "" }}
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                                                    <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
-                                                </template>
-
-                                            </Column>
-
-                                            <Column field="sto_Status" header="PIC Name">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">
-                                                        Customer Name
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
-                                                </template>
-                                            </Column>
-
-                                            <Column field="sto_Status" header="PIC Phone No.">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">
-                                                        0123123123
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
-                                                </template>
-                                            </Column>
-
-                                            <Column :exportable="false" header="Details">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.rm_Status === '1'" hidden>Level 1</p>
-                                                    <!-- <router-link :to="{ name: 'manage-stock' }"> -->
-                                                        <Button icon="pi pi-truck"
-                                                            class="p-button-rounded p-button-info" />
-                                                    <!-- </router-link> -->
-                                                </template>
-                                            </Column>
-
-                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                                                <template #body="searchStore">
-                                                    <Button icon="pi pi-print"
-                                                        class="p-button-rounded p-button-warning mr-2"
-                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
-                                                    <Button icon="pi pi-pencil"
-                                                        class="p-button-rounded p-button-success mr-2"
-                                                        @click="editUser(searchStore)" /> {{ "" }}
-                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                        @click="deleteUser(searchStore)" />
-
-
-                                                </template>
-                                            </Column>
-
-
-                                            <template #expansion="searchStore12">
-                                                <div class="orders-subtable">
-                                                    <h5 style="margin-bottom:20px">Order No. Record for D0-00001 {{
-                                                            searchStore12.data.sto_Status2
-                                                    }}</h5>
-
-                                                    <DataTable :value="searchStore" :paginator="true" :rows="10"
-                                                        v-model:expandedRows="expandedRows"
-                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-
-                                                        <Column field="sto_Status" header="Order No.">
-
-                                                            <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Name === 'store outlet'">
-                                                                    #QwDer</p>
-                                                                <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">
-                                                                    #ASDqwe</p>
-                                                            </template>
-
-                                                        </Column>
-
-                                                        <Column field="sto_Status" header="Order Datetime">
-                                                            <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Name === 'store outlet'">
-                                                                    14/07/2022 12:00</p>
-                                                                <p v-if="searchStore.data.sto_Name === 'Store outlet UPM'">
-                                                                    15/07/2022 12:00</p>
-                                                            </template>
-                                                        </Column>
-
-                                                        <Column field="sto_Status" header="Remarks">
-                                                            <template #body="searchStore">
-                                                                <p v-if="searchStore.data.sto_Status == '1'">
-                                                                    Wrap </p>
-                                                            </template>
-                                                        </Column>
-
-                                                        <Column field="sto_Status" header="Status Delivery">
-                                                            <template #body="searchStore">
-                                                                <rs-badges variant="warning"
-                                                                    v-if="searchStore.data.sto_Status">
-                                                                    Prepairing</rs-badges>
-                                                                {{ "" }}
-                                                                <Button icon="pi pi-info"
-                                                                    class="p-button-rounded p-button-info"
-                                                                    style="width: 25px;height:25px"
-                                                                    @click="clickBtnInfo()" />
-                                                            </template>
-                                                        </Column>
-
-
-                                                        <template #paginatorstart>
-                                                            <Button type="button" icon="pi pi-refresh"
-                                                                class="p-button-text" />
-                                                        </template>
-                                                        <template #paginatorend>
-                                                            <Button type="button" icon="pi pi-cloud"
-                                                                class="p-button-text" />
-                                                        </template>
-
-                                                    </DataTable>
+                                        <Column field="do_TotalPrice" header="Total Price">
+                                            <template #body="searchDO">
+                                                {{ formatPrice(searchDO.data.do_TotalPrice) }}
+                                            </template>
+                                        </Column>
 
 
 
-                                                </div>
+
+                                        <Column field="sto_Status" header="Status">
+                                            <template #body="searchDO">
+                                                <rs-badges variant="warning" v-if="searchDO.data.do_Status"
+                                                    @click="clickBtnStatus()">
+                                                    Approved</rs-badges>
+                                                {{ "" }}
+                                                <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                    style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                <p v-if="searchDO.data.sto_Status === '2'">Inactive</p>
                                             </template>
 
-                                        </DataTable>
-                                    </div>
-                                </div>
-                            </rs-card>
-                        </div>
+                                        </Column>
 
-                        <!-- UNTUK ATAS BAWAH -->
+                                        <Column field="do_PIC" header="PIC Name">
+                                        </Column>
+
+                                        <Column field="do_PICPhoneNo" header="PIC Phone No.">
+                                        </Column>
+
+                                        <Column :exportable="false" header="Details">
+                                            <template #body="searchDO">
+                                                <p v-if="searchDO.data.do_Status === '1'" hidden>Level 1</p>
+                                                <router-link
+                                                    :to="{ name: 'manage-delivery-order-details', params: { id: searchDO.data.do_Id } }">
+                                                    <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                                                </router-link>
+                                            </template>
+                                        </Column>
+
+                                        <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                                            <template #body="searchDO">
+                                                <Button icon="pi pi-print"
+                                                    class="p-button-rounded p-button-warning mr-2"
+                                                    @click="editUser(searchOrderStock)" /> {{ "" }}
+                                                <Button icon="pi pi-pencil"
+                                                    class="p-button-rounded p-button-success mr-2"
+                                                    @click="editUser(searchDO)" /> {{ "" }}
+                                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                                    @click="deleteUser(searchDO)" />
+
+
+                                            </template>
+                                        </Column>
+
+
+                                        <template #expansion="searchDO12">
+                                            <div class="orders-subtable">
+                                                <h5 style="margin-bottom:20px">Order No. Record for D0-00001 {{
+                                                        searchDO12.data.sto_Status2
+                                                }}</h5>
+
+                                                <DataTable :value="searchDO" :paginator="true" :rows="10"
+                                                    v-model:expandedRows="expandedRows"
+                                                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                    :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+
+                                                    <Column field="sto_Status" header="Order No.">
+
+                                                        <template #body="searchDO">
+                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
+                                                                #QwDer</p>
+                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
+                                                                #ASDqwe</p>
+                                                        </template>
+
+                                                    </Column>
+
+                                                    <Column field="sto_Status" header="Order Datetime">
+                                                        <template #body="searchDO">
+                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
+                                                                14/07/2022 12:00</p>
+                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
+                                                                15/07/2022 12:00</p>
+                                                        </template>
+                                                    </Column>
+
+                                                    <Column field="sto_Status" header="Remarks">
+                                                        <template #body="searchDO">
+                                                            <p v-if="searchDO.data.sto_Status == '1'">
+                                                                Wrap </p>
+                                                        </template>
+                                                    </Column>
+
+                                                    <Column field="sto_Status" header="Status Delivery">
+                                                        <template #body="searchDO">
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchDO.data.sto_Status">
+                                                                Prepairing</rs-badges>
+                                                            {{ "" }}
+                                                            <Button icon="pi pi-info"
+                                                                class="p-button-rounded p-button-info"
+                                                                style="width: 25px;height:25px"
+                                                                @click="clickBtnInfo()" />
+                                                        </template>
+                                                    </Column>
+
+
+                                                    <template #paginatorstart>
+                                                        <Button type="button" icon="pi pi-refresh"
+                                                            class="p-button-text" />
+                                                    </template>
+                                                    <template #paginatorend>
+                                                        <Button type="button" icon="pi pi-cloud"
+                                                            class="p-button-text" />
+                                                    </template>
+
+                                                </DataTable>
+
+
+
+                                            </div>
+                                        </template>
+
+                                    </DataTable>
+                                </div>
+                            </div>
+                        </rs-card>
                     </div>
+
+                    <!-- UNTUK ATAS BAWAH -->
                 </div>
-                <!-- UNTUK SEBELAH2 -->
             </div>
+            <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add DO" v-model="modalRawMaterial" position="middle" size="lg">
-            <FormKit label="PIC Name" type="text" v-model="name" />
-            <FormKit label="PIC Phone No." type="text" v-model="sku" />
-
+        <rs-modal title="Add DO" v-model="modalDO" position="middle" size="lg">
+            <FormKit label="PIC Name" type="text" v-model="pic_name" />
+            <FormKit label="PIC Phone No." type="text" v-model="pic_phone" />
+            <FormKit type="select" label="Outlet Name" placeholder="Select Outlet" v-model="selectOutlet"
+                :options="this.listOutlet" @change="getPOOutlet()" />
 
             <label>Order No.</label>
-            <Multiselect v-model="fruit" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
-                :options="[
-                    '#QwDer',
-                    '#ASDqwe',
-                ]" @select="papar()" @deselect="padam()" @clear="padam()" />
+            <Multiselect v-model="selectPO" mode="tags" :close-on-select="false" :searchable="true"
+                :create-option="true" :options="this.listPO" @select="papar(selectPO)"
+                @deselect="padamOrderNo(selectPO)" @clear="padam()" />
 
-            <div v-if="this.order1 == true">
+
+            <div v-for="(rm, l) in this.selectPO" :key="l">
                 <table class="border-2">
                     <tr>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ this.selectOrderNo[l] }}</th>
                     </tr>
                     <tr>
-                        <div class="flex flex-row">
+                        <div class="flex flex-row" v-for="(item, index) in this.listSelectPO" :key="index">
                             <div>
-                                <FormKit type="text" label="Stock Name" value="Fanta 1.5L" readonly />
+                                <FormKit type="text" label="Stock Name" v-model="this.item[l][index].rm_Name"
+                                    :value=this.item[l][index].rm_Name readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity DO" value="5" />
+                                <FormKit type="number" label="Quantity DO"
+                                    v-model="this.item[l][index].rm_QuantityRequested"
+                                    :value=this.item[l][index].rm_QuantityRequested />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity PO" value="5" readonly />
+                                <FormKit type="text" label="Quantity PO" v-model="this.item[l][index].rm_Quantity"
+                                    :value=this.item[l][index].rm_Quantity readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity Available" value="5" readonly />
+                                <FormKit type="text" label="Quantity Available"
+                                    v-model="this.item[l][index].rm_QuantityHq" :value=this.item[l][index].rm_QuantityHq
+                                    readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Min. Quantity" value="5" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Pasta" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="10" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="20" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Coca-cola" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="7" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="10" readonly />
+                                <FormKit type="text" label="Min. Quantity"
+                                    v-model="this.item[l][index].rm_MinQuantityHq"
+                                    :value=this.item[l][index].rm_MinQuantityHq readonly />
                             </div>
                         </div>
                     </tr>
                 </table>
             </div>
-            <div v-if="this.order2 == true">
-                <table class="border-2">
-                    <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[1] }}</th>
-                    </tr>
-                    <tr>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Mushroom" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="3" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="15" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Tea" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="9" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="20" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Coffee" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity DO" value="7" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" value="10" readonly />
-                            </div>
-                        </div>
-                    </tr>
-                </table>
-            </div>
+
             <br />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="insertDO()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
 
-        <rs-modal title="DO No." v-model="modalDO" position="middle" size="md">
+        <rs-modal title="DO No." v-model="modalStatusDO" position="middle" size="md">
 
             <p>2022-11-18 12:00 : <b>#ASDqwe</b> (Open)</p>
             <p>2022-11-18 12:00 : <b>#ASDqwe</b> (Approved)</p>
@@ -331,7 +247,6 @@
             <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
             <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
         </rs-modal>
-
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
             <FormKit type="select" label="Status" :options="[
@@ -375,17 +290,17 @@ export default {
 
     },
     setup() {
-        const store = ref([]);
+        const deliveryOrder = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
-        const searchStore = computed(() => {
-            return store.value.filter((store) => {
+        const searchDO = computed(() => {
+            return deliveryOrder.value.filter((deliveryOrder) => {
                 return (
-                    store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    deliveryOrder.do_No.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    store.sto_Name
+                    deliveryOrder.do_No
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -399,8 +314,8 @@ export default {
         };
         return {
             search,
-            searchStore,
-            store,
+            searchDO,
+            deliveryOrder,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -425,16 +340,24 @@ export default {
             quantity: null,
             minquantity: null,
             price: null,
-            packaging_type: null,
-            measurement: null,
-            modalRawMaterial: false,
             modalDO: false,
+            modalStatusDO: false,
             modalInfo: false,
             modalStatus: false,
 
-            fruit: null,
             order1: false,
             order2: false,
+
+            selectPO: null,
+            listSelectPO: [],
+            listPO: [],
+            listPOItem: [],
+            item: [],
+            selectOrderNo: [],
+            listOutlet: [],
+            selectOutlet: null,
+            pic_name: null,
+            pic_phone: null,
         };
     },
     async created() {
@@ -442,16 +365,76 @@ export default {
     },
 
     methods: {
-        async papar() {
-            for (var i = 0; i < this.fruit.length; i++) {
-                console.log("data", this.fruit.length);
-                console.log("data2", this.fruit);
-                if (this.fruit[i] == "#QwDer") {
-                    this.order1 = true;
+        async papar(PO_id) {
+
+            this.listSelectPO = [];
+            this.item = [];
+            this.selectOrderNo = [];
+
+            let rawMaterial = null;
+
+            for (var i = 0; i < PO_id.length; i++) {
+                rawMaterial = this.listPOItem.filter((item) => {
+                    return item.po_id == PO_id[i];
+                });
+
+                this.selectOrderNo.push(rawMaterial[0].po_No);
+                this.listSelectPO = [];
+
+                for (let i = 0; i < rawMaterial.length; i++) {
+
+                    this.listSelectPO.push({
+                        rm_Id: rawMaterial[i].rm_Id,
+                        rm_Name: rawMaterial[i].rm_Name,
+                        rm_Quantity: rawMaterial[i].rm_QuantityRequested,
+                        rm_Price: rawMaterial[i].rm_Price,
+                        rm_QuantityRequested: rawMaterial[i].rm_QuantityRequested,
+                        rm_QuantityHq: rawMaterial[i].rm_QuantityHq,
+                        rm_MinQuantityHq: rawMaterial[i].rm_MinQuantityHq,
+                        po_Id: rawMaterial[i].po_Id,
+                        po_No: rawMaterial[i].po_No,
+                        po_outlet_details_id: rawMaterial[i].po_outlet_details_id,
+
+                    });
+
                 }
-                if (this.fruit[i] == "#ASDqwe") {
-                    this.order2 = true;
+                this.item.push(this.listSelectPO);
+            }
+        },
+
+        async padamOrderNo(PO_id) {
+            this.listSelectPO = [];
+            this.item = [];
+            this.selectOrderNo = [];
+
+            let rawMaterial = null;
+
+            for (var i = 0; i < PO_id.length; i++) {
+                rawMaterial = this.listPOItem.filter((item) => {
+                    return item.po_id == PO_id[i];
+                });
+
+                this.selectOrderNo.push(rawMaterial[0].po_No);
+                this.listSelectPO = [];
+
+                for (let i = 0; i < rawMaterial.length; i++) {
+
+                    this.listSelectPO.push({
+                        rm_Id: rawMaterial[i].rm_Id,
+                        rm_Name: rawMaterial[i].rm_Name,
+                        rm_Quantity: rawMaterial[i].rm_QuantityRequested,
+                        rm_Price: rawMaterial[i].rm_Price,
+                        rm_QuantityRequested: rawMaterial[i].rm_QuantityRequested,
+                        rm_QuantityHq: rawMaterial[i].rm_QuantityHq,
+                        rm_MinQuantityHq: rawMaterial[i].rm_MinQuantityHq,
+                        po_Id: rawMaterial[i].po_Id,
+                        po_No: rawMaterial[i].po_No,
+                        po_outlet_details_id: rawMaterial[i].po_outlet_details_id,
+
+                    });
+
                 }
+                this.item.push(this.listSelectPO);
             }
         },
 
@@ -479,8 +462,10 @@ export default {
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
-                        this.getStore();
-
+                        // this.getPOOutlet();
+                        this.getPOItem();
+                        this.getOutlet();
+                        this.getDO();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -488,14 +473,23 @@ export default {
                 });
         },
 
-        async getStore() {
+
+        async getPOOutlet() {
+            this.listPO = [];
+            this.listSelectPO = [];
+            this.item = [];
+            this.selectOrderNo = [];
+            this.padam();
+
+
             var axios = require("axios");
             var data = JSON.stringify({
                 staffId: this.staffId,
+                outletId: this.selectOutlet,
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPOOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -504,16 +498,66 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        console.log("resp", response.data.data);
-                        this.store = response.data.data;
-                        this.totalData = this.store.length;
-
-                        let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].rm_Price;
-
+                            this.listPO.push({
+                                label: response.data.data[i].po_No,
+                                value: response.data.data[i].po_Id,
+                            });
                         }
-                        this.sumPrice = price;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getPOItem() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPOItem",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        this.listPOItem = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listOutlet.push({
+                                label: response.data.data[i].outlet_name,
+                                value: response.data.data[i].outlet_id,
+                            });
+                        }
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -523,12 +567,12 @@ export default {
 
         async clickBtnAdd() {
             // this.users1 = user.data;
-            this.modalRawMaterial = true;
+            this.modalDO = true;
         },
 
         async clickBtnDO() {
             // this.users1 = user.data;
-            this.modalDO = true;
+            this.modalStatusDO = true;
         },
 
         async clickBtnInfo() {
@@ -541,22 +585,19 @@ export default {
             this.modalStatus = true;
         },
 
-
-        async insertRawMaterial() {
+        async insertDO() {
             var axios = require("axios");
             var data = JSON.stringify({
-                name: this.name,
-                sku: this.sku,
-                quantity: this.quantity,
-                minquantity: this.minquantity,
-                price: this.price,
-                packaging_type: this.packaging_type,
-                measurement: this.measurement,
+                staffId: this.staffId,
+                picName: this.pic_name,
+                picPhone: this.pic_phone,
+                order: this.item,
+                remarks: this.remarks,
+                outlet: this.selectOutlet,
             });
-            console.log("Insert data :", data);
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/insertDOHq",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -566,13 +607,38 @@ export default {
                 .then(
                     function (response) {
                         if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
+                            this.modalDO = false;
                             alert(response.data.message);
                             this.users.splice(0);
                             this.getRawMaterial();
                         } else {
                             alert(response.data.message);
                         }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getDO() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("response", response.data.data);
+                        this.deliveryOrder = response.data.data;
                     }.bind(this)
                 )
                 .catch(function (error) {
