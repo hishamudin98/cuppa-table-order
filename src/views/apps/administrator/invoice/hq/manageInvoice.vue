@@ -26,152 +26,108 @@
             <rs-card style="margin-top: 40px">
               <div>
                 <div>
-                  <DataTable :value="searchStore" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
+                  <DataTable :value="searchInvoice" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                     <Column :expander="true" headerStyle="width: 3rem" />
-                    <Column field="sto_Name" header="Invoice No.">
-                      <template #body="searchStore">
-                        <p v-if="searchStore.data.sto_Name === 'Store A'">
-                          Inv-00001</p>
-                        <p v-if="searchStore.data.sto_Name === 'Store B'">
-                          Inv-00002</p>
-                      </template>
+                    <Column field="invoice_No" header="Invoice No.">
                     </Column>
-                    <Column field="sto_Email" header="Date">
-                      <template #body="searchStore">
-                        <p v-if="searchStore.data.sto_Type">14/07/2022</p>
-                        <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                      </template>
+                    <Column field="invoice_CreatedDate" header="Date">
                     </Column>
 
-                    <Column field="sto_PhoneNo" header="Staff">
-                      <template #body="searchStore">
-                        <p v-if="searchStore.data.sto_Type">Staff HQ</p>
-                        <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
+                    <Column field="staff_Name" header="Staff">
+                    </Column>
+
+                    <Column field="invoice_TotalPrice" header="Total Price">
+                      <template #body="searchInvoice">
+                        <p>{{ parseFloat(searchInvoice.data.invoice_TotalPrice).toFixed(2) }}</p>
                       </template>
                     </Column>
 
-                    <Column field="sto_Type" header="Total Price">
-                      <template #body="searchStore">
-                        <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
-                        <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                      </template>
-                    </Column>
-
-                    <!-- <Column field="sto_Level" header="Bill To">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Type === '1'">
-                                                        He & She University of Malaya
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                                </template>
-                                            </Column>
-
-                                            <Column field="sto_Status" header="PIC Name">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">
-                                                        Customer Name
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
-                                                </template>
-                                            </Column>
-
-                                            <Column field="sto_Status" header="PIC Phone No.">
-                                                <template #body="searchStore">
-                                                    <p v-if="searchStore.data.sto_Status === '1'">
-                                                        0123123123
-                                                    </p>
-                                                    <p v-if="searchStore.data.sto_Status === '2'">
-                                                        Inactive
-                                                    </p>
-                                                </template>
-                                            </Column> -->
-
-                    <Column field="sto_Status" header="Status">
-                      <template #body="searchStore">
-                        <rs-badges variant="warning" v-if="searchStore.data.sto_Status" @click="clickBtnStatus()">
+                    <Column field="invoice_Status" header="Status">
+                      <template #body="searchInvoice">
+                        <rs-badges variant="warning" v-if="searchInvoice.data.invoice_Status" @click="clickBtnStatus()">
                           Approved</rs-badges>
                         {{ "" }}
                         <Button icon="pi pi-info" class="p-button-rounded p-button-info" style="width: 25px;height:25px"
                           @click="clickBtnInfo()" />
-                        <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                        <p v-if="searchInvoice.data.invoice_Status === '2'">Inactive</p>
 
                       </template>
                     </Column>
 
                     <Column :exportable="false" header="Details">
-                      <template #body="searchStore">
-                        <p v-if="searchStore.data.rm_Status === '1'" hidden>
+                      <template #body="searchInvoice">
+                        <p v-if="searchInvoice.data.rm_Status === '1'" hidden>
                           Level 1
                         </p>
-                        <router-link :to="{ name: 'manage-stock' }">
+                        <router-link
+                          :to="{ name: 'hq-invoice-details', params: { id: searchInvoice.data.invoice_Id } }">
                           <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                         </router-link>
                       </template>
                     </Column>
 
                     <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                      <template #body="searchStore">
+                      <template #body="searchInvoice">
                         <Button icon="pi pi-print" class="p-button-rounded p-button-warning mr-2"
                           @click="editUser(searchOrderStock)" /> {{ "" }}
 
                         <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                          @click="editUser(searchStore)" />
+                          @click="editUser(searchInvoice)" />
                         {{ "" }}
                         <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                          @click="deleteUser(searchStore)" />
+                          @click="deleteUser(searchInvoice)" />
                       </template>
                     </Column>
 
-                    <template #expansion="searchStore12">
+                    <template #expansion="searchInvoice12">
                       <div class="orders-subtable">
                         <h5 style="margin-bottom: 20px">
                           Delivery Order Record for Inv-00001
-                          {{ searchStore12.data.sto_Status2 }}
+                          {{ searchInvoice12.data.sto_Status2 }}
                         </h5>
 
-                        <DataTable :value="searchStore" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
+                        <DataTable :value="searchInvoice" :paginator="true" :rows="10"
+                          v-model:expandedRows="expandedRows"
                           paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                           :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                           <Column field="sto_Status" header="DO No.">
-                            <template #body="searchStore">
-                              <p v-if="searchStore.data.sto_Name === 'Store A'">
+                            <template #body="searchInvoice">
+                              <p v-if="searchInvoice.data.sto_Name === 'Store A'">
                                 D0-00001</p>
-                              <p v-if="searchStore.data.sto_Name === 'Store B'">
+                              <p v-if="searchInvoice.data.sto_Name === 'Store B'">
                                 D0-00002</p>
                             </template>
                           </Column>
 
                           <Column field="sto_Status" header="DO Datetime">
-                            <template #body="searchStore">
-                              <p v-if="searchStore.data.sto_Name === 'Store A'">
+                            <template #body="searchInvoice">
+                              <p v-if="searchInvoice.data.sto_Name === 'Store A'">
                                 14/07/2022 12:00</p>
-                              <p v-if="searchStore.data.sto_Name === 'Store B'">
+                              <p v-if="searchInvoice.data.sto_Name === 'Store B'">
                                 15/07/2022 12:00</p>
                             </template>
                           </Column>
 
                           <Column field="sto_Status" header="Remarks">
-                            <template #body="searchStore">
-                              <p v-if="searchStore.data.sto_Status == '1'">
+                            <template #body="searchInvoice">
+                              <p v-if="searchInvoice.data.sto_Status == '1'">
                                 Wrap
                               </p>
                             </template>
                           </Column>
 
                           <Column field="sto_Status" header="Status">
-                            <template #body="searchStore">
-                              <rs-badges variant="success" v-if="searchStore.data.sto_Status">
+                            <template #body="searchInvoice">
+                              <rs-badges variant="success" v-if="searchInvoice.data.sto_Status">
                                 Received</rs-badges>
                               {{ "" }}
                               <Button icon="pi pi-info" class="p-button-rounded p-button-info"
                                 style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                              <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
+                              <p v-if="searchInvoice.data.sto_Status === '2'">Inactive</p>
 
                             </template>
                           </Column>
@@ -197,141 +153,51 @@
       <!-- UNTUK SEBELAH2 -->
     </div>
 
-    <rs-modal title="Add Invoice" v-model="modalRawMaterial" position="middle" size="md">
-      <FormKit label="PIC Name" type="text" v-model="name" />
-      <FormKit label="PIC Phone No." type="text" v-model="sku" />
-      <label for="sto_Type">Delivery Order No.</label>
-      <!-- <vue-taggable-select
-        v-model="fruit"
-        :options="this.deliveryOrders"
-        placeholder="Select Delivery Order No."
-      >
-      </vue-taggable-select> -->
-      <Multiselect v-model="fruit" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
-        :options="this.deliveryOrders" @select="papar()" @deselect="padam()" @clear="padam()" />
+    <rs-modal title="Add Invoice" v-model="modalInvoice" position="middle" size="lg">
+
+      <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
+        :options="this.listOutlet" @change="getDO()"/>
+
+      <label>Delivery Order No.</label>
+      <Multiselect v-model="selectDO" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
+        :options="this.listDO" @select="papar(selectDO)" @deselect="padamDO(selectDO)" @clear="padam()" />
+
       <br />
 
-      <div v-if="this.order1 == true">
+      <div v-for="(rm, l) in this.selectDO" :key="l">
         <table class="border-2">
           <tr>
-            <th class="float-left ml-3 mb-3 text-lg">{{ fruit[0] }}</th>
+            <th class="float-left ml-3 mb-3 text-lg">{{ this.selectDONo[l] }}</th>
           </tr>
           <tr>
-            <div class="flex flex-row">
+            <div class="flex flex-row" v-for="(item, index) in this.listSelectDO" :key="index">
               <div>
-                <FormKit type="text" label="Stock Name" value="Fanta 1.5L" readonly />
+                <FormKit type="text" label="Stock Name" v-model="this.item[l][index].rm_Name"
+                  :value=this.item[l][index].rm_Name readonly />
               </div>
               <div>
-                <FormKit type="text" label="Quantity Delivered" value="5" />
+                <FormKit type="number" label="Quantity Invoice" v-model="this.item[l][index].rm_QuantityRequested"
+                  :value=this.item[l][index].rm_QuantityRequested />
               </div>
               <div>
-                <FormKit type="text" label="Quantity DO" value="5" readonly />
-              </div>
-            </div>
-            <div class="flex flex-row">
-              <div>
-                <FormKit type="text" label="Stock Name" value="Pasta" readonly />
+                <FormKit type="text" label="Quantity DO" v-model="this.item[l][index].rm_Quantity"
+                  :value=this.item[l][index].rm_Quantity readonly />
               </div>
               <div>
-                <FormKit type="text" label="Quantity Delivered" value="10" />
+                <FormKit type="text" label="Quantity Available" v-model="this.item[l][index].rm_QuantityHq"
+                  :value=this.item[l][index].rm_QuantityHq readonly />
               </div>
               <div>
-                <FormKit type="text" label="Quantity DO" value="20" readonly />
-              </div>
-            </div>
-            <div class="flex flex-row">
-              <div>
-                <FormKit type="text" label="Stock Name" value="Coca-cola" readonly />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity Delivered" value="7" />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity DO" value="10" readonly />
+                <FormKit type="text" label="Min. Quantity" v-model="this.item[l][index].rm_MinQuantityHq"
+                  :value=this.item[l][index].rm_MinQuantityHq readonly />
               </div>
             </div>
           </tr>
         </table>
       </div>
-      <div v-if="this.order2 == true">
-        <table class="border-2">
-          <tr>
-            <th class="float-left ml-3 mb-3 text-lg">{{ fruit[1] }}</th>
-          </tr>
-          <tr>
-            <div class="flex flex-row">
-              <div>
-                <FormKit type="text" label="Stock Name" value="Mushroom" readonly />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity Delivered" value="3" />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity DO" value="15" readonly />
-              </div>
-            </div>
-            <div class="flex flex-row">
-              <div>
-                <FormKit type="text" label="Stock Name" value="Tea" readonly />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity Delivered" value="9" />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity DO" value="20" readonly />
-              </div>
-            </div>
-            <div class="flex flex-row">
-              <div>
-                <FormKit type="text" label="Stock Name" value="Coffee" readonly />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity Delivered" value="7" />
-              </div>
-              <div>
-                <FormKit type="text" label="Quantity DO" value="10" readonly />
-              </div>
-            </div>
-          </tr>
-        </table>
-      </div>
+
       <br />
-
-      <!-- <table>
-                <div v-for="(rm, l) in this.rawMaterial" :key="l">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <FormKit type="text" hidden />
-                            </td>
-                            <td>
-                                <FormKit type="select" label="Stock Name" :options="[
-                                    'Fanta 1.5L',
-                                    'Pasta 1kg',
-                                    'Coca Cola 1.5L',
-                                    'Milo 1kg',
-                                ]" />
-                            </td>
-                            <td>
-                                <FormKit type="number" label="Quantity" />
-                            </td>
-                            <td>
-                                <FormKit type="text" label="Remarks" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2"
-                                    @click="removeRawMaterial(l)" v-show="l || (!l && this.rawMaterial.length > 1)" />
-                            </td>
-                            <td>
-                                <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5"
-                                    @click="addRawMaterial(l)" v-show="l == this.rawMaterial.length - 1" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </div>
-            </table> -->
-
-      <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+      <rs-button style="float: right" @click="insertInvoice()" class="bg-heandshe hover:bg-heandshe">
         Save
       </rs-button>
     </rs-modal><!-- INSERT -->
@@ -386,18 +252,17 @@ export default {
     Multiselect,
   },
   setup() {
-    const store = ref([]);
+    const invoice = ref([]);
     const typePackaging = ref([]);
     const unitMeasurement = ref([]);
     const search = ref("");
-    const deliveryOrders = ref([]);
 
-    const searchStore = computed(() => {
-      return store.value.filter((store) => {
+    const searchInvoice = computed(() => {
+      return invoice.value.filter((invoice) => {
         return (
-          store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+          invoice.invoice_No.toLowerCase().indexOf(search.value.toLowerCase()) !=
           -1 ||
-          store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) != -1
+          invoice.invoice_No.toLowerCase().indexOf(search.value.toLowerCase()) != -1
         );
       });
     });
@@ -410,17 +275,16 @@ export default {
 
     return {
       search,
-      searchStore,
-      store,
+      searchInvoice,
+      invoice,
       formatPrice,
       typePackaging,
       unitMeasurement,
-      deliveryOrders,
     };
   },
   data() {
     return {
-      staffid: "",
+      staffId: "",
       staffName: "",
       totalData: 0,
       show: false,
@@ -429,30 +293,25 @@ export default {
       menuDrop: false,
       /* BARU */
       expandedRows: [],
-      rawMaterial: [
-        {
-          type: "",
-        },
-      ],
-      name: null,
-      sku: null,
-      quantity: null,
-      minquantity: null,
-      price: null,
-      packaging_type: null,
-      measurement: null,
-      modalRawMaterial: false,
-      fruit: null,
-      order1: false,
-      order2: false,
+
+      modalInvoice: false,
       modalStatus: false,
       modalInfo: false,
+
+      selectDO: null,
+      listDO: [],
+      listSelectDO: [],
+      listDOItem: [],
+      item: [],
+      selectDONo: [],
+      listOutlet: [],
+      selectOutlet: null,
+      
     };
   },
   async created() {
     this.getdata();
-    this.getStore();
-    this.getDO();
+
   },
 
   methods: {
@@ -462,17 +321,107 @@ export default {
       this.modalInfo = true;
     },
 
-    async papar() {
-      for (var i = 0; i < this.fruit.length; i++) {
-        console.log("data", this.fruit.length);
-        if (this.fruit[i] == "D0-00001") {
-          this.order1 = true;
+    async papar(DO_id) {
+      this.listSelectDO = [];
+      this.item = [];
+      this.selectDONo = [];
+
+      let rawMaterial = null;
+
+      for (var i = 0; i < DO_id.length; i++) {
+        rawMaterial = this.listDOItem.filter((item) => {
+          return item.do_Id == DO_id[i];
+        });
+
+        this.selectDONo.push(rawMaterial[0].do_No);
+        this.listSelectDO = [];
+
+        for (let i = 0; i < rawMaterial.length; i++) {
+
+          this.listSelectDO.push({
+            rm_Id: rawMaterial[i].rm_Id,
+            rm_Name: rawMaterial[i].rm_Name,
+            rm_Quantity: rawMaterial[i].rm_Quantity,
+            rm_Price: rawMaterial[i].rm_Price,
+            rm_QuantityRequested: rawMaterial[i].rm_Quantity,
+            rm_QuantityHq: rawMaterial[i].rm_QuantityHq,
+            rm_MinQuantityHq: rawMaterial[i].rm_MinQuantityHq,
+            do_Id: rawMaterial[i].do_Id,
+            do_No: rawMaterial[i].do_No,
+            item_DoHqOutletId: rawMaterial[i].item_DoHqOutletId,
+            
+
+          });
+
         }
-        if (this.fruit[i] == "D0-00002") {
-          this.order2 = true;
-        }
+        this.item.push(this.listSelectDO);
       }
     },
+
+    async getDO() {
+      this.selectDO = [];
+      this.listSelectDO = [];
+      this.item = [];
+      this.selectDONo = [];
+      this.padam();
+      this.listDO = [];
+
+
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+        outletId: this.selectOutlet,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getDOHq",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            console.log('response', response);
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listDO.push({
+                label: response.data.data[i].do_No,
+                value: response.data.data[i].do_Id,
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getDOItem() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getDOItem",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            console.log('getDOItem', response.data.data);
+            this.listDOItem = response.data.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
 
     async padam() {
       this.order1 = false;
@@ -481,11 +430,6 @@ export default {
 
     async redirectPayment() {
       window.location.href = "https://dev1.toyyibpay.com/dev1-iserve-ewallet";
-    },
-
-    async getDO() {
-      const response = ["D0-00001", "D0-00002"];
-      this.deliveryOrders = response;
     },
 
     async clickBtnStatus() {
@@ -511,37 +455,11 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    async getStore() {
-      var axios = require("axios");
-      // var data = JSON.stringify({
-      //     staffid: localStorage.staff,
-      // });
-      var config = {
-        method: "get",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            console.log("resp", response.data.data);
-            this.store = response.data.data;
-            this.totalData = this.store.length;
-
-            let price = 0;
-            for (let i = 0; i < response.data.data.length; i++) {
-              price += response.data.data[i].rm_Price;
-            }
-            this.sumPrice = price;
+            this.staffId = response.data.data[0].staff_id;
+            this.getDO();
+            this.getDOItem();
+            this.getInvoiceHq();
+            this.getOutlet();
           }.bind(this)
         )
         .catch(function (error) {
@@ -551,46 +469,94 @@ export default {
 
     async clickBtnAdd() {
       // this.users1 = user.data;
-      this.modalRawMaterial = true;
+      this.modalInvoice = true;
     },
 
-    async insertRawMaterial() {
-      console.log(this.fruit);
-      /* var axios = require("axios");
-            var data = JSON.stringify({
-                name: this.name,
-                sku: this.sku,
-                quantity: this.quantity,
-                minquantity: this.minquantity,
-                price: this.price,
-                packaging_type: this.packaging_type,
-                measurement: this.measurement,
-            });
-            console.log("Insert data :", data);
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
-                            alert(response.data.message);
-                            this.users.splice(0);
-                            this.getRawMaterial();
-                        } else {
-                            alert(response.data.message);
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                }); */
+    async insertInvoice() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+        order: this.item,
+        outletId: this.selectOutlet,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertInvoiceHq",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            if (response.data.status == 200) {
+              this.modalInvoice = false;
+              alert(response.data.message);
+              this.getDO();
+            } else {
+              alert(response.data.message);
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getInvoiceHq() {
+      console.log("getInvoiceHq");
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getInvoice",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.invoice = response.data.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getOutlet() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listOutlet.push({
+                label: response.data.data[i].outlet_name,
+                value: response.data.data[i].outlet_id,
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     addRawMaterial(index) {
