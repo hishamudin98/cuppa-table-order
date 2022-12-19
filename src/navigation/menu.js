@@ -180,10 +180,22 @@ export default [{
             route: { name: "manage-invoice" },
             icon: "file-text",
             meta: {
-                staffCategory: [1, 2, 3]
+                staffCategory: [2]
             }
         }]
     },
+
+    {
+        child: [{
+            title: "Invoice",
+            route: { name: "manage-invoice-outlet" },
+            icon: "file-text",
+            meta: {
+                staffCategory: [3]
+            }
+        }]
+    },
+
     {
         child: [{
             title: "Payment Voucher",

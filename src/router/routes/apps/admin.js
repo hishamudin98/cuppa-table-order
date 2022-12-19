@@ -127,6 +127,20 @@ export default [{
     },
 
     {
+        path: "/admin/supplier-stock/:id",
+        name: "admin-supplier-stock",
+        component: () =>
+            import ("@/views/apps/administrator/supplier/hq/manageStockSupplier.vue")
+    },
+
+    {
+        path: "/admin/hq-stock-supplier/:id",
+        name: "hq-stock-supplier",
+        component: () =>
+            import ("@/views/apps/administrator/stock/hq/detailsStockSupplier.vue")
+    },
+
+    {
         path: "/admin/outlet/supplier",
         name: "outlet-supplier",
         component: () =>
@@ -153,13 +167,6 @@ export default [{
                 }
             ]
         }
-    },
-
-    {
-        path: "/admin/hq-stock-supplier/:id",
-        name: "hq-stock-supplier",
-        component: () =>
-            import ("@/views/apps/administrator/stock/hq/detailsStockSupplier.vue")
     },
 
     {
@@ -282,6 +289,13 @@ export default [{
     },
 
     {
+        path: "/admin/delivery-order-details/:id",
+        name: "manage-delivery-order-details",
+        component: () =>
+            import ("@/views/apps/administrator/deliveryOrder/hq/DODetails.vue")
+    },
+
+    {
         path: "/admin/invoice",
         name: "manage-invoice",
         component: () =>
@@ -289,10 +303,24 @@ export default [{
     },
 
     {
+        path: "/admin/invoice-details/:id",
+        name: "hq-invoice-details",
+        component: () =>
+            import ("@/views/apps/administrator/invoice/hq/invoiceDetails.vue")
+    },
+
+    {
         path: "/admin/invoice-outlet",
         name: "manage-invoice-outlet",
         component: () =>
             import ("@/views/apps/administrator/invoice/outlet/manageInvoice.vue")
+    },
+
+    {
+        path: "/admin/invoice-outlet-details/:id",
+        name: "manage-invoice-outlet-details",
+        component: () =>
+            import ("@/views/apps/administrator/invoice/outlet/invoiceDetails.vue")
     },
 
     {
@@ -322,6 +350,8 @@ export default [{
         component: () =>
             import ("@/views/apps/administrator/deliveryOrder/outlet/manageDO.vue")
     },
+
+
 
     {
         path: "/admin/payment-voucher",
