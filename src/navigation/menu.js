@@ -202,10 +202,22 @@ export default [{
             route: { name: "manage-payment-voucher" },
             icon: "credit-card",
             meta: {
-                staffCategory: [1, 2, 3]
+                staffCategory: [2]
             }
         }]
     },
+
+    {
+        child: [{
+            title: "Payment Voucher",
+            route: { name: "manage-payment-voucher-outlet" },
+            icon: "credit-card",
+            meta: {
+                staffCategory: [3]
+            }
+        }]
+    },
+
     {
         child: [{
             title: "Store",
