@@ -78,6 +78,18 @@
 
                                         </Column>
 
+                                        <Column :exportable="false" header="Details">
+                                            <template #body="searchInvoice">
+                                                <p v-if="searchInvoice.data.rm_Status === '1'" hidden>
+                                                    Level 1
+                                                </p>
+                                                <router-link
+                                                    :to="{ name: 'hq-invoice-details', params: { id: searchInvoice.data.invoice_Id } }">
+                                                    <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                                                </router-link>
+                                            </template>
+                                        </Column>
+
                                         <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                             <template #body="searchStore">
 
