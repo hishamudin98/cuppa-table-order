@@ -39,6 +39,10 @@
                     <Column field="staff_Name" header="Staff">
                     </Column>
 
+                    <Column field="staff_Name" header="Outlet Name">
+                    </Column>
+
+
                     <Column field="invoice_TotalPrice" header="Total Price">
                       <template #body="searchInvoice">
                         <p>{{ parseFloat(searchInvoice.data.invoice_TotalPrice).toFixed(2) }}</p>
@@ -156,7 +160,7 @@
     <rs-modal title="Add Invoice" v-model="modalInvoice" position="middle" size="lg">
 
       <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
-        :options="this.listOutlet" @change="getDO()"/>
+        :options="this.listOutlet" @change="getDO()" />
 
       <label>Delivery Order No.</label>
       <Multiselect v-model="selectDO" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
@@ -306,7 +310,7 @@ export default {
       selectDONo: [],
       listOutlet: [],
       selectOutlet: null,
-      
+
     };
   },
   async created() {
@@ -349,7 +353,7 @@ export default {
             do_Id: rawMaterial[i].do_Id,
             do_No: rawMaterial[i].do_No,
             item_DoHqOutletId: rawMaterial[i].item_DoHqOutletId,
-            
+
 
           });
 

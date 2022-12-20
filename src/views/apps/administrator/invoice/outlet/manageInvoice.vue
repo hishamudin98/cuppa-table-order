@@ -38,6 +38,9 @@
   
                       <Column field="staff_Name" header="Staff">
                       </Column>
+
+                      <Column field="staff_Name" header="Outlet Name">
+                      </Column>
   
                       <Column field="invoice_TotalPrice" header="Total Price">
                         <template #body="searchInvoice">
