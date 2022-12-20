@@ -43,6 +43,9 @@
                                         <Column field="staff_Name" header="Staff">
                                         </Column>
 
+                                        <Column field="staff_Name" header="Outlet Name">
+                                        </Column>
+
                                         <Column field="do_TotalPrice" header="Total Price">
                                             <template #body="searchDO">
                                                 {{ formatPrice(searchDO.data.do_TotalPrice) }}
@@ -480,7 +483,6 @@ export default {
             this.item = [];
             this.selectOrderNo = [];
             this.padam();
-
 
             var axios = require("axios");
             var data = JSON.stringify({
