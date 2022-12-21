@@ -28,7 +28,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
+                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -112,98 +112,44 @@
                                             </template>
                                         </Column>
 
-                                        <template #expansion="searchRawMaterial1">
-                                            <div class="orders-subtable">
-                                                <h5 style="margin-bottom:20px">Order for {{
-                                                        searchRawMaterial1.data.rm_Name
+                                        <template #expansion="resultFilter">
+                                            {{ resultFilter }}
+                                            <div v class="orders-subtable">
+                                                <h5 style="margin-bottom:20px">Order No. for {{
+                                                        resultFilter.data.rm_Name
                                                 }}</h5>
 
-                                                <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter"
+                                                    :paginator="true" :rows="10"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                                    <Column field="rm_Name" header="Order No.">
-                                                        <template #body="searchRawMaterial">
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
-                                                                #QwDer</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
-                                                                #ASDqwe</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
-                                                                #VsrSf</p>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="rm_Name" header="Outlet Name">
-                                                        <template #body="searchRawMaterial">
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
-                                                                He & She University of Malaya</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
-                                                                He & She University of Malaya</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
-                                                                He & She SME Bank</p>
-                                                        </template>
+                                                    <Column field="po_No" header="Order No.">
                                                     </Column>
 
-                                                    <Column field="rm_Status" header="Order Datetime">
+                                                    <Column field="po_Date" header="Order Datetime">
 
-                                                        <template #body="searchRawMaterial">
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
-                                                                14/07/2022 17:55</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
-                                                                15/07/2022 10:50</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
-                                                                16/07/2022 15:55</p>
-                                                        </template>
                                                     </Column>
-                                                    <Column field="rm_Status" header="Quantity Requested">
-                                                        <template #body="searchRawMaterial">
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
-                                                                30</p>
+                                                    <Column field="po_ItemQuantity" header="Quantity Requested">
 
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
-                                                                50</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
-                                                                30</p>
-                                                        </template>
                                                     </Column>
-                                                    <Column field="rm_Status" header="Quantity Available">
-                                                        <template #body="searchRawMaterial">
-                                                            <p v-if="searchRawMaterial.data.rm_Status === '1'">
-                                                                5</p>
+                                                    <Column field="rm_Quantity" header="Quantity Available">
 
-                                                            <p v-if="searchRawMaterial.data.rm_Status === '2'">
-                                                                100</p>
-                                                        </template>
                                                     </Column>
-                                                    <Column field="rm_Status" header="Total Price (RM)">
-                                                        <template #body="searchRawMaterial">
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
-                                                                {{ formatPrice(30 * 1.50) }}</p>
+                                                    <Column field="po_ItemTotalPrice" header="Total Price (RM)">
 
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
-                                                                {{ formatPrice(50 * 1.50) }}</p>
-
-                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
-                                                                {{ formatPrice(30 * 1.50) }}</p>
-                                                        </template>
 
                                                     </Column>
 
                                                     <Column :exportable="false" style="min-width: 8rem"
                                                         header="Actions">
-                                                        <template #body="searchRawMaterial">
+                                                        <template #body="resultFilter">
                                                             <Button icon="pi pi-pencil"
                                                                 class="p-button-rounded p-button-success mr-2"
-                                                                @click="editUser(searchRawMaterial)" />{{ " " }}
+                                                                @click="editUser(resultFilter)" />{{ " " }}
                                                             <Button icon="pi pi-trash"
                                                                 class="p-button-rounded p-button-danger"
-                                                                @click="deleteUser(searchRawMaterial)" />
+                                                                @click="deleteUser(resultFilter)" />
                                                         </template>
                                                     </Column>
 
@@ -217,6 +163,8 @@
                                                     </template>
                                                 </DataTable>
                                             </div>
+
+
                                         </template>
                                     </DataTable>
                                 </div>
@@ -329,6 +277,8 @@ export default {
 
             rawMaterialHq: [],
             listStoreOutlet: [],
+            listRawMaterialOrder: [],
+            resultFilter: [],
         };
     },
     async created() {
@@ -361,6 +311,7 @@ export default {
                         this.getRawMaterial();
                         this.getRawMaterialHq();
                         this.getStoreOutlet();
+                        this.getRawMaterialByOrder();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -558,6 +509,56 @@ export default {
                     console.log(error);
                 });
         },
+
+        async getRawMaterialByOrder() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialByOrder",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("respons all order", response.data.data);
+                        this.listRawMaterialOrder = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        onRowExpand(event) {
+            console.log("rdata", event.data);
+            console.log("store_Id", event.data.rm_StoreId);
+            this.resultFilter = this.listRawMaterialOrder.filter((item) => {
+
+                // console.log("item", item);
+                if (item.rm_Id == event.data.rm_Id && item.store_Id == event.data.rm_StoreId) {
+                    // this.resultFilter.push(item);
+                    console.log("item", item);
+
+                    return item;
+
+                }
+            });
+
+            // console.log("tt", tt);
+            // console.log("result", result);
+            // console.log("this.resultFilter", this.resultFilter);
+            // // this.resultFilter.push(result);
+
+            // console.log("search material", this.searchRawMaterial);
+            // console.log("filter", this.resultFilter);
+            // this.$toast.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
+        }
     },
 };
 </script>
