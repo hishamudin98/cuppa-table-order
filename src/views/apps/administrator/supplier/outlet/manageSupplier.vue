@@ -122,7 +122,7 @@
       <FormKit label="Account No." type="number" v-model="accNo" />
       <FormKit label="Postcode" type="text" v-model="postcode" />
       <FormKit label="Address" type="textarea" v-model="address" />
-     
+
 
       <rs-button style="float: right" @click="insertSupplier()">
         Save
@@ -265,9 +265,13 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            this.supplier = response.data.data;
-            this.totalData = response.data.data.length;
+            if (response.data.status == 200) {
+              this.supplier = response.data.data;
+              this.totalData = response.data.data.length;
 
+            } else {
+              alert(response.data.message);
+            }
           }.bind(this)
         )
         .catch(function (error) {
