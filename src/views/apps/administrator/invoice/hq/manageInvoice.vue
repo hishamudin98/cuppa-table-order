@@ -27,6 +27,7 @@
               <div>
                 <div>
                   <DataTable :value="searchInvoice" :paginator="true" :rows="10" v-model:expandedRows="expandedRows"
+                    @rowExpand="onRowExpand"
                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -86,54 +87,33 @@
                       </template>
                     </Column>
 
-                    <template #expansion="searchInvoice12">
+                    <template #expansion="headerInv">
                       <div class="orders-subtable">
                         <h5 style="margin-bottom: 20px">
-                          Delivery Order Record for Inv-00001
-                          {{ searchInvoice12.data.sto_Status2 }}
+                          Delivery Order Record for
+                          {{ headerInv.data.invoice_No }}
                         </h5>
 
-                        <DataTable :value="searchInvoice" :paginator="true" :rows="10"
+                        <DataTable :value="resultFilter" :paginator="true" :rows="10"
                           v-model:expandedRows="expandedRows"
                           paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                           :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                          <Column field="sto_Status" header="DO No.">
-                            <template #body="searchInvoice">
-                              <p v-if="searchInvoice.data.sto_Name === 'Store A'">
-                                D0-00001</p>
-                              <p v-if="searchInvoice.data.sto_Name === 'Store B'">
-                                D0-00002</p>
+                          <Column field="do_No" header="DO No.">
+                          </Column>
+
+                          <Column field="do_CreatedDate" header="DO Datetime">
+                          </Column>
+
+                          <Column field="do_TotalPrice" header="Total Price (RM)">
+                            <template #body="resultFilter">
+                              {{
+                                  formatPrice(resultFilter.data.do_TotalPrice)
+                              }}
                             </template>
                           </Column>
 
-                          <Column field="sto_Status" header="DO Datetime">
-                            <template #body="searchInvoice">
-                              <p v-if="searchInvoice.data.sto_Name === 'Store A'">
-                                14/07/2022 12:00</p>
-                              <p v-if="searchInvoice.data.sto_Name === 'Store B'">
-                                15/07/2022 12:00</p>
-                            </template>
-                          </Column>
-
-                          <Column field="sto_Status" header="Remarks">
-                            <template #body="searchInvoice">
-                              <p v-if="searchInvoice.data.sto_Status == '1'">
-                                Wrap
-                              </p>
-                            </template>
-                          </Column>
-
-                          <Column field="sto_Status" header="Status">
-                            <template #body="searchInvoice">
-                              <rs-badges variant="success" v-if="searchInvoice.data.sto_Status">
-                                Received</rs-badges>
-                              {{ "" }}
-                              <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                              <p v-if="searchInvoice.data.sto_Status === '2'">Inactive</p>
-
-                            </template>
+                          <Column field="do_Status" header="Status DO">
                           </Column>
 
                           <template #paginatorstart>
@@ -311,6 +291,9 @@ export default {
       listOutlet: [],
       selectOutlet: null,
 
+      headerInv: [],
+      resultFilter: [],
+      listInvoice: [],
     };
   },
   async created() {
@@ -464,6 +447,7 @@ export default {
             this.getDOItem();
             this.getInvoiceHq();
             this.getOutlet();
+            this.getDOByInvoiceHqOutlet();
           }.bind(this)
         )
         .catch(function (error) {
@@ -497,7 +481,7 @@ export default {
             if (response.data.status == 200) {
               this.modalInvoice = false;
               alert(response.data.message);
-              this.getDO();
+              this.getInvoiceHq();
             } else {
               alert(response.data.message);
             }
@@ -561,6 +545,42 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+
+    async getDOByInvoiceHqOutlet() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getDOByInvoiceHqOutlet",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.listInvoice = response.data.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    onRowExpand(event) {
+
+      this.resultFilter = this.listInvoice.filter((item) => {
+        // console.log("item", item);
+        if (item.invoice_Id == event.data.invoice_Id) {
+          return item;
+        }
+      });
+
+      this.headerInv = this.resultFilter;
     },
 
     addRawMaterial(index) {

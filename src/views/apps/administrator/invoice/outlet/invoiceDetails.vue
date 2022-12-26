@@ -50,7 +50,7 @@
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                        <Column :expander="true" headerStyle="width: 3rem" />
+                                       
                                         <Column field="rm_Name" header="Name"></Column>
                                         <Column field="rm_Sku" header="SKU"></Column>
                                         <Column field="rm_Quantity" header="Quantity"></Column>
@@ -412,6 +412,7 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
+                        console.log("response", response.data.data);
                         this.listItem = response.data.data;
                         this.totalData = this.listItem.length;
 
@@ -452,7 +453,6 @@ export default {
                         if (response.data.status == 200) {
                             this.modalRawMaterial = false;
                             alert(response.data.message);
-                            this.users.splice(0);
                             this.getDetailsInvoice();
                         } else {
                             alert(response.data.message);
