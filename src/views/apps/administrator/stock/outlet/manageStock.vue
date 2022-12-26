@@ -92,16 +92,6 @@
 
                                         </Column>
 
-                                        <Column field="rm_Status" header="Level">
-                                            <template #body="searchRawMaterial">
-                                                <p v-if="searchRawMaterial.data.rm_Status === '1'">
-                                                    1</p>
-                                                <p v-if="searchRawMaterial.data.rm_Status === '2'">Inactive</p>
-
-                                            </template>
-
-                                        </Column>
-
                                         <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                             <template #body="searchRawMaterial">
                                                 <Button icon="pi pi-pencil"
@@ -112,15 +102,13 @@
                                             </template>
                                         </Column>
 
-                                        <template #expansion="resultFilter">
-                                            {{ resultFilter }}
+                                        <template #expansion="headerRawMaterial">
                                             <div v class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">Order No. for {{
-                                                        resultFilter.data.rm_Name
+                                                        headerRawMaterial.data.rm_Name
                                                 }}</h5>
 
-                                                <DataTable :value="resultFilter"
-                                                    :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -137,7 +125,11 @@
 
                                                     </Column>
                                                     <Column field="po_ItemTotalPrice" header="Total Price (RM)">
-
+                                                        <template #body="resultFilter">
+                                                            {{
+                                                                formatPrice(resultFilter.data.po_ItemTotalPrice)
+                                                            }}
+                                                        </template>
 
                                                     </Column>
 
@@ -278,6 +270,7 @@ export default {
             rawMaterialHq: [],
             listStoreOutlet: [],
             listRawMaterialOrder: [],
+            headerRawMaterial: [],
             resultFilter: [],
         };
     },
@@ -536,19 +529,14 @@ export default {
         },
 
         onRowExpand(event) {
-            console.log("rdata", event.data);
-            console.log("store_Id", event.data.rm_StoreId);
             this.resultFilter = this.listRawMaterialOrder.filter((item) => {
-
                 // console.log("item", item);
                 if (item.rm_Id == event.data.rm_Id && item.store_Id == event.data.rm_StoreId) {
-                    // this.resultFilter.push(item);
-                    console.log("item", item);
-
                     return item;
-
                 }
             });
+
+            this.headerRawMaterial = this.resultFilter;
 
             // console.log("tt", tt);
             // console.log("result", result);
