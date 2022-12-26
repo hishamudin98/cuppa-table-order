@@ -30,7 +30,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchDO" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
+                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -100,56 +100,35 @@
                                         </Column>
 
 
-                                        <template #expansion="searchDO12">
+                                        <template #expansion="headerDO">
                                             <div class="orders-subtable">
-                                                <h5 style="margin-bottom:20px">Order No. Record for D0-00001 {{
-                                                        searchDO12.data.sto_Status2
+                                                <h5 style="margin-bottom:20px">Order No. Record for {{
+                                                        headerDO.data.do_No
                                                 }}</h5>
 
-                                                <DataTable :value="searchDO" :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
-                                                    <Column field="sto_Status" header="Order No.">
+                                                    <Column field="po_No" header="Order No.">
 
-                                                        <template #body="searchDO">
-                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
-                                                                #QwDer</p>
-                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
-                                                                #ASDqwe</p>
-                                                        </template>
 
                                                     </Column>
 
-                                                    <Column field="sto_Status" header="Order Datetime">
-                                                        <template #body="searchDO">
-                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
-                                                                14/07/2022 12:00</p>
-                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
-                                                                15/07/2022 12:00</p>
+                                                    <Column field="po_CreatedDate" header="Order Datetime">
+                                                    </Column>
+
+                                                    <Column field="po_TotalPrice" header="Total Price (RM)">
+                                                        <template #body="resultFilter">
+                                                            {{
+                                                                    formatPrice(resultFilter.data.po_TotalPrice)
+                                                            }}
                                                         </template>
                                                     </Column>
 
-                                                    <Column field="sto_Status" header="Remarks">
-                                                        <template #body="searchDO">
-                                                            <p v-if="searchDO.data.sto_Status == '1'">
-                                                                Wrap </p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Status Delivery">
-                                                        <template #body="searchDO">
-                                                            <rs-badges variant="warning"
-                                                                v-if="searchDO.data.sto_Status">
-                                                                Prepairing</rs-badges>
-                                                            {{ "" }}
-                                                            <Button icon="pi pi-info"
-                                                                class="p-button-rounded p-button-info"
-                                                                style="width: 25px;height:25px"
-                                                                @click="clickBtnInfo()" />
-                                                        </template>
+                                                    <Column field="po_Status" header="Status Order">
                                                     </Column>
 
 
@@ -361,6 +340,9 @@ export default {
             selectOutlet: null,
             pic_name: null,
             pic_phone: null,
+
+            headerDO: [],
+            listDO: [],
         };
     },
     async created() {
@@ -469,6 +451,7 @@ export default {
                         this.getPOItem();
                         this.getOutlet();
                         this.getDOHq();
+                        this.getDOByOrderHqOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -644,6 +627,43 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        async getDOByOrderHqOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDOByPOHqOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("response do", response.data.data);
+                        this.listDO = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        onRowExpand(event) {
+
+            this.resultFilter = this.listDO.filter((item) => {
+                // console.log("item", item);
+                if (item.do_Id == event.data.do_Id) {
+                    return item;
+                }
+            });
+
+            this.headerPO = this.resultFilter;
         },
 
         addRawMaterial(index) {

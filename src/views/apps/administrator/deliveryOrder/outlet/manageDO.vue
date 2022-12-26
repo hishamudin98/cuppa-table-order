@@ -30,7 +30,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchDO" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
+                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -97,56 +97,35 @@
                                         </Column>
 
 
-                                        <template #expansion="searchDO12">
+                                        <template #expansion="headerDO">
                                             <div class="orders-subtable">
-                                                <h5 style="margin-bottom:20px">Order No. Record for D0-00001 {{
-                                                        searchDO12.data.sto_Status2
+                                                <h5 style="margin-bottom:20px">Order No. Record for {{
+                                                        headerDO.data.do_No
                                                 }}</h5>
 
-                                                <DataTable :value="searchDO" :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
-                                                    <Column field="sto_Status" header="Order No.">
+                                                    <Column field="po_No" header="Order No.">
 
-                                                        <template #body="searchDO">
-                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
-                                                                #QwDer</p>
-                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
-                                                                #ASDqwe</p>
-                                                        </template>
 
                                                     </Column>
 
-                                                    <Column field="sto_Status" header="Order Datetime">
-                                                        <template #body="searchDO">
-                                                            <p v-if="searchDO.data.sto_Name === 'Store A'">
-                                                                14/07/2022 12:00</p>
-                                                            <p v-if="searchDO.data.sto_Name === 'Store B'">
-                                                                15/07/2022 12:00</p>
+                                                    <Column field="po_CreatedDate" header="Order Datetime">
+                                                    </Column>
+
+                                                    <Column field="po_TotalPrice" header="Total Price (RM)">
+                                                        <template #body="resultFilter">
+                                                            {{
+                                                                    formatPrice(resultFilter.data.po_TotalPrice)
+                                                            }}
                                                         </template>
                                                     </Column>
 
-                                                    <Column field="sto_Status" header="Remarks">
-                                                        <template #body="searchDO">
-                                                            <p v-if="searchDO.data.sto_Status == '1'">
-                                                                Wrap </p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Status Delivery">
-                                                        <template #body="searchDO">
-                                                            <rs-badges variant="warning"
-                                                                v-if="searchDO.data.sto_Status">
-                                                                Prepairing</rs-badges>
-                                                            {{ "" }}
-                                                            <Button icon="pi pi-info"
-                                                                class="p-button-rounded p-button-info"
-                                                                style="width: 25px;height:25px"
-                                                                @click="clickBtnInfo()" />
-                                                        </template>
+                                                    <Column field="po_Status" header="Status Order">
                                                     </Column>
 
 
@@ -177,60 +156,6 @@
             </div>
             <!-- UNTUK SEBELAH2 -->
         </div>
-
-        <rs-modal title="Add DO" v-model="modalDO" position="middle" size="lg">
-            <FormKit label="PIC Name" type="text" v-model="pic_name" />
-            <FormKit label="PIC Phone No." type="text" v-model="pic_phone" />
-            <FormKit type="select" label="Outlet Name" placeholder="Select Outlet" v-model="selectOutlet"
-                :options="this.listOutlet" @change="getPOOutlet()" />
-
-            <label>Order No.</label>
-            <Multiselect v-model="selectPO" mode="tags" :close-on-select="false" :searchable="true"
-                :create-option="true" :options="this.listPO" @select="papar(selectPO)"
-                @deselect="padamOrderNo(selectPO)" @clear="padam()" />
-
-
-            <div v-for="(rm, l) in this.selectPO" :key="l">
-                <table class="border-2">
-                    <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ this.selectOrderNo[l] }}</th>
-                    </tr>
-                    <tr>
-                        <div class="flex flex-row" v-for="(item, index) in this.listSelectPO" :key="index">
-                            <div>
-                                <FormKit type="text" label="Stock Name" v-model="this.item[l][index].rm_Name"
-                                    :value=this.item[l][index].rm_Name readonly />
-                            </div>
-                            <div>
-                                <FormKit type="number" label="Quantity DO"
-                                    v-model="this.item[l][index].rm_QuantityRequested"
-                                    :value=this.item[l][index].rm_QuantityRequested />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity PO" v-model="this.item[l][index].rm_Quantity"
-                                    :value=this.item[l][index].rm_Quantity readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity Available"
-                                    v-model="this.item[l][index].rm_QuantityHq" :value=this.item[l][index].rm_QuantityHq
-                                    readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Min. Quantity"
-                                    v-model="this.item[l][index].rm_MinQuantityHq"
-                                    :value=this.item[l][index].rm_MinQuantityHq readonly />
-                            </div>
-                        </div>
-                    </tr>
-                </table>
-            </div>
-
-            <br />
-
-            <rs-button style="float: right" @click="insertDO()" class="bg-heandshe hover:bg-heandshe">
-                Save
-            </rs-button>
-        </rs-modal><!-- INSERT -->
 
         <rs-modal title="DO No." v-model="modalStatusDO" position="middle" size="md">
 
@@ -275,7 +200,6 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import RsBadges from "@/components/Badges.vue";
-import Multiselect from "@vueform/multiselect";
 
 export default {
     name: "RawMaterial",
@@ -286,7 +210,6 @@ export default {
         RsModal,
         Column,
         Button,
-        Multiselect,
 
     },
     setup() {
@@ -358,6 +281,10 @@ export default {
             selectOutlet: null,
             pic_name: null,
             pic_phone: null,
+
+            headerDO: [],
+            listDO: [],
+
         };
     },
     async created() {
@@ -462,102 +389,9 @@ export default {
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
-                        // this.getPOOutlet();
-                        this.getPOItem();
-                        this.getOutlet();
+
                         this.getDO();
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-
-        async getPOOutlet() {
-            this.listPO = [];
-            this.listSelectPO = [];
-            this.item = [];
-            this.selectOrderNo = [];
-            this.padam();
-
-
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-                outletId: this.selectOutlet,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getPOOutlet",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listPO.push({
-                                label: response.data.data[i].po_No,
-                                value: response.data.data[i].po_Id,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getPOItem() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getPOItem",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        this.listPOItem = response.data.data;
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getOutlet() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listOutlet.push({
-                                label: response.data.data[i].outlet_name,
-                                value: response.data.data[i].outlet_id,
-                            });
-                        }
+                        this.getDOByOrderHqOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -646,18 +480,42 @@ export default {
                 });
         },
 
-        addRawMaterial(index) {
-            this.counter++;
-            console.log("ADD", index);
-            this.rawMaterial.push({
-                type: "",
+        async getDOByOrderHqOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
             });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDOByPOHqOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("response do", response.data.data);
+                        this.listDO = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
-        removeRawMaterial(index) {
-            this.counter--;
-            console.log("REMOVE", index);
-            this.rawMaterial.splice(index, 1);
-        },
+
+        onRowExpand(event) {
+
+            this.resultFilter = this.listDO.filter((item) => {
+                // console.log("item", item);
+                if (item.do_Id == event.data.do_Id) {
+                    return item;
+                }
+            });
+
+            this.headerPO = this.resultFilter;
+        }
     },
 };
 </script>
