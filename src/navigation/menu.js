@@ -76,6 +76,8 @@ export default [{
         }]
     },
     {
+        header: "UI Elements",
+        description: "Component for the ui",
         child: [{
             title: "Stock (HQ)",
             child: [{
@@ -106,6 +108,8 @@ export default [{
     },
 
     {
+        header: "UI Elements",
+        description: "Component for the ui",
         child: [{
             title: "Stock (Outlet)",
             route: { name: "outlet-manage-stock" },
