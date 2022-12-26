@@ -76,10 +76,10 @@
                                             <template #body="searchPO">
 
                                                 <p v-if="searchPO"></p>
-                                                <!-- <router-link
-                                                    :to="{ name: 'order-stock-outlet-hq', params: { id: searchPO.data.stockOrderOutletId } }"> -->
+                                                <router-link
+                                                    :to="{ name: 'order-stock-outlet-hq', params: { id: searchPO.data.po_No } }">
                                                 <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
-                                                <!-- </router-link> -->
+                                                </router-link>
                                             </template>
 
 

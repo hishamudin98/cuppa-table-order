@@ -250,7 +250,7 @@ export default {
           function (response) {
             this.staffName = response.data.data[0].staff_name;
             this.staffId = response.data.data[0].staff_id;
-           
+
             this.getSupplierByRawMaterial();
             this.getAllSupplier();
           }.bind(this)
@@ -296,11 +296,11 @@ export default {
     async getAllSupplier() {
       var axios = require("axios");
       var data = JSON.stringify({
-        rawMaterialId: null,
+        staffId: this.staffId,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getSupplier",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getSupplierHq",
         headers: {
           "Content-Type": "application/json",
         },
