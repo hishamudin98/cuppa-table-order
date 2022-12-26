@@ -46,7 +46,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchPO" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
+                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -133,45 +133,34 @@
                                             </template>
                                         </Column>
 
-                                        <template #expansion="searchPO12">
+                                        <template #expansion="headerPO">
                                             <div class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">DO No. Record for {{
-                                                        searchPO12.data.suppOrderNo
+                                                        headerPO.data.po_No
                                                 }}</h5>
 
-                                                <DataTable :value="searchPO" :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
-                                                    <Column field="sto_Status" header="DO No.">
-                                                        <template #body="searchPO">
+                                                    <Column field="do_No" header="DO No.">
+                                                    </Column>
 
-                                                            <p v-if="searchPO.data.suppOrderNo === '#OpGwe2'">
-                                                                D0-00001</p>
+                                                    <Column field="do_CreatedDate" header="DO Datetime">
+                                                    </Column>
 
-                                                            <p v-if="searchPO.data.suppOrderNo === '#hasASd'">
-                                                                D0-00002</p>
+                                                    <Column field="do_TotalPrice" header="Total Price (RM)">
+                                                        <template #body="resultFilter">
+                                                            {{
+                                                                    formatPrice(resultFilter.data.do_TotalPrice)
+                                                            }}
                                                         </template>
                                                     </Column>
 
-                                                    <Column field="sto_Status" header="DO Datetime">
-                                                        <template #body="searchPO">
-                                                            <p v-if="searchPO.data.suppOrderNo">
-                                                                14/07/2022 18:32</p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Total Price (RM)">
-                                                        <template #body="searchPO">
-                                                            <p v-if="searchPO.data.suppOrderNo">
-                                                                300.00</p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Status">
-                                                        <template #body="searchPO">
+                                                    <Column field="do_Status" header="Status DO">
+                                                        <!-- <template #body="resultFilter">
                                                             <rs-badges variant="success"
                                                                 v-if="searchPO.data.suppOrderStatusCode">
                                                                 Received</rs-badges>
@@ -181,7 +170,7 @@
                                                                 style="width: 25px;height:25px"
                                                                 @click="clickBtnInfo()" />
 
-                                                        </template>
+                                                        </template> -->
                                                     </Column>
                                                     <Column :exportable="false" style="min-width: 8rem"
                                                         header="Actions">
@@ -237,7 +226,7 @@
             ]" />
 
             <div v-if="this.selectType == 1">
-                <FormKit type="select" label="Store" v-model="selectStoreHq" :options="this.listStoreHQ" />
+                <FormKit type="select" label="Store" v-model="selectStoreHq" :options="this.listStoreOutlet" />
                 <FormKit type="textarea" label="Remarks" v-model="remarksHq" />
 
                 <table>
@@ -285,10 +274,12 @@
                 </table>
             </div>
 
-            <div v-if="this.orderTo == 'supplier'">
-                <FormKit type="select" label="Supplier" :options="this.listSupplier" />
+            <div v-if="this.selectType == 3">
+                <FormKit type="select" label="Supplier" v-model="selectSupplier" :options="this.listSupplier"
+                    placeholder="Select Supplier" @change="getRawMaterialBySupplierId()" />
 
-                <FormKit type="select" label="Store" :options="this.listStoreOutlet" />
+                <FormKit type="select" label="Store" v-model="selectStoreOutlet" :options="this.listStoreOutlet"
+                    placeholder="Select Store" />
                 <FormKit type="textarea" label="Remarks" v-model="remarksOutlet" />
 
                 <table>
@@ -296,15 +287,8 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <FormKit type="text" hidden />
-                                </td>
-                                <td>
-                                    <FormKit type="select" label="Stock Name" :options="[
-                                        'Fanta 1.5L',
-                                        'Pasta 1kg',
-                                        'Coca Cola 1.5L',
-                                        'Milo 1kg',
-                                    ]" />
+                                    <FormKit type="select" label="Stock Name" placeholder="Select Stock"
+                                        v-model="selectRawMaterial" :options="this.listRawMaterialSupplier" />
                                 </td>
                                 <td>
                                     <FormKit type="number" label="Quantity" />
@@ -507,24 +491,24 @@ export default {
             selectStoreHq: null,
             selectStoreOutlet: null,
             selectRawMaterial: null,
-            orderRemarks: null,
+            remarksHq: null,
+            remarksOutlet: null,
 
             modalPO: false,
             modalStatus: false,
             modalInfo: false,
             modalDO: false,
-            orderByOutlet: "",
-            orderNo: ['#OpGwe2', '#hasASd'],
-            order1: false,
 
             listSupplier: [],
             listStore: [],
-            listOutlet: [],
             listStoreOutlet: [],
-            listStoreHq: [],
             listRawMaterialHq: [],
+            listRawMaterialSupplier: [],
             listPurchase: [],
             listAllData: [],
+            headerPO: [],
+            resultFilter: [],
+            listDO: [],
 
         };
     },
@@ -558,13 +542,11 @@ export default {
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
-                        this.getStoreHQ();
                         this.getStoreOutlet();
-                        this.getOutlet();
                         this.getSupplier();
-                        this.getPOHq();
+                        this.getPOOutlet();
                         this.getRawMaterialHq();
-
+                        this.getDOByOrderHqOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -583,50 +565,15 @@ export default {
             }
         },
 
-
-
-        async getStoreHQ() {
-            this.listStoreHQ = [];
-
-            var axios = require("axios");
-            var data = JSON.stringify({
-                outletId: 0,
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listStoreHQ.push({
-                                label: response.data.data[i].sto_Name,
-                                value: response.data.data[i].sto_Id,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
         async getStoreOutlet() {
             this.listStoreOutlet = [];
             var axios = require("axios");
             var data = JSON.stringify({
-                outletId: this.selectOutlet,
                 staffId: this.staffId,
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -635,6 +582,7 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
+                        console.log('response', response.data.data);
                         for (let i = 0; i < response.data.data.length; i++) {
                             this.listStoreOutlet.push({
                                 label: response.data.data[i].sto_Name,
@@ -700,8 +648,7 @@ export default {
                 });
         },
 
-        async getPOHq() {
-            console.log("getPOHq");
+        async getPOOutlet() {
             var axios = require("axios");
             var data = JSON.stringify({
                 staffId: this.staffId,
@@ -717,7 +664,6 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-                        console.log('response', response);
                         this.listPurchaseOrder = response.data.data;
                         this.totalData = this.listPurchaseOrder.length;
 
@@ -783,39 +729,9 @@ export default {
                         if (response.data.status == 200) {
                             this.modalPO = false;
                             alert(response.data.message);
-                            this.getPOHq();
+                            this.getPOOutlet();
                         } else {
                             alert(response.data.message);
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getOutlet() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listOutlet.push({
-                                label: response.data.data[i].outlet_name,
-                                value: response.data.data[i].outlet_id,
-                            });
                         }
                     }.bind(this)
                 )
@@ -827,11 +743,12 @@ export default {
         async getSupplier() {
             var axios = require("axios");
             var data = JSON.stringify({
+                rawMaterialId: null,
                 staffId: this.staffId,
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getSupplierHq",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getSupplier",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -845,6 +762,37 @@ export default {
                             this.listSupplier.push({
                                 label: response.data.data[i].sup_Name,
                                 value: response.data.data[i].sup_Id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getRawMaterialBySupplierId() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                supplierId: this.selectSupplier
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialBySupplier",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response);
+                        this.listRawMaterialSupplier = [];
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listRawMaterialSupplier.push({
+                                label: response.data.data[i].rm_Name,
+                                value: response.data.data[i].rm_Id,
                             });
                         }
                     }.bind(this)
@@ -889,12 +837,46 @@ export default {
                 });
         },
 
+        async getDOByOrderHqOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDOByPOHqOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        this.listDO = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        onRowExpand(event) {
+
+            this.resultFilter = this.listDO.filter((item) => {
+                // console.log("item", item);
+                if (item.po_Id == event.data.po_Id) {
+                    return item;
+                }
+            });
+
+            this.headerPO = this.resultFilter;
+        },
+
         addRawMaterial(index, rawMaterialId) {
             this.counter++;
             console.log("ADD", index, rawMaterialId);
-
             let rawMaterial = this.listAllData.find((item) => item.rm_Id == rawMaterialId);
-
             this.listPurchase.push({
                 rm_Id: rawMaterial.rm_Id,
                 rm_Name: rawMaterial.rm_Name,
@@ -902,7 +884,6 @@ export default {
                 rm_MinQuantity: rawMaterial.rm_MinQuantity,
                 rm_Price: rawMaterial.rm_Price,
                 rm_QuantityRequested: null,
-
             });
         },
         removeRawMaterial(index, rawMaterialId) {

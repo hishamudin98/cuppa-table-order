@@ -46,7 +46,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchPO" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
+                                        v-model:expandedRows="expandedRows"  @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -78,8 +78,7 @@
 
                                         <Column field="po_Status" header="Status">
                                             <template #body="searchPO">
-                                                <rs-badges variant="success"
-                                                    v-if="searchPO.data.po_Status === '1'"
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '1'"
                                                     @click="clickBtnStatus()">
                                                     Partial Delivered</rs-badges>
                                                 {{ "" }}
@@ -127,45 +126,34 @@
                                             </template>
                                         </Column>
 
-                                        <template #expansion="searchPO12">
+                                        <template #expansion="headerPO">
                                             <div class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">DO No. Record for {{
-                                                        searchPO12.data.suppOrderNo
+                                                        headerPO.data.po_No
                                                 }}</h5>
 
-                                                <DataTable :value="searchPO" :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
-                                                    <Column field="sto_Status" header="DO No.">
-                                                        <template #body="searchPO">
+                                                    <Column field="do_No" header="DO No.">
+                                                    </Column>
 
-                                                            <p v-if="searchPO.data.suppOrderNo === '#OpGwe2'">
-                                                                D0-00001</p>
+                                                    <Column field="do_CreatedDate" header="DO Datetime">
+                                                    </Column>
 
-                                                            <p v-if="searchPO.data.suppOrderNo === '#hasASd'">
-                                                                D0-00002</p>
+                                                    <Column field="do_TotalPrice" header="Total Price (RM)">
+                                                        <template #body="resultFilter">
+                                                            {{
+                                                                    formatPrice(resultFilter.data.do_TotalPrice)
+                                                            }}
                                                         </template>
                                                     </Column>
 
-                                                    <Column field="sto_Status" header="DO Datetime">
-                                                        <template #body="searchPO">
-                                                            <p v-if="searchPO.data.suppOrderNo">
-                                                                14/07/2022 18:32</p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Total Price (RM)">
-                                                        <template #body="searchPO">
-                                                            <p v-if="searchPO.data.suppOrderNo">
-                                                                300.00</p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Status">
-                                                        <template #body="searchPO">
+                                                    <Column field="do_Status" header="Status DO">
+                                                        <!-- <template #body="resultFilter">
                                                             <rs-badges variant="success"
                                                                 v-if="searchPO.data.suppOrderStatusCode">
                                                                 Received</rs-badges>
@@ -175,7 +163,7 @@
                                                                 style="width: 25px;height:25px"
                                                                 @click="clickBtnInfo()" />
 
-                                                        </template>
+                                                        </template> -->
                                                     </Column>
                                                     <Column :exportable="false" style="min-width: 8rem"
                                                         header="Actions">
@@ -563,9 +551,6 @@ export default {
             modalStatus: false,
             modalInfo: false,
             modalDO: false,
-            orderByOutlet: "",
-            orderNo: ['#OpGwe2', '#hasASd'],
-            order1: false,
 
             listSupplier: [],
             listStore: [],
@@ -576,6 +561,9 @@ export default {
             listPurchase: [],
             listAllData: [],
 
+            headerPO: [],
+            resultFilter: [],
+            listDO: [],
         };
     },
     async created() {
@@ -613,6 +601,7 @@ export default {
                         this.getOutlet();
                         this.getSupplier();
                         this.getPOHq();
+                        this.getDOByOrderHqOutlet();
 
                     }.bind(this)
                 )
@@ -937,6 +926,44 @@ export default {
                     console.log(error);
                 });
         },
+
+        async getDOByOrderHqOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDOByPOHqOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("listDO", response.data.data);
+                        this.listDO = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        onRowExpand(event) {
+
+            this.resultFilter = this.listDO.filter((item) => {
+                // console.log("item", item);
+                if (item.po_Id == event.data.po_Id) {
+                    return item;
+                }
+            });
+
+            this.headerPO = this.resultFilter;
+        },
+
 
         addRawMaterial(index, rawMaterialId) {
             this.counter++;
