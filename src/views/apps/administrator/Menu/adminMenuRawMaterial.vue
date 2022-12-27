@@ -199,6 +199,7 @@ export default {
       packaging_type: null,
       measurement: null,
       modalRawMaterial: false,
+      
     };
   },
   async created() {
@@ -228,6 +229,8 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+            this.staffId = response.data.data[0].staff_id;
+            console.log(response)
           }.bind(this)
         )
         .catch(function (error) {
@@ -239,14 +242,16 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterial",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialName",
         headers: {
           "Content-Type": "application/json",
         },
       };
+      console.log(config)
       await axios(config)
         .then(
           function (response) {
+            console.log("data : ",response)
             for (let i = 0; i < response.data.data.length; i++) {
               this.rawMaterials.push({
                 label: response.data.data[i].rm_Name,
