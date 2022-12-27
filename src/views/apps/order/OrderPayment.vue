@@ -111,7 +111,17 @@
                     </div>
                   </div>
                   <div
-                    class="flex items-center justify-center h-7 w-7 bg-heandshe text-primary-100 rounded-full text-sm"
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      h-7
+                      w-7
+                      bg-heandshe
+                      text-primary-100
+                      rounded-full
+                      text-sm
+                    "
                   >
                     x{{ product.menu_quantity }}
                   </div>
@@ -192,7 +202,17 @@
                     </div>
                   </div>
                   <div
-                    class="flex items-center justify-center h-7 w-7 bg-heandshe text-primary-100 rounded-full text-sm"
+                    class="
+                      flex
+                      items-center
+                      justify-center
+                      h-7
+                      w-7
+                      bg-heandshe
+                      text-primary-100
+                      rounded-full
+                      text-sm
+                    "
                   >
                     x{{ product.menu_quantity }}
                   </div>
@@ -245,7 +265,16 @@
             class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
           >
             <a
-              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              class="
+                text-xs
+                font-bold
+                uppercase
+                px-5
+                py-4
+                shadow
+                block
+                leading-normal
+              "
               @click="toggleTabs(1)"
               :class="{
                 'text-primary bg-white': paymentMethod !== 1,
@@ -273,7 +302,16 @@
             class="mb-0 last:mr-0 flex-auto text-left sm:text-center relative"
           >
             <a
-              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              class="
+                text-xs
+                font-bold
+                uppercase
+                px-5
+                py-4
+                shadow
+                block
+                leading-normal
+              "
               @click="toggleTabs(2)"
               :class="{
                 'text-primary bg-white': paymentMethod !== 2,
@@ -291,10 +329,27 @@
             </a>
           </li>
           <li
-            class="-mb-px mr-2 last:mr-0 flex-auto text-left sm:text-center relative"
+            class="
+              -mb-px
+              mr-2
+              last:mr-0
+              flex-auto
+              text-left
+              sm:text-center
+              relative
+            "
           >
             <a
-              class="text-xs font-bold uppercase px-5 py-4 shadow block leading-normal"
+              class="
+                text-xs
+                font-bold
+                uppercase
+                px-5
+                py-4
+                shadow
+                block
+                leading-normal
+              "
               @click="toggleTabs(3)"
               :class="{
                 'text-primary bg-white': paymentMethod !== 3,
@@ -331,7 +386,17 @@
                   <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
                     <div v-for="val in getBankCode" :key="val.CODE">
                       <button
-                        class="px-4 pb-2 pt-3 bg-gray-200 hover:bg-gray-300 text-sm font-medium w-full h-full"
+                        class="
+                          px-4
+                          pb-2
+                          pt-3
+                          bg-gray-200
+                          hover:bg-gray-300
+                          text-sm
+                          font-medium
+                          w-full
+                          h-full
+                        "
                         @click="SetBank(val.CODE)"
                         :class="{
                           '!bg-heandshe text-white': bankcode === val.CODE,
@@ -450,7 +515,18 @@
       <div class="rounded-t-3xl" style="min-height: 90vh">
         <perfect-scrollbar class="mb-4" style="height: 90vh">
           <button
-            class="flex justify-center items-center p-1 bg-heandshe absolute top-2 right-2 rounded-full z-50"
+            class="
+              flex
+              justify-center
+              items-center
+              p-1
+              bg-heandshe
+              absolute
+              top-2
+              right-2
+              rounded-full
+              z-50
+            "
           >
             <vue-feather
               @click="openModal = false"
@@ -540,7 +616,13 @@
                             :value="val"
                           />
                           <label
-                            class="text-gray-700 dark:text-gray-200 text-sm formkit-disabled:text-gray-300 dark:formkit-disabled:text-gray-700"
+                            class="
+                              text-gray-700
+                              dark:text-gray-200
+                              text-sm
+                              formkit-disabled:text-gray-300
+                              dark:formkit-disabled:text-gray-700
+                            "
                             :for="modalData.sku + '-check-' + index"
                           >
                             {{ val }}
@@ -549,13 +631,29 @@
                         </div>
                         <div class="flex items-center gap-x-2">
                           <button
-                            class="flex items-center justify-center bg-primary-400 text-primary-50 p-1 rounded-lg"
+                            class="
+                              flex
+                              items-center
+                              justify-center
+                              bg-primary-400
+                              text-primary-50
+                              p-1
+                              rounded-lg
+                            "
                           >
                             <vue-feather size="1rem" type="minus"></vue-feather>
                           </button>
                           <span class="text-gray-500">x1</span>
                           <button
-                            class="flex items-center justify-center bg-primary-400 text-primary-50 p-1 rounded-lg"
+                            class="
+                              flex
+                              items-center
+                              justify-center
+                              bg-primary-400
+                              text-primary-50
+                              p-1
+                              rounded-lg
+                            "
                           >
                             <vue-feather size="1rem" type="plus"></vue-feather>
                           </button>
@@ -578,7 +676,16 @@
             </div> -->
           <div v-if="this.status != 'FAIL'">
             <div
-              class="modal-item-action flex w-full justify-between items-center overflow-auto px-2 gap-x-2"
+              class="
+                modal-item-action
+                flex
+                w-full
+                justify-between
+                items-center
+                overflow-auto
+                px-2
+                gap-x-2
+              "
             >
               <button
                 class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
@@ -593,14 +700,30 @@
               </button>
               <div class="flex gap-x-2">
                 <button
-                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-heandshe
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
                   @click="decrement()"
                 >
                   <vue-feather type="minus"></vue-feather>
                 </button>
                 {{ modalData.menu_quantity }}
                 <button
-                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-heandshe
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
                   @click="increment()"
                 >
                   <vue-feather type="plus"></vue-feather>
@@ -621,7 +744,18 @@
     <template #custom>
       <div class="rounded-t-3xl" style="min-height: 50vh">
         <button
-          class="flex justify-center items-center p-1 bg-primary-400 absolute top-2 right-2 rounded-full z-50"
+          class="
+            flex
+            justify-center
+            items-center
+            p-1
+            bg-primary-400
+            absolute
+            top-2
+            right-2
+            rounded-full
+            z-50
+          "
         >
           <vue-feather
             @click="openModalConfirmation = false"
@@ -929,6 +1063,9 @@ export default {
       branch: 0,
       time: null,
       status: "",
+      date: "",
+      postcode: "",
+      address: "",
 
       /* TIMER IDLE */
       /* IDLE_COUNTER: 60,
@@ -973,8 +1110,8 @@ export default {
   methods: {
     /* async idleChecker() {
       this.idleSecondsCounter++; */
-      /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
-      /* if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
+    /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
+    /* if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
         clearInterval(this.idleSecondsTimer);
         this.idleSecondsTimer = null;
         this.idleSecondsCounter = 0;
@@ -1341,6 +1478,9 @@ export default {
           billPhone: localStorage.phone,
           orderNo: this.orderno,
           branch: localStorage.branch,
+          date: localStorage.date,
+          postcode: this.postcode,
+          address: this.address,
         });
         var config = {
           method: "POST",
@@ -1350,12 +1490,11 @@ export default {
           },
           data: data,
         };
+        console.log("config", config);
+        console.log("data ", data);
         await axios(config)
           .then(
             function (response) {
-              clearInterval(this.idleSecondsTimer);
-              this.idleSecondsTimer = null;
-              this.idleSecondsCounter = 0;
               var link = response.data.data2;
               window.location.href = link;
             }.bind(this)
@@ -1449,7 +1588,11 @@ export default {
         billPhone: "0174842981",
         orderNo: this.orderno,
         branch: localStorage.branch,
+        date: localStorage.date,
+        postcode: this.postcode,
+        address: this.address,
       });
+      console.log(data);
       var config = {
         method: "POST",
         url:

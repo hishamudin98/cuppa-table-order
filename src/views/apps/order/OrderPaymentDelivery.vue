@@ -270,8 +270,15 @@
           type="text"
           label="Postcode"
           placeholder="Postcode"
+          v-model="postcode"
         />
-        <FormKit type="textarea" rows="5" label="Address" placeholder="Delivery Address..." />
+        <FormKit
+          type="textarea"
+          rows="5"
+          label="Address"
+          v-model="address"
+          placeholder="Delivery Address..."
+        />
       </div>
     </div>
 
@@ -443,7 +450,8 @@
                   >
                     <span v-if="loading"> Loading </span>
                     <span v-else
-                      >Pay Online RM {{ formatPrice(this.totalPay + 4.00) }}</span
+                      >Pay Online RM
+                      {{ formatPrice(this.totalPay + 4.0) }}</span
                     >
                   </rs-button>
                 </div>
@@ -1081,6 +1089,8 @@ export default {
       branch: 0,
       time: null,
       status: "",
+      postcode: "",
+      address: "",
 
       /* TIMER IDLE */
       IDLE_COUNTER: 60,
@@ -1205,7 +1215,8 @@ export default {
             }
             this.tableNo = this.orderData[0].tableNo;
             this.totalAmount = response.data.data.am0untOrd3r;
-            this.sst = this.totalAmount * 0.06;
+            
+            this.sst = (this.totalAmount + 4) * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
             if (this.totalAmount >= 70) {
@@ -1268,7 +1279,7 @@ export default {
             orderTotal1 = orderTotal1 + total1;
           }
           /* __________________________________________________________________________ */
-          this.totalAmount = orderTotal1 + orderTotal;
+          this.totalAmount = orderTotal1 + orderTotal + 4;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
           this.totalPay = this.totalAmount + this.sst;
@@ -1305,7 +1316,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + 4;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1331,7 +1342,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + 4;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1362,7 +1373,7 @@ export default {
             orderTotal1 = orderTotal1 + total1;
           }
           /* __________________________________________________________________________ */
-          this.totalAmount = orderTotal1 + orderTotal;
+          this.totalAmount = orderTotal1 + orderTotal + 4;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
           this.totalPay = this.totalAmount + this.sst;
@@ -1399,7 +1410,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + 4;
             this.sst = this.totalAmount * 0.06;
 
             this.totalPay = this.totalAmount + this.sst;
@@ -1425,7 +1436,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + 4;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1487,12 +1498,15 @@ export default {
           tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
-          billAmount: parseInt(this.roundNumber),
+          billAmount: parseInt(this.roundNumber) + 400,
           billExternalReferenceNo: "Order For Table " + this.tableNo,
           billTo: localStorage.name,
           billPhone: localStorage.phone,
           orderNo: this.orderno,
           branch: localStorage.branch,
+          date: localStorage.date,
+          postcode: this.postcode,
+          address: this.address,
         });
         var config = {
           method: "POST",
@@ -1595,12 +1609,15 @@ export default {
         tax: this.sst,
         billName: "Order For Table " + this.tableNo,
         billDesc: "Order For Table " + this.tableNo,
-        billAmount: parseInt(this.roundNumber),
+        billAmount: parseInt(this.roundNumber) + 400,
         billExternalReferenceNo: "Order For Table " + this.tableNo,
         billTo: this.name,
         billPhone: "0174842981",
         orderNo: this.orderno,
         branch: localStorage.branch,
+        date: localStorage.date,
+        postcode: this.postcode,
+        address: this.address,
       });
       var config = {
         method: "POST",
