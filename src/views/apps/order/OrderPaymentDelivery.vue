@@ -258,7 +258,7 @@
       <div class="total flex justify-between my-2 text-xl">
         <div class="font-semibold">Total</div>
         <div class="font-semibold">
-          RM {{ formatPrice(this.totalPay + 4.0) }}
+          RM {{ formatPrice(this.totalPay) }}
         </div>
       </div>
     </rs-card>
@@ -451,7 +451,7 @@
                     <span v-if="loading"> Loading </span>
                     <span v-else
                       >Pay Online RM
-                      {{ formatPrice(this.totalPay + 4.0) }}</span
+                      {{ formatPrice(this.totalPay) }}</span
                     >
                   </rs-button>
                 </div>
@@ -1216,9 +1216,9 @@ export default {
             this.tableNo = this.orderData[0].tableNo;
             this.totalAmount = response.data.data.am0untOrd3r;
             
-            this.sst = (this.totalAmount + 4) * 0.06;
+            this.sst = (this.totalAmount + 4 )* 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = this.totalAmount + this.sst;
+            this.totalPay = (this.totalAmount + 4) + this.sst;
             if (this.totalAmount >= 70) {
               this.outletDisc = this.totalAmount * 0.1;
               this.totalPay = this.totalPay - this.outletDisc;
@@ -1279,7 +1279,7 @@ export default {
             orderTotal1 = orderTotal1 + total1;
           }
           /* __________________________________________________________________________ */
-          this.totalAmount = orderTotal1 + orderTotal + 4;
+          this.totalAmount = orderTotal1 + orderTotal;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
           this.totalPay = this.totalAmount + this.sst;
@@ -1316,7 +1316,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal + 4;
+            this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1342,7 +1342,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal + 4;
+            this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1373,7 +1373,7 @@ export default {
             orderTotal1 = orderTotal1 + total1;
           }
           /* __________________________________________________________________________ */
-          this.totalAmount = orderTotal1 + orderTotal + 4;
+          this.totalAmount = orderTotal1 + orderTotal;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
           this.totalPay = this.totalAmount + this.sst;
@@ -1410,7 +1410,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal + 4;
+            this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
 
             this.totalPay = this.totalAmount + this.sst;
@@ -1436,7 +1436,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal + 4;
+            this.totalAmount = orderTotal1 + orderTotal;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1498,7 +1498,7 @@ export default {
           tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
-          billAmount: parseInt(this.roundNumber) + 400,
+          billAmount: parseInt(this.roundNumber) ,
           billExternalReferenceNo: "Order For Table " + this.tableNo,
           billTo: localStorage.name,
           billPhone: localStorage.phone,
@@ -1609,7 +1609,7 @@ export default {
         tax: this.sst,
         billName: "Order For Table " + this.tableNo,
         billDesc: "Order For Table " + this.tableNo,
-        billAmount: parseInt(this.roundNumber) + 400,
+        billAmount: parseInt(this.roundNumber) ,
         billExternalReferenceNo: "Order For Table " + this.tableNo,
         billTo: this.name,
         billPhone: "0174842981",

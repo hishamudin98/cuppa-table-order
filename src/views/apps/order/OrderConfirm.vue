@@ -82,6 +82,31 @@
       </div>
     </div>
   </rs-card>
+  <rs-card class="py-3 px-4" v-if=" this.address != null">
+    <div class="payment-detail-wrapper">
+      <div class="flex justify-between items-center my-3">
+        <p class="font-semibold uppercase">Delivery Details</p>
+      </div>
+      <div class="order-wrapper flex flex-col gap-2 mb-5">
+        <div class="flex justify-between items-center">
+          <div>Delivery Address</div>
+          <div class="font-semibold">{{ this.address }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Delivery Date</div>
+          <div class="font-semibold">{{ this.delivery_date }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Delivery Time</div>
+          <div class="font-semibold">{{ this.pickup_time }}</div>
+        </div>
+        <!-- <div class="flex justify-between items-center">
+            <div>Payment Type</div>
+            <div class="font-semibold">FPX</div>
+          </div> -->
+      </div>
+    </div>
+  </rs-card>
   <rs-card class="py-3 px-4">
     <div class="payment-detail-wrapper">
       <div class="flex justify-between items-center my-3">
@@ -118,6 +143,10 @@
             <div class="font-semibold">FPX</div>
           </div> -->
       </div>
+    </div>
+    <br />
+    <div class="text-center">
+    Please Screenshot to ensure that the Receipt won't gone missing
     </div>
   </rs-card>
   <div
@@ -200,6 +229,9 @@ export default {
       branch: 0,
       tblNo: 0,
       orderid: 0,
+      address: "",
+      delivery_date: "",
+      pickup_time: "",
     };
   },
   async created() {
@@ -293,6 +325,11 @@ export default {
             this.tax = response.data.data[0].tax;
             this.discount = response.data.data[0].discount;
             this.transacno = response.data.data[0].transac_no;
+            this.address = response.data.data[0].order_address;
+            this.delivery_date = moment(response.data.data[0].order_delivery).format(
+              "DD-MM-YYYY"
+            );
+            this.pickup_time = response.data.data[0].order_pickup;
             this.date = moment(response.data.data[0].order_date).format(
               "DD-MM-YYYY"
             );
