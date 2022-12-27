@@ -6,30 +6,7 @@
         <!-- UNTUK SEBELAH2 -->
         
         <div class="w-full flex flex-col">
-          <!--  <div class="w-full flex flex-row mb-1">
-            <div class="inline-block w-1/2 pr-10 h-2/4">
-              <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Number of active staff</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">
-                  {{ this.totalStaff }} Active Users
-                </div>
-              </rs-card>
-            </div>
-            <div class="inline-block w-1/2 pr-10 pb-2">
-              <rs-card>
-                <div class="text-center pt-10">
-                  <strong>Number of staff by Outlet</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">
-                  {{ this.totalStaff }} Active Users
-                </div></rs-card
-              >
-            </div>
-          </div> -->
+          
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
@@ -58,7 +35,7 @@
                   >Add Staff</rs-button
                 >
               </div>
-              <div class="w-1/12" style="">
+              <div class="w-1/12" style="padding-top: 10px">
                 <rs-button
                   @click="filter()"
                   class="bg-heandshe hover:bg-heandshe"

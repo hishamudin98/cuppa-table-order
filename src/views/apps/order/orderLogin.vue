@@ -48,7 +48,7 @@
             >Check Previous Order
           </rs-button>
           <hr v-if="this.orderid != null" class="my-1" />
-          <rs-button
+          <!-- <rs-button
             @click="memberLogin()"
             class="w-full"
             variant="primary-outline"
@@ -74,7 +74,7 @@
                 Sign Up</a
               ></router-link
             >
-          </p>
+          </p> -->
           <hr class="my-1" />
         </div>
       </div>
@@ -536,7 +536,7 @@ export default {
     },
 
     async checkMember() {
-      var axios = require("axios");
+      /* var axios = require("axios");
       var data = JSON.stringify({
         username: this.username,
         password: this.password,
@@ -552,20 +552,24 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == 200) {
-              localStorage.mmberno = response.data.data[0].member_no;
+            if (response.data.status == 200) { */
+              /* localStorage.mmberno = response.data.data[0].member_no;
               localStorage.name = response.data.data[0].full_name;
               localStorage.phone = response.data.data[0].phone_no;
+ */
+              localStorage.mmberno = 1;
+              localStorage.name = "Faris Izwan";
+              localStorage.phone = "0174842981" ;
 
               this.orderType();
-            } else {
+           /*  } else {
               alert(response.data.message);
             }
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error);
-        });
+        }); */
     },
 
     async pickTable() {

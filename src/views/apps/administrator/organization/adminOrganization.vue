@@ -1,173 +1,124 @@
 <template>
   <rs-layout>
     <rs-breadcrumb />
-    <!-- <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            Organization Management
-          </div>
-        </div>
 
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div class="w-full flex flex-col"> -->
-      <div style="display: flex; flex-direction: row">
-        <!-- UNTUK SEBELAH2 -->
-       <!--  <div>
-          <arbitrary />
-        </div> -->
-        <div class="w-full flex flex-col">
-          <div class="w-full flex flex-row mb-1">
-            <!-- <div class="inline-block w-1/2 pr-10 h-2/4">
-              <rs-card>
-                <div class="text-center pt-10 pb-2">
-                  <strong>Number of active staff</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">
-                  {{ this.totalStaff }} Active Users
-                </div>
-              </rs-card>
+    <div style="display: flex; flex-direction: row">
+      <div class="w-full flex flex-col">
+        <div class="w-full flex flex-row mb-1"></div>
+        <div class="w-full" style="flex-direction: column">
+          <!-- UNTUK ATAS BAWAH -->
+          <div style="display: flex; flex-direction: row">
+            <div class="w-11/12 h-10">
+              <FormKit
+                v-model="search"
+                id="search-sticky"
+                placeholder="Search for a staff..."
+                type="search"
+                :classes="{
+                  inner:
+                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                  outer: 'flex-1 mb-0',
+                  input: 'h-12',
+                }"
+              />
             </div>
-            <div class="inline-block w-1/2 pr-10 pb-2">
-              <rs-card>
-                <div class="text-center pt-10">
-                  <strong>Number of staff by Organization</strong>
-                </div>
-                <hr />
-                <div class="text-center py-8">
-                  {{ this.totalStaff }} Active Users
-                </div></rs-card
+            <div
+              v-if="this.staff_role != 3 || this.staff_category != 3"
+              class="w-2/12"
+              style="padding-top: 3px"
+            >
+              <rs-button
+                @click="addUser()"
+                class="bg-heandshe hover:bg-heandshe"
+                >Add Organization Owner</rs-button
               >
-            </div> -->
-          </div>
-          <div class="w-full" style="flex-direction: column">
-            <!-- UNTUK ATAS BAWAH -->
-            <div style="display: flex; flex-direction: row">
-              <div class="w-11/12 h-10">
-                <FormKit
-                  v-model="search"
-                  id="search-sticky"
-                  placeholder="Search for a staff..."
-                  type="search"
-                  :classes="{
-                    inner:
-                      'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                    outer: 'flex-1 mb-0',
-                    input: 'h-12',
-                  }"
-                />
-              </div>
-              <div
-                v-if="this.staff_role != 3 || this.staff_category != 3"
-                class="w-2/12"
-                style="padding-top: 3px"
-              >
-                <rs-button
-                  @click="addUser()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Add Organization Owner</rs-button
-                >
-              </div>
-              <div class="w-1/12" style="padding-top: 3px">
-                <rs-button
-                  @click="filter()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Filter</rs-button
-                >
-              </div>
             </div>
-            <div class="">
-              <rs-card style="padding-top: 10px">
+            <div class="w-1/12" style="padding-top: 3px">
+              <rs-button @click="filter()" class="bg-heandshe hover:bg-heandshe"
+                >Filter</rs-button
+              >
+            </div>
+          </div>
+          <div class="">
+            <rs-card style="padding-top: 10px">
+              <div>
                 <div>
-                  <div>
-                    <DataTable
-                      :value="searchUsers"
-                      :paginator="true"
-                      :rows="10"
-                      v-model:expandedRows="expandedRows"
-                      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                      :rowsPerPageOptions="[10, 20, 50]"
-                      responsiveLayout="scroll"
-                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                    >
-                      <Column :expander="true" headerStyle="width: 3rem" />
-                      <Column field="owner_name" header="Name"></Column>
-                      <Column field="owner_phone" header="Phone no."></Column>
-                      <Column field="owner_email" header="Email"></Column>
+                  <DataTable
+                    :value="searchUsers"
+                    :paginator="true"
+                    :rows="10"
+                    v-model:expandedRows="expandedRows"
+                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                    :rowsPerPageOptions="[10, 20, 50]"
+                    responsiveLayout="scroll"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                  >
+                    <Column :expander="true" headerStyle="width: 3rem" />
+                    <Column field="outlet_name" header="Name"></Column>
+                    <Column field="outlet_jenis" header="Type"></Column>
+                      <!-- <Column field="owner_email" header="Email"></Column> -->
 
-                      <template #expansion="searchRawMaterial">
-                        <div class="orders-subtable">
-                          <h5 style="margin-bottom: 20px">
-                            Organization's Informations
-                            {{ searchRawMaterial.data.outlet.outlet_name }}
-                          </h5>
+                    <template #expansion="searchRawMaterial">
+                      <div class="orders-subtable">
+                        <h5 style="margin-bottom: 20px">
+                          Organization's Informations
+                          {{ searchRawMaterial.data.outlet.outlet_name }}
+                        </h5>
 
-                          <DataTable
-                            :value="searchRawMaterial.data.outlet"
-                            :paginator="true"
-                            :rows="10"
-                            v-model:expandedRows="expandedRows"
-                            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                            :rowsPerPageOptions="[10, 20, 50]"
-                            responsiveLayout="scroll"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                          >
-                            <Column header="Outlet Name">
-                              <template #body="searchRawMaterial">
-                                {{ searchRawMaterial.data.outlet_name }}
-                              </template>
-                            </Column>
-                            <Column header="Phone No.">
-                              <template #body="searchRawMaterial">
-                                {{ searchRawMaterial.data.outlet_phone }}
-                              </template>
-                            </Column>
-                            <Column header="Address">
-                              <template #body="searchRawMaterial">
-                                {{ searchRawMaterial.data.outlet_address }}
-                              </template>
-                            </Column>
-
-                            <template #paginatorstart>
-                              <Button
-                                type="button"
-                                icon="pi pi-refresh"
-                                class="p-button-text"
-                              />
+                        <DataTable
+                          :value="searchRawMaterial.data.outlet"
+                          :paginator="true"
+                          :rows="10"
+                          v-model:expandedRows="expandedRows"
+                          paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                          :rowsPerPageOptions="[10, 20, 50]"
+                          responsiveLayout="scroll"
+                          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                        >
+                          <Column header="Organization Name">
+                            <template #body="searchRawMaterial">
+                              {{ searchRawMaterial.data.organization_name }}
                             </template>
-                            <template #paginatorend>
-                              <Button
-                                type="button"
-                                icon="pi pi-cloud"
-                                class="p-button-text"
-                              />
+                          </Column>
+                          <Column header="Phone No.">
+                              <template #body="searchRawMaterial">
+                                {{ searchRawMaterial.data.owner_phone }}
+                              </template>
+                            </Column>
+                          <Column header="Address">
+                            <template #body="searchRawMaterial">
+                              {{ searchRawMaterial.data.organization_address }}
                             </template>
-                          </DataTable>
-                        </div>
-                      </template>
-                    </DataTable>
-                  </div>
+                          </Column>
+
+                          <template #paginatorstart>
+                            <Button
+                              type="button"
+                              icon="pi pi-refresh"
+                              class="p-button-text"
+                            />
+                          </template>
+                          <template #paginatorend>
+                            <Button
+                              type="button"
+                              icon="pi pi-cloud"
+                              class="p-button-text"
+                            />
+                          </template>
+                        </DataTable>
+                      </div>
+                    </template>
+                  </DataTable>
                 </div>
-              </rs-card>
-            </div>
-
-            <!-- UNTUK ATAS BAWAH -->
+              </div>
+            </rs-card>
           </div>
+
+          <!-- UNTUK ATAS BAWAH -->
         </div>
-        <!-- UNTUK SEBELAH2 -->
       </div>
+      <!-- UNTUK SEBELAH2 -->
+    </div>
     <!-- </div> -->
 
     <rs-modal title="Staff" v-model="selectStaff" position="middle" size="md">
@@ -208,7 +159,11 @@
         v-model="category"
         type="radio"
         label="Category Status"
-        :options="[{ label :'HQ', value: 	2 } ,{ label: 'Branch', value: 3 }, { label: 'Supplier' , value: 4 }]"
+        :options="[
+          { label: 'HQ', value: 2 },
+          { label: 'Branch', value: 3 },
+          { label: 'Supplier', value: 4 },
+        ]"
       />
 
       <rs-button
@@ -309,7 +264,7 @@
         ]"
         v-model="users1.user_position"
       />
-      
+
       <rs-button style="float: right" @click="updateUser(users1)">
         Save
       </rs-button> </rs-modal
@@ -370,12 +325,21 @@ export default {
 
     const searchUsers = computed(() => {
       return users.value.filter((user) => {
-        return (
-          user.owner_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1 ||
-          user.owner_email.toLowerCase().indexOf(search.value.toLowerCase()) !=
+        if (category.value == "") {
+          return (
+            user.outlet_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
             -1
-        );
+          );
+        }
+        else
+        {
+          return (
+            user.outlet_type.toString().indexOf(category.value.toString()) !=
+            -1 &&
+            user.outlet_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+            -1
+          );
+        }
       });
     });
 
@@ -387,6 +351,7 @@ export default {
 
     const filter = () => {
       filterModal.value = true;
+      console.log(category.value)
     };
 
     return {
@@ -396,6 +361,7 @@ export default {
       filter,
       filters,
       filterModal,
+      category,
     };
   },
   data() {
@@ -430,6 +396,8 @@ export default {
       outlet: 0,
       user_position: "",
       user_category: "",
+      Outlet_Suppliername: "",
+      type:"",
     };
   },
   async created() {
@@ -523,22 +491,39 @@ export default {
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
+              if (response.data.data[i].outlet_name == null) {
+                this.Outlet_Suppliername = response.data.data[i].supplier_name;
+              } else {
+                this.Outlet_Suppliername = response.data.data[i].outlet_name;
+              }
+              if(response.data.data[i].type_code == 2)
+              {
+                this.type = "HQ"
+              }
+              else if(response.data.data[i].type_code == 3)
+              {
+                this.type = "Outlet"
+              }
+              else if(response.data.data[i].type_code == 4)
+              {
+                this.type = "Supplier"
+              }
               this.users.push({
-                owner_id: response.data.data[i].owner_id,
-                owner_name: response.data.data[i].owner_name,
-                owner_phone: response.data.data[i].owner_phone,
-                owner_email: response.data.data[i].owner_email,
+                outlet_id: response.data.data[i].oos_id,
+                outlet_name: this.Outlet_Suppliername,
+                outlet_type : response.data.data[i].type_code,
+                outlet_jenis: this.type,
                 outlet: [
                   {
-                    outlet_id: response.data.data[i].outlet_id,
-                    outlet_name: response.data.data[i].outlet_name,
-                    outlet_address: response.data.data[i].outlet_address,
-                    outlet_phone: response.data.data[i].outlet_phone,
-                    outlet_code: response.data.data[i].outlet_code,
+                    organization_id: response.data.data[i].organization_id,
+                    organization_name: response.data.data[i].organization_name,
+                    organization_address: response.data.data[i].organization_address,
+                    owner_phone: response.data.data[i].organization_phone,
                   },
                 ],
               });
             }
+            console.log(this.users)
           }.bind(this)
         )
         .catch(function (error) {
@@ -646,10 +631,11 @@ export default {
         category: this.user_category,
         staffid: localStorage.staff,
       });
-      console.log(data)
+      console.log(data);
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertOrganizationOwner",
+        url:
+          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertOrganizationOwner",
         headers: {
           "Content-Type": "application/json",
         },
@@ -658,27 +644,26 @@ export default {
       await axios(config)
         .then(
           function (response) {
-
-      if (response.data.status == "Success") {
-      this.modalPOS = false;
-      this.fullname = "";
-      this.phone = "";
-      this.email = "";
-      this.address = "";
-      this.password = "";
-      this.pincode = "";
-      this.dob = "";
-      this.position = "";
-      this.user_category = "";
-      this.user_position = "";
-      alert(response.data.message);
-      /* alert("Successfully Insert New Organization's Owner"); */ 
-       this.users.splice(0);
-        this.getuser();
-       } else {
-        alert(response.data.message);
-      }
-        }.bind(this)
+            if (response.data.status == "Success") {
+              this.modalPOS = false;
+              this.fullname = "";
+              this.phone = "";
+              this.email = "";
+              this.address = "";
+              this.password = "";
+              this.pincode = "";
+              this.dob = "";
+              this.position = "";
+              this.user_category = "";
+              this.user_position = "";
+              alert(response.data.message);
+              /* alert("Successfully Insert New Organization's Owner"); */
+              this.users.splice(0);
+              this.getuser();
+            } else {
+              alert(response.data.message);
+            }
+          }.bind(this)
         )
         .catch(function (error) {
           console.log(error);

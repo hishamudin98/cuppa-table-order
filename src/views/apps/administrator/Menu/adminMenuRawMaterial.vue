@@ -4,9 +4,8 @@
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        
+
         <div class="w-full h-1/4 flex flex-col">
-          
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -24,7 +23,7 @@
                   }"
                 />
               </div>
-              <div class="w-1/12" >
+              <div class="w-1/12">
                 <rs-button
                   @click="clickBtnAdd()"
                   class="bg-heandshe hover:bg-heandshe"
@@ -45,28 +44,13 @@
                       responsiveLayout="scroll"
                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                     >
-                      <Column header="Name">
-                        <template #body=""> Mushroom </template>
-                      </Column>
-                      <Column header="Quantity">
-                        <template #body=""> 1 </template>
-                      </Column>
-                      <Column header="Measurement">
-                        <template #body=""> gram </template>
-                      </Column>
-                      <Column header="Unit Cost ( RM )">
-                        <template #body=""> 5.00 </template>
-                      </Column>
+                      <Column field="rm_Name" header="Name"></Column>
+                      <Column field="rm_Quantity" header="Quantity"></Column>
+                      <Column field="rm_Unit" header="Measurement"></Column>
+                      <Column field="rm_totalprice" header="Total Cost (RM)"></Column>
+                      <Column field="rm_unitcost" header="Unit Cost (RM)"></Column>
 
-                      <Column header="Total Cost">
-                        <template #body=""> 30.00 </template>
-                      </Column>
-
-                      <Column header="Status">
-                        <template #body=""> Active </template>
-                      </Column>
-
-                      <Column :exportable="false" style="min-width: 8rem">
+                      <!-- <Column :exportable="false" style="min-width: 8rem">
                         <template #body="searchRawMaterial">
                           <Button
                             icon="pi pi-pencil"
@@ -79,7 +63,7 @@
                             @click="deleteUser(searchRawMaterial)"
                           />
                         </template>
-                      </Column>
+                      </Column> -->
 
                       <template #paginatorstart>
                         <Button
@@ -114,11 +98,16 @@
       position="middle"
       size="md"
     >
-      <FormKit label="Name" type="text" v-model="name" />
-      
-      
+      <FormKit
+        type="select"
+        label="Name"
+        v-model="name"
+        placeholder="Choose Raw Material Name"
+        :options="this.rawMaterials"
+      />
+
       <FormKit label="Quantity" type="number" v-model="quantity" />
-     
+
       <FormKit
         type="select"
         label="Unit Measurement"
@@ -135,7 +124,6 @@
         Save
       </rs-button> </rs-modal
     ><!-- INSERT -->
-    
   </rs-layout>
 </template>
 <script>
@@ -163,16 +151,15 @@ export default {
     const typePackaging = ref([]);
     const unitMeasurement = ref([]);
     const search = ref("");
+    const rawMaterials = ref([]);
+    const listRawMaterial = ref([]);
 
     const searchRawMaterial = computed(() => {
-      return rawMaterial.value.filter((rawMaterial) => {
+      return listRawMaterial.value.filter((rawMaterial) => {
         return (
           rawMaterial.rm_Name
             .toLowerCase()
-            .indexOf(search.value.toLowerCase()) != -1 ||
-          rawMaterial.rm_Name
-            .toLowerCase()
-            .indexOf(search.value.toLowerCase()) != -1
+            .indexOf(search.value.toLowerCase()) != -1 
         );
       });
     });
@@ -189,6 +176,8 @@ export default {
       formatPrice,
       typePackaging,
       unitMeasurement,
+      rawMaterials,
+      listRawMaterial,
     };
   },
   data() {
@@ -217,6 +206,7 @@ export default {
     this.getRawMaterial();
     this.getTypePackaging();
     this.getUnitMeasurement();
+    this.getRawMaterialName();
   },
 
   methods: {
@@ -238,6 +228,31 @@ export default {
         .then(
           function (response) {
             this.staffName = response.data.data[0].staff_name;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getRawMaterialName() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterial",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.rawMaterials.push({
+                label: response.data.data[i].rm_Name,
+                value: response.data.data[i].rm_Id,
+              });
+            }
           }.bind(this)
         )
         .catch(function (error) {
@@ -297,29 +312,32 @@ export default {
 
     async getRawMaterial() {
       var axios = require("axios");
-      // var data = JSON.stringify({
-      //     staffid: localStorage.staff,
-      // });
+       var data = JSON.stringify({
+           menu: this.$route.params.menuid,
+       });
       var config = {
-        method: "get",
-        url: process.env.VUE_APP_FNB_URL + "/getRawMaterial",
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getRawMaterialMenu",
         headers: {
           "Content-Type": "application/json",
         },
+        data: data,
       };
       await axios(config)
         .then(
           function (response) {
-            // console.log("price", response.data.data.rm_Price[0]);
-            /* this.rawMaterial = response.data.data; */
-            this.rawMaterial.push({ rm_Name: "mushroom", rm_Sku: "123123" });
-            this.totalData = this.rawMaterial.length;
-
-            let price = 0;
+            console.log(response.data)
             for (let i = 0; i < response.data.data.length; i++) {
-              price += response.data.data[i].rm_Price;
+              this.listRawMaterial.push({
+                rm_Name: response.data.data[i].rm_Name,
+                rm_Quantity: response.data.data[i].rm_Quantity,
+                rm_Unit: response.data.data[i].rm_Unit,
+                rm_totalprice: response.data.data[i].rm_totalprice,
+                rm_unitcost: response.data.data[i].rm_unitcost,
+                mrm_id: response.data.data[i].mrm_id,
+              });
             }
-            this.sumPrice = price;
+           
           }.bind(this)
         )
         .catch(function (error) {
@@ -336,17 +354,13 @@ export default {
       var axios = require("axios");
       var data = JSON.stringify({
         name: this.name,
-        sku: this.sku,
         quantity: this.quantity,
-        minquantity: this.minquantity,
-        price: this.price,
-        packaging_type: this.packaging_type,
         measurement: this.measurement,
+        menu: this.$route.params.menuid,
       });
-      console.log("Insert data :", data);
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertRawMaterialMenu",
         headers: {
           "Content-Type": "application/json",
         },
