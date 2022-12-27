@@ -481,7 +481,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOwnerDetails" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getOwnerDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -635,7 +635,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertOrganizationOwner",
+          process.env.VUE_APP_FNB_URL + "/admin/insertOrganizationOwner",
         headers: {
           "Content-Type": "application/json",
         },

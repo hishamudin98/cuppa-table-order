@@ -322,7 +322,7 @@ export default {
        });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getRawMaterialMenu",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialMenu",
         headers: {
           "Content-Type": "application/json",
         },
@@ -365,7 +365,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertRawMaterialMenu",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterialMenu",
         headers: {
           "Content-Type": "application/json",
         },

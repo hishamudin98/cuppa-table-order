@@ -223,7 +223,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutlet",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
         headers: {
           "Content-Type": "application/json",
         },
@@ -255,7 +255,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletMenu" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getOutletMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
