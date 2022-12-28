@@ -192,10 +192,10 @@
       <br />
       {{ this.data.receipt_no }}
       <br />
-      <label><strong>Order Type</strong></label>
+      <!-- <label><strong>Order Type</strong></label>
       <br />
-      {{ this.data.order_type }}
-      <br />
+      {{ this.data.order_type }} -->
+      <!-- <br /> -->
       <label><strong>Payment Method</strong></label>
       <br />
       {{ this.data.payment_method }}
@@ -338,6 +338,7 @@
                 <p>
                   {{ input.menu_name }} x {{ input.menu_quantity }} - RM
                   {{ formatPrice(input.menu_price) }}
+                  
                 </p>
               </div>
               <br />
@@ -362,7 +363,7 @@
         type="checkbox"
         :options="this.refundData"
       />
-
+      
       <rs-button @click="Refund()">Save</rs-button>
       <br />
     </rs-modal>
@@ -415,8 +416,11 @@ export default {
 
     const searchOrder = computed(() => {
       return order.value.filter((orders) => {
-        if (start_date.value != "") {
-          return formatDate(start_date.value) < orders.orderDatetime && formatDate(end_date.value) > orders.orderDatetime
+        if (start_date.value != "" && end_date.value != "") {
+          return (
+            formatDate(start_date.value) < orders.orderDatetime &&
+            formatDate(end_date.value) > orders.orderDatetime 
+          );
         } else if (search.value == "") {
           return (
             orders.outlet_id.toString().indexOf(outlet_id.value.toString()) !=
@@ -451,6 +455,10 @@ export default {
 
     const filters = () => {
       outlet_id.value = "";
+      order_status.value = "";
+      order_from.value = "";
+      start_date.value = "";
+      end_date.value = "";
       filterModal.value = false;
     };
 
@@ -538,19 +546,16 @@ export default {
       await axios(config)
         .then(
           function (response) {
-           console.log(response.data)
-           if(response.data.response == 200)
-           {
-            alert(response.data.message)
-            this.refunded = false;
-            this.refundsValue = null;
-           }
-           else
-           {
-            alert(response.data.message)
-            this.refunded = false;
-            this.refundsValue = null;
-           }
+            console.log(response.data);
+            if (response.data.response == 200) {
+              alert(response.data.message);
+              this.refunded = false;
+              this.refundsValue = null;
+            } else {
+              alert(response.data.message);
+              this.refunded = false;
+              this.refundsValue = null;
+            }
           }.bind(this)
         )
         .catch(function (error) {
@@ -571,7 +576,7 @@ export default {
     },
     async Cancel() {
       /* CANCEL API this.cancelsValue */
-       var axios = require("axios");
+      var axios = require("axios");
       var data = JSON.stringify({
         cancelsValue: this.cancelsValue,
         cancelID: this.cancelID,
@@ -588,19 +593,16 @@ export default {
       await axios(config)
         .then(
           function (response) {
-           console.log(response.data)
-           if(response.data.response == 200)
-           {
-            alert(response.data.message)
-            this.canceled = false;
-            this.cancelsValue = null;
-           }
-           else
-           {
-            alert(response.data.message)
-            this.canceled = false;
-            this.cancelsValue = null;
-           }
+            console.log(response.data);
+            if (response.data.response == 200) {
+              alert(response.data.message);
+              this.canceled = false;
+              this.cancelsValue = null;
+            } else {
+              alert(response.data.message);
+              this.canceled = false;
+              this.cancelsValue = null;
+            }
           }.bind(this)
         )
         .catch(function (error) {
@@ -647,8 +649,7 @@ export default {
       });
       var config = {
         method: "post",
-        url:
-          process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },

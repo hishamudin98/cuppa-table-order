@@ -48,25 +48,36 @@
                     :paginator="true"
                     :rows="10"
                     v-model:expandedRows="expandedRows"
+                    @rowExpand="onRowExpand"
                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                     :rowsPerPageOptions="[10, 20, 50]"
                     responsiveLayout="scroll"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                   >
-                    <Column :expander="true" headerStyle="width: 3rem" />
-                    <Column field="outlet_name" header="Name"></Column>
-                    <Column field="outlet_jenis" header="Type"></Column>
-                      <!-- <Column field="owner_email" header="Email"></Column> -->
+                    <Column
+                      :expander="true"
+                      style="min-width: 8rem"
+                      header="Actions"
+                    >
+                    </Column>
+                    <Column field="organization_Name" header="Name"></Column>
+                    <Column
+                      field="organization_address"
+                      header="Address"
+                    ></Column>
+                    <Column
+                      field="organization_phone"
+                      header="Phone No."
+                    ></Column>
 
-                    <template #expansion="searchRawMaterial">
+                    <template #expansion="">
                       <div class="orders-subtable">
                         <h5 style="margin-bottom: 20px">
                           Organization's Informations
-                          {{ searchRawMaterial.data.outlet.outlet_name }}
                         </h5>
 
                         <DataTable
-                          :value="searchRawMaterial.data.outlet"
+                          :value="filterOrganization"
                           :paginator="true"
                           :rows="10"
                           v-model:expandedRows="expandedRows"
@@ -75,36 +86,8 @@
                           responsiveLayout="scroll"
                           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                         >
-                          <Column header="Organization Name">
-                            <template #body="searchRawMaterial">
-                              {{ searchRawMaterial.data.organization_name }}
-                            </template>
-                          </Column>
-                          <Column header="Phone No.">
-                              <template #body="searchRawMaterial">
-                                {{ searchRawMaterial.data.owner_phone }}
-                              </template>
-                            </Column>
-                          <Column header="Address">
-                            <template #body="searchRawMaterial">
-                              {{ searchRawMaterial.data.organization_address }}
-                            </template>
-                          </Column>
-
-                          <template #paginatorstart>
-                            <Button
-                              type="button"
-                              icon="pi pi-refresh"
-                              class="p-button-text"
-                            />
-                          </template>
-                          <template #paginatorend>
-                            <Button
-                              type="button"
-                              icon="pi pi-cloud"
-                              class="p-button-text"
-                            />
-                          </template>
+                          <Column field="org_name" header="Name"></Column>
+                          <Column field="org_phone" header="Phone No."></Column>
                         </DataTable>
                       </div>
                     </template>
@@ -158,7 +141,7 @@
       <FormKit
         v-model="category"
         type="radio"
-        label="Category Status"
+        label="Organization Type"
         :options="[
           { label: 'HQ', value: 2 },
           { label: 'Branch', value: 3 },
@@ -191,34 +174,16 @@
       <FormKit label="Fullname" type="text" v-model="fullname" />
       <FormKit label="Phone No." type="number" v-model="phone" />
       <FormKit label="Email" type="email" v-model="email" />
-      <FormKit label="Password " type="password" v-model="password" />
-      <FormKit
+      <!-- <FormKit label="Password " type="password" v-model="password" /> -->
+      <!-- <FormKit
         label="Pin Code"
         help="for POS system login"
         type="number"
         v-model="pincode"
-      />
+      /> -->
       <FormKit label="Address" type="textarea" v-model="address" />
       <FormKit label="Date of Birth." type="date" v-model="dob" />
-      <FormKit
-        type="select"
-        label="Staff Position"
-        :options="[
-          { label: 'Admin', value: '2' },
-          { label: 'User/Staff', value: '3' },
-        ]"
-        v-model="user_position"
-      />
-      <FormKit
-        type="select"
-        label="Staff Category"
-        :options="[
-          { label: 'HQ', value: '2' },
-          { label: 'Outlet', value: '3' },
-          { label: 'Supplier', value: '4' },
-        ]"
-        v-model="user_category"
-      />
+
       <rs-button style="float: right" @click="insertUser()">
         Save
       </rs-button> </rs-modal
@@ -300,7 +265,7 @@ import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Button from "primevue/button";
+/* import Button from "primevue/button"; */
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
@@ -313,33 +278,45 @@ export default {
     RsModal,
     DataTable,
     Column,
-    Button,
+    /* Button, */
     /* arbitrary: Menu, */
   },
   setup() {
-    const users = ref([]);
+    const organization = ref([]);
     const search = ref("");
     const filterModal = ref(false);
     const role = ref("");
     const category = ref("");
+    const belowOrganization = ref([]);
 
     const searchUsers = computed(() => {
-      return users.value.filter((user) => {
-        if (category.value == "") {
-          return (
-            user.outlet_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1
-          );
-        }
-        else
-        {
+      return organization.value.filter((user) => {
+        /* if (category.value == "") { */
+        return (
+          user.organization_Name
+            .toLowerCase()
+            .indexOf(search.value.toLowerCase()) != -1
+        );
+
+        /* } else {
           return (
             user.outlet_type.toString().indexOf(category.value.toString()) !=
-            -1 &&
-            user.outlet_name.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1
+              -1 &&
+            user.organization_Name
+              .toLowerCase()
+              .indexOf(search.value.toLowerCase()) != -1
           );
-        }
+        } */
+      });
+    });
+
+    const filterOrganization = computed(() => {
+      return belowOrganization.value.filter((user) => {
+        return (
+          user.type_code
+            .toString()
+            .indexOf(category.value.toString()) != -1
+        );
       });
     });
 
@@ -351,13 +328,15 @@ export default {
 
     const filter = () => {
       filterModal.value = true;
-      console.log(category.value)
+      console.log(category.value);
     };
 
     return {
       search,
       searchUsers,
-      users,
+      filterOrganization,
+      organization,
+      belowOrganization,
       filter,
       filters,
       filterModal,
@@ -397,7 +376,14 @@ export default {
       user_position: "",
       user_category: "",
       Outlet_Suppliername: "",
-      type:"",
+      type: "",
+
+      return_data: "",
+      oos_id: "",
+      org_name: "",
+      org_id: "",
+      org_phone: "",
+      type_code: "",
     };
   },
   async created() {
@@ -411,6 +397,61 @@ export default {
     this.getPosition();
   },
   methods: {
+    async onRowExpand(event) {
+      this.belowOrganization = [];
+      var axios = require("axios");
+      var data = JSON.stringify({
+        orgid: event.data.organization_id,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/listOrganizationMenu",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            this.return_data = response.data.data;
+            for (let i = 0; i < this.return_data.length; i++) {
+              if (this.return_data[i].outlet_name != null) {
+                this.oos_id = this.return_data[i].oos_id;
+                this.org_name = this.return_data[i].outlet_name;
+                this.org_id = this.return_data[i].outletid;
+                this.org_phone = this.return_data[i].outlet_phone;
+                this.type_code = this.return_data[i].type_code;
+                this.belowOrganization.push({
+                  oos_id: this.oos_id,
+                  org_name: this.org_name,
+                  org_id: this.org_id,
+                  org_phone: this.org_phone,
+                  type_code: this.type_code,
+                });
+              } else if (this.return_data[i].supplier_name != null) {
+                this.oos_id = this.return_data[i].oos_id;
+                this.org_name = this.return_data[i].supplier_name;
+                this.org_id = this.return_data[i].supplierid;
+                this.org_phone = this.return_data[i].supplier_phone;
+                this.type_code = this.return_data[i].type_code;
+                this.belowOrganization.push({
+                  oos_id: this.oos_id,
+                  org_name: this.org_name,
+                  org_id: this.org_id,
+                  org_phone: this.org_phone,
+                  type_code: this.type_code,
+                });
+              }
+            }
+            console.log(this.belowOrganization);
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     expandAll() {
       this.expandedRows = this.searchUsers.filter((p) => p.owner_id);
     },
@@ -480,8 +521,7 @@ export default {
       });
       var config = {
         method: "post",
-        url:
-          process.env.VUE_APP_FNB_URL + "/admin/getOwnerDetails" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/listOrganization" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -491,39 +531,15 @@ export default {
         .then(
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
-              if (response.data.data[i].outlet_name == null) {
-                this.Outlet_Suppliername = response.data.data[i].supplier_name;
-              } else {
-                this.Outlet_Suppliername = response.data.data[i].outlet_name;
-              }
-              if(response.data.data[i].type_code == 2)
-              {
-                this.type = "HQ"
-              }
-              else if(response.data.data[i].type_code == 3)
-              {
-                this.type = "Outlet"
-              }
-              else if(response.data.data[i].type_code == 4)
-              {
-                this.type = "Supplier"
-              }
-              this.users.push({
-                outlet_id: response.data.data[i].oos_id,
-                outlet_name: this.Outlet_Suppliername,
-                outlet_type : response.data.data[i].type_code,
-                outlet_jenis: this.type,
-                outlet: [
-                  {
-                    organization_id: response.data.data[i].organization_id,
-                    organization_name: response.data.data[i].organization_name,
-                    organization_address: response.data.data[i].organization_address,
-                    owner_phone: response.data.data[i].organization_phone,
-                  },
-                ],
+              this.organization.push({
+                organization_id: response.data.data[i].organization_id,
+                organization_Name: response.data.data[i].organization_Name,
+                organization_address:
+                  response.data.data[i].organization_address,
+                organization_phone: response.data.data[i].organization_phone,
               });
             }
-            console.log(this.users)
+            console.log(response.data.data);
           }.bind(this)
         )
         .catch(function (error) {
@@ -634,8 +650,7 @@ export default {
       console.log(data);
       var config = {
         method: "post",
-        url:
-          process.env.VUE_APP_FNB_URL + "/admin/insertOrganizationOwner",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertOrganizationOwner",
         headers: {
           "Content-Type": "application/json",
         },

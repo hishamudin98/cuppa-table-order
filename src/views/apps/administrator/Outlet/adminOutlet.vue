@@ -80,7 +80,7 @@
                           @click="editOutlet(searchOutlet)"
                         />
                         {{ "" }}
-                        <router-link :to="{ name: 'admin-table' }">
+                        <router-link :to="{ name: 'admin-table' , params: { outletid: searchOutlet.data.outlet_id } }">
                           <Button
                             icon="pi pi-table"
                             class="p-button-rounded p-button-success"

@@ -1,41 +1,13 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            <router-link
-              class="flex items-center justify-center"
-              :to="{
-                name: 'admin-outlet',
-              }"
-            >
-              <vue-feather class="text-white" type="chevron-left"> </vue-feather>Table Management
-            </router-link>
-          </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
+        
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-1">
-            <div class="inline-block w-full pr-10">
+            <!-- <div class="inline-block w-full pr-10">
               <rs-card>
                 <div class="text-center pt-10 pb-2">
                   <strong>Number of active tables</strong>
@@ -43,7 +15,7 @@
                 <hr />
                 <div class="text-center py-8">4 Active tables</div>
               </rs-card>
-            </div>
+            </div> -->
           </div>
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
@@ -205,7 +177,6 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import QrcodeVue from "qrcode.vue";
 import Vue3Html2pdf from "vue3-html2pdf";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 
 export default {
   name: "AdminDashboard",
@@ -217,7 +188,6 @@ export default {
     Button,
     QrcodeVue,
     Vue3Html2pdf,
-     'arbitrary': Menu,
   },
   setup() {
     const tables = ref([]);
@@ -335,6 +305,7 @@ export default {
       var axios = require("axios");
       var data = JSON.stringify({
         staffid: localStorage.staff,
+        outletid: this.$route.params.outletid,
       });
       var config = {
         method: "post",
@@ -379,6 +350,7 @@ export default {
         tableName: this.tablename,
         tableRefNo: this.tableRefNo,
         staffid: localStorage.staff,
+        outletid: this.$route.params.outletid,
       });
       var config = {
         method: "post",

@@ -183,21 +183,24 @@
       <FormKit
         type="select"
         label="Staff Position"
+         placeholder="Select a Position"
         :options="[
+        
           { label: 'Admin', value: '2' },
           { label: 'User/Staff', value: '3' },
         ]"
-        v-model="users1.user_position"
+        v-model="position"
       />
       <FormKit
         type="select"
         label="Staff Category"
+         placeholder="Select a Category"
         :options="[
           { label: 'HQ', value: '2' },
           { label: 'Outlet', value: '3' },
           { label: 'Supplier', value: '4' },
         ]"
-        v-model="users1.user_position"
+        v-model="category"
       />
       <FormKit label="Outlet" type="text" v-model="this.searchUsers[0].outlet_name" readonly/>
 
@@ -336,6 +339,7 @@ export default {
       pincode: "",
       dob: "",
       position: "",
+      category: "",
 
       /* MODAL SHOW */
       modalDelete: false,
@@ -553,11 +557,14 @@ export default {
         pincode: this.pincode,
         dob: this.dob,
         position: this.position,
+        category: this.category,
         staffid: localStorage.staff,
+        outlet: this.outlet
       });
+      console.log(data)
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertStaff",
+        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
         headers: {
           "Content-Type": "application/json",
         },

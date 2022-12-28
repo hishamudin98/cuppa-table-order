@@ -107,7 +107,7 @@ export default [{
             import ("@/views/apps/administrator/Reports/adminReportsRefund.vue")
     },
     {
-        path: "/admin/table",
+        path: "/admin/table/:outletid?",
         name: "admin-table",
         component: () =>
             import ("@/views/apps/administrator/outlet/adminTable.vue")
