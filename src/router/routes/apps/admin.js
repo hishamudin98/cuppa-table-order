@@ -20,7 +20,15 @@ export default [{
         path: "/admin/staff/:outletid?",
         name: "admin-staff-outlet",
         component: () =>
-            import ("@/views/apps/administrator/User/adminStaff.vue")
+            import ("@/views/apps/administrator/User/adminStaff.vue"),
+            meta: {
+                title: "Outlet Staff",
+                breadcrumb: [{
+                        title: "User",
+                        route: { name: "admin-staff" }
+                    }
+                ]
+            }
     },
     {
         path: "/admin/staff",
