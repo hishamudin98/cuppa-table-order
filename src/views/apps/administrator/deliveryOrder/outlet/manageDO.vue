@@ -12,11 +12,11 @@
                     <div style="display: flex; flex-direction: row; padding-top: 10px">
                         <div class="w-full h-1">
                             <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
-                                inner:
-                                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                                outer: 'flex-1 mb-0',
-                                input: 'h-10',
-                            }" />
+    inner:
+        'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+    outer: 'flex-1 mb-0',
+    input: 'h-10',
+}" />
                         </div>
 
                         <div class="w-1/12" style="">
@@ -49,18 +49,36 @@
                                             </template>
                                         </Column>
 
-
-
-
-                                        <Column field="sto_Status" header="Status">
+                                        <Column field="do_Status" header="Status">
                                             <template #body="searchDO">
-                                                <rs-badges variant="warning" v-if="searchDO.data.do_Status"
-                                                    @click="clickBtnStatus()">
+                                                <rs-badges variant="warning" v-if="searchDO.data.do_Status === '1'"
+                                                    @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                    Open</rs-badges>
+
+                                                <rs-badges variant="warning" v-if="searchDO.data.do_Status === '2'"
+                                                    @click="clickBtnStatus(searchDO.data.do_Id)">
                                                     Approved</rs-badges>
+
+                                                <rs-badges variant="info" v-if="searchDO.data.do_Status === '3'"
+                                                    @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                    Delivery</rs-badges>
+
+                                                <rs-badges variant="info" v-if="searchDO.data.do_Status === '4'"
+                                                    @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                    Delivered</rs-badges>
+
+                                                <rs-badges variant="success" v-if="searchDO.data.do_Status === '5'"
+                                                    @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                    Cancelled</rs-badges>
+
+                                                <rs-badges variant="success" v-if="searchDO.data.do_Status === '6'"
+                                                    @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                    Cancelled</rs-badges>
+
                                                 {{ "" }}
                                                 <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                    style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                                                <p v-if="searchDO.data.sto_Status === '2'">Inactive</p>
+                                                    style="width: 25px;height:25px"
+                                                    @click="clickBtnInfo(searchDO.data.do_Id)" />
                                             </template>
 
                                         </Column>
@@ -100,8 +118,8 @@
                                         <template #expansion="headerDO">
                                             <div class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">Order No. Record for {{
-                                                        headerDO.data.do_No
-                                                }}</h5>
+        headerDO.data.do_No
+}}</h5>
 
                                                 <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
@@ -120,12 +138,48 @@
                                                     <Column field="po_TotalPrice" header="Total Price (RM)">
                                                         <template #body="resultFilter">
                                                             {{
-                                                                    formatPrice(resultFilter.data.po_TotalPrice)
-                                                            }}
+        formatPrice(resultFilter.data.po_TotalPrice)
+}}
                                                         </template>
                                                     </Column>
 
-                                                    <Column field="po_Status" header="Status Order">
+                                                    <Column field="po_Status" header="Status">
+                                                        <template #body="searchPO">
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchPO.data.po_Status === '1'">
+                                                                Open</rs-badges>
+
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchPO.data.po_Status === '2'">
+                                                                Approved</rs-badges>
+
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchPO.data.po_Status === '3'">
+                                                                Accepted</rs-badges>
+
+                                                            <rs-badges variant="info"
+                                                                v-if="searchPO.data.po_Status === '4'">
+                                                                Delivery</rs-badges>
+
+                                                            <rs-badges variant="success"
+                                                                v-if="searchPO.data.po_Status === '5'">
+                                                                Partial Delivered</rs-badges>
+
+                                                            <rs-badges variant="success"
+                                                                v-if="searchPO.data.po_Status === '6'">
+                                                                Completed</rs-badges>
+
+                                                            <rs-badges variant="success"
+                                                                v-if="searchPO.data.po_Status === '7'">
+                                                                Cancelled</rs-badges>
+
+                                                            {{ "" }}
+                                                            <Button icon="pi pi-info"
+                                                                class="p-button-rounded p-button-info"
+                                                                style="width: 25px;height:25px"
+                                                                @click="clickBtnInfo(searchPO.data.po_Id)" />
+                                                        </template>
+
                                                     </Column>
 
 
@@ -166,23 +220,16 @@
 
         <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+            <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+        status.timeline_statusName
+}}</b> ({{ status.timeline_staffName }})</p>
         </rs-modal>
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
+            <FormKit type="select" label="Status" :options="this.listStatus" v-model="selectStatus"
+                placeholder="Select Status" />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="updateStatus()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal>
@@ -285,10 +332,15 @@ export default {
             headerDO: [],
             listDO: [],
 
+            listTimelineStatus: [],
+            listStatus: [],
+            selectDOId: null,
+            selectStatus: null,
         };
     },
     async created() {
         this.getdata();
+        this.getStatusDO();
     },
 
     methods: {
@@ -409,15 +461,77 @@ export default {
             this.modalStatusDO = true;
         },
 
-        async clickBtnInfo() {
+        async clickBtnInfo(value) {
             // this.users1 = user.data;
             this.modalInfo = true;
+            this.listTimelineStatus = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                doId: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusDO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        this.listTimelineStatus = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
 
-        async clickBtnStatus() {
+        async clickBtnStatus(value) {
             // this.users1 = user.data;
             this.modalStatus = true;
+            this.selectDOId = value;
         },
+
+        async updateStatus() {
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                doId: this.selectDOId,
+                status: this.selectStatus,
+            });
+
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/updateStatusDO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        if (response.data.status == 200) {
+                            this.modalStatus = false;
+                            alert(response.data.message);
+                            this.getDO();
+                            this.getDOByOrderHqOutlet();
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
 
         async insertDO() {
             var axios = require("axios");
@@ -498,6 +612,32 @@ export default {
                     function (response) {
                         console.log("response do", response.data.data);
                         this.listDO = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStatusDO() {
+            var axios = require("axios");
+            var config = {
+                method: "get",
+                url: process.env.VUE_APP_FNB_URL + "/getStatusDOOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStatus.push({
+                                label: response.data.data[i].title,
+                                value: response.data.data[i].id,
+                            });
+                        }
                     }.bind(this)
                 )
                 .catch(function (error) {
