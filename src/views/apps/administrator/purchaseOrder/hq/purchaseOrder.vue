@@ -46,7 +46,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchPO" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"  @rowExpand="onRowExpand"
+                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -397,11 +397,9 @@
 
         <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+            <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+                    status.timeline_statusName
+            }}</b> ({{ status.timeline_staffName }})</p>
         </rs-modal>
 
         <rs-modal title="Confirm Delivery" v-model="modalDO" position="middle" size="md">
@@ -564,6 +562,8 @@ export default {
             headerPO: [],
             resultFilter: [],
             listDO: [],
+            listTimelineStatus: [],
+
         };
     },
     async created() {
@@ -782,9 +782,32 @@ export default {
             this.modalStatus = true;
         },
 
-        async clickBtnInfo() {
-            // this.users1 = user.data;
+        async clickBtnInfo(value) {
             this.modalInfo = true;
+            this.listTimelineStatus = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                poId: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusPOOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        this.listTimelineStatus = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
 
         async clickBtnDO() {

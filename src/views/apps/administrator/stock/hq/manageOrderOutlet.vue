@@ -41,31 +41,38 @@
                                         </Column>
                                         <Column field="po_Status" header="Status">
                                             <template #body="searchPO">
-                                                <div v-if="searchPO.data.po_Status === '1'">
-                                                    <rs-badges variant="warning" @click="clickBtnStatus()">
-                                                        Open</rs-badges> {{ " " }}
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '1'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Open</rs-badges>
 
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '2'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Approved</rs-badges>
 
-                                                </div>
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '3'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Accepted</rs-badges>
 
-                                                <div v-if="searchPO.data.po_Status === '2'">
-                                                    <rs-badges variant="warning" @click="clickBtnStatus()">
-                                                        Approved</rs-badges> {{ " " }}
+                                                <rs-badges variant="info" v-if="searchPO.data.po_Status === '4'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Delivery</rs-badges>
 
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '5'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Partial Delivered</rs-badges>
 
-                                                </div>
-                                                <p v-if="searchPO.data.po_Status === '3'">
-                                                    Accepted</p>
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '6'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Completed</rs-badges>
 
-                                                <p v-if="searchPO.data.po_Status === '4'">
-                                                    Delivery</p>
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '7'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Cancelled</rs-badges>
 
-                                                <p v-if="searchPO.data.po_Status === '5'">
-                                                    Received</p>
+                                                {{ "" }}
+                                                <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                    style="width: 25px;height:25px"
+                                                    @click="clickBtnInfo(searchPO.data.po_Id)" />
                                             </template>
 
                                         </Column>
@@ -78,7 +85,7 @@
                                                 <p v-if="searchPO"></p>
                                                 <router-link
                                                     :to="{ name: 'order-stock-outlet-hq', params: { id: searchPO.data.po_No } }">
-                                                <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                                                    <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
 
@@ -175,25 +182,19 @@
             </rs-button>
         </rs-modal><!-- INSERT -->
 
+
         <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+            <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+                    status.timeline_statusName
+            }}</b> ({{ status.timeline_staffName }})</p>
         </rs-modal>
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
+            <FormKit type="select" label="Status" :options="this.listStatus" v-model="selectStatus" placeholder="Select Status" />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="updateStatus()"
+                class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal>
@@ -278,6 +279,10 @@ export default {
             modalInfo: false,
             modalStatus: false,
 
+            listTimelineStatus: [],
+            listStatus: [],
+            selectPOId: null,
+            selectStatus: null,
 
         };
     },
@@ -285,17 +290,42 @@ export default {
         this.getdata();
         this.getTypePackaging();
         this.getUnitMeasurement();
+        this.getStatusPO();
     },
 
     methods: {
-        async clickBtnInfo() {
-            // this.users1 = user.data;
-            this.modalInfo = true;
-        },
 
-        async clickBtnStatus() {
-            // this.users1 = user.data;
+        async clickBtnInfo(value) {
+
+            this.modalInfo = true;
+            this.listTimelineStatus = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                poId: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusPOOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        this.listTimelineStatus = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        async clickBtnStatus(value) {
             this.modalStatus = true;
+            this.selectPOId = value;
         },
 
         async getdata() {
@@ -350,6 +380,31 @@ export default {
                 });
         },
 
+        async getStatusPO() {
+            var axios = require("axios");
+            var config = {
+                method: "get",
+                url: process.env.VUE_APP_FNB_URL + "/getStatusPOHq",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStatus.push({
+                                label: response.data.data[i].title,
+                                value: response.data.data[i].id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
 
         async getTypePackaging() {
             var axios = require("axios");
@@ -436,6 +491,40 @@ export default {
                             this.modalRawMaterial = false;
                             alert(response.data.message);
                             this.getOrderStock();
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async updateStatus() {
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                poId: this.selectPOId,
+                status: this.selectStatus,
+            });
+
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/updateStatusPO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        if (response.data.status == 200) {
+                            this.modalStatus = false;
+                            alert(response.data.message);
+                            this.getPOHq();
                         } else {
                             alert(response.data.message);
                         }
