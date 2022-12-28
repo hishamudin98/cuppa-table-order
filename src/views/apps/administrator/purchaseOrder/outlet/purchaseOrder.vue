@@ -85,21 +85,38 @@
 
                                         <Column field="po_Status" header="Status">
                                             <template #body="searchPO">
-                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '1'"
-                                                    @click="clickBtnStatus()">
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '1'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Open</rs-badges>
+
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '2'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Approved</rs-badges>
+
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '3'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Accepted</rs-badges>
+
+                                                <rs-badges variant="info" v-if="searchPO.data.po_Status === '4'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Delivery</rs-badges>
+
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '5'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
                                                     Partial Delivered</rs-badges>
+
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '6'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Completed</rs-badges>
+
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '7'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Cancelled</rs-badges>
+
                                                 {{ "" }}
                                                 <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                    style="width: 25px;height:25px" @click="clickBtnInfo()" />
-
-                                                <p v-if="searchPO.data.po_Status === '2'">
-                                                    Approved</p>
-                                                <p v-if="searchPO.data.po_Status === '3'">
-                                                    Accepted</p>
-                                                <p v-if="searchPO.data.po_Status === '4'">
-                                                    Delivery</p>
-                                                <p v-if="searchPO.data.po_Status === '5'">
-                                                    Received</p>
+                                                    style="width: 25px;height:25px"
+                                                    @click="clickBtnInfo(searchPO.data.po_Id)" />
                                             </template>
 
                                         </Column>
@@ -160,17 +177,33 @@
                                                     </Column>
 
                                                     <Column field="do_Status" header="Status DO">
-                                                        <!-- <template #body="resultFilter">
-                                                            <rs-badges variant="success"
-                                                                v-if="searchPO.data.suppOrderStatusCode">
-                                                                Received</rs-badges>
-                                                            {{ "" }}
-                                                            <Button icon="pi pi-info"
-                                                                class="p-button-rounded p-button-info"
-                                                                style="width: 25px;height:25px"
-                                                                @click="clickBtnInfo()" />
+                                                        <template #body="searchDO">
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchDO.data.do_Status === '1'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Open</rs-badges>
 
-                                                        </template> -->
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchDO.data.do_Status === '2'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Approved</rs-badges>
+
+                                                            <rs-badges variant="info"
+                                                                v-if="searchDO.data.do_Status === '3'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Delivery</rs-badges>
+
+                                                            <rs-badges variant="success"
+                                                                v-if="searchDO.data.do_Status === '4'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Completed</rs-badges>
+
+                                                            <rs-badges variant="success"
+                                                                v-if="searchDO.data.do_Status === '5'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Cancelled</rs-badges>
+
+                                                        </template>
                                                     </Column>
                                                     <Column :exportable="false" style="min-width: 8rem"
                                                         header="Actions">
@@ -190,8 +223,6 @@
                                                         </template>
                                                     </Column>
 
-
-
                                                     <template #paginatorstart>
                                                         <Button type="button" icon="pi pi-refresh"
                                                             class="p-button-text" />
@@ -202,9 +233,6 @@
                                                     </template>
 
                                                 </DataTable>
-
-
-
                                             </div>
                                         </template>
                                     </DataTable>
@@ -226,7 +254,8 @@
             ]" />
 
             <div v-if="this.selectType == 1">
-                <FormKit type="select" label="Store" v-model="selectStoreHq" :options="this.listStoreOutlet" />
+                <FormKit type="select" label="Store" v-model="selectStoreHq" :options="this.listStoreOutlet"
+                    placeholder="Select Store" />
                 <FormKit type="textarea" label="Remarks" v-model="remarksHq" />
 
                 <table>
@@ -334,26 +363,19 @@
 
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
+            <FormKit type="select" label="Status" :options="this.listStatus" v-model="selectStatus"
+                placeholder="Select Status" />
 
-            <rs-button style="float: right" @click="updatePO()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="updateStatus()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal>
 
         <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+            <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+                    status.timeline_statusName
+            }}</b> ({{ status.timeline_staffName }})</p>
         </rs-modal>
 
         <rs-modal title="Confirm Delivery" v-model="modalDO" position="middle" size="md">
@@ -509,13 +531,18 @@ export default {
             headerPO: [],
             resultFilter: [],
             listDO: [],
+            listTimelineStatus: [],
 
+            listStatus: [],
+            selectPOId: null,
+            selectStatus: null,
         };
     },
     async created() {
         this.getdata();
         this.getTypePackaging();
         this.getUnitMeasurement();
+        this.getStatusPO();
     },
 
     methods: {
@@ -596,6 +623,32 @@ export default {
                 });
         },
 
+        async getStatusPO() {
+            var axios = require("axios");
+            var config = {
+                method: "get",
+                url: process.env.VUE_APP_FNB_URL + "/getStatusPOOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStatus.push({
+                                label: response.data.data[i].title,
+                                value: response.data.data[i].id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
         async getTypePackaging() {
             var axios = require("axios");
             var config = {
@@ -664,15 +717,10 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
+                        console.log("resp", response.data.data);
                         this.listPurchaseOrder = response.data.data;
                         this.totalData = this.listPurchaseOrder.length;
 
-                        let price = 0;
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].po_TotalPrice;
-
-                        }
-                        this.sumPrice = price;
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -685,14 +733,75 @@ export default {
             this.modalPO = true;
         },
 
-        async clickBtnStatus() {
+        async clickBtnStatus(value) {
             // this.users1 = user.data;
             this.modalStatus = true;
+            this.selectPOId = value;
+
         },
 
-        async clickBtnInfo() {
-            // this.users1 = user.data;
+        async updateStatus() {
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                poId: this.selectPOId,
+                status: this.selectStatus,
+            });
+
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/updateStatusPO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        if (response.data.status == 200) {
+                            this.modalStatus = false;
+                            alert(response.data.message);
+                            this.getPOOutlet();
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+
+        async clickBtnInfo(value) {
+
             this.modalInfo = true;
+            this.listTimelineStatus = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                poId: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusPOOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        this.listTimelineStatus = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
 
         async clickBtnDO() {
@@ -701,8 +810,6 @@ export default {
         },
 
         async insertPO() {
-
-            console.log("insertPO", this.listPurchase);
 
             var axios = require("axios");
             var data = JSON.stringify({

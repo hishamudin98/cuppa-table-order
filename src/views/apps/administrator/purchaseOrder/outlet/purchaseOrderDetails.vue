@@ -30,11 +30,11 @@
                     <div style="display: flex; flex-direction: row; padding-top: 10px">
                         <div class="w-full h-1">
                             <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
-                                inner:
-                                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                                outer: 'flex-1 mb-0',
-                                input: 'h-10',
-                            }" />
+    inner:
+        'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+    outer: 'flex-1 mb-0',
+    input: 'h-10',
+}" />
                         </div>
                         <div class="w-1/12" style="padding-top: 10px">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Stock
@@ -46,7 +46,7 @@
                             <div>
                                 <div>
                                     <DataTable :value="searchStock" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
+                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -57,8 +57,8 @@
                                         <Column field="rm_QuantityDelivered" header="Quantity Delivered">
                                             <template #body="searchStock">
                                                 <p>{{ searchStock.data.rm_QuantityDelivered }} / {{
-                                                        searchStock.data.rm_QuantityRequested
-                                                }}</p>
+        searchStock.data.rm_QuantityRequested
+}}</p>
                                             </template>
 
                                         </Column>
@@ -104,86 +104,62 @@
                                             </template>
                                         </Column>
 
-                                        <template #expansion="searchStock">
+                                        <template #expansion="headerStock">
                                             <div class="orders-subtable">
                                                 <h5 style="margin-bottom:20px">Delivery Order Record for {{
-                                                        searchStock.data.rawMaterialName
-                                                }}</h5>
+        headerStock.data.rm_Name
+}}</h5>
 
-                                                <DataTable :value="searchStock" :paginator="true" :rows="10"
+                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
                                                     v-model:expandedRows="expandedRows"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                                    <Column field="rawMaterialName" header="DO No.">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                D0-00001</p>
-                                                        </template>
+
+                                                    <Column field="do_No" header="DO No.">
                                                     </Column>
-                                                    <Column field="rawMaterialName" header="Date">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                14/07/2022</p>
+
+                                                    <Column field="do_CreatedDate" header="DO Datetime">
+                                                    </Column>
+
+                                                    <Column field="rm_Quantity" header="Quantity"></Column>
+
+                                                    <Column field="do_TotalPrice" header="Total Price (RM)">
+                                                        <template #body="resultFilter">
+                                                            {{
+        formatPrice(resultFilter.data.do_TotalPrice)
+}}
                                                         </template>
                                                     </Column>
 
-                                                    <Column field="rawMaterialName" header="Order No.">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                #QwDer</p>
-                                                        </template>
-                                                    </Column>
+                                                    <Column field="do_Status" header="Status DO">
+                                                        <template #body="searchDO">
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchDO.data.do_Status === '1'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Open</rs-badges>
 
-                                                    <Column field="rawMaterialName" header="Staff">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                Staff HQ</p>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="rawMaterialName" header="Quantity">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                5</p>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="rawMaterialName" header="Total Price">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                123.00</p>
-                                                        </template>
-                                                    </Column>
+                                                            <rs-badges variant="warning"
+                                                                v-if="searchDO.data.do_Status === '2'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Approved</rs-badges>
 
-                                                    <Column field="rawMaterialName" header="PIC Name">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                Customer
-                                                                Name</p>
-                                                        </template>
+                                                            <rs-badges variant="info"
+                                                                v-if="searchDO.data.do_Status === '3'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Delivery</rs-badges>
 
-                                                    </Column>
-
-                                                    <Column field="rawMaterialName" header="PIC Phone No.">
-                                                        <template #body="searchStock">
-                                                            <p v-if="searchStock.data.rawMaterialName">
-                                                                0123123123
-                                                            </p>
-                                                        </template>
-
-                                                    </Column>
-
-                                                    <Column field="rawMaterialName" header="Status">
-                                                        <template #body="searchStock">
                                                             <rs-badges variant="success"
-                                                                v-if="searchStock.data.rawMaterialName">
-                                                                Received</rs-badges>
-                                                            {{ "" }}
-                                                            <Button icon="pi pi-info"
-                                                                class="p-button-rounded p-button-info"
-                                                                style="width: 25px;height:25px"
-                                                                @click="clickBtnInfo()" />
-                                                        </template>
+                                                                v-if="searchDO.data.do_Status === '4'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Completed</rs-badges>
 
+                                                            <rs-badges variant="success"
+                                                                v-if="searchDO.data.do_Status === '5'"
+                                                                @click="clickBtnStatus(searchDO.data.do_Id)">
+                                                                Cancelled</rs-badges>
+
+                                                        </template>
                                                     </Column>
 
                                                     <template #paginatorstart>
@@ -273,7 +249,7 @@ export default {
                 return (
                     listItemPO.rm_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    listItemPO.po_No
+                    listItemPO.rm_Name
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -314,6 +290,12 @@ export default {
             packaging_type: null,
             measurement: null,
             modalRawMaterial: false,
+
+            headerStock: [],
+            resultFilter: [],
+            listStock: [],
+            listTimelineStatus: [],
+
         };
     },
     async created() {
@@ -348,6 +330,7 @@ export default {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
                         this.getDetailsPO();
+                        this.getDOByStock();
 
                     }.bind(this)
                 )
@@ -409,7 +392,6 @@ export default {
         },
 
         async getDetailsPO() {
-            console.log("po" + this.$route.params.id);
             var axios = require("axios");
             var data = JSON.stringify({
                 staffId: this.staffId,
@@ -426,16 +408,8 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-
                         this.listItemPO = response.data.data;
                         this.totalData = this.listItemPO.length;
-
-                        let price = 0;
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].suppOrderDetailsTotalPrice;
-
-                        }
-                        this.sumPrice = price;
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -474,7 +448,6 @@ export default {
                         if (response.data.status == 200) {
                             this.modalRawMaterial = false;
                             alert(response.data.message);
-                            this.users.splice(0);
                             this.getDetailsPO();
                         } else {
                             alert(response.data.message);
@@ -484,6 +457,41 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        async getDOByStock() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getDOItem",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        this.listStock = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        onRowExpand(event) {
+            console.log("listStock", this.listStock);
+            this.resultFilter = this.listStock.filter((item) => {
+                // console.log("item", item);
+                if (item.rm_Id == event.data.rm_Id && item.po_No == event.data.po_No) {
+                    return item;
+                }
+            });
+            this.headerStock = this.resultFilter;
         },
     },
 };
