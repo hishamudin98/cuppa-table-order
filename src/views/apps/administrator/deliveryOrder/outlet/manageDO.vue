@@ -69,9 +69,9 @@
 
                                                 <rs-badges variant="success" v-if="searchDO.data.do_Status === '5'"
                                                     @click="clickBtnStatus(searchDO.data.do_Id)">
-                                                    Cancelled</rs-badges>
+                                                    Completed</rs-badges>
 
-                                                <rs-badges variant="success" v-if="searchDO.data.do_Status === '6'"
+                                                <rs-badges variant="danger" v-if="searchDO.data.do_Status === '6'"
                                                     @click="clickBtnStatus(searchDO.data.do_Id)">
                                                     Cancelled</rs-badges>
 
