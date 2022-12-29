@@ -10,11 +10,11 @@
           <div style="display: flex; flex-direction: row; padding-top: 10px">
             <div class="w-11/12 h-1">
               <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
-                inner:
-                  'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                outer: 'flex-1 mb-0',
-                input: 'h-10',
-              }" />
+  inner:
+    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+  outer: 'flex-1 mb-0',
+  input: 'h-10',
+}" />
             </div>
 
             <div class="w-1/12" style="">
@@ -52,12 +52,29 @@
 
                     <Column field="invoice_Status" header="Status">
                       <template #body="searchInvoice">
-                        <rs-badges variant="warning" v-if="searchInvoice.data.invoice_Status" @click="clickBtnStatus()">
+                        <rs-badges variant="warning" v-if="searchInvoice.data.invoice_Status === '1'"
+                          @click="clickBtnStatus(searchInvoice.data.invoice_Id)">
+                          Open</rs-badges>
+
+                        <rs-badges variant="warning" v-if="searchInvoice.data.invoice_Status === '2'"
+                          @click="clickBtnStatus(searchInvoice.data.invoice_Id)">
                           Approved</rs-badges>
+
+                        <rs-badges variant="info" v-if="searchInvoice.data.invoice_Status === '3'"
+                          @click="clickBtnStatus(searchInvoice.data.invoice_Id)">
+                          Payment Ready</rs-badges>
+
+                        <rs-badges variant="info" v-if="searchInvoice.data.invoice_Status === '4'"
+                          @click="clickBtnStatus(searchInvoice.data.invoice_Id)">
+                          Paid</rs-badges>
+
+                        <rs-badges variant="danger" v-if="searchInvoice.data.invoice_Status === '5'"
+                          @click="clickBtnStatus(searchInvoice.data.invoice_Id)">
+                          Cancelled</rs-badges>
+
                         {{ "" }}
                         <Button icon="pi pi-info" class="p-button-rounded p-button-info" style="width: 25px;height:25px"
-                          @click="clickBtnInfo()" />
-                        <p v-if="searchInvoice.data.invoice_Status === '2'">Inactive</p>
+                          @click="clickBtnInfo(searchInvoice.data.invoice_Id)" />
 
                       </template>
                     </Column>
@@ -108,8 +125,8 @@
                           <Column field="do_TotalPrice" header="Total Price (RM)">
                             <template #body="resultFilter">
                               {{
-                                  formatPrice(resultFilter.data.do_TotalPrice)
-                              }}
+    formatPrice(resultFilter.data.do_TotalPrice)
+}}
                             </template>
                           </Column>
 
@@ -188,26 +205,20 @@
 
     <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-      <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-      <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-      <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-      <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-      <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+      <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+    status.timeline_statusName
+}}</b> ({{ status.timeline_staffName }})</p>
     </rs-modal>
 
     <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-      <FormKit type="select" label="Status" :options="[
-        'Open',
-        'Approved',
-        'Accepted',
-        'Delivery',
-        'Received',
-      ]" />
+      <FormKit type="select" label="Status" :options="this.listStatus" v-model="selectStatus"
+        placeholder="Select Status" />
 
-      <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+      <rs-button style="float: right" @click="updateStatus()" class="bg-heandshe hover:bg-heandshe">
         Save
       </rs-button>
     </rs-modal>
+
   </rs-layout>
 </template>
 <script>
@@ -294,18 +305,48 @@ export default {
       headerInv: [],
       resultFilter: [],
       listInvoice: [],
+
+      listTimelineStatus: [],
+      listStatus: [],
+      selectInvoiceId: null,
+      selectStatus: null,
+
     };
   },
   async created() {
     this.getdata();
-
+    this.getStatusInvoice();
   },
 
   methods: {
 
-    async clickBtnInfo() {
+    async clickBtnInfo(value) {
       // this.users1 = user.data;
       this.modalInfo = true;
+      this.listTimelineStatus = [];
+
+      var axios = require("axios");
+      var data = JSON.stringify({
+        invoiceId: value
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusInvoice",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            console.log('response status', response.data.data);
+            this.listTimelineStatus = response.data.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     async papar(DO_id) {
@@ -419,9 +460,47 @@ export default {
       window.location.href = "https://dev1.toyyibpay.com/dev1-iserve-ewallet";
     },
 
-    async clickBtnStatus() {
+    async clickBtnStatus(value) {
       // this.users1 = user.data;
       this.modalStatus = true;
+      this.selectInvoiceId = value;
+
+    },
+
+    async updateStatus() {
+      console.log('update status', this.selectStatus);
+
+      var axios = require("axios");
+      var data = JSON.stringify({
+        staffId: this.staffId,
+        invoiceId: this.selectInvoiceId,
+        status: this.selectStatus,
+      });
+
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateStatusInvoice",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+      await axios(config)
+        .then(
+          function (response) {
+            console.log('response status', response.data.data);
+            if (response.data.status == 200) {
+              this.modalStatus = false;
+              alert(response.data.message);
+              this.getInvoiceHq();
+            } else {
+              alert(response.data.message);
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     async getdata() {
@@ -493,7 +572,6 @@ export default {
     },
 
     async getInvoiceHq() {
-      console.log("getInvoiceHq");
       var axios = require("axios");
       var data = JSON.stringify({
         staffId: this.staffId,
@@ -564,6 +642,32 @@ export default {
         .then(
           function (response) {
             this.listInvoice = response.data.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async getStatusInvoice() {
+      var axios = require("axios");
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL + "/getStatusInvoiceHq",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios(config)
+        .then(
+          function (response) {
+
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listStatus.push({
+                label: response.data.data[i].title,
+                value: response.data.data[i].id,
+              });
+            }
           }.bind(this)
         )
         .catch(function (error) {

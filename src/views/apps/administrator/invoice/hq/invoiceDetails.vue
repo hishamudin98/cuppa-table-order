@@ -50,7 +50,7 @@
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                        <Column :expander="true" headerStyle="width: 3rem" />
+                                        <!-- <Column :expander="true" headerStyle="width: 3rem" /> -->
                                         <Column field="rm_Name" header="Name"></Column>
                                         <Column field="rm_Sku" header="SKU"></Column>
                                         <Column field="rm_Quantity" header="Quantity"></Column>
