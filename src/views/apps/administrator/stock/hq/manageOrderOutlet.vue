@@ -65,7 +65,7 @@
                                                     @click="clickBtnStatus(searchPO.data.po_Id)">
                                                     Completed</rs-badges>
 
-                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '7'"
+                                                <rs-badges variant="danger" v-if="searchPO.data.po_Status === '7'"
                                                     @click="clickBtnStatus(searchPO.data.po_Id)">
                                                     Cancelled</rs-badges>
 
