@@ -1197,10 +1197,12 @@ export default {
     if (this.orderNo != "") {
       this.getOrderID();
     }
-    if (localStorage.name) {
+    console.log(localStorage.name)
+    if (localStorage.name != "") {
       this.name = localStorage.name;
+      console.log("Masuk nama x kosong")
     }
-    if (localStorage.phone) {
+    if (localStorage.phone != "") {
       this.phone = localStorage.phone;
     }
     if (this.branch != "") {

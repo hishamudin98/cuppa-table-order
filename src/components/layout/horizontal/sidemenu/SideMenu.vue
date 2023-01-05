@@ -3,7 +3,7 @@
     class="vertical-menu bg-[#1A1819] dark:bg-slate-800 text-white text-base h-screen fixed w-64 top-0 z-50 duration-300 border-l-0 "
   >
     <div class="flex flex-auto justify-center items-center bg-[#1A1819]">
-      <img class="h-18 w-18 mt-4" src="@/assets/images/logo/heandshe.jpg" alt="" />
+      <img class="h-18 w-18 mt-4" src="@/assets/images/logo/cuppa.png" alt="" />
     </div>
     <div class="flex flex-col justify-between my-6">
       <perfect-scrollbar style="max-height: 87vh">

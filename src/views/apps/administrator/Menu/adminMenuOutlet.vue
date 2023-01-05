@@ -47,9 +47,7 @@
                       <Column field="outlet_code" header="Outlet Code"></Column>
                       <Column field="outlet_name" header="Outlet Name"></Column>
                       <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
-                      <Column field="" header="Price ( RM )"><template #body="">
-                      6.00
-                    </template></Column>
+                      <Column field="menu_price" header="Price ( RM )"></Column>
                      
                       <template #paginatorstart>
                         <Button
@@ -84,10 +82,9 @@
       size="md"
     >
       <label><strong>Outlet Available</strong></label>
-      <vue-taggable-select
-        v-model="outlet"
-        :options="this.outlets"
-    ></vue-taggable-select>
+      
+    <Multiselect v-model="branch" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
+                :options="this.outlets"  />
     <br>
     <FormKit type="number" label="Menu Price By Outlet ( RM )" v-model="menu_price" />
       <rs-button style="float: right" @click="insertOutlet()"> Save </rs-button>
@@ -124,7 +121,7 @@ import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
 import "primeicons/primeicons.css";
 /* import moment from "moment"; */
-import VueTaggableSelect from "vue-taggable-select";
+import Multiselect from "@vueform/multiselect";
 
 export default {
   name: "AdminDashboard",
@@ -134,7 +131,7 @@ export default {
     DataTable,
     Column,
     Button,
-    VueTaggableSelect,
+    Multiselect,
   },
   setup() {
     const outlet = ref([]);
@@ -184,12 +181,16 @@ export default {
       outlet_postcode: "",
       outlet_address: "",
       outlet_images: "",
+      menuId: "",
+      branch: [],
+      menu_price: 0,
     };
   },
   async created() {
     this.getdata();
     this.getOutlethq();
     this.getOutlet();
+    this.menuId = this.$route.params.menuid;
   },
 
   methods: {
@@ -222,7 +223,7 @@ export default {
       var axios = require("axios");
       var config = {
         method: "get",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutlet",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
         headers: {
           "Content-Type": "application/json",
         },
@@ -233,10 +234,10 @@ export default {
           function (response) {
             for (let i = 0; i < response.data.data.length; i++) {
               this.outlets.push(/* {
-                label:  */response.data.data[i].outlet_name
-                /* value: this.valueOutlet, */
-              /* } */);
-              this.valueOutlet = [];
+                name:  */response.data.data[i].outlet_name
+                /* code: response.data.data[i].outlet_id
+              } */);
+              
             }
           }.bind(this)
         )
@@ -249,11 +250,12 @@ export default {
       var axios = require("axios");
       var data = JSON.stringify({
         staffid: localStorage.staff,
+        menuId: this.$route.params.menuid,
       });
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getOutletMenu" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -263,15 +265,13 @@ export default {
         .then(
           function (response) {
             this.outlet_details = response.data.data.Outlet_det;
+            console.log(response.data.data)
             for (let i = 0; i < this.outlet_details.length; i++) {
               this.outlet.push({
                 outlet_id: this.outlet_details[i].outlet_id,
                 outlet_code: this.outlet_details[i].outlet_code,
                 outlet_name: this.outlet_details[i].outlet_name,
-                outlet_phone: this.outlet_details[i].outlet_phone,
-                outlet_email: this.outlet_details[i].outlet_email,
-                outlet_address: this.outlet_details[i].outlet_address,
-                staff_name: this.outlet_details[i].staff_name,
+                menu_price: this.outlet_details[i].menu_price.toFixed(2),
               });
             }
             this.totalData = this.outlet.length;
@@ -294,18 +294,17 @@ export default {
     },
 
     async insertOutlet() {
+      console.log(this.branch)
       var axios = require("axios");
       var data = JSON.stringify({
-        outlet_name: this.outlet_name,
-        outlet_phone: this.outlet_phone,
-        outlet_email: this.outlet_email,
-        outlet_postcode: this.outlet_postcode,
-        outlet_address: this.outlet_address,
+        outlet_name: this.branch,
+        outlet_price: this.menu_price,
+        menuId: this.menuId,
         staffid: localStorage.staff,
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertOutlet",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertMenuOutlet",
         headers: {
           "Content-Type": "application/json",
         },
@@ -333,45 +332,9 @@ export default {
         });
     },
 
-    async editOutlets(outlet1) {
-      var axios = require("axios");
-      var data = JSON.stringify({
-        outlet_name: outlet1.outlet_name,
-        outlet_phone: outlet1.outlet_phone,
-        outlet_email: outlet1.outlet_email,
-        outlet_address: outlet1.outlet_address,
-        outlet_id: outlet1.outlet_id,
-        staffid: localStorage.staff,
-      });
-      var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/updateOutlet",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      await axios(config)
-        .then(
-          function (response) {
-            if (response.data.status == "Success") {
-              this.modalEdit = false;
-              this.outlet_name = "";
-              this.outlet_phone = "";
-              this.outlet_email = "";
-              this.outlet_address = "";
-              alert(response.data.message);
-              this.outlet.splice(0);
-              this.getOutlethq();
-            } else {
-              alert(response.data.message);
-            }
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
   },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css">
+
+</style>

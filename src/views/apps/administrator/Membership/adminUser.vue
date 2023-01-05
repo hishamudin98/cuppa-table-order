@@ -19,7 +19,7 @@
                 }" />
               </div>
               <div class="w-1/12" style="padding-top: 10px">
-                <rs-button @click="addUser()" class="bg-heandshe hover:bg-heandshe">Add User</rs-button>
+                <rs-button @click="addUser()" class="bg-heandshe hover:bg-heandshe">Add Membership</rs-button>
               </div>
             </div>
             <div class="">

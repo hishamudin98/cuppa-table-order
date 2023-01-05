@@ -24,13 +24,13 @@
                   }"
                 />
               </div>
-              <div class="w-1/12" style="padding-top: 10px">
+              <!-- <div class="w-1/12" style="">
                 <rs-button
                   @click="filter()"
                   class="bg-heandshe hover:bg-heandshe"
                   >Filter</rs-button
                 >
-              </div>
+              </div> -->
             </div>
             <div class="">
               <rs-card style="margin-top: 40px">
@@ -224,7 +224,6 @@ export default {
           outlets.org_type
             .toLowerCase()
             .indexOf(role.value.toLowerCase()) != -1 
-         
         );
       });
     });
@@ -314,7 +313,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -323,7 +322,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            
+            console.log(response)
             this.outlet_details = response.data.data.Outlet_det;
             for (let i = 0; i < this.outlet_details.length; i++) {
               if(this.outlet_details[i].org_type == 2)
@@ -349,6 +348,7 @@ export default {
                 org_type : this.orgType,
               });
             }
+            
             this.totalData = this.outlet.length;
 
             /* this.sumShifts = response.data.data.Shift_sum[0].sums */

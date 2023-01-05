@@ -82,7 +82,7 @@
       </div>
     </div>
   </rs-card>
-  <rs-card class="py-3 px-4" v-if=" this.address != ''">
+  <rs-card class="py-3 px-4" v-if=" this.address != '' || this.address != null">
     <div class="payment-detail-wrapper">
       <div class="flex justify-between items-center my-3">
         <p class="font-semibold uppercase">Delivery Details</p>

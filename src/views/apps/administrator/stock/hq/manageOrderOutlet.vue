@@ -3,28 +3,7 @@
         <div style="display: flex; flex-direction: row">
 
             <div class="w-full h-1/4 flex flex-col">
-                <div class="w-full flex flex-row mb-0">
-                    <div class="inline-block w-1/2 pr-10">
-                        <rs-card>
-                            <div class="text-center pt-10 pb-2">
-                                <strong>Total of Stock Order </strong>
-                            </div>
-                            <hr />
-                            <div class="text-center py-8">{{ this.totalData }} shifts</div>
-                        </rs-card>
-                    </div>
-                    <div class="inline-block w-1/2 pr-10">
-                        <rs-card>
-                            <div class="text-center pt-10 pb-2">
-                                <strong>Total Price Stock Order ( RM )</strong>
-                            </div>
-                            <hr />
-                            <div class="text-center py-8">
-                                {{ formatPrice(this.sumPrice) }}
-                            </div>
-                        </rs-card>
-                    </div>
-                </div>
+
                 <div class="w-full" style="flex-direction: column">
                     <!-- UNTUK ATAS BAWAH -->
                     <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -45,48 +24,55 @@
                         <rs-card style="margin-top: 40px">
                             <div>
                                 <div>
-                                    <DataTable :value="searchOrderStock" :paginator="true" :rows="10"
+                                    <DataTable :value="searchPO" :paginator="true" :rows="10"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                        <Column field="outletName" header="Outlet Name"></Column>
-                                        <Column field="stockOrderOutletNo" header="Order No."></Column>
-                                        <Column field="stockOrderOutletDatetime" header="Order Datetime"></Column>
-                                        <Column field="stockOrderOutletRemarks" header="Remarks"></Column>
-                                        <Column field="stockOrderOutletTotalPrice" header="Total Order (RM)">
-                                            <template #body="searchOrderStock">
+                                        <Column field="po_Outlet" header="Outlet Name"></Column>
+                                        <Column field="po_No" header="Order No."></Column>
+                                        <Column field="po_Date" header="Order Datetime"></Column>
+                                        <Column field="po_Remarks" header="Remarks"></Column>
+                                        <Column field="po_TotalPrice" header="Total Order (RM)">
+                                            <template #body="searchPO">
                                                 {{
-                                                        formatPrice(searchOrderStock.data.stockOrderOutletTotalPrice)
+                                                        parseFloat(searchPO.data.po_TotalPrice).toFixed(2)
                                                 }}
                                             </template>
                                         </Column>
-                                        <Column field="stockOrderOutletStatusCode" header="Status">
-                                            <template #body="searchOrderStock">
-                                                <div v-if="searchOrderStock.data.stockOrderOutletStatusCode === '1'">
-                                                    <rs-badges variant="warning" @click="clickBtnStatus()">
-                                                        Open</rs-badges> {{ " " }}
+                                        <Column field="po_Status" header="Status">
+                                            <template #body="searchPO">
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '1'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Open</rs-badges>
 
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '2'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Approved</rs-badges>
 
-                                                </div>
+                                                <rs-badges variant="warning" v-if="searchPO.data.po_Status === '3'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Accepted</rs-badges>
 
-                                                <div v-if="searchOrderStock.data.stockOrderOutletStatusCode === '2'">
-                                                    <rs-badges variant="warning" @click="clickBtnStatus()">
-                                                        Approved</rs-badges> {{ " " }}
+                                                <rs-badges variant="info" v-if="searchPO.data.po_Status === '4'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Delivery</rs-badges>
 
-                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                        style="width: 25px;height:25px" @click="clickBtnInfo()" />
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '5'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Partial Delivered</rs-badges>
 
-                                                </div>
-                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '3'">
-                                                    Accepted</p>
+                                                <rs-badges variant="success" v-if="searchPO.data.po_Status === '6'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Completed</rs-badges>
 
-                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '4'">
-                                                    Delivery</p>
+                                                <rs-badges variant="danger" v-if="searchPO.data.po_Status === '7'"
+                                                    @click="clickBtnStatus(searchPO.data.po_Id)">
+                                                    Cancelled</rs-badges>
 
-                                                <p v-if="searchOrderStock.data.stockOrderOutletStatusCode === '5'">
-                                                    Received</p>
+                                                {{ "" }}
+                                                <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                    style="width: 25px;height:25px"
+                                                    @click="clickBtnInfo(searchPO.data.po_Id)" />
                                             </template>
 
                                         </Column>
@@ -94,10 +80,11 @@
 
                                         <Column :exportable="false" header="Details">
 
-                                            <template #body="searchOrderStock">
+                                            <template #body="searchPO">
 
+                                                <p v-if="searchPO"></p>
                                                 <router-link
-                                                    :to="{ name: 'order-stock-outlet-hq', params: { id: searchOrderStock.data.stockOrderOutletId } }">
+                                                    :to="{ name: 'order-stock-outlet-hq', params: { id: searchPO.data.po_No } }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
@@ -106,12 +93,12 @@
                                         </Column>
 
                                         <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                                            <template #body="searchOrderStock">
+                                            <template #body="searchPO">
                                                 <Button icon="pi pi-pencil"
                                                     class="p-button-rounded p-button-success mr-2"
-                                                    @click="editUser(searchOrderStock)" /> {{ " " }}
+                                                    @click="editUser(searchPO)" /> {{ " " }}
                                                 <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                    @click="deleteUser(searchOrderStock)" />
+                                                    @click="deleteUser(searchPO)" />
                                             </template>
                                         </Column>
 
@@ -195,25 +182,19 @@
             </rs-button>
         </rs-modal><!-- INSERT -->
 
+
         <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+            <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+                    status.timeline_statusName
+            }}</b> ({{ status.timeline_staffName }})</p>
         </rs-modal>
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
+            <FormKit type="select" label="Status" :options="this.listStatus" v-model="selectStatus" placeholder="Select Status" />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="updateStatus()"
+                class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal>
@@ -243,17 +224,17 @@ export default {
         Button,
     },
     setup() {
-        const orderStock = ref([]);
+        const purchaseOrder = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
-        const searchOrderStock = computed(() => {
-            return orderStock.value.filter((orderStock) => {
+        const searchPO = computed(() => {
+            return purchaseOrder.value.filter((purchaseOrder) => {
                 return (
-                    orderStock.stockOrderOutletNo.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    purchaseOrder.po_No.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    orderStock.stockOrderOutletNo
+                    purchaseOrder.po_No
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -267,8 +248,8 @@ export default {
         };
         return {
             search,
-            searchOrderStock,
-            orderStock,
+            searchPO,
+            purchaseOrder,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -276,7 +257,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -298,24 +279,53 @@ export default {
             modalInfo: false,
             modalStatus: false,
 
+            listTimelineStatus: [],
+            listStatus: [],
+            selectPOId: null,
+            selectStatus: null,
+
         };
     },
     async created() {
         this.getdata();
-        this.getOrderStock();
         this.getTypePackaging();
         this.getUnitMeasurement();
+        this.getStatusPO();
     },
 
     methods: {
-        async clickBtnInfo() {
-            // this.users1 = user.data;
-            this.modalInfo = true;
-        },
 
-        async clickBtnStatus() {
-            // this.users1 = user.data;
+        async clickBtnInfo(value) {
+
+            this.modalInfo = true;
+            this.listTimelineStatus = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                poId: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusPOOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        this.listTimelineStatus = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        async clickBtnStatus(value) {
             this.modalStatus = true;
+            this.selectPOId = value;
         },
 
         async getdata() {
@@ -336,6 +346,59 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getPOHq();
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getPOHq() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "POST",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPOHqOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        this.purchaseOrder = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStatusPO() {
+            var axios = require("axios");
+            var config = {
+                method: "get",
+                url: process.env.VUE_APP_FNB_URL + "/getStatusPOHq",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStatus.push({
+                                label: response.data.data[i].title,
+                                value: response.data.data[i].id,
+                            });
+                        }
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -395,37 +458,6 @@ export default {
                 });
         },
 
-        async getOrderStock() {
-            var axios = require("axios");
-            // var data = JSON.stringify({
-            //     staffid: localStorage.staff,
-            // });
-            var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/outlet/getOrderStock",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        console.log("data : ", response.data.data);
-                        this.orderStock = response.data.data;
-                        this.totalData = this.orderStock.length;
-
-                        let price = 0;
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].stockOrderOutletTotalPrice;
-
-                        }
-                        this.sumPrice = price;
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
 
         async clickBtnAdd() {
             // this.users1 = user.data;
@@ -458,8 +490,41 @@ export default {
                         if (response.data.status == 200) {
                             this.modalRawMaterial = false;
                             alert(response.data.message);
-                            this.users.splice(0);
                             this.getOrderStock();
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async updateStatus() {
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                poId: this.selectPOId,
+                status: this.selectStatus,
+            });
+
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/updateStatusPO",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        if (response.data.status == 200) {
+                            this.modalStatus = false;
+                            alert(response.data.message);
+                            this.getPOHq();
                         } else {
                             alert(response.data.message);
                         }

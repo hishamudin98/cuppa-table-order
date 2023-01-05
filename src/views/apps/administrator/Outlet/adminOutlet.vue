@@ -80,7 +80,7 @@
                           @click="editOutlet(searchOutlet)"
                         />
                         {{ "" }}
-                        <router-link :to="{ name: 'admin-table' }">
+                        <router-link :to="{ name: 'admin-table' , params: { outletid: searchOutlet.data.outlet_id } }">
                           <Button
                             icon="pi pi-table"
                             class="p-button-rounded p-button-success"
@@ -327,7 +327,7 @@ export default {
       var config = {
         method: "post",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
+          process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -363,7 +363,7 @@ export default {
       var config = {
         method: "get",
         url:
-          process.env.VUE_APP_FNB_URL_LOCAL +
+          process.env.VUE_APP_FNB_URL +
           "/admin/getOrganizationOwner" /*   */,
         headers: {
           "Content-Type": "application/json",

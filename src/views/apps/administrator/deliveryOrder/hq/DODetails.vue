@@ -36,10 +36,10 @@
                                 input: 'h-10',
                             }" />
                         </div>
-                        <div class="w-1/12" style="padding-top: 10px">
+                        <!-- <div class="w-1/12" style="padding-top: 10px">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Stock
                             </rs-button>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="">
                         <rs-card style="margin-top: 40px">
@@ -53,48 +53,36 @@
                                         <Column :expander="true" headerStyle="width: 3rem" />
                                         <Column field="rm_Name" header="Name"></Column>
                                         <Column field="rm_Sku" header="SKU"></Column>
-                                        <Column field="rm_QuantityRequested" header="Quantity"></Column>
-                                        <Column field="rm_QuantityDelivered" header="Quantity Delivered">
+                                        <Column field="rm_Quantity" header="Quantity"></Column>
+                                        <Column field="rm_Price" header="Unit Price (RM) ">
                                             <template #body="searchStock">
-                                                <p>{{ searchStock.data.rm_QuantityDelivered }} / {{
-                                                        searchStock.data.rm_QuantityRequested
-                                                }}</p>
+                                                <p>{{ parseFloat(searchStock.data.rm_Price).toFixed(2) }}</p>
                                             </template>
-
+                                        </Column>
+                                        <Column field="rm_TotalPrice" header="Total Price (RM)">
+                                            <template #body="searchStock">
+                                                <p>{{ parseFloat(searchStock.data.rm_TotalPrice).toFixed(2) }}</p>
+                                            </template>
                                         </Column>
                                         <Column field="rm_Packaging" header="Packaging Type">
-                                            <template #body="searchStock">
-                                                <p v-if="searchStock.data.rm_Packaging === '1'">Box</p>
-                                                <p v-if="searchStock.data.rm_Packaging === '2'">Packet</p>
-                                                <p v-if="searchStock.data.rm_Packaging === '3'">Carton</p>
+                                            <template #body="searchRawMaterial">
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '1'">Box</p>
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '2'">Packet</p>
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '3'">Carton</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_Unit" header="Measurement">
-                                            <template #body="searchStock">
-                                                <p v-if="searchStock.data.rm_Unit === '1'">gram</p>
-                                                <p v-if="searchStock.data.rm_Unit === '2'">kilogram</p>
-                                                <p v-if="searchStock.data.rm_Unit === '3'">centimetre</p>
-                                                <p v-if="searchStock.data.rm_Unit === '4'">metre</p>
-                                                <p v-if="searchStock.data.rm_Unit === '5'">pcs</p>
-                                            </template>
-                                        </Column>
-                                        <Column field="rm_Price" header="Unit Price (RM)">
-                                            <template #body="searchStock">
-                                                {{ formatPrice(searchStock.data.rm_Price) }}
+                                            <template #body="searchRawMaterial">
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '1'">gram</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '2'">kilogram</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '3'">centimetre</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '4'">metre</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '5'">pcs</p>
                                             </template>
                                         </Column>
 
-                                        <Column field="rm_Price" header="Total Price (RM)">
-                                            <template #body="searchStock">
-                                                {{ formatPrice(searchStock.data.rm_TotalPrice) }}
-                                            </template>
-                                        </Column>
 
-                                        <Column field="store_Name" header="Store">
-
-                                        </Column>
-
-                                        <Column :exportable="false" style="min-width: 8rem">
+                                        <Column :exportable="false" style="min-width: 8rem" header="Actions">
                                             <template #body="searchStock">
                                                 <Button icon="pi pi-pencil"
                                                     class="p-button-rounded p-button-success mr-2"
@@ -263,17 +251,17 @@ export default {
         Button,
     },
     setup() {
-        const listItemPO = ref([]);
+        const listItem = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
 
         const searchStock = computed(() => {
-            return listItemPO.value.filter((listItemPO) => {
+            return listItem.value.filter((listItem) => {
                 return (
-                    listItemPO.rm_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    listItem.rm_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    listItemPO.po_No
+                    listItem.po_No
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -288,7 +276,7 @@ export default {
         return {
             search,
             searchStock,
-            listItemPO,
+            listItem,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -347,7 +335,7 @@ export default {
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
                         this.staffId = response.data.data[0].staff_id;
-                        this.getDetailsPO();
+                        this.getDetailsDO();
 
                     }.bind(this)
                 )
@@ -408,16 +396,14 @@ export default {
                 });
         },
 
-        async getDetailsPO() {
-            console.log("po" + this.$route.params.id);
+        async getDetailsDO() {
             var axios = require("axios");
             var data = JSON.stringify({
-                staffId: this.staffId,
-                orderId: this.$route.params.id
+                doId: this.$route.params.id
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getDetailsPO",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialByDO",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -426,9 +412,8 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-
-                        this.listItemPO = response.data.data;
-                        this.totalData = this.listItemPO.length;
+                        this.listItem = response.data.data;
+                        this.totalData = this.listItem.length;
 
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
@@ -475,7 +460,7 @@ export default {
                             this.modalRawMaterial = false;
                             alert(response.data.message);
                             this.users.splice(0);
-                            this.getDetailsPO();
+                            this.getDetailsDO();
                         } else {
                             alert(response.data.message);
                         }

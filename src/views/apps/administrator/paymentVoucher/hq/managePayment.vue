@@ -1,297 +1,259 @@
 <template>
     <rs-layout>
-        <div style="display: flex; flex-direction: row">
+        <div class="w-full flex flex-col">
+            <div style="display: flex; flex-direction: row">
 
-            <div class="w-full h-1/4 flex flex-col">
-                <div class="w-full flex flex-row mb-0">
-
-                </div>
-                <div class="w-full" style="flex-direction: column">
-                    <!-- UNTUK ATAS BAWAH -->
-                    <div style="display: flex; flex-direction: row; padding-top: 10px">
-                        <div class="w-full h-1">
-                            <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search" :classes="{
-                                inner:
-                                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                                outer: 'flex-1 mb-0',
-                                input: 'h-10',
-                            }" />
-                        </div>
-
-                        <div class="w-1/12" style="padding-top: 10px">
-                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Payment
-                                Voucher
-                            </rs-button>
-                        </div>
+                <div class="w-full h-1/4 flex flex-col">
+                    <div class="w-full flex flex-row mb-0">
 
                     </div>
-                    <div class="">
-                        <rs-card style="margin-top: 40px">
-                            <div>
-                                <div>
-                                    <DataTable :value="searchStore" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows"
-                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                        <Column :expander="true" headerStyle="width: 3rem" />
-                                        <Column field="sto_Name" header="Payment Voucher No.">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Name === 'Store A'">
-                                                    #PV-00001</p>
-                                                <p v-if="searchStore.data.sto_Name === 'Store B'">
-                                                    #PV-00002</p>
-                                            </template>
-
-                                        </Column>
-                                        <Column field="sto_Email" header="Date">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Type">14/07/2022</p>
-                                                <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                            </template>
-                                        </Column>
-
-                                        <Column field="sto_PhoneNo" header="Staff">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Type">Staff HQ</p>
-                                                <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                            </template>
-                                        </Column>
-                                        <Column field="sto_Type" header="Total Price">
-                                            <template #body="searchStore">
-                                                <p v-if="searchStore.data.sto_Type === '1'">123.00</p>
-                                                <p v-if="searchStore.data.sto_Type === '2'">Outlet</p>
-                                            </template>
-                                        </Column>
-
-
-                                        <Column field="sto_Status" header="Status">
-                                            <template #body="searchStore">
-                                                <rs-badges variant="warning" v-if="searchStore.data.sto_Status"
-                                                    @click="clickBtnStatus()">
-                                                    Approved</rs-badges>
-                                                {{ "" }}
-                                                <Button icon="pi pi-info" class="p-button-rounded p-button-info"
-                                                    style="width: 25px;height:25px" @click="clickBtnInfo()" />
-                                                <p v-if="searchStore.data.sto_Status === '2'">Inactive</p>
-                                            </template>
-
-                                        </Column>
-
-                                        <Column :exportable="false" style="min-width: 8rem" header="Actions">
-                                            <template #body="searchStore">
-
-                                                <Button icon="pi pi-dollar"
-                                                    class="p-button-rounded p-button-warning mr-2"
-                                                    @click="redirectPayment()" />{{ "" }}
-
-                                                <Button icon="pi pi-print"
-                                                    class="p-button-rounded p-button-warning mr-2"
-                                                    @click="editUser(searchOrderStock)" /> {{ "" }}
-
-
-                                                <Button icon="pi pi-pencil"
-                                                    class="p-button-rounded p-button-success mr-2"
-                                                    @click="editUser(searchStore)" />{{ "" }}
-                                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                                    @click="deleteUser(searchStore)" />
-
-
-                                            </template>
-                                        </Column>
-
-
-                                        <template #expansion="searchStore12">
-                                            <div class="orders-subtable">
-                                                <h5 style="margin-bottom:20px">Invoice No. Record for PV-00001 {{
-                                                        searchStore12.data.sto_Status2
-                                                }}</h5>
-
-                                                <DataTable :value="searchStore" :paginator="true" :rows="10"
-                                                    v-model:expandedRows="expandedRows"
-                                                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                                                    :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
-                                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-
-                                                    <Column field="sto_Status" header="Invoice No.">
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.sto_Name === 'Store A'">
-                                                                #Inv-0001</p>
-                                                            <p v-if="searchStore.data.sto_Name === 'Store B'">
-                                                                #Inv-0002</p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Invoice Datetime">
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.sto_Status == '1'">
-                                                                14/07/2022</p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Remarks">
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.sto_Status == '1'">
-                                                                Wrap </p>
-                                                        </template>
-                                                    </Column>
-
-                                                    <Column field="sto_Status" header="Status">
-                                                        <template #body="searchStore">
-                                                            <rs-badges variant="warning"
-                                                                v-if="searchStore.data.sto_Status">
-                                                                Payment Ready</rs-badges> {{ "" }}
-                                                            <Button icon="pi pi-info"
-                                                                class="p-button-rounded p-button-info"
-                                                                style="width: 25px;height:25px"
-                                                                @click="clickBtnInfo()" />
-                                                            <p v-if="searchStore.data.sto_Status === '2'">Inactive
-                                                            </p>
-                                                        </template>
-
-                                                    </Column>
-
-                                                    <Column :exportable="false" style="min-width: 8rem"
-                                                        header="Details">
-                                                        <template #body="searchStore">
-                                                            <p v-if="searchStore.data.rm_Status === '1'" hidden>
-                                                                Level 1
-                                                            </p>
-                                                            <router-link :to="{ name: 'manage-stock' }">
-                                                                <Button icon="pi pi-truck"
-                                                                    class="p-button-rounded p-button-info" />
-                                                            </router-link>
-                                                        </template>
-                                                    </Column>
-
-                                                    <template #paginatorstart>
-                                                        <Button type="button" icon="pi pi-refresh"
-                                                            class="p-button-text" />
-                                                    </template>
-                                                    <template #paginatorend>
-                                                        <Button type="button" icon="pi pi-cloud"
-                                                            class="p-button-text" />
-                                                    </template>
-
-                                                </DataTable>
-
-
-
-                                            </div>
-                                        </template>
-
-                                    </DataTable>
-                                </div>
+                    <div class="w-full" style="flex-direction: column">
+                        <!-- UNTUK ATAS BAWAH -->
+                        <div style="display: flex; flex-direction: row; padding-top: 10px">
+                            <div class="w-full h-1">
+                                <FormKit v-model="search" id="search-sticky" placeholder="Search" type="search"
+                                    :classes="{
+    inner:
+        'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+    outer: 'flex-1 mb-0',
+    input: 'h-10',
+}" />
                             </div>
-                        </rs-card>
-                    </div>
 
-                    <!-- UNTUK ATAS BAWAH -->
+                            <div class="w-1/12" style="">
+                                <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Payment
+                                    Voucher
+                                </rs-button>
+                            </div>
+
+                        </div>
+                        <div class="">
+                            <rs-card style="margin-top: 40px">
+                                <div>
+                                    <div>
+                                        <DataTable :value="searchPV" :paginator="true" :rows="10"
+                                            v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
+                                            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                            :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                                            <Column :expander="true" headerStyle="width: 3rem" />
+                                            <Column field="pv_No" header="Payment Voucher No.">
+
+                                            </Column>
+                                            <Column field="pv_CreatedDate" header="Date">
+                                            </Column>
+
+                                            <Column field="staff_Name" header="Staff">
+                                            </Column>
+                                            <Column field="pv_TotalPrice" header="Total Price">
+                                                <template #body="searchPV">
+                                                    {{ parseFloat(searchPV.data.pv_TotalPrice).toFixed(2) }}
+                                                </template>
+                                            </Column>
+
+
+                                            <Column field="invoice_Status" header="Status">
+                                                <template #body="searchPV">
+                                                    <rs-badges variant="warning" v-if="searchPV.data.pv_Status === '1'"
+                                                        @click="clickBtnStatus(searchPV.data.pv_Id)">
+                                                        Open</rs-badges>
+
+                                                    <rs-badges variant="warning" v-if="searchPV.data.pv_Status === '2'"
+                                                        @click="clickBtnStatus(searchPV.data.pv_Id)">
+                                                        Approved</rs-badges>
+
+                                                    <rs-badges variant="info" v-if="searchPV.data.pv_Status === '3'"
+                                                        @click="clickBtnStatus(searchPV.data.pv_Id)">
+                                                        Payment Ready</rs-badges>
+
+                                                    <rs-badges variant="info" v-if="searchPV.data.pv_Status === '4'"
+                                                        @click="clickBtnStatus(searchPV.data.pv_Id)">
+                                                        Paid</rs-badges>
+
+                                                    <rs-badges variant="danger" v-if="searchPV.data.pv_Status === '5'"
+                                                        @click="clickBtnStatus(searchPV.data.pv_Id)">
+                                                        Cancelled</rs-badges>
+
+                                                    {{ "" }}
+                                                    <Button icon="pi pi-info" class="p-button-rounded p-button-info"
+                                                        style="width: 25px;height:25px"
+                                                        @click="clickBtnInfo(searchPV.data.pv_Id)" />
+
+                                                </template>
+
+                                            </Column>
+
+                                            <Column :exportable="false" header="Details">
+                                                <template #body="searchPV">
+                                                    <p v-if="searchPV.data.rm_Status === '1'" hidden>
+                                                        Level 1
+                                                    </p>
+                                                    <!-- <router-link
+                                                        :to="{ name: 'hq-invoice-details', params: { id: searchPV.data.invoice_Id } }"> -->
+                                                    <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                                                    <!-- </router-link> -->
+                                                </template>
+                                            </Column>
+
+                                            <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                                                <template #body="searchPV">
+
+                                                    <Button icon="pi pi-dollar"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="redirectPayment()" />{{ "" }}
+
+                                                    <Button icon="pi pi-print"
+                                                        class="p-button-rounded p-button-warning mr-2"
+                                                        @click="editUser(searchOrderStock)" /> {{ "" }}
+
+
+                                                    <Button icon="pi pi-pencil"
+                                                        class="p-button-rounded p-button-success mr-2"
+                                                        @click="editUser(searchPV)" />{{ "" }}
+                                                    <Button icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                                        @click="deleteUser(searchPV)" />
+
+
+                                                </template>
+                                            </Column>
+
+
+                                            <template #expansion="headerPV">
+                                                <div class="orders-subtable">
+                                                    <h5 style="margin-bottom:20px">Invoice No. Record for {{
+        headerPV.data.pv_No
+}}</h5>
+
+                                                    <DataTable :value="resultFilter" :paginator="true" :rows="10"
+                                                        v-model:expandedRows="expandedRows"
+                                                        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                                        :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+
+                                                        <Column field="invoice_No" header="Invoice No.">
+                                                        </Column>
+
+                                                        <Column field="invoice_CreatedDate" header="Invoice Datetime">
+                                                        </Column>
+
+                                                        <Column field="invoice_TotalPrice" header="Total Price (RM)">
+                                                            <template #body="resultFilter">
+                                                                {{
+        formatPrice(resultFilter.data.invoice_TotalPrice)
+}}
+                                                            </template>
+                                                        </Column>
+
+                                                        <Column field="invoice_Status" header="Status">
+                                                            <template #body="resultFilter">
+                                                                <rs-badges variant="warning"
+                                                                    v-if="resultFilter.data.invoice_Status === '1'">
+                                                                    Open</rs-badges>
+
+                                                                <rs-badges variant="warning"
+                                                                    v-if="resultFilter.data.invoice_Status === '2'">
+                                                                    Approved</rs-badges>
+
+                                                                <rs-badges variant="info"
+                                                                    v-if="resultFilter.data.invoice_Status === '3'">
+                                                                    Payment Ready</rs-badges>
+
+                                                                <rs-badges variant="info"
+                                                                    v-if="resultFilter.data.invoice_Status === '4'">
+                                                                    Paid</rs-badges>
+
+                                                                <rs-badges variant="danger"
+                                                                    v-if="resultFilter.data.invoice_Status === '5'">
+                                                                    Cancelled</rs-badges>
+
+                                                                {{ "" }}
+                                                                <Button icon="pi pi-info"
+                                                                    class="p-button-rounded p-button-info"
+                                                                    style="width: 25px;height:25px"
+                                                                    @click="clickBtnInfo(resultFilter.data.invoice_Id)" />
+
+                                                            </template>
+                                                        </Column>
+
+
+                                                        <template #paginatorstart>
+                                                            <Button type="button" icon="pi pi-refresh"
+                                                                class="p-button-text" />
+                                                        </template>
+                                                        <template #paginatorend>
+                                                            <Button type="button" icon="pi pi-cloud"
+                                                                class="p-button-text" />
+                                                        </template>
+
+                                                    </DataTable>
+
+
+
+                                                </div>
+                                            </template>
+
+                                        </DataTable>
+                                    </div>
+                                </div>
+                            </rs-card>
+                        </div>
+
+                        <!-- UNTUK ATAS BAWAH -->
+                    </div>
                 </div>
+                <!-- UNTUK SEBELAH2 -->
             </div>
-            <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Payment Voucher" v-model="modalRawMaterial" position="middle" size="md">
-            <FormKit label="PIC Name" type="text" v-model="name" />
-            <FormKit label="PIC Phone No." type="text" v-model="sku" />
-            <FormKit label="PIC Email" type="text" v-model="sku" />
+        <rs-modal title="Add Payment Voucher" v-model="modalPV" position="middle" size="lg">
+            <FormKit label="PIC Name" type="text" v-model="pic_name" />
+            <FormKit label="PIC Phone No." type="text" v-model="pic_phone" />
+            <FormKit label="PIC Email" type="email" v-model="pic_email" />
+            <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
+                :options="this.listOutlet" @change="getInvoiceNo()" />
 
-            <label for="sto_Type">Invoice</label>
-            <Multiselect v-model="fruit" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
-                :options="[
-                    '#Inv-0001',
-                    '#Inv-0002',
-                ]" @select="papar()" @deselect="padam()" @clear="padam()" />
+            <label>Invoice</label>
+            <Multiselect v-model="selectInvoice" mode="tags" :close-on-select="false" :searchable="true"
+                :create-option="true" :options="this.listInvoice" @select="papar(selectInvoice)"
+                @deselect="padamInvoice(selectInvoice)" @clear="padam()" />
             <br />
 
-            <div v-if="this.order1 == true">
+            <div v-for="(rm, l) in this.selectInvoice" :key="l">
                 <table class="border-2">
                     <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[0] }}</th>
+                        <th class="float-left ml-3 mb-3 text-lg">{{ this.selectInvoiceNo[l] }}</th>
                     </tr>
                     <tr>
-                        <div class="flex flex-row">
+                        <div class="flex flex-row" v-for="(item, index) in this.listSelectInvoice" :key="index">
                             <div>
-                                <FormKit type="text" label="Stock Name" value="Fanta 1.5L" readonly />
+                                <FormKit type="text" label="Stock Name" v-model="this.item[l][index].rm_Name"
+                                    :value=this.item[l][index].rm_Name readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity To Pay" value="5" />
+                                <FormKit type="number" label="Quantity To Pay"
+                                    v-model="this.item[l][index].rm_QuantityRequested"
+                                    :value=this.item[l][index].rm_QuantityRequested />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity in Invoice" value="5" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Pasta" readonly />
+                                <FormKit type="text" label="Quantity in Invoice"
+                                    v-model="this.item[l][index].rm_Quantity" :value=this.item[l][index].rm_QuantityDO
+                                    readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity To Pay" value="20" />
+                                <FormKit type="text" label="Quantity Available"
+                                    v-model="this.item[l][index].rm_QuantityHq" :value=this.item[l][index].rm_QuantityHq
+                                    readonly />
                             </div>
                             <div>
-                                <FormKit type="text" label="Quantity in Invoice" value="20" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Coca-cola" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity To Pay" value="10" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity in Invoice" value="10" readonly />
+                                <FormKit type="text" label="Min. Quantity"
+                                    v-model="this.item[l][index].rm_MinQuantityHq"
+                                    :value=this.item[l][index].rm_MinQuantityHq readonly />
                             </div>
                         </div>
                     </tr>
                 </table>
             </div>
-            <div v-if="this.order2 == true">
-                <table class="border-2">
-                    <tr>
-                        <th class="float-left ml-3 mb-3 text-lg">{{ fruit[1] }}</th>
-                    </tr>
-                    <tr>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Mushroom" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity To Pay" value="15" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity in Invoice" value="15" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Tea" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity To Pay" value="20" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity in Invoice" value="20" readonly />
-                            </div>
-                        </div>
-                        <div class="flex flex-row">
-                            <div>
-                                <FormKit type="text" label="Stock Name" value="Coffee" readonly />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity To Pay" value="10" />
-                            </div>
-                            <div>
-                                <FormKit type="text" label="Quantity in Invoice" value="10" readonly />
-                            </div>
-                        </div>
-                    </tr>
-                </table>
-            </div>
-            <br />
-
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="insertPV()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal><!-- INSERT -->
@@ -305,23 +267,16 @@
 
         <rs-modal title="Info Timeline" v-model="modalInfo" position="middle" size="md">
 
-            <p>2022-11-18 12:00 : <b>Open</b> (Staff A)</p>
-            <p>2022-11-18 12:00 : <b>Approved</b> (Staff A)</p>
-            <p>2022-11-18 13:00 : <b>Accepted</b> (Staff A)</p>
-            <p>2022-11-18 14:00 : <b>Delivery</b> (Staff A)</p>
-            <p>2022-11-18 15:00 : <b>Received</b> (Staff A)</p>
+            <p v-for="(status, l) in this.listTimelineStatus" :key="l">{{ status.timeline_date }} : <b>{{
+        status.timeline_statusName
+}}</b> ({{ status.timeline_staffName }})</p>
         </rs-modal>
 
         <rs-modal title="Status" v-model="modalStatus" position="middle" size="md">
-            <FormKit type="select" label="Status" :options="[
-                'Open',
-                'Approved',
-                'Accepted',
-                'Delivery',
-                'Received',
-            ]" />
+            <FormKit type="select" label="Status" :options="this.listStatus" v-model="selectStatus"
+                placeholder="Select Status" />
 
-            <rs-button style="float: right" @click="insertRawMaterial()" class="bg-heandshe hover:bg-heandshe">
+            <rs-button style="float: right" @click="updateStatus()" class="bg-heandshe hover:bg-heandshe">
                 Save
             </rs-button>
         </rs-modal>
@@ -354,19 +309,18 @@ export default {
 
     },
     setup() {
-        const store = ref([]);
+        const paymentVoucher = ref([]);
         const typePackaging = ref([]);
         const unitMeasurement = ref([]);
         const search = ref("");
-        const invoices = ref([]);
 
 
-        const searchStore = computed(() => {
-            return store.value.filter((store) => {
+        const searchPV = computed(() => {
+            return paymentVoucher.value.filter((paymentVoucher) => {
                 return (
-                    store.sto_Name.toLowerCase().indexOf(search.value.toLowerCase()) !=
+                    paymentVoucher.pv_No.toLowerCase().indexOf(search.value.toLowerCase()) !=
                     -1 ||
-                    store.sto_Name
+                    paymentVoucher.pv_No
                         .toLowerCase()
                         .indexOf(search.value.toLowerCase()) != -1
                 );
@@ -380,9 +334,8 @@ export default {
         };
         return {
             search,
-            invoices,
-            searchStore,
-            store,
+            searchPV,
+            paymentVoucher,
             formatPrice,
             typePackaging,
             unitMeasurement
@@ -390,7 +343,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -409,39 +362,76 @@ export default {
             price: null,
             packaging_type: null,
             measurement: null,
-            modalRawMaterial: false,
+            modalPV: false,
             modalDO: false,
             modalStatus: false,
             modalInfo: false,
-            fruit: null,
-            order1: false,
-            order2: false,
 
+            selectInvoice: null,
+            listSelectInvoice: [],
+            listInvoice: [],
+            listInvoiceItem: [],
+            item: [],
+            selectInvoiceNo: [],
+            pic_name: null,
+            pic_phone: null,
+            pic_email: null,
+            selectOutlet: null,
+            listOutlet: [],
+
+            headerPV: [],
+            resultFilter: [],
+            listInv: [],
+
+            listTimelineStatus: [],
+            listStatus: [],
+            selectPVId: null,
+            selectStatus: null,
         };
     },
     async created() {
         this.getdata();
-        this.getStore();
-        this.getInvoiceNo();
+        this.getStatusPV();
     },
 
     methods: {
+        async papar(inv_id) {
 
-        async clickBtnStatus() {
-            // this.users1 = user.data;
-            this.modalStatus = true;
-        },
+            this.listSelectInvoice = [];
+            this.item = [];
+            this.selectInvoiceNo = [];
 
-        async papar() {
-            for (var i = 0; i < this.fruit.length; i++) {
-                console.log("data", this.fruit.length);
-                console.log("data22", this.fruit);
-                if (this.fruit[i] == "#Inv-0001") {
-                    this.order1 = true;
+            let rawMaterial = null;
+
+            console.log("listInvoiceItem", this.listInvoiceItem);
+            console.log("inv_id", inv_id);
+
+            for (var i = 0; i < inv_id.length; i++) {
+                rawMaterial = this.listInvoiceItem.filter((item) => {
+                    return item.invoice_Id == inv_id[i];
+                });
+
+                this.selectInvoiceNo.push(rawMaterial[0].invoice_No);
+                this.listSelectInvoice = [];
+
+                for (let i = 0; i < rawMaterial.length; i++) {
+
+                    this.listSelectInvoice.push({
+                        rm_Id: rawMaterial[i].rm_Id,
+                        rm_Name: rawMaterial[i].rm_Name,
+                        rm_Quantity: rawMaterial[i].rm_QuantityInvoice,
+                        rm_Price: rawMaterial[i].rm_PriceInvoice,
+                        rm_QuantityRequested: rawMaterial[i].rm_QuantityInvoice,
+                        rm_QuantityHq: rawMaterial[i].rm_QuantityHq,
+                        rm_MinQuantityHq: rawMaterial[i].rm_MinQuantityHq,
+                        invoice_Id: rawMaterial[i].invoice_Id,
+                        invoice_No: rawMaterial[i].invoice_No,
+                        item_InvoiceHqOutletId: rawMaterial[i].item_InvoiceHqOutletId,
+
+                    });
+
                 }
-                if (this.fruit[i] == "#Inv-0002") {
-                    this.order2 = true;
-                }
+                this.item.push(this.listSelectInvoice);
             }
         },
 
@@ -450,9 +440,78 @@ export default {
             this.order2 = false;
         },
 
-        async clickBtnInfo() {
+        async clickBtnStatus(value) {
+            // this.users1 = user.data;
+            this.modalStatus = true;
+            this.selectPVId = value;
+
+        },
+
+        async updateStatus() {
+            console.log('update status', this.selectStatus);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                pvId: this.selectPVId,
+                status: this.selectStatus,
+            });
+
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/updateStatusPaymentVoucher",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        if (response.data.status == 200) {
+                            this.modalStatus = false;
+                            alert(response.data.message);
+                            this.getPV();
+                            this.getInvoiceByPV();
+
+                        } else {
+                            alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async clickBtnInfo(value) {
             // this.users1 = user.data;
             this.modalInfo = true;
+            this.listTimelineStatus = [];
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                pvId: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getTimelineStatusPaymentVoucher",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response status', response.data.data);
+                        this.listTimelineStatus = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
 
         async redirectPayment() {
@@ -460,9 +519,90 @@ export default {
         },
 
         async getInvoiceNo() {
-            const response = ['#Inv-0001', '#Inv-0002'
-            ];
-            this.invoices = response;
+            this.listInvoice = [];
+            this.listSelectInvoice = [];
+            this.item = [];
+            this.selectInvoiceNo = [];
+            this.padam();
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+                outletId: this.selectOutlet,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getInvoiceByOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listInvoice.push({
+                                label: response.data.data[i].invoice_No,
+                                value: response.data.data[i].invoice_Id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getPV() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getPaymentVoucher",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("paymentVoucher", response.data.data);
+                        this.paymentVoucher = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getInvoiceItem() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getInvoiceItem",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("listInvoiceItem", response.data.data);
+                        this.listInvoiceItem = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
 
         async getdata() {
@@ -483,6 +623,11 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getInvoiceItem();
+                        this.getPV();
+                        this.getOutlet();
+                        this.getInvoiceByPV();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -490,31 +635,29 @@ export default {
                 });
         },
 
-        async getStore() {
+        async getOutlet() {
             var axios = require("axios");
-            // var data = JSON.stringify({
-            //     staffid: localStorage.staff,
-            // });
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
             var config = {
-                method: "get",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                data: data,
             };
             await axios(config)
                 .then(
                     function (response) {
-                        console.log("resp", response.data.data);
-                        this.store = response.data.data;
-                        this.totalData = this.store.length;
 
-                        let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
-                            price += response.data.data[i].rm_Price;
-
+                            this.listOutlet.push({
+                                label: response.data.data[i].outlet_name,
+                                value: response.data.data[i].outlet_id,
+                            });
                         }
-                        this.sumPrice = price;
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -524,7 +667,7 @@ export default {
 
         async clickBtnAdd() {
             // this.users1 = user.data;
-            this.modalRawMaterial = true;
+            this.modalPV = true;
         },
 
         async clickBtnDO() {
@@ -532,21 +675,20 @@ export default {
             this.modalDO = true;
         },
 
-        async insertRawMaterial() {
+        async insertPV() {
             var axios = require("axios");
             var data = JSON.stringify({
-                name: this.name,
-                sku: this.sku,
-                quantity: this.quantity,
-                minquantity: this.minquantity,
-                price: this.price,
-                packaging_type: this.packaging_type,
-                measurement: this.measurement,
+                staffId: this.staffId,
+                picname: this.pic_name,
+                picphone: this.pic_phone,
+                picemail: this.pic_email,
+                outletId: this.selectOutlet,
+                order: this.item,
             });
             console.log("Insert data :", data);
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/insertPVOutlet",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -556,10 +698,11 @@ export default {
                 .then(
                     function (response) {
                         if (response.data.status == 200) {
-                            this.modalRawMaterial = false;
+                            this.modalPV = false;
                             alert(response.data.message);
-                            this.users.splice(0);
-                            this.getRawMaterial();
+                            this.getPV();
+                            this.getInvoiceByPV();
+
                         } else {
                             alert(response.data.message);
                         }
@@ -568,6 +711,69 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        async getInvoiceByPV() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getInvoiceByPV",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log("listInv", response.data.data);
+                        this.listInv = response.data.data;
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStatusPV() {
+            var axios = require("axios");
+            var config = {
+                method: "get",
+                url: process.env.VUE_APP_FNB_URL + "/getStatusPVHq",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStatus.push({
+                                label: response.data.data[i].title,
+                                value: response.data.data[i].id,
+                            });
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        onRowExpand(event) {
+            console.log("this.listInv", this.listInv);
+            this.resultFilter = this.listInv.filter((item) => {
+                // console.log("item", item);
+                if (item.pv_Id == event.data.pv_Id) {
+                    return item;
+                }
+            });
+
+            this.headerPV = this.resultFilter;
         },
 
         addRawMaterial(index) {

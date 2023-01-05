@@ -124,6 +124,7 @@
                               searchOrder.data.order_status == 'Preparing'
                             "
                             class="p-button-rounded p-button-warning"
+                            @click="refunds(searchOrder)"
                           >
                             Refund
                           </Button>
@@ -133,6 +134,7 @@
                               searchOrder.data.order_status == 'Pending'
                             "
                             class="p-button-rounded p-button-danger"
+                            @click="cancels(searchOrder)"
                           >
                             Cancel
                           </Button>
@@ -190,10 +192,10 @@
       <br />
       {{ this.data.receipt_no }}
       <br />
-      <label><strong>Order Type</strong></label>
+      <!-- <label><strong>Order Type</strong></label>
       <br />
-      {{ this.data.order_type }}
-      <br />
+      {{ this.data.order_type }} -->
+      <!-- <br /> -->
       <label><strong>Payment Method</strong></label>
       <br />
       {{ this.data.payment_method }}
@@ -220,6 +222,7 @@
         label="Outlet"
         :options="this.outlet"
       />
+
       <FormKit
         v-model="order_status"
         type="radio"
@@ -234,6 +237,7 @@
       />
       <FormKit type="date" v-model="start_date" label="From Date" />
       <FormKit type="date" v-model="end_date" label="To Date" />
+
       <rs-button
         style="float: right"
         variant="primary-outline"
@@ -334,6 +338,7 @@
                 <p>
                   {{ input.menu_name }} x {{ input.menu_quantity }} - RM
                   {{ formatPrice(input.menu_price) }}
+                  
                 </p>
               </div>
               <br />
@@ -348,6 +353,30 @@
           >Print PDF</rs-button
         >
       </div>
+    </rs-modal>
+    <!-- REFUND -->
+    <rs-modal title="Refund" v-model="refunded" position="middle" size="md">
+      Refund
+      <br />
+      <FormKit
+        v-model="refundsValue"
+        type="checkbox"
+        :options="this.refundData"
+      />
+      
+      <rs-button @click="Refund()">Save</rs-button>
+      <br />
+    </rs-modal>
+    <!-- Cancel -->
+    <rs-modal title="Cancel" v-model="canceled" position="middle" size="md">
+      Cancel
+      <br />
+      <FormKit
+        v-model="cancelsValue"
+        type="checkbox"
+        :options="this.cancelData"
+      />
+      <rs-button @click="Cancel()">Save</rs-button>
     </rs-modal>
   </rs-layout>
 </template>
@@ -382,10 +411,17 @@ export default {
     const outlet_id = ref("");
     const order_status = ref("");
     const order_from = ref("");
+    const start_date = ref("");
+    const end_date = ref("");
 
     const searchOrder = computed(() => {
       return order.value.filter((orders) => {
-        if (search.value == "") {
+        if (start_date.value != "" && end_date.value != "") {
+          return (
+            formatDate(start_date.value) < orders.orderDatetime &&
+            formatDate(end_date.value) > orders.orderDatetime 
+          );
+        } else if (search.value == "") {
           return (
             orders.outlet_id.toString().indexOf(outlet_id.value.toString()) !=
               -1 &&
@@ -396,18 +432,19 @@ export default {
               -1 &&
             orders.order_customer
               .toLowerCase()
-              .indexOf(search.value.toLowerCase()) != -1 /* ||
-          orders.staffName.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
-          orders.order_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1  */
+              .indexOf(search.value.toLowerCase()) != -1
           );
         } else {
           return (
-            orders.order_no.toString().indexOf(search.value.toString()) !=
-            -1
+            orders.order_no.toString().indexOf(search.value.toString()) != -1
           );
         }
       });
     });
+
+    const formatDate = (value) => {
+      return moment(value).format("DD-MM-YYYY");
+    };
 
     const formatPrice = (price) => {
       return parseFloat(price)
@@ -418,6 +455,10 @@ export default {
 
     const filters = () => {
       outlet_id.value = "";
+      order_status.value = "";
+      order_from.value = "";
+      start_date.value = "";
+      end_date.value = "";
       filterModal.value = false;
     };
 
@@ -434,7 +475,10 @@ export default {
       outlet_id,
       order_status,
       order_from,
+      start_date,
+      end_date,
       formatPrice,
+      formatDate,
       filter,
       filters,
     };
@@ -452,6 +496,14 @@ export default {
       payment: "",
       qrcode: false,
       receiptData: null,
+      refunded: false,
+      refundID: null,
+      refundData: [],
+      refundsValue: null,
+      cancelID: null,
+      canceled: false,
+      cancelData: [],
+      cancelsValue: null,
     };
   },
   async created() {
@@ -464,6 +516,98 @@ export default {
     async print(data) {
       this.receiptData = data;
       this.qrcode = true;
+    },
+    async refunds(data) {
+      this.refundData = [];
+      for (let i = 0; i < data.data.order_detail.length; i++) {
+        this.refundData.push({
+          label: data.data.order_detail[i].menu_name,
+          value: data.data.order_detail[i].menu_id,
+        });
+      }
+      this.refundID = data.data.order_id;
+      this.refunded = true;
+    },
+    async Refund() {
+      var axios = require("axios");
+      var data = JSON.stringify({
+        refundsValue: this.refundsValue,
+        refundID: this.refundID,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateRefundItem" /*  */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      await axios(config)
+        .then(
+          function (response) {
+            console.log(response.data);
+            if (response.data.response == 200) {
+              alert(response.data.message);
+              this.refunded = false;
+              this.refundsValue = null;
+            } else {
+              alert(response.data.message);
+              this.refunded = false;
+              this.refundsValue = null;
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    async cancels(data) {
+      this.cancelData = [];
+      for (let i = 0; i < data.data.order_detail.length; i++) {
+        this.cancelData.push({
+          label: data.data.order_detail[i].menu_name,
+          value: data.data.order_detail[i].menu_id,
+        });
+      }
+      this.cancelID = data.data.order_id;
+      this.canceled = true;
+    },
+    async Cancel() {
+      /* CANCEL API this.cancelsValue */
+      var axios = require("axios");
+      var data = JSON.stringify({
+        cancelsValue: this.cancelsValue,
+        cancelID: this.cancelID,
+      });
+      var config = {
+        method: "post",
+        url: process.env.VUE_APP_FNB_URL + "/admin/updateCancelItem" /*  */,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      await axios(config)
+        .then(
+          function (response) {
+            console.log(response.data);
+            if (response.data.response == 200) {
+              alert(response.data.message);
+              this.canceled = false;
+              this.cancelsValue = null;
+            } else {
+              alert(response.data.message);
+              this.canceled = false;
+              this.cancelsValue = null;
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     async generateReport() {
       this.$refs.html2Pdf.generatePdf();
@@ -505,8 +649,7 @@ export default {
       });
       var config = {
         method: "post",
-        url:
-          process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOutletDetails" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOutletDetails" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -539,7 +682,7 @@ export default {
       });
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/getOrder" /*   */,
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOrder" /*   */,
         headers: {
           "Content-Type": "application/json",
         },
@@ -577,6 +720,7 @@ export default {
                 this.payment = "QR Payment";
               }
               this.order.push({
+                order_id: response.data.data.Order_det[i].order_id,
                 order_no: response.data.data.Order_det[i].order_no,
                 orderDatetime: moment(
                   response.data.data.Order_det[i].order_datetime

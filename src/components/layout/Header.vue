@@ -15,7 +15,7 @@
 
       <div class="flex gap-2 items-center justify-items-end">
         <div class="text-white">{{ this.staffName }}</div>
-        <img src="@/assets/images/logo/heandshe.jpg" style="width: 40px" />
+        <img src="@/assets/images/logo/cuppa.png" style="width: 40px" />
       </div>
     </div>
   </div>

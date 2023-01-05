@@ -19,7 +19,7 @@
                             }" />
                         </div>
 
-                        <div class="w-1/12" style="padding-top: 10px">
+                        <div class="w-1/12" style="">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Store
                             </rs-button>
                         </div>
@@ -61,7 +61,8 @@
 
 
                                         <Column :exportable="false" header="Details Stock">
-                                            <template #body="">
+                                            <template #body="searchStore">
+                                                <p v-if="searchStore.data.sto_Status === '1'" hidden>Active</p>
                                                 <router-link :to="{ name: 'hq-manage-stock' }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
@@ -176,7 +177,7 @@ export default {
     },
     data() {
         return {
-            staffid: "",
+            staffId: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -201,8 +202,7 @@ export default {
     },
     async created() {
         this.getdata();
-        this.getStore();
-        this.getOutlet();
+
     },
 
     methods: {
@@ -225,6 +225,10 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+
+                        this.getStore();
+                        this.getOutlet();
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -235,7 +239,8 @@ export default {
         async getStore() {
             var axios = require("axios");
             var data = JSON.stringify({
-                type: 0,
+                outletId: 0,
+                staffId: this.staffId,
             });
             var config = {
                 method: "post",
@@ -303,6 +308,7 @@ export default {
                 pic: this.pic,
                 storeType: this.storeType,
                 selectOutlet: this.selectOutlet,
+                staffId: this.staffId,
             });
             console.log("Insert data :", data);
             var config = {

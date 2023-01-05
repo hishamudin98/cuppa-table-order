@@ -1,7 +1,7 @@
 <template>
     <rs-layout>
+        <rs-breadcrumb />
         <div style="display: flex; flex-direction: row">
-
             <div class="w-full h-1/4 flex flex-col">
                 <!-- <div class="w-full flex flex-row mb-0">
                         <div class="inline-block w-1/2 pr-10">
@@ -36,7 +36,7 @@
                                 input: 'h-10',
                             }" />
                         </div>
-                        <div class="w-1/12" style="padding-top: 10px">
+                        <div class="w-1/12" style="">
                             <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Raw Material
                             </rs-button>
                         </div>
@@ -108,7 +108,8 @@
                                             <template #body="searchRawMaterial">
                                                 <p v-if="searchRawMaterial.data.rm_Status === '1'" hidden>Level 1
                                                 </p>
-                                                <router-link :to="{ name: 'hq-stock-supplier' , params: { id: searchRawMaterial.data.rm_Id }}">
+                                                <router-link
+                                                    :to="{ name: 'hq-stock-supplier', params: { id: searchRawMaterial.data.rm_Id } }">
                                                     <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
                                                 </router-link>
                                             </template>
@@ -242,10 +243,10 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
+        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="lg">
             <FormKit label="Name" type="text" v-model="name" />
 
-            <FormKit type="select" label="Category" v-model="selectCategory" :options="[
+            <FormKit type="select" label="Category" placeholder="Select Category" v-model="selectCategory" :options="[
                 { label: 'Product', value: 1 },
                 { label: 'Services', value: 2 },
             ]" />
@@ -264,16 +265,27 @@
             <FormKit type="select" label="Type Store" v-model="selectType" placeholder="Select Store Type" :options="[
                 { label: 'HQ', value: 1 },
                 { label: 'Outlet', value: 2 },
-            ]" />
+            ]" @change="clearValue(selectType)" />
+
 
             <div v-if="(selectType == 1)">
-                <FormKit type="select" v-model="selectStore" label="Store" :options="this.listStoreHQ"
+                <FormKit type="select" v-model="selectStoreHq" label="Store" :options="this.listStoreHQ"
                     placeholder="Select Store" />
             </div>
 
             <div v-if="(selectType == 2)">
-                <FormKit type="select" v-model="selectStore" label="Store" :options="this.listStoreOutlet"
-                    placeholder="Select Store" />
+                <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
+                    :options="this.listOutlet" @change="getStoreOutlet()" />
+
+                <div v-if="(selectOutlet && listStoreOutlet.length != 0)">
+                    <FormKit type="select" v-model="selectStoreOutlet" label="Store" :options="this.listStoreOutlet"
+                        placeholder="Select Store" />
+                </div>
+
+                <div v-if="(selectOutlet && listStoreOutlet.length == 0)">
+                    <FormKit type="select" placeholder="Select Store" label="Store"
+                        :options="[{ label: 'No Store', value: '0', attrs: { disabled: true } },]" />
+                </div>
             </div>
 
             <!-- {{ this.listStore }} -->
@@ -345,8 +357,8 @@ export default {
     },
     data() {
         return {
-            staffid: "",
             staffName: "",
+            staffId: "",
             totalData: 0,
             show: false,
             outletDrop: false,
@@ -365,7 +377,9 @@ export default {
             packaging_type: null,
             measurement: null,
             selectType: '',
-            selectStore: '',
+            selectStoreHq: '',
+            selectStoreOutlet: '',
+            selectOutlet: '',
             modalRawMaterial: false,
             level_1: null,
             level_2: null,
@@ -375,14 +389,11 @@ export default {
             listStore: [],
             listStoreHQ: [],
             listStoreOutlet: [],
+            listOutlet: [],
         };
     },
     async created() {
         this.getdata();
-        this.getStore();
-        this.getStoreHQ();
-        this.getStoreOutlet();
-        this.getRawMaterial();
         this.getTypePackaging();
         this.getUnitMeasurement();
     },
@@ -407,11 +418,29 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
+                        this.staffId = response.data.data[0].staff_id;
+                        this.getStore();
+                        this.getStoreHQ();
+                        this.getStoreOutlet();
+                        this.getOutlet();
+                        this.getRawMaterial();
+
                     }.bind(this)
                 )
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        async clearValue(value) {
+            // HQ is 1, Outlet is 2
+            if (value == 1) {
+                this.selectOutlet = '';
+                this.selectStoreOutlet = '';
+
+            } else {
+                this.selectStoreHq = '';
+            }
         },
 
         async getStore(value) {
@@ -450,13 +479,13 @@ export default {
         },
 
         async getStoreHQ() {
-            this.listStore = [];
-            let value = 1;
-            console.log('value', value);
+            console.log('getStoreHQ');
+            this.listStoreHQ = [];
 
             var axios = require("axios");
             var data = JSON.stringify({
-                type: value
+                outletId: 0,
+                staffId: this.staffId,
             });
             var config = {
                 method: "post",
@@ -476,7 +505,7 @@ export default {
                                 value: response.data.data[i].sto_Id,
                             });
                         }
-                        console.log('listStore', this.listStore);
+                        console.log('listStoreHQ', this.listStoreHQ);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -485,13 +514,11 @@ export default {
         },
 
         async getStoreOutlet() {
-            this.listStore = [];
-            let value = 2;
-            console.log('value', value);
-
+            this.listStoreOutlet = [];
             var axios = require("axios");
             var data = JSON.stringify({
-                type: value
+                outletId: this.selectOutlet,
+                staffId: this.staffId,
             });
             var config = {
                 method: "post",
@@ -511,7 +538,7 @@ export default {
                                 value: response.data.data[i].sto_Id,
                             });
                         }
-                        console.log('listStore', this.listStore);
+                        console.log('listStoreOutlet', this.listStoreOutlet);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -573,20 +600,20 @@ export default {
 
         async getRawMaterial() {
             var axios = require("axios");
-            // var data = JSON.stringify({
-            //     staffid: localStorage.staff,
-            // });
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
             var config = {
-                method: "get",
+                method: "post",
                 url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterial",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                data: data,
             };
             await axios(config)
                 .then(
                     function (response) {
-                        // console.log("price", response.data.data.rm_Price[0]);
                         this.rawMaterial = response.data.data;
                         this.totalData = this.rawMaterial.length;
 
@@ -609,9 +636,9 @@ export default {
         },
 
         async insertRawMaterial() {
-            console.log("Insert Raw Material", this.selectCategory);
             var axios = require("axios");
             var data = JSON.stringify({
+                staffId: this.staffId,
                 name: this.name,
                 selectCategory: this.selectCategory,
                 sku: this.sku,
@@ -621,12 +648,13 @@ export default {
                 packaging_type: this.packaging_type,
                 quantity_packaging_type: this.quantity_packaging_type,
                 measurement: this.measurement,
-                store: this.selectStore,
+                outlet: this.selectOutlet,
+                store: this.selectStoreHq == "" ? this.selectStoreOutlet : this.selectStoreHq,
                 level_1: this.level_1,
                 level_2: this.level_2,
                 level_3: this.level_3,
             });
-            console.log("Insert data :", data);
+
             var config = {
                 method: "post",
                 url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
@@ -644,6 +672,36 @@ export default {
                             this.getRawMaterial();
                         } else {
                             alert(response.data.message);
+                        }
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getOutlet() {
+            var axios = require("axios");
+            var data = JSON.stringify({
+                staffId: this.staffId,
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getOutlet",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listOutlet.push({
+                                label: response.data.data[i].outlet_name,
+                                value: response.data.data[i].outlet_id,
+                            });
                         }
                     }.bind(this)
                 )

@@ -56,50 +56,25 @@
                     <Column field="sup_Code" header="Code"></Column>
                     <Column field="sup_PhoneNo" header="Phone No."></Column>
                     <Column field="sup_Email" header="Email"></Column>
+                    <Column field="sup_Address" header="Address"></Column>
 
-                    <Column field="sup_Status" header="Account No"> <template #body="searchSupplier">
-                        <p v-if="searchSupplier.data.sup_Status === '1'">123123123</p>
-                        <p v-if="searchSupplier.data.sup_Status === '2'">Inactive</p>
-                      </template></Column>
+                    <Column field="sup_AccNo" header="Account No"></Column>
 
-                    <Column field="rm_Quantity" header="Quantity">
-                      <template #body="searchSupplier">
-                        <p v-if="(searchSupplier.data.rm_Quantity <= searchSupplier.data.rm_MinQuantity)"
-                          style="color:red; font-weight: bold;">
-                          {{ searchSupplier.data.rm_Quantity }}</p>
-                        <p v-else>{{ searchSupplier.data.rm_Quantity }}</p>
-                      </template>
-                    </Column>
-                    <Column field="rm_MinQuantity" header="Min. Quantity"></Column>
-
-                    <Column field="rm_Price" header="Unit Price (RM)">
-                      <template #body="searchSupplier">
-                        {{ formatPrice(searchSupplier.data.rm_Price) }}
-                      </template>
-                    </Column>
-
-                    <Column field="rm_Price" header="Total Price (RM)">
-                      <template #body="searchSupplier">
-                        {{ formatPrice(searchSupplier.data.rm_TotalPrice) }}
-                      </template>
-                    </Column>
-
-                    <Column field="rm_Status" header="Status">
-                      <template #body="searchSupplier">
-                        <rs-badges variant="danger"
-                          v-if="(searchSupplier.data.rm_Quantity <= searchSupplier.data.rm_MinQuantity)">
-                          Low Stock</rs-badges>
-                        <rs-badges variant="success" v-else>
-                          In Stock</rs-badges>
-
-                      </template>
-
-                    </Column>
+                    <Column field="sup_Bank" header="Bank"></Column>
 
                     <Column field="sup_Status" header="Status"> <template #body="searchSupplier">
                         <p v-if="searchSupplier.data.sup_Status === '1'">Active</p>
                         <p v-if="searchSupplier.data.sup_Status === '2'">Inactive</p>
                       </template></Column>
+
+                    <Column :exportable="false" header="Details">
+                      <template #body="searchSupplier">
+                        <router-link
+                          :to="{ name: 'admin-supplier-stock', params: { id: searchSupplier.data.sup_Id } }">
+                          <Button icon="pi pi-truck" class="p-button-rounded p-button-info" />
+                        </router-link>
+                      </template>
+                    </Column>
 
                     <Column header="Actions" :exportable="false" style="min-width: 8rem">
                       <template #body="searchSupplier">
@@ -129,15 +104,27 @@
     </div>
 
     <rs-modal title="Add Supplier" v-model="modalSupplier" position="middle" size="md">
+      <FormKit label="Name" type="text" v-model="name" />
+      <FormKit label="Code" type="text" v-model="code" />
+      <FormKit label="Phone No." type="number" v-model="phone" />
+      <FormKit label="Email" type="text" v-model="email" />
 
-      <FormKit type="select" label="Supplier" v-model="selectSupplier" placeholder="Select Supplier"
-        :options="this.listSupplier" />
+      <FormKit label="Organization" type="select" v-model="selectOrganization" placeholder="Select Organization"
+        :options="this.listOrganization" />
+      <FormKit label="Bank" type="select" v-model="selectBank" placeholder="Select Bank" :options="this.listBank" />
 
-      <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
-      <FormKit label="Quantity" type="number" v-model="quantity" />
+      <FormKit label="Account No." type="number" v-model="accNo" />
+      <FormKit label="Postcode" type="text" v-model="postcode" />
+      <FormKit label="Address" type="textarea" v-model="address" />
+      <FormKit v-model="supplierType" type="radio" label="Supplier Type" :options="[
+        { label: 'HQ', value: 1 },
+        { label: 'Outlet', value: 2 },
+      ]" />
 
-      <FormKit label="Price (RM)" type="number" v-model="price" />
-      <FormKit label="Discount (RM)" type="number" v-model="discount" />
+      <div v-if="(supplierType == 2)">
+        <FormKit type="select" label="Outlet" v-model="selectOutlet" placeholder="Select Outlet"
+          :options="this.listOutlet" />
+      </div>
 
       <rs-button style="float: right" @click="insertSupplier()">
         Save
@@ -156,14 +143,12 @@ import Button from "primevue/button";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import RsBadges from "@/components/Badges.vue";
 
 export default {
   name: "AdminDashboard",
   components: {
     RsButton,
     DataTable,
-    RsBadges,
     RsModal,
     Column,
     Button,
@@ -208,17 +193,21 @@ export default {
       /* BARU */
 
       modalSupplier: false,
-
-      selectSupplier: null,
-      minquantity: null,
-      quantity: null,
-      price: null,
-      discount: null,
+      name: null,
+      code: null,
+      phone: null,
+      email: null,
+      address: null,
+      postcode: null,
+      accNo: null,
+      selectOrganization: null,
+      selectBank: null,
+      supplierType: null,
+      selectOutlet: null,
 
       listOutlet: [],
       listOrganization: [],
       listBank: [],
-      listSupplier: [],
 
 
     };
@@ -250,9 +239,10 @@ export default {
           function (response) {
             this.staffName = response.data.data[0].staff_name;
             this.staffId = response.data.data[0].staff_id;
-
-            this.getSupplierByRawMaterial();
-            this.getAllSupplier();
+            console.log('staff id', this.staffId);
+            this.getSupplier();
+            this.getOutlet();
+            this.getOrganization();
           }.bind(this)
         )
         .catch(function (error) {
@@ -260,10 +250,10 @@ export default {
         });
     },
 
-    async getSupplierByRawMaterial() {
+    async getSupplier() {
       var axios = require("axios");
       var data = JSON.stringify({
-        rawMaterialId: this.$route.params.id,
+        rawMaterialId: null,
         staffId: this.staffId,
       });
       var config = {
@@ -277,14 +267,9 @@ export default {
       await axios(config)
         .then(
           function (response) {
-
-            if (response.data.status == 200) {
-              this.supplier = response.data.data;
-              this.totalData = response.data.data.length;
-
-            } else {
-              alert(response.data.message);
-            }
+            console.log('supplier', response.data.data);
+            this.supplier = response.data.data;
+            this.totalData = response.data.data.length;
 
           }.bind(this)
         )
@@ -293,34 +278,25 @@ export default {
         });
     },
 
-    async getAllSupplier() {
+    async getOrganization() {
       var axios = require("axios");
-      var data = JSON.stringify({
-        staffId: this.staffId,
-      });
       var config = {
-        method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/getSupplierHq",
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getOrganizationOwner",
         headers: {
           "Content-Type": "application/json",
         },
-        data: data,
       };
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == 200) {
-              for (let i = 0; i < response.data.data.length; i++) {
-                this.listSupplier.push({
-                  label: response.data.data[i].sup_Name,
-                  value: response.data.data[i].sup_Id,
-                });
-              }
 
-            } else {
-              alert(response.data.message);
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listOrganization.push({
+                label: response.data.data[i].org_name,
+                value: response.data.data[i].org_id,
+              });
             }
-
           }.bind(this)
         )
         .catch(function (error) {
@@ -343,18 +319,12 @@ export default {
       await axios(config)
         .then(
           function (response) {
-            if (response.data.status == 200) {
-              for (let i = 0; i < response.data.data.length; i++) {
-                this.listBank.push({
-                  label: response.data.data[i].bank_name,
-                  value: response.data.data[i].bank_id,
-                });
-              }
-            } else {
-              alert(response.data.message);
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listBank.push({
+                label: response.data.data[i].bank_name,
+                value: response.data.data[i].bank_id,
+              });
             }
-
-
           }.bind(this)
         )
         .catch(function (error) {
@@ -380,19 +350,12 @@ export default {
         .then(
           function (response) {
 
-            if (response.data.status == 200) {
-              for (let i = 0; i < response.data.data.length; i++) {
-                this.listOutlet.push({
-                  label: response.data.data[i].outlet_name,
-                  value: response.data.data[i].outlet_id,
-                });
-              }
-
-            } else {
-              alert(response.data.message);
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listOutlet.push({
+                label: response.data.data[i].outlet_name,
+                value: response.data.data[i].outlet_id,
+              });
             }
-
-
           }.bind(this)
         )
         .catch(function (error) {
@@ -403,17 +366,23 @@ export default {
     async insertSupplier() {
       var axios = require("axios");
       var data = JSON.stringify({
-        supplierId: this.selectSupplier,
-        minQuantity: this.minquantity,
-        quantity: this.quantity,
-        price: this.price,
-        discount: this.discount,
-        rawMaterial: this.$route.params.id,
+        name: this.name,
+        code: this.code,
+        phone: this.phone,
+        email: this.email,
+        address: this.address,
+        postcode: this.postcode,
+        organization: this.selectOrganization,
+        bank: this.selectBank,
+        accNo: this.accNo,
+        supplierType: this.supplierType,
+        staffId: this.staffId,
+        outletId: this.selectOutlet,
       });
-
+      console.log("Insert data :", data);
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL + "/admin/insertSupplierRawMaterial",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertSupplier",
         headers: {
           "Content-Type": "application/json",
         },
@@ -425,8 +394,7 @@ export default {
             if (response.data.status == 200) {
               alert(response.data.message);
               this.modalSupplier = false;
-              this.getSupplierByRawMaterial();
-
+              this.getSupplier();
             } else {
               alert(response.data.message);
             }

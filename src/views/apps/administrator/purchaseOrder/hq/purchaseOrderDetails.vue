@@ -63,30 +63,30 @@
 
                                         </Column>
                                         <Column field="rm_Packaging" header="Packaging Type">
-                                            <template #body="searchStock">
-                                                <p v-if="searchStock.data.rm_Packaging === '1'">Box</p>
-                                                <p v-if="searchStock.data.rm_Packaging === '2'">Packet</p>
-                                                <p v-if="searchStock.data.rm_Packaging === '3'">Carton</p>
+                                            <template #body="searchRawMaterial">
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '1'">Box</p>
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '2'">Packet</p>
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '3'">Carton</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_Unit" header="Measurement">
-                                            <template #body="searchStock">
-                                                <p v-if="searchStock.data.rm_Unit === '1'">gram</p>
-                                                <p v-if="searchStock.data.rm_Unit === '2'">kilogram</p>
-                                                <p v-if="searchStock.data.rm_Unit === '3'">centimetre</p>
-                                                <p v-if="searchStock.data.rm_Unit === '4'">metre</p>
-                                                <p v-if="searchStock.data.rm_Unit === '5'">pcs</p>
+                                            <template #body="searchRawMaterial">
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '1'">gram</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '2'">kilogram</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '3'">centimetre</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '4'">metre</p>
+                                                <p v-if="searchRawMaterial.data.rm_Unit === '5'">pcs</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_Price" header="Unit Price (RM)">
-                                            <template #body="searchStock">
-                                                {{ formatPrice(searchStock.data.rm_Price) }}
+                                            <template #body="searchRawMaterial">
+                                                {{ formatPrice(searchRawMaterial.data.rm_Price) }}
                                             </template>
                                         </Column>
 
                                         <Column field="rm_Price" header="Total Price (RM)">
-                                            <template #body="searchStock">
-                                                {{ formatPrice(searchStock.data.rm_TotalPrice) }}
+                                            <template #body="searchRawMaterial">
+                                                {{ formatPrice(searchRawMaterial.data.rm_TotalPrice) }}
                                             </template>
                                         </Column>
 
@@ -426,7 +426,7 @@ export default {
             await axios(config)
                 .then(
                     function (response) {
-
+                        console.log("data : ", response.data.data);
                         this.listItemPO = response.data.data;
                         this.totalData = this.listItemPO.length;
 

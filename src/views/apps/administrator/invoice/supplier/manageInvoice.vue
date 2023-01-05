@@ -9,7 +9,7 @@
         <div class="flex gap-x-2 items-center">
           <div class="text-white">{{ this.staffName }}</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
+            <img class="flex-1" src="@/assets/images/logo/cuppa.png" alt="" />
           </div>
         </div>
       </div>

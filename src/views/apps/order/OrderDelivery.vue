@@ -1154,7 +1154,6 @@ export default {
     },
 
     async insertOrder(discount) {
-        console.log("Insert")
       if (this.orderID != "") {
         var axios = require("axios");
         var data = JSON.stringify({

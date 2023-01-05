@@ -1,4 +1,5 @@
 <template>
+  
   <!-- v-elseOrder Menu Page -->
   <div class="order-menu-page">
     <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
@@ -224,38 +225,7 @@
                 </div>
               </div>
             </div>
-            <!-- <div
-                class="
-                  tag
-                  bg-primary-400
-                  text-xs
-                  px-1
-                  w-fit
-                  rounded-sm
-                  text-white
-                  absolute
-                  bottom-2
-                  right-2
-                "
-              >
-                NEW
-              </div>
-              <div
-                class="
-                  tag
-                  bg-primary-400
-                  text-xs
-                  px-1
-                  w-fit
-                  rounded-sm
-                  text-white
-                  absolute
-                  bottom-2
-                  right-14
-                "
-              >
-                RECOMMEND
-              </div> -->
+           
           </rs-card>
         </div>
       </div>

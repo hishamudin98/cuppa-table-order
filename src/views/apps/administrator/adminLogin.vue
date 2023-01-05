@@ -16,7 +16,7 @@
         <div class="w-70 bg-black rounded-full">
           <img
             class="object-scale-down"
-            src="@/assets/images/logo/heandshe.jpg"
+            src="@/assets/images/logo/cuppa.png"
             alt=""
           />
         </div>

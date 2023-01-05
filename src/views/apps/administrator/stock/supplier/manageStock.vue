@@ -2,9 +2,29 @@
     <rs-layout>
         <rs-breadcrumb />
         <div style="display: flex; flex-direction: row">
-
             <div class="w-full h-1/4 flex flex-col">
-
+                <!-- <div class="w-full flex flex-row mb-0">
+                        <div class="inline-block w-1/2 pr-10">
+                            <rs-card>
+                                <div class="text-center pt-10 pb-2">
+                                    <strong>Total of Raw Material </strong>
+                                </div>
+                                <hr />
+                                <div class="text-center py-8">{{ this.totalData }} Raw Material</div>
+                            </rs-card>
+                        </div>
+                        <div class="inline-block w-1/2 pr-10">
+                            <rs-card>
+                                <div class="text-center pt-10 pb-2">
+                                    <strong>Total Price Raw Material ( RM )</strong>
+                                </div>
+                                <hr />
+                                <div class="text-center py-8">
+                                    {{ formatPrice(this.sumPrice) }}
+                                </div>
+                            </rs-card>
+                        </div>
+                    </div> -->
                 <div class="w-full" style="flex-direction: column">
                     <!-- UNTUK ATAS BAWAH -->
                     <div style="display: flex; flex-direction: row; padding-top: 10px">
@@ -16,19 +36,17 @@
                                 input: 'h-10',
                             }" />
                         </div>
-
-                        <div class="w-1/12" style="">
-                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Stock
+                        <div class="w-1/12" style="padding-top: 10px">
+                            <rs-button @click="clickBtnAdd()" class="bg-heandshe hover:bg-heandshe">Add Raw Material
                             </rs-button>
                         </div>
-
                     </div>
                     <div class="">
                         <rs-card style="margin-top: 40px">
                             <div>
                                 <div>
                                     <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
-                                        v-model:expandedRows="expandedRows" @rowExpand="onRowExpand"
+                                        v-model:expandedRows="expandedRows"
                                         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                         :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -37,19 +55,20 @@
                                         <Column field="rm_Sku" header="SKU"></Column>
                                         <Column field="rm_Quantity" header="Quantity">
                                             <template #body="searchRawMaterial">
-                                                <p v-if="searchRawMaterial.data.rm_Quantity <= 5"
+                                                <p v-if="(searchRawMaterial.data.rm_Quantity <= searchRawMaterial.data.rm_MinQuantity)"
                                                     style="color:red; font-weight: bold;">
                                                     {{ searchRawMaterial.data.rm_Quantity }}</p>
                                                 <p v-else>{{ searchRawMaterial.data.rm_Quantity }}</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_MinQuantity" header="Min. Quantity"></Column>
-                                        <Column field="rm_MinQuantity" header="Quantity By Packaging Type">
+                                        <Column field="rm_quanityByPackagingType" header="Quantity By Packaging Type">
                                         </Column>
                                         <Column field="rm_Packaging" header="Packaging Type">
                                             <template #body="searchRawMaterial">
                                                 <p v-if="searchRawMaterial.data.rm_Packaging === '1'">Box</p>
                                                 <p v-if="searchRawMaterial.data.rm_Packaging === '2'">Packet</p>
+                                                <p v-if="searchRawMaterial.data.rm_Packaging === '3'">Carton</p>
                                             </template>
                                         </Column>
                                         <Column field="rm_Unit" header="Measurement">
@@ -76,18 +95,11 @@
                                         <Column field="rm_Status" header="Status">
                                             <template #body="searchRawMaterial">
                                                 <rs-badges variant="danger"
-                                                    v-if="searchRawMaterial.data.rm_Quantity <= searchRawMaterial.data.rm_MinQuantity">
+                                                    v-if="(searchRawMaterial.data.rm_Quantity <= searchRawMaterial.data.rm_MinQuantity)">
                                                     Low Stock</rs-badges>
                                                 <rs-badges variant="success" v-else>
                                                     In Stock</rs-badges>
 
-                                            </template>
-
-                                        </Column>
-
-                                        <Column field="rm_StoreName" header="Store">
-                                            <template #body="searchRawMaterial">
-                                                <p>{{ searchRawMaterial.data.rm_StoreName }}</p>
                                             </template>
 
                                         </Column>
@@ -102,46 +114,98 @@
                                             </template>
                                         </Column>
 
-                                        <template #expansion="headerRawMaterial">
-                                            <div v class="orders-subtable">
-                                                <h5 style="margin-bottom:20px">Order No. for {{
-                                                        headerRawMaterial.data.rm_Name
+                                        <template #expansion="searchRawMaterial1">
+                                            <div class="orders-subtable">
+                                                <h5 style="margin-bottom:20px">Order for {{
+                                                        searchRawMaterial1.data.rm_Name
                                                 }}</h5>
 
-                                                <DataTable :value="resultFilter" :paginator="true" :rows="10"
+                                                <DataTable :value="searchRawMaterial" :paginator="true" :rows="10"
                                                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                                     :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                                                    <Column field="po_No" header="Order No.">
+                                                    <Column field="rm_Name" header="Order No.">
+                                                        <template #body="searchRawMaterial">
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                #QwDer</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                #ASDqwe</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                #VsrSf</p>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="rm_Name" header="Outlet Name">
+                                                        <template #body="searchRawMaterial">
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                He & She University of Malaya</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                He & She University of Malaya</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                He & She SME Bank</p>
+                                                        </template>
                                                     </Column>
 
-                                                    <Column field="po_Date" header="Order Datetime">
+                                                    <Column field="rm_Status" header="Order Datetime">
 
-                                                    </Column>
-                                                    <Column field="po_ItemQuantity" header="Quantity Requested">
+                                                        <template #body="searchRawMaterial">
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                14/07/2022 17:55</p>
 
-                                                    </Column>
-                                                    <Column field="rm_Quantity" header="Quantity Available">
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                15/07/2022 10:50</p>
 
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                16/07/2022 15:55</p>
+                                                        </template>
                                                     </Column>
-                                                    <Column field="po_ItemTotalPrice" header="Total Price (RM)">
-                                                        <template #body="resultFilter">
-                                                            {{
-                                                                formatPrice(resultFilter.data.po_ItemTotalPrice)
-                                                            }}
+                                                    <Column field="rm_Status" header="Quantity Requested">
+                                                        <template #body="searchRawMaterial">
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                30</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                50</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                30</p>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="rm_Status" header="Quantity Available">
+                                                        <template #body="searchRawMaterial">
+                                                            <p v-if="searchRawMaterial.data.rm_Status === '1'">
+                                                                5</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Status === '2'">
+                                                                100</p>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="rm_Status" header="Total Price (RM)">
+                                                        <template #body="searchRawMaterial">
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#F123'">
+                                                                {{ formatPrice(30 * 1.50) }}</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#C123'">
+                                                                {{ formatPrice(50 * 1.50) }}</p>
+
+                                                            <p v-if="searchRawMaterial.data.rm_Sku === '#P442'">
+                                                                {{ formatPrice(30 * 1.50) }}</p>
                                                         </template>
 
                                                     </Column>
 
                                                     <Column :exportable="false" style="min-width: 8rem"
                                                         header="Actions">
-                                                        <template #body="resultFilter">
+                                                        <template #body="searchRawMaterial">
                                                             <Button icon="pi pi-pencil"
                                                                 class="p-button-rounded p-button-success mr-2"
-                                                                @click="editUser(resultFilter)" />{{ " " }}
+                                                                @click="editUser(searchRawMaterial)" />{{ " " }}
                                                             <Button icon="pi pi-trash"
                                                                 class="p-button-rounded p-button-danger"
-                                                                @click="deleteUser(resultFilter)" />
+                                                                @click="deleteUser(searchRawMaterial)" />
                                                         </template>
                                                     </Column>
 
@@ -155,8 +219,6 @@
                                                     </template>
                                                 </DataTable>
                                             </div>
-
-
                                         </template>
                                     </DataTable>
                                 </div>
@@ -170,14 +232,41 @@
             <!-- UNTUK SEBELAH2 -->
         </div>
 
-        <rs-modal title="Add Stock" v-model="modalRawMaterial" position="middle" size="md">
-            <FormKit type="select" label="Stock" placeholder="Select Stock" v-model="selectRawMaterial"
-                :options="this.rawMaterialHq" />
+        <rs-modal title="Add Raw Material" v-model="modalRawMaterial" position="middle" size="md">
+            <FormKit label="Name" type="text" v-model="name" />
+
+            <FormKit type="select" label="Category" v-model="selectCategory" :options="[
+                { label: 'Product', value: 1 },
+                { label: 'Services', value: 2 },
+            ]" />
+            <FormKit label="SKU" type="text" v-model="sku" />
             <FormKit label="Min. Quantity" type="number" v-model="minquantity" />
             <FormKit label="Quantity" type="number" v-model="quantity" />
+
             <FormKit label="Price (RM)" type="number" v-model="price" />
-            <FormKit type="select" v-model="selectStoreOutlet" label="Store" :options="this.listStoreOutlet"
-                placeholder="Select Store" />
+            <FormKit class="" type="file" label="Images" accept=".jpg, .png, .jpeg" v-model="image" />
+            <FormKit type="select" label="Packaging Type" v-model="packaging_type" placeholder="Choose Packaging Type"
+                :options="this.typePackaging" />
+            <FormKit label="Quantity By Packaging Type" type="number" v-model="quantity_packaging_type" />
+            <FormKit type="select" label="Unit Measurement" v-model="measurement" placeholder="Choose Unit Measurement"
+                :options="this.unitMeasurement" />
+
+            <FormKit type="select" label="Type Store" v-model="selectType" placeholder="Select Store Type" :options="[
+                { label: 'HQ', value: 1 },
+                { label: 'Outlet', value: 2 },
+            ]" />
+
+            <div v-if="(selectType == 1)">
+                <FormKit type="select" v-model="selectStore" label="Store" :options="this.listStoreHQ"
+                    placeholder="Select Store" />
+            </div>
+
+            <div v-if="(selectType == 2)">
+                <FormKit type="select" v-model="selectStore" label="Store" :options="this.listStoreOutlet"
+                    placeholder="Select Store" />
+            </div>
+
+            <!-- {{ this.listStore }} -->
 
             <FormKit label="Level 1" type="text" v-model="level_1" />
             <FormKit label="Level 2" type="text" v-model="level_2" />
@@ -207,10 +296,10 @@ export default {
     components: {
         RsButton,
         DataTable,
+        RsBadges,
         RsModal,
         Column,
         Button,
-        RsBadges
     },
     setup() {
         const rawMaterial = ref([]);
@@ -246,7 +335,7 @@ export default {
     },
     data() {
         return {
-            staffId: "",
+            staffid: "",
             staffName: "",
             totalData: 0,
             show: false,
@@ -257,25 +346,33 @@ export default {
             expandedRows: [],
 
             name: null,
+            selectCategory: null,
+            sku: null,
             quantity: null,
             minquantity: null,
             price: null,
+            image: null,
+            packaging_type: null,
+            measurement: null,
+            selectType: '',
+            selectStore: '',
             modalRawMaterial: false,
-            selectRawMaterial: null,
-            selectStoreOutlet: null,
             level_1: null,
             level_2: null,
             level_3: null,
+            quantity_packaging_type: null,
 
-            rawMaterialHq: [],
+            listStore: [],
+            listStoreHQ: [],
             listStoreOutlet: [],
-            listRawMaterialOrder: [],
-            headerRawMaterial: [],
-            resultFilter: [],
         };
     },
     async created() {
         this.getdata();
+        this.getStore();
+        this.getStoreHQ();
+        this.getStoreOutlet();
+        this.getRawMaterialBySupplierId();
         this.getTypePackaging();
         this.getUnitMeasurement();
     },
@@ -300,11 +397,111 @@ export default {
                 .then(
                     function (response) {
                         this.staffName = response.data.data[0].staff_name;
-                        this.staffId = response.data.data[0].staff_id;
-                        this.getRawMaterial();
-                        this.getRawMaterialHq();
-                        this.getStoreOutlet();
-                        this.getRawMaterialByOrder();
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStore(value) {
+            this.listStore = [];
+            // let value = this.selectStore;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStore.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStoreHQ() {
+            this.listStore = [];
+            let value = 1;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStoreHQ.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        async getStoreOutlet() {
+            this.listStore = [];
+            let value = 2;
+            console.log('value', value);
+
+            var axios = require("axios");
+            var data = JSON.stringify({
+                type: value
+            });
+            var config = {
+                method: "post",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getStore",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            await axios(config)
+                .then(
+                    function (response) {
+                        console.log('response', response.data.data);
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            this.listStoreOutlet.push({
+                                label: response.data.data[i].sto_Name,
+                                value: response.data.data[i].sto_Id,
+                            });
+                        }
+                        console.log('listStore', this.listStore);
                     }.bind(this)
                 )
                 .catch(function (error) {
@@ -364,14 +561,14 @@ export default {
                 });
         },
 
-        async getRawMaterial() {
+        async getRawMaterialBySupplierId() {
             var axios = require("axios");
             var data = JSON.stringify({
-                staffId: this.staffId,
+                supplierId: this.$route.params.id
             });
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterial",
+                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialBySupplier",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -383,7 +580,7 @@ export default {
                         // console.log("price", response.data.data.rm_Price[0]);
                         this.rawMaterial = response.data.data;
                         this.totalData = this.rawMaterial.length;
-                        console.log("respons 123e", response);
+
                         let price = 0;
                         for (let i = 0; i < response.data.data.length; i++) {
                             price += response.data.data[i].rm_Price;
@@ -397,59 +594,33 @@ export default {
                 });
         },
 
-        async getRawMaterialHq() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialHq",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        // console.log("price", response.data.data.rm_Price[0]);
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.rawMaterialHq.push({
-                                label: response.data.data[i].rm_Name,
-                                value: response.data.data[i].rm_Id,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
         async clickBtnAdd() {
             // this.users1 = user.data;
             this.modalRawMaterial = true;
         },
 
         async insertRawMaterial() {
+            console.log("Insert Raw Material", this.selectCategory);
             var axios = require("axios");
             var data = JSON.stringify({
-                staffId: this.staffId,
-                rawMaterialId: this.selectRawMaterial,
+                name: this.name,
+                selectCategory: this.selectCategory,
+                sku: this.sku,
                 quantity: this.quantity,
                 minquantity: this.minquantity,
                 price: this.price,
-                store: this.selectStoreOutlet,
+                packaging_type: this.packaging_type,
+                quantity_packaging_type: this.quantity_packaging_type,
+                measurement: this.measurement,
+                store: this.selectStore,
                 level_1: this.level_1,
                 level_2: this.level_2,
                 level_3: this.level_3,
-
             });
             console.log("Insert data :", data);
             var config = {
                 method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterialOutlet",
+                url: process.env.VUE_APP_FNB_URL + "/admin/insertRawMaterial",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -471,82 +642,6 @@ export default {
                     console.log(error);
                 });
         },
-
-        async getStoreOutlet() {
-            this.listStoreOutlet = [];
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getStoreOutlet",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        console.log('response', response.data.data);
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.listStoreOutlet.push({
-                                label: response.data.data[i].sto_Name,
-                                value: response.data.data[i].sto_Id,
-                            });
-                        }
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        async getRawMaterialByOrder() {
-            var axios = require("axios");
-            var data = JSON.stringify({
-                staffId: this.staffId,
-            });
-            var config = {
-                method: "post",
-                url: process.env.VUE_APP_FNB_URL + "/admin/getRawMaterialByOrder",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-            await axios(config)
-                .then(
-                    function (response) {
-                        console.log("respons all order", response.data.data);
-                        this.listRawMaterialOrder = response.data.data;
-                    }.bind(this)
-                )
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        onRowExpand(event) {
-            this.resultFilter = this.listRawMaterialOrder.filter((item) => {
-                // console.log("item", item);
-                if (item.rm_Id == event.data.rm_Id && item.store_Id == event.data.rm_StoreId) {
-                    return item;
-                }
-            });
-
-            this.headerRawMaterial = this.resultFilter;
-
-            // console.log("tt", tt);
-            // console.log("result", result);
-            // console.log("this.resultFilter", this.resultFilter);
-            // // this.resultFilter.push(result);
-
-            // console.log("search material", this.searchRawMaterial);
-            // console.log("filter", this.resultFilter);
-            // this.$toast.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
-        }
     },
 };
 </script>
