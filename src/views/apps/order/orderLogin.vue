@@ -151,16 +151,19 @@
         </rs-button>
       </div>
       <div v-if="pickOrdertype == true">
+        <div v-if="this.table != 14">
         <rs-button
           class="w-full bg-heandshe hover:bg-heandshe"
           @click="pickTable()"
           >Dine In</rs-button
         >
         <hr class="my-2" />
+        </div>
         <rs-button class="w-full" variant="primary-outline" @click="pickTime()">
           Take Away
         </rs-button>
         <hr class="my-2" />
+        
         <rs-button
           class="w-full"
           variant="primary-outline"
