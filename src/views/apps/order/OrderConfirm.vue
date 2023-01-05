@@ -37,7 +37,7 @@
       Order failed
     </p>
     <p class="flex justify-center items-center font-semibold text-2xl">
-      RM {{ this.orderAmount }}
+      RM {{ this.orderAmount.toFixed(2) }}
     </p>
   </div>
   <rs-card class="py-3 px-4">
@@ -59,6 +59,10 @@
       <br />
       <div class="order-wrapper flex flex-col gap-2">
         <div class="flex justify-between items-center">
+          <div class="font-semibold">Delivery Charges </div>
+          <div class="font-semibold">RM 4.00</div>
+        </div>
+        <div class="flex justify-between items-center">
           <div class="font-semibold">SST (6%)</div>
           <div class="font-semibold">RM {{ this.tax.toFixed(2) }}</div>
         </div>
@@ -77,7 +81,7 @@
         <hr class="my-2 mb-1" />
         <div class="flex justify-between items-center text-xl">
           <div class="font-semibold">Total</div>
-          <div class="font-semibold">RM {{ this.orderAmount }}</div>
+          <div class="font-semibold">RM {{ this.orderAmount.toFixed(2) }}</div>
         </div>
       </div>
     </div>
@@ -320,7 +324,7 @@ export default {
             this.orderid = response.data.data[0].order_id;
             this.orderNo = response.data.data[0].order_no;
             this.orderAmount = response.data.data[0].ordertotal_amount;
-            this.orderAmount = this.orderAmount.toFixed(2);
+            this.orderAmount = this.orderAmount + 4.00 ;
             this.tableno = response.data.data[0].tableNNo;
             this.tax = response.data.data[0].tax;
             this.discount = response.data.data[0].discount;

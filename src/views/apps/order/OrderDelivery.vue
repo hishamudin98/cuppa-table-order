@@ -21,11 +21,11 @@
               Hishammudin Ali
             </div>
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
-          <div class="text-white">He and She</div>
+          <div class="text-white">Cuppa 365 Coffee</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
             <img
               class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
+              src="@/assets/images/logo/cuppa.png"
               alt=""
             />
           </div>
@@ -92,7 +92,7 @@
               >
                 <img
                   class="h-full w-full object-scale-down rounded-full"
-                  src="@/assets/images/logo/heandshe.jpg"
+                  src="@/assets/images/logo/cuppa.png"
                 />
               </div>
               <span>All Menu</span>

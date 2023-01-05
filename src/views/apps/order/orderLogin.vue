@@ -10,7 +10,7 @@
     >
       <div class="flex justify-between items-center p-2">
         <div class="bg-heandshe h-10 w-10 p-1 rounded-full">
-          <img class="flex-1" src="@/assets/images/logo/heandshe.jpg" alt="" />
+          <img class="flex-1" src="@/assets/images/logo/cuppa.png" alt="" />
         </div>
         <div class="text-white">{{ this.branch_Name }}</div>
       </div>
@@ -22,7 +22,7 @@
           <!-- @/assets/images/illustration/eating.svg -->
           <img
             class="object-scale-down"
-            src="@/assets/images/logo/heandshe.jpg"
+            src="@/assets/images/logo/cuppa.png"
             alt=""
           />
         </div>
@@ -322,7 +322,7 @@
         />
         <FormKit
           type="select"
-          label="Location"
+          label="Location Area"
           v-model="location"
           :options="['Kampus ', 'Lotus Bandar Puteri Bangi', 'PR1MA Bandar Bukit Mahkota', 'Apartment Putra', 'Apartment Seri Melati']"
         />
