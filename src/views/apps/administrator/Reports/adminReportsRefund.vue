@@ -11,7 +11,7 @@
           <div class="bg-black h-10 w-10 p-1 rounded-full">
             <img
               class="flex-1"
-              src="@/assets/images/logo/heandshe.jpg"
+              src="@/assets/images/logo/cuppa.png"
               alt=""
             />
           </div>
