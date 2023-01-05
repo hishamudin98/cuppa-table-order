@@ -620,12 +620,12 @@ export default {
 
     async preorderCheck(table2) {
       const today = moment();
-      if (this.timer2 <= today.format("HH:mm")) {
+      /* if (this.timer2 <= today.format("HH:mm")) {
         alert("Please pick above current time");
       } else {
         if (this.timer2 < "10:30" || this.timer2 > "20:00") {
           alert("Outside Working Hours");
-        } else {
+        } else { */
           if (table2 != 0 && table2 > 0) {
             localStorage.time = this.timer2;
             this.customerProceed = true;
@@ -636,8 +636,8 @@ export default {
           } else {
             alert("Please Enter a valid table number");
           }
-        }
-      }
+        /* }
+      } */
     },
     async addTime() {
       const today = moment();

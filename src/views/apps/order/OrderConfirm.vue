@@ -82,7 +82,7 @@
       </div>
     </div>
   </rs-card>
-  <rs-card class="py-3 px-4" v-if=" this.address != '' || this.address != null">
+  <rs-card class="py-3 px-4" v-if=" this.address != '' || this.address != null || this.addDelivery != undefined">
     <div class="payment-detail-wrapper">
       <div class="flex justify-between items-center my-3">
         <p class="font-semibold uppercase">Delivery Details</p>
@@ -326,6 +326,7 @@ export default {
             this.discount = response.data.data[0].discount;
             this.transacno = response.data.data[0].transac_no;
             this.address = response.data.data[0].order_address;
+            console.log("address", this.address)
             this.delivery_date = moment(response.data.data[0].order_delivery).format(
               "DD-MM-YYYY"
             );
