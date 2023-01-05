@@ -326,8 +326,6 @@ export default {
             this.discount = response.data.data[0].discount;
             this.transacno = response.data.data[0].transac_no;
             this.address = response.data.data[0].order_address;
-
-            console.log(this.address)
             this.delivery_date = moment(response.data.data[0].order_delivery).format(
               "DD-MM-YYYY"
             );
