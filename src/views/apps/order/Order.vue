@@ -339,7 +339,7 @@
                 "
               >
                 <vue-feather
-                  @click="openModal = false"
+                  @click="( openModal = false ) & (isdisabled = false)"
                   class="text-primary-100"
                   type="x"
                 ></vue-feather>

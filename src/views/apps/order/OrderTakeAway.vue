@@ -244,7 +244,7 @@
               class="flex justify-center items-center p-1 bg-heandshe absolute top-2 right-2 rounded-full z-50"
             >
               <vue-feather
-                @click="openModal = false"
+                @click="( openModal = false ) & (isdisabled = false)"
                 class="text-primary-100"
                 type="x"
               ></vue-feather>
