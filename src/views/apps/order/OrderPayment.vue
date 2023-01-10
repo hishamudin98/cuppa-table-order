@@ -252,7 +252,7 @@
         </div> -->
       <hr />
       <div class="total flex justify-between my-2 text-xl">
-        <div class="font-semibold">Total</div>
+        <div class="font-semibold">Total (Rounding)</div>
         <div class="font-semibold">RM {{ formatPrice(this.totalPay) }}</div>
       </div>
     </rs-card>
@@ -1193,6 +1193,7 @@ export default {
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
+            this.totalPay = Math.round(this.totalPay * 10)/10;
             if (this.totalAmount >= 70) {
               this.outletDisc = this.totalAmount * 0.1;
               this.totalPay = this.totalPay - this.outletDisc;

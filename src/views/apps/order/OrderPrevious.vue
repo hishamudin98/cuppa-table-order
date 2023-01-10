@@ -80,7 +80,7 @@
     </router-link>
     <router-link
       class="w-full"
-      :to="{ name: 'paymentlink', params: { orderid: this.orderi } }"
+      :to="{ name: 'paymentlink', params: { orderid: this.orderid } }"
       v-else
     >
       <rs-button class="w-full gap-x-2 mb-6 bg-heandshe"> Return </rs-button>
@@ -120,6 +120,7 @@ export default {
       status: 0,
       LocalStatus: 0,
       orderi: 0,
+      orderid: 0,
     };
   },
   async created() {
@@ -170,6 +171,7 @@ export default {
             this.status = response.data.data[0].order_status;
             this.orderamount = response.data.data[0].ordertotal_amount;
             this.tblNo = response.data.data[0].table_no;
+            this.orderid = response.data.data[0].order_id;
             if (this.status == 5) {
               this.LocalStatus = "DONE";
             }
