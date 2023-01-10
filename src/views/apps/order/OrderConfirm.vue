@@ -80,7 +80,7 @@
           </div> -->
         <hr class="my-2 mb-1" />
         <div class="flex justify-between items-center text-xl">
-          <div class="font-semibold">Total</div>
+          <div class="font-semibold">Total (Rounding)</div>
           <div class="font-semibold">RM {{ this.orderAmount }}</div>
         </div>
       </div>
