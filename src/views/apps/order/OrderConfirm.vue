@@ -62,6 +62,10 @@
           <div class="font-semibold">SST (6%)</div>
           <div class="font-semibold">RM {{ this.tax.toFixed(2) }}</div>
         </div>
+        <div class="flex justify-between items-center" v-if=" this.address != null ">
+          <div class="font-semibold">Delivery Fee</div>
+          <div class="font-semibold">RM 4.00</div>
+        </div>
         <!-- <div class="flex justify-between items-center">
             <div class="font-semibold">Service Charges (10%)</div>
             <div class="font-semibold">RM {{(this.service).toFixed(2)}}</div>
@@ -82,7 +86,7 @@
       </div>
     </div>
   </rs-card>
-  <rs-card class="py-3 px-4" v-if=" this.address != '' || this.address != null || this.addDelivery != undefined">
+  <rs-card class="py-3 px-4" v-if=" this.address != null ">
     <div class="payment-detail-wrapper">
       <div class="flex justify-between items-center my-3">
         <p class="font-semibold uppercase">Delivery Details</p>
@@ -326,7 +330,14 @@ export default {
             this.discount = response.data.data[0].discount;
             this.transacno = response.data.data[0].transac_no;
             this.address = response.data.data[0].order_address;
-            console.log("address", this.address)
+            if(this.address != "")
+            {
+              console.log("address x empty")
+            }
+            else
+            {
+              this.address = null;
+            }
             this.delivery_date = moment(response.data.data[0].order_delivery).format(
               "DD-MM-YYYY"
             );
