@@ -15,11 +15,9 @@
         <div style="height: 40vh" class="flex flex-col justify-center items-center">
           <div class="w-70">
             <!-- @/assets/images/illustration/eating.svg -->
-            <img v-if="branch_holiday.includes(day) == false && (branch_open <= time && branch_close >= time)"
-              class="object-scale-down" src="@/assets/images/logo/cuppa.png" alt="" />
-            <img v-else-if="(branch_holiday.includes(day) == true) || (branch_open >= time && branch_close <= time)"
-              class="object-scale-down" src="@/assets/images/logo/cuppa3.png" alt="" />
-
+            <img v-if="branchIsOpen == true" class="object-scale-down" src="@/assets/images/logo/cuppa.png" alt="" />
+            <img v-else-if="branchIsOpen == false" class="object-scale-down" src="@/assets/images/logo/cuppa3.png"
+              alt="" />
 
           </div>
         </div>
@@ -29,14 +27,13 @@
         <div v-if="LoginType == false">
           <!-- PILIH LOGIN TYPE -->
           <div class="h-full p-4">
-            <rs-button v-if="branch_holiday.includes(day) == false && (branch_open <= time && branch_close >= time)"
+            <rs-button v-if="branchIsOpen == true"
               class="w-full bg-heandshe hover:bg-heandshe" @click="CustomerDetails()">
               Guest
             </rs-button>
 
-            <rs-button
-              v-else-if="(branch_holiday.includes(day) == true) || (branch_open >= time && branch_close <= time)"
-              class="w-full bg-heandshe hover:bg-heandshe" style="background-color: #727272;">
+            <rs-button v-else-if="branchIsOpen == false" class="w-full bg-heandshe hover:bg-heandshe"
+              style="background-color: #727272;">
               Sorry We Are Closed!
             </rs-button>
 
@@ -335,6 +332,8 @@ export default {
       day: "",
       branch_holiday: [],
 
+      branchIsOpen: false,
+
       /* LAMA DATA RETURN */
 
       dataUser: "Guest",
@@ -629,6 +628,21 @@ export default {
             this.branch_open = response.data.data[0].outlet_openHours;
             this.branch_close = response.data.data[0].outlet_closingHours;
             this.branch_holiday = response.data.data[0].outlet_holiday;
+
+            console.log(this.branch_open);
+            console.log(this.time);
+
+            let open = this.branch_open <= this.time;
+            let close = this.branch_close >= this.time;
+            if (open == true && close == true && this.branch_holiday.includes(this.day) == false) {
+              console.log('open', open);
+              console.log('close', close);
+              this.branchIsOpen = true;
+            } else if (open == false && close == false || this.branch_holiday.includes(this.day) == true) {
+              this.branchIsOpen = false;
+            }
+
+            console.log('this.branchIsOpen', this.branchIsOpen);
 
           }.bind(this)
         )
