@@ -564,7 +564,7 @@ export default {
       console.log(data)
       var config = {
         method: "post",
-        url: process.env.VUE_APP_FNB_URL_LOCAL + "/admin/insertStaff",
+        url: process.env.VUE_APP_FNB_URL + "/admin/insertStaff",
         headers: {
           "Content-Type": "application/json",
         },
