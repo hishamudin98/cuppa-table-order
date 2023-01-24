@@ -251,7 +251,7 @@ export default {
     },
     async print(data) {
       this.value =
-        "https://stg-heandshe.toyyibfnb.com/orderLogin/" +
+        "https://stg-heandshe.toyyibfnb.com/" +
         localStorage.branch +
         "/" +
         data.data.outletTID;

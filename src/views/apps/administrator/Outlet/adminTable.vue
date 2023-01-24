@@ -1,10 +1,10 @@
 <template>
   <rs-layout>
-    
+
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        
+
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-1">
             <!-- <div class="inline-block w-full pr-10">
@@ -21,74 +21,53 @@
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
               <div class="w-11/12 h-10">
-                <FormKit
-                  v-model="search"
-                  id="search-sticky"
-                  placeholder="Search for a table..."
-                  type="search"
-                  :classes="{
-                    inner:
-                      'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                    outer: 'flex-1 mb-0',
-                    input: 'h-12',
-                  }"
-                />
+                <FormKit v-model="search" id="search-sticky" placeholder="Search for a table..." type="search" :classes="{
+                  inner:
+                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                  outer: 'flex-1 mb-0',
+                  input: 'h-12',
+                }" />
               </div>
               <div class="w-1/12" style="padding-top: 10px">
-                <rs-button
-                  @click="addTable()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Add Table</rs-button
-                >
+                <rs-button @click="addTable()" class="bg-heandshe hover:bg-heandshe">Add Table</rs-button>
               </div>
             </div>
             <div class="h-4/6">
               <div>
-                <DataTable
-                  :value="searchTables"
-                  :paginator="true"
-                  :rows="10"
+                <DataTable :value="searchTables" :paginator="true" :rows="10"
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                  :rowsPerPageOptions="[10, 20, 50]"
-                  responsiveLayout="scroll"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                >
-                  <Column field="outletTID" header="No"></Column>
-                  <Column field="outletTNAME" header="Table Name"></Column>
-                  <Column field="outletTSTATUS" header="Table Status"></Column>
-                  <Column field="outletTTYPE" header="Table Type"></Column>
-                  <Column :exportable="false" style="min-width: 8rem">
+                  :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                  <!-- <Column field="outletTID" header="No"></Column> -->
+                  <Column field="outletTNAME" header=" Name"></Column>
+                  <Column field="outletTSTATUS" header=" Status">
                     <template #body="searchTables">
-                      <Button
-                        icon="pi pi-pencil"
-                        class="p-button-rounded p-button-success mr-2"
-                        @click="editTable(searchTables)"
-                      />
-                      <Button
-                        icon="pi pi-trash"
-                        class="p-button-rounded p-button-warning"
-                        @click="deleteTable(searchTables)"
-                      />
-                      <Button
-                        icon="pi pi-qrcode"
-                        class="p-button-rounded p-button-success"
-                        @click="print(searchTables)"
-                      />
+
+                      <rs-badges variant="success" v-if="searchTables.data.outletTSTATUS === '1'"
+                        @click="clickBtnStatus()">
+                        Active</rs-badges>
+
+                      <rs-badges variant="danger" v-if="searchTables.data.outletTSTATUS === '0'"
+                        @click="clickBtnStatus()">
+                        Inactive</rs-badges>
+                    </template>
+                  </Column>
+                  <Column field="outletTTYPE" header=" Type"></Column>
+                  <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                    <template #body="searchTables">
+                      <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        @click="editTable(searchTables)" /> {{ " " }}
+                      <Button icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        @click="deleteTable(searchTables)" /> {{ " " }}
+                      <Button icon="pi pi-qrcode" class="p-button-rounded p-button-success"
+                        @click="print(searchTables)" />
                     </template>
                   </Column>
                   <template #paginatorstart>
-                    <Button
-                      type="button"
-                      icon="pi pi-refresh"
-                      class="p-button-text"
-                    />
+                    <Button type="button" icon="pi pi-refresh" class="p-button-text" />
                   </template>
                   <template #paginatorend>
-                    <Button
-                      type="button"
-                      icon="pi pi-cloud"
-                      class="p-button-text"
-                    />
+                    <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                   </template>
                 </DataTable>
               </div>
@@ -103,32 +82,20 @@
     <!-- QR CODE -->
     <rs-modal title="QR CODE" v-model="qrcode" position="middle" size="md">
       <div class="mb-10">
-         <center>
-              <h1>{{this.printName}}</h1>
-              <br />
-              <qrcode-vue :value="this.value" :size="size" level="L" />
-            </center>
+        <center>
+          <h1>{{ this.printName }}</h1>
+          <br />
+          <qrcode-vue :value="this.value" :size="size" level="L" />
+        </center>
       </div>
       <div>
-        <vue3-html2pdf
-          :show-layout="false"
-          :float-layout="true"
-          :enable-download="true"
-          :preview-modal="false"
-          :paginate-elements-by-height="1400"
-          :filename = this.printName
-          :pdf-quality="2"
-          :manual-pagination="false"
-          pdf-format="a4"
-          pdf-orientation="portrait"
-          pdf-content-width="800px"
-          @hasStartedGeneration="hasStartedGeneration()"
-          @hasGenerated="hasGenerated($event)"
-          ref="html2Pdf"
-        >
+        <vue3-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="false"
+          :paginate-elements-by-height="1400" :filename=this.printName :pdf-quality="2" :manual-pagination="false"
+          pdf-format="a4" pdf-orientation="portrait" pdf-content-width="800px"
+          @hasStartedGeneration="hasStartedGeneration()" @hasGenerated="hasGenerated($event)" ref="html2Pdf">
           <template v-slot:pdf-content>
             <center>
-              <h1>{{this.printName}}</h1>
+              <h1>{{ this.printName }}</h1>
               <br />
               <qrcode-vue :value="this.value" :size="size" level="L" />
             </center>
@@ -136,30 +103,14 @@
         </vue3-html2pdf>
       </div>
       <div>
-        <rs-button
-          class="bg-heandshe hover:bg-heandshe w-full"
-          
-          @click="generateReport()"
-          >Print PDF</rs-button
-        >
+        <rs-button class="bg-heandshe hover:bg-heandshe w-full" @click="generateReport()">Print PDF</rs-button>
       </div>
     </rs-modal>
     <!-- QR CODE -->
     <!-- ADD TABLES -->
-    <rs-modal
-      title="Add Table"
-      v-model="tableADD"
-      position="middle"
-      size="md"
-    >
-      <FormKit label="Table No" type="number" v-model="tableno" />
+    <rs-modal title="Add Table" v-model="tableADD" position="middle" size="md">
       <FormKit label="Table Name" type="text" v-model="tablename" />
-      <FormKit
-        v-model="tableRefNo"
-        type="radio"
-        label="Drive In or Dine In"
-        :options="['Drive In', 'Dine In']"
-      />
+      <FormKit v-model="tableRefNo" type="radio" label="Drive In or Dine In" :options="['Drive In', 'Dine In']" />
       <rs-button style="float: right" @click="insertTable()"> Save </rs-button>
     </rs-modal>
     <!-- ADD TABLES -->
@@ -177,6 +128,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import QrcodeVue from "qrcode.vue";
 import Vue3Html2pdf from "vue3-html2pdf";
+import RsBadges from "@/components/Badges.vue";
 
 export default {
   name: "AdminDashboard",
@@ -188,6 +140,7 @@ export default {
     Button,
     QrcodeVue,
     Vue3Html2pdf,
+    RsBadges
   },
   setup() {
     const tables = ref([]);
@@ -197,9 +150,9 @@ export default {
       return tables.value.filter((table) => {
         return (
           table.outletTNAME.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1 ||
+          -1 ||
           table.outletTNAME.toLowerCase().indexOf(search.value.toLowerCase()) !=
-            -1
+          -1
         );
       });
     });
@@ -218,7 +171,6 @@ export default {
       value: "",
       size: 300,
       /* TABLE DATA V-MODAL */
-      tableno: "",
       tablename: "",
       tableRefNo: "",
       printName: "",
@@ -265,10 +217,12 @@ export default {
     },
     async print(data) {
       this.value =
-        "https://stg-heandshe.toyyibfnb.com/orderLogin/" +
-        localStorage.branch +
+        process.env.APP_URL +
+        this.$route.params.outletid +
         "/" +
         data.data.outletTID;
+
+      console.log(this.value);
       this.printName = data.data.outletTNAME;
       this.qrcode = true;
     },
@@ -328,7 +282,7 @@ export default {
                 outletTID: response.data.data[i].outlet_tableID,
                 outletTNAME: response.data.data[i].outlet_tableName,
                 outletTTYPE: response.data.data[i].outlet_tableType,
-                outletTSTATUS: this.status,
+                outletTSTATUS: response.data.data[i].outlet_tableStatus,
               });
             }
           }.bind(this)
@@ -346,7 +300,6 @@ export default {
     async insertTable() {
       var axios = require("axios");
       var data = JSON.stringify({
-        tableNo: this.tableno,
         tableName: this.tablename,
         tableRefNo: this.tableRefNo,
         staffid: localStorage.staff,

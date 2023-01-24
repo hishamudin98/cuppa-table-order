@@ -28,70 +28,42 @@
           <!-- UNTUK ATAS BAWAH -->
           <div style="display: flex; flex-direction: row; padding-top: 10px">
             <div class="w-11/12 h-1">
-              <FormKit
-                v-model="search"
-                id="search-sticky"
-                placeholder="Search for a outlet..."
-                type="search"
-                :classes="{
-                  inner:
-                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                  outer: 'flex-1 mb-0',
-                  input: 'h-10',
-                }"
-              />
+              <FormKit v-model="search" id="search-sticky" placeholder="Search for a outlet..." type="search" :classes="{
+                inner:
+                  'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                outer: 'flex-1 mb-0',
+                input: 'h-10',
+              }" />
             </div>
             <div class="w-1/12">
-              <rs-button
-                @click="addOutlet()"
-                class="bg-heandshe hover:bg-heandshe"
-                >Add Outlet</rs-button
-              >
+              <rs-button @click="addOutlet()" class="bg-heandshe hover:bg-heandshe">Add Outlet</rs-button>
             </div>
           </div>
           <div class="">
             <rs-card style="margin-top: 40px">
               <div>
                 <div>
-                  <DataTable
-                    :value="searchOutlet"
-                    :paginator="true"
-                    :rows="10"
+                  <DataTable :value="searchOutlet" :paginator="true" :rows="10"
                     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                    :rowsPerPageOptions="[10, 20, 50]"
-                    responsiveLayout="scroll"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                  >
+                    :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                     <Column field="outlet_code" header="Outlet Code"></Column>
                     <Column field="outlet_name" header="Outlet Name"></Column>
                     <!-- <Column field="staff_name" header="Outlet Owner"></Column> -->
                     <Column field="outlet_phone" header="Phone No."></Column>
                     <Column field="outlet_address" header="Address"></Column>
                     <Column field="outlet_email" header="Email"></Column>
-                    <Column
-                      :exportable="false"
-                      style="min-width: 8rem"
-                      header="Actions"
-                    >
+                    <Column :exportable="false" style="min-width: 8rem" header="Actions">
                       <template #body="searchOutlet">
-                        <Button
-                          icon="pi pi-pencil"
-                          class="p-button-rounded p-button-success"
-                          @click="editOutlet(searchOutlet)"
-                        />
+                        <Button icon="pi pi-pencil" class="p-button-rounded p-button-success"
+                          @click="editOutlet(searchOutlet)" />
                         {{ "" }}
-                        <router-link :to="{ name: 'admin-table' , params: { outletid: searchOutlet.data.outlet_id } }">
-                          <Button
-                            icon="pi pi-table"
-                            class="p-button-rounded p-button-success"
-                          />
+                        <router-link :to="{ name: 'admin-table', params: { outletid: searchOutlet.data.outlet_id } }">
+                          <Button icon="pi pi-table" class="p-button-rounded p-button-success" />
                         </router-link>
                         {{ "" }}
                         <router-link :to="{ name: 'admin-station' }">
-                          <Button
-                            icon="pi pi-bars"
-                            class="p-button-rounded p-button-success"
-                          />
+                          <Button icon="pi pi-bars" class="p-button-rounded p-button-success" />
                         </router-link>
 
                         <!-- <Button
@@ -103,18 +75,10 @@
                     </Column>
 
                     <template #paginatorstart>
-                      <Button
-                        type="button"
-                        icon="pi pi-refresh"
-                        class="p-button-text"
-                      />
+                      <Button type="button" icon="pi pi-refresh" class="p-button-text" />
                     </template>
                     <template #paginatorend>
-                      <Button
-                        type="button"
-                        icon="pi pi-cloud"
-                        class="p-button-text"
-                      />
+                      <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                     </template>
                   </DataTable>
                 </div>
@@ -127,42 +91,22 @@
       </div>
       <!-- UNTUK SEBELAH2 -->
     </div>
-    <rs-modal
-      title="Add Outlet"
-      v-model="modalInsert"
-      position="middle"
-      size="md"
-    >
+    <rs-modal title="Add Outlet" v-model="modalInsert" position="middle" size="md">
       <FormKit label="Outlet Name" type="text" v-model="outlet_name" />
       <FormKit label="Phone No." type="number" v-model="outlet_phone" />
       <FormKit label="Email" type="email" v-model="outlet_email" />
       <FormKit label="Postcode" type="number" v-model="outlet_postcode" />
       <FormKit label="Address" type="textarea" v-model="outlet_address" />
-      <FormKit
-        type="radio"
-        label="Outlet Type"
-        v-model="outlet_type"
-        :options="[
-          { label: 'HQ', value: 2 },
-          { label: 'Branch', value: 3 },
-        ]"
-      />
-      <FormKit
-        type="file"
-        label="Images"
-        v-model="outlet_images"
-        accept=".jpg, .png, .jpeg"
-      />
+      <FormKit type="radio" label="Outlet Type" v-model="outlet_type" :options="[
+        { label: 'HQ', value: 2 },
+        { label: 'Branch', value: 3 },
+      ]" />
+      <FormKit type="file" label="Images" v-model="outlet_images" accept=".jpg, .png, .jpeg" />
       <hr />
       <br />
       <label><strong>Organization's Information</strong></label>
       <br />
-      <FormKit
-        label="Owner"
-        type="select"
-        v-model="Organizationowner"
-        :options="this.owner"
-      />
+      <FormKit label="Owner" type="select" v-model="Organizationowner" :options="this.owner" />
       <!-- <FormKit label="Phone No." type="number" />
       <FormKit label="Email" type="email" />
       <FormKit label="Address" type="textarea" /> -->
@@ -170,44 +114,26 @@
       <br />
       <label><strong>Social Media's URL</strong></label>
       <br />
-      <FormKit
-        type="url"
-        label="Official Website"
-        placeholder="https://www.example.com..."
-      />
-      <FormKit
-        type="url"
-        label="Facebook"
-        placeholder="https://www.example.com..."
-        validation="url"
-      />
-      <FormKit
-        type="url"
-        label="Instagram"
-        placeholder="https://www.example.com..."
-      />
-      <FormKit
-        type="url"
-        label="Twitter"
-        placeholder="https://www.example.com..."
-      />
+      <FormKit type="url" label="Official Website" placeholder="https://www.example.com..." />
+      <FormKit type="url" label="Facebook" placeholder="https://www.example.com..." validation="url" />
+      <FormKit type="url" label="Instagram" placeholder="https://www.example.com..." />
+      <FormKit type="url" label="Twitter" placeholder="https://www.example.com..." />
       <rs-button style="float: right" @click="insertOutlet()"> Save </rs-button>
     </rs-modal>
     <!-- EDIT -->
-    <rs-modal
-      title="Edit Outlet"
-      v-model="modalEdit"
-      position="middle"
-      size="md"
-    >
+    <rs-modal title="Edit Outlet" v-model="modalEdit" position="middle" size="md">
       <FormKit label="Outlet Name" type="text" v-model="outlet1.outlet_name" />
       <FormKit label="Phone No." type="number" v-model="outlet1.outlet_phone" />
       <FormKit label="Email" type="email" v-model="outlet1.outlet_email" />
-      <FormKit
-        label="Address"
-        type="textarea"
-        v-model="outlet1.outlet_address"
-      />
+      <FormKit label="Opening Hours" type="time" v-model="outlet1.outlet_opening" />
+      <FormKit label="Closing Hours" type="time" v-model="outlet1.outlet_closing" />
+
+      <label>Holiday</label>
+      <Multiselect v-model="outlet1.outlet_holiday" mode="tags" :close-on-select="false" :searchable="true"
+        :create-option="true" :options="this.listDay" @select="papar(selectPO)" @deselect="padamOrderNo(selectPO)"
+        @clear="padam()" style="margin-bottom:10px" />
+
+      <FormKit label="Address" type="textarea" v-model="outlet1.outlet_address" />
       <rs-button style="float: right" @click="editOutlets(outlet1)">
         Save
       </rs-button>
@@ -225,6 +151,7 @@ import RsButton from "@/components/Button.vue";
 import RsModal from "@/components/Modal.vue";
 import "primeicons/primeicons.css";
 /* import moment from "moment"; */
+import Multiselect from "@vueform/multiselect";
 
 export default {
   name: "AdminDashboard",
@@ -234,6 +161,7 @@ export default {
     DataTable,
     Column,
     Button,
+    Multiselect,
   },
   setup() {
     const outlet = ref([]);
@@ -283,14 +211,19 @@ export default {
       outlet_postcode: "",
       outlet_address: "",
       outlet_images: "",
-       outlet_type: "",
+      outlet_type: "",
       Organizationowner: "",
+
+      selectDay: null,
+      listDay: [],
+
     };
   },
   async created() {
     this.getdata();
     this.getOutlethq();
     this.getOrganizationOwner();
+    this.getDay();
   },
 
   methods: {
@@ -319,6 +252,35 @@ export default {
         });
     },
 
+    async getDay() {
+      var axios = require("axios");
+
+      var config = {
+        method: "get",
+        url: process.env.VUE_APP_FNB_URL + "/admin/getDay",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      await axios(config)
+        .then(
+          function (response) {
+            for (let i = 0; i < response.data.data.length; i++) {
+              this.listDay.push({
+                label: response.data.data[i].title,
+                value: response.data.data[i].id,
+              });
+            }
+
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+
+    },
+
     async getOutlethq() {
       var axios = require("axios");
       var data = JSON.stringify({
@@ -345,7 +307,10 @@ export default {
                 outlet_phone: this.outlet_details[i].outlet_phone,
                 outlet_email: this.outlet_details[i].outlet_email,
                 outlet_address: this.outlet_details[i].outlet_address,
+                outlet_opening: this.outlet_details[i].outlet_open,
+                outlet_closing: this.outlet_details[i].outlet_close,
                 staff_name: this.outlet_details[i].staff_name,
+                outlet_holiday: JSON.parse(this.outlet_details[i].outlet_holiday),
               });
             }
             this.totalData = this.outlet.length;
@@ -378,7 +343,7 @@ export default {
                 value: response.data.data[i].org_id,
               });
             }
-            
+
           }.bind(this)
         )
         .catch(function (error) {
@@ -391,6 +356,7 @@ export default {
     },
 
     async editOutlet(outlet) {
+      console.log("oo", outlet);
       this.outlet1 = outlet.data;
       this.modalEdit = true;
     },
@@ -438,6 +404,8 @@ export default {
     },
 
     async editOutlets(outlet1) {
+      console.log(outlet1);
+      // return;
       var axios = require("axios");
       var data = JSON.stringify({
         outlet_name: outlet1.outlet_name,
@@ -445,6 +413,9 @@ export default {
         outlet_email: outlet1.outlet_email,
         outlet_address: outlet1.outlet_address,
         outlet_id: outlet1.outlet_id,
+        outlet_opening: outlet1.outlet_opening,
+        outlet_closing: outlet1.outlet_closing,
+        outlet_holiday: outlet1.outlet_holiday,
         staffid: localStorage.staff,
       });
       var config = {
@@ -479,3 +450,7 @@ export default {
   },
 };
 </script>
+
+<style src="@vueform/multiselect/themes/default.css">
+
+</style>
