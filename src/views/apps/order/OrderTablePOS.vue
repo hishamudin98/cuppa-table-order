@@ -1,23 +1,17 @@
 <template>
   <div class="order-customer">
-    <div
-      style="
+    <div style="
         height: 56vh;
         border-bottom-left-radius: 2rem;
         border-bottom-right-radius: 2rem;
-      "
-      class="bg-heandshe after:content-['']"
-    >
+      " class="bg-heandshe after:content-['']">
       <div class="flex justify-between items-center p-2">
         <div class="bg-black h-10 w-10 p-1 rounded-full">
           <img class="flex-1" src="@/assets/images/logo/cuppa.png" alt="" />
         </div>
         <div class="text-white">{{ this.branch_Name }}</div>
       </div>
-      <div
-        style="height: 40vh"
-        class="flex flex-col justify-center items-center"
-      >
+      <div style="height: 40vh" class="flex flex-col justify-center items-center">
         <div class="w-70 items-center">
           <!-- <img
               class="object-scale-down"
@@ -51,12 +45,10 @@
         <h4 style="font-weight: normal">Thank you !</h4>
       </div>
       <br />
-      <router-link
-        :to="{
-          name: 'orderLogin',
-          params: { branchID: this.branch, table: this.table },
-        }"
-      >
+      <router-link :to="{
+        name: 'main-order',
+        params: { branchID: this.branch, table: this.table },
+      }">
         <rs-button class="w-full bg-heandshe"> Order Again? </rs-button>
       </router-link>
     </div>
@@ -231,6 +223,7 @@ export default {
   border-radius: 0.5rem;
   box-shadow: 0 4px 24px 0 rgb(253 186 116 / 50%);
 }
+
 .triangle {
   width: 0;
   height: 0;

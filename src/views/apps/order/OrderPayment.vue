@@ -1117,7 +1117,7 @@ export default {
         this.idleSecondsCounter = 0;
         alert("You have been idle for 1 minute");
         this.$router.push({
-          name: "orderLogin",
+          name: "main-order",
           params: { branchID: this.branch, table: this.tablNo },
         });
       }

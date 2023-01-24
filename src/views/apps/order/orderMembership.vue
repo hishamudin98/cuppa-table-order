@@ -4,7 +4,7 @@
       <div class="flex items-center gap-x-2">
         <router-link
           class="flex items-center justify-center"
-          :to="{ name: 'orderLogin', params: { branchID: this.branch } }"
+          :to="{ name: 'main-order', params: { branchID: this.branch } }"
         >
           <vue-feather class="text-white" type="chevron-left"></vue-feather>
         </router-link>
@@ -47,7 +47,7 @@
     >
     <hr class="my-2" />
     <p class="text-center">
-      Already a member?<router-link :to="{ name: 'orderLogin' }">
+      Already a member?<router-link :to="{ name: 'main-order' }">
         <a
           href="#"
           class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
@@ -116,7 +116,7 @@ export default {
             if (response.data.status == 200) {
               alert("Register Successfully");
               this.$router.push({
-                name: "orderLogin",
+                name: "main-order",
                 params: { branchID: localStorage.branch },
               });
             } else {

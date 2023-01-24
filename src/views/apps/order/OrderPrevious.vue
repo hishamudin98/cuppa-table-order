@@ -71,7 +71,7 @@
     <router-link
       class="w-full"
       :to="{
-        name: 'orderLogin',
+        name: 'main-order',
         params: { branchID: this.branch, table: this.tblNo },
       }"
       v-if="this.LocalStatus != 'FAIL'"
