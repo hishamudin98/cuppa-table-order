@@ -1,146 +1,106 @@
 <template>
   <rs-layout>
-    
+
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        
+
         <div class="w-full flex flex-col">
-          
+
           <div class="w-full" style="flex-direction: column">
             <!-- UNTUK ATAS BAWAH -->
             <div style="display: flex; flex-direction: row">
-             
+
             </div>
             <div class="h-4/6">
               <div>
-                <DataTable
-                  :value="searchUsers"
-                  :paginator="true"
-                  :rows="10"
+                <DataTable :value="searchMenu" :paginator="true" :rows="10"
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                  :rowsPerPageOptions="[10, 20, 50]"
-                  responsiveLayout="scroll"
-                  removableSort
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                >
+                  :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll" removableSort
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                   <template #header>
                     <div class="flex justify-content-between">
                       <div class="w-11/12 h-10">
-                        <FormKit
-                          v-model="search"
-                          id="search-sticky"
-                          placeholder="Search for Menu..."
-                          type="search"
+                        <FormKit v-model="search" id="search-sticky" placeholder="Search for Menu..." type="search"
                           :classes="{
                             inner:
                               'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
                             outer: 'flex-1 mb-0',
                             input: 'h-12',
-                          }"
-                        />
+                          }" />
                       </div>
-                      <div
-                        v-if="this.staff_role != 3 || this.staff_category != 3"
-                        class="w-1/12 h-12 mt-1"
-                      >
-                        <rs-button
-                          @click="addMenu()"
-                          class="bg-heandshe hover:bg-heandshe"
-                          >Add Menu</rs-button
-                        >
+                      <div v-if="this.staff_role != 3 || this.staff_category != 3" class="w-1/12 h-12 mt-1">
+                        <rs-button @click="addMenu()" class="bg-heandshe hover:bg-heandshe">Add Menu</rs-button>
                       </div>
                     </div>
                   </template>
                   <Column field="name" header="Menu Name">
-                    <template #body="searchUsers">
+                    <template #body="searchMenu">
                       <div class="flex flex-row gap-y-px">
                         <div class="pr-10">
-                          <img
-                            :src="searchUsers.data.images[0].image1"
-                            class="product-image"
-                          />
+                          <img :src="searchMenu.data.images[0].image1" class="product-image" />
                         </div>
 
                         <div class="mt-5">
-                          {{ searchUsers.data.name }}
+                          {{ searchMenu.data.name }}
                         </div>
                       </div>
                     </template>
                   </Column>
+                  <Column header="Status">
+                    <template #body="searchMenu">
+
+                      <rs-badges variant="success" v-if="searchMenu.data.status === '1'" @click="clickBtnStatus()">
+                        Active</rs-badges>
+
+                      <rs-badges variant="danger" v-if="searchMenu.data.status === '0'" @click="clickBtnStatus()">
+                        Inactive</rs-badges>
+                    </template>
+                  </Column>
                   <Column header="Category">
-                    <template #body="searchUsers">
-                      {{ searchUsers.data.category[0].category_name }}
+                    <template #body="searchMenu">
+                      {{ searchMenu.data.category[0].category_name }}
                     </template>
                   </Column>
                   <Column field="price" header="Price ( RM )" :sortable="true">
-                    <template #body="searchUsers">
-                      {{ formatPrice(searchUsers.data.price) }}
+                    <template #body="searchMenu">
+                      {{ formatPrice(searchMenu.data.price) }}
                     </template>
                   </Column>
-                  <Column
-                    field="code"
-                    header="Menu Code"
-                    :sortable="true"
-                  ></Column>
-                  <Column field="code" header="Raw Materials">
-                    <template #body="searchUsers">
-                      <router-link
-                        :to="{
-                          name: 'admin-menu-rawmaterial',
-                          params: { menuid: searchUsers.data.menuid },
-                        }"
-                      >
-                        <Button
-                          icon="pi pi-box"
-                          class="p-button-rounded p-button-info mx-5"
-                        />
+                  <Column field="code" header="Menu Code" :sortable="true"></Column>
+                  <!-- <Column field="code" header="Raw Materials">
+                    <template #body="searchMenu">
+                      <router-link :to="{
+                        name: 'admin-menu-rawmaterial',
+                        params: { menuid: searchMenu.data.menuid },
+                      }">
+                        <Button icon="pi pi-box" class="p-button-rounded p-button-info mx-5" />
                       </router-link>
                     </template>
-                  </Column>
-                  <Column
-                    :exportable="false"
-                    style="min-width: 8rem"
-                    header="Actions"
-                  >
-                    <template #body="searchUsers">
-                      <Button
-                        icon="pi pi-pencil"
-                        class="p-button-rounded p-button-success mx-2"
-                        @click="editMenu(searchUsers)"
-                      />
-                      <router-link
-                        :to="{
-                          name: 'admin-menu-outlet',
-                          params: { menuid: searchUsers.data.menuid },
-                        }"
-                      >
-                        <Button
-                          icon="pi pi-building"
-                          class="p-button-rounded p-button-success mx-5"
-                        />
+                  </Column> -->
+                  <Column :exportable="false" style="min-width: 8rem" header="Actions">
+                    <template #body="searchMenu">
+                      <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        @click="editMenu(searchMenu)" />{{ "" }}
+                      <router-link :to="{
+                        name: 'admin-menu-outlet',
+                        params: { menuid: searchMenu.data.menuid },
+                      }">
+                        <Button icon="pi pi-building" class="p-button-rounded p-button-success mx-5" />
                       </router-link>
 
                       <!-- <Button
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-warning mx-2"
-                        @click="deleteUser(searchUsers)"
+                        @click="deleteUser(searchMenu)"
                       /> -->
                     </template>
                   </Column>
                   <template #paginatorstart>
-                    <Button
-                      type="button"
-                      icon="pi pi-refresh"
-                      class="p-button-text"
-                    />
+                    <Button type="button" icon="pi pi-refresh" class="p-button-text" />
                   </template>
                   <template #paginatorend>
-                    <Button
-                      type="button"
-                      icon="pi pi-cloud"
-                      class="p-button-text"
-                    />
+                    <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                   </template>
                 </DataTable>
               </div>
@@ -152,30 +112,15 @@
         <!-- UNTUK SEBELAH2 -->
       </div>
     </div>
-    <rs-modal
-      title="Add Menu"
-      v-model="addMenuModal"
-      position="middle"
-      size="md"
-    >
+    <rs-modal title="Add Menu" v-model="addMenuModal" position="middle" size="md">
       <FormKit type="text" label="Menu Name" v-model="menu_name" />
-      <FormKit
-        type="file"
-        label="Images"
-        v-model="menu_images"
-        accept=".jpg, .png, .jpeg"
-      />
+      <FormKit type="file" label="Images" v-model="menu_images" accept=".jpg, .png, .jpeg" />
       <FormKit type="number" label="Menu Price ( RM )" v-model="menu_price" />
-      <FormKit
-        type="select"
-        label="Menu Stations"
-        v-model="menu_station"
-        :options="[
-          { label: 'Kitchen', value: 1 },
-          { label: 'Beverages', value: 2 },
-          { label: 'Bakery', value: 3 },
-        ]"
-      />
+      <FormKit type="select" label="Menu Stations" v-model="menu_station" placeholder="Choose Stations" :options="[
+        { label: 'Kitchen', value: 1 },
+        { label: 'Beverages', value: 2 },
+        { label: 'Bakery', value: 3 },
+      ]" />
       <!-- <FormKit
         type="select"
         label="Category"
@@ -186,28 +131,17 @@
       <label><strong>Menu Category</strong></label>
       <!-- <vue-taggable-select v-model="category1" :options="this.categories" placeholder="Select Category">
       </vue-taggable-select> -->
-      <Multiselect
-        v-model="fruit"
-        mode="tags"
-        :close-on-select="false"
-        :searchable="true"
-        :create-option="true"
-        :options="this.categories"
-      />
+      <Multiselect v-model="menu_category" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
+        :options="this.categories" />
 
-      
+
 
       <br />
       <FormKit v-model="value" type="checkbox" label="Variants?" />
       <rs-button style="float: right" @click="nextPage()"> Save </rs-button>
     </rs-modal>
 
-    <rs-modal
-      title="Add Variant"
-      v-model="addVariantModal"
-      position="middle"
-      size="md"
-    >
+    <rs-modal title="Add Variant" v-model="addVariantModal" position="middle" size="md">
       <div v-for="(input, k) in variants" :key="k">
         <table class="table-fixed border-2 mb-2">
           <tbody>
@@ -215,20 +149,12 @@
               <FormKit type="text" label="Variants Type" v-model="input.type" />
             </td>
             <td>
-              <Button
-                icon="pi pi-minus"
-                class="p-button-rounded p-button-danger mx-2"
-                @click="remove(k)"
-                v-show="k || (!k && variants.length > 1)"
-              />
+              <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2" @click="remove(k)"
+                v-show="k || (!k && variants.length > 1)" />
             </td>
             <td>
-              <Button
-                icon="pi pi-plus"
-                class="p-button-rounded p-button-success mx-5"
-                @click="add(k)"
-                v-show="k == variants.length - 1"
-              />
+              <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5" @click="add(k)"
+                v-show="k == variants.length - 1" />
             </td>
           </tbody>
           <tr>
@@ -239,34 +165,18 @@
                     <FormKit type="text" v-model="inputs.id" hidden />
                   </td>
                   <td>
-                    <FormKit
-                      type="text"
-                      label="Variant Name"
-                      v-model="inputs.name"
-                    />
+                    <FormKit type="text" label="Variant Name" v-model="inputs.name" />
                   </td>
                   <td>
-                    <FormKit
-                      type="number"
-                      label="Price Added To Base Price"
-                      v-model="inputs.price"
-                    />
+                    <FormKit type="number" label="Price Added To Base Price" v-model="inputs.price" />
                   </td>
                   <td>
-                    <Button
-                      icon="pi pi-minus"
-                      class="p-button-rounded p-button-danger mx-2"
-                      @click="removeL(k)"
-                      v-show="l || (!l && input.data.length > 1)"
-                    />
+                    <Button icon="pi pi-minus" class="p-button-rounded p-button-danger mx-2" @click="removeL(k)"
+                      v-show="l || (!l && input.data.length > 1)" />
                   </td>
                   <td>
-                    <Button
-                      icon="pi pi-plus"
-                      class="p-button-rounded p-button-success mx-5"
-                      @click="addL(k)"
-                      v-show="l == input.data.length - 1"
-                    />
+                    <Button icon="pi pi-plus" class="p-button-rounded p-button-success mx-5" @click="addL(k)"
+                      v-show="l == input.data.length - 1" />
                   </td>
                 </tr>
               </tbody>
@@ -278,18 +188,14 @@
       <rs-button style="float: right" @click="insert()"> Save </rs-button>
     </rs-modal>
 
-    <rs-modal
-      title="Edit Menu"
-      v-model="editMenuModal"
-      position="middle"
-      size="md"
-    >
-      <FormKit type="text" label="Menu Name" v-model="menuedit.name" />
-      <FormKit
-        type="number"
-        label="Menu Price ( RM )"
-        v-model="menuedit.price"
-      />
+    <rs-modal title="Edit Menu" v-model="editMenuModal" position="middle" size="md">
+      <FormKit type="text" label="Name" v-model="menuedit.name" />
+      <FormKit type="number" label="Price ( RM )" v-model="menuedit.price" />
+
+      <FormKit type="select" label="Status" v-model="menuedit.status" placeholder="Choose Status" :options="[
+        { label: 'Active', value: 1 },
+        { label: 'Inactive', value: 0 },
+      ]" />
       <rs-button style="float: right" @click="edit(menuedit)"> Save </rs-button>
     </rs-modal>
 
@@ -301,16 +207,9 @@
       <p>{{ formatPrice(menuedit.price) }}</p>
       <br />
       <label><strong>Outlet Available</strong></label>
-      <vue-taggable-select
-        v-model="outlet"
-        :options="this.outlets"
-      ></vue-taggable-select>
+      <vue-taggable-select v-model="outlet" :options="this.outlets"></vue-taggable-select>
       <br />
-      <FormKit
-        type="number"
-        label="Menu Price By Outlet ( RM )"
-        v-model="menu_price"
-      />
+      <FormKit type="number" label="Menu Price By Outlet ( RM )" v-model="menu_price" />
       <rs-button style="float: right" @click="showMenuModal = false">
         Save
       </rs-button>
@@ -329,6 +228,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import VueTaggableSelect from "vue-taggable-select";
 import Multiselect from "@vueform/multiselect";
+import RsBadges from "@/components/Badges.vue";
 
 export default {
   name: "AdminDashboard",
@@ -340,18 +240,19 @@ export default {
     Button,
     VueTaggableSelect,
     Multiselect,
+    RsBadges
   },
   setup() {
-    const users = ref([]);
+    const menus = ref([]);
     const search = ref("");
     const categories = ref([]);
     const outlets = ref([]);
 
-    const searchUsers = computed(() => {
-      return users.value.filter((user) => {
+    const searchMenu = computed(() => {
+      return menus.value.filter((a) => {
         return (
-          user.name.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
-          user.code.toLowerCase().indexOf(search.value.toLowerCase()) != -1
+          a.name.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
+          a.code.toLowerCase().indexOf(search.value.toLowerCase()) != -1
         );
       });
     });
@@ -365,8 +266,8 @@ export default {
       search,
       categories,
       outlets,
-      searchUsers,
-      users,
+      searchMenu,
+      menus,
       formatPrice,
     };
   },
@@ -409,7 +310,7 @@ export default {
       addMenuModal: false,
       addVariantModal: false,
       editMenuModal: false,
-      users1: "",
+      menus1: "",
       show: false,
       outletDrop: false,
       menuDrop: false,
@@ -491,10 +392,10 @@ export default {
                 category_id: response.data.data[i].category_id,
                 category_name: response.data.data[i].category_name,
               });
-              this.categories.push(
-                /* label:  */ response.data.data[i].category_name
-                /*  value: this.valueCategory, */
-              );
+              this.categories.push({
+                label: response.data.data[i].category_name,
+                value: response.data.data[i].category_id,
+              });
               this.valueCategory = [];
             }
           }.bind(this)
@@ -569,7 +470,8 @@ export default {
                   },
                 ];
               }
-              this.users.push({
+
+              this.menus.push({
                 menuid: response.data.data[i].menu_id,
                 name: response.data.data[i].menu_name,
                 price: response.data.data[i].menu_price,
@@ -577,6 +479,7 @@ export default {
                 category: JSON.parse(response.data.data[i].menu_category),
                 variants: this.variansi,
                 images: images[0].image1,
+                status: response.data.data[i].menu_status,
               });
               this.variansi = [];
             }
@@ -637,6 +540,8 @@ export default {
       }
     },
     async editMenu(menu) {
+      console.log('menu', menu);
+
       if (this.editMenuModal == false) {
         this.menuedit = menu.data;
         this.editMenuModal = true;
@@ -660,7 +565,7 @@ export default {
           menu_image: this.file,
           menu_price: this.menu_price,
           menu_station: this.menu_station,
-          /* menu_category: this.category, */
+          menu_category: this.menu_category,
           menu_variant: null,
         });
       } else {
@@ -673,6 +578,7 @@ export default {
           menu_variant: this.variants,
         });
       }
+      console.log(data);
 
       var config = {
         method: "post",
@@ -688,6 +594,7 @@ export default {
             alert(response.data.message);
             this.addVariantModal = false;
             this.addMenuModal = false;
+            this.getMenu();
           }.bind(this)
         )
         .catch(function (error) {
@@ -700,6 +607,7 @@ export default {
         menu_name: menuedit.name,
         menu_price: menuedit.price,
         menu_id: menuedit.menuid,
+        menu_status: menuedit.status,
       });
       var config = {
         method: "post",
@@ -735,4 +643,6 @@ export default {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 </style>    
-<style src="@vueform/multiselect/themes/default.css"></style>
+<style src="@vueform/multiselect/themes/default.css">
+
+</style>
