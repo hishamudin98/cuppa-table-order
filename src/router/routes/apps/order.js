@@ -1,7 +1,7 @@
 export default [
   {
-    path: "/orderLogin/:branchID?/:table?",
-    name: "orderLogin",
+    path: "/:branchID?/:table?",
+    name: "main-order",
     component: () => import("@/views/apps/order/orderLogin.vue"),
   },
   {
