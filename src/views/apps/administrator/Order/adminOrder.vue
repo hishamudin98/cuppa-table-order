@@ -34,126 +34,70 @@
             </div>
             <div style="display: flex; flex-direction: row; padding-top: 10px">
               <div class="w-11/12 h-1">
-                <FormKit
-                  v-model="search"
-                  id="search-sticky"
-                  placeholder="Search for order..."
-                  type="search"
-                  :classes="{
-                    inner:
-                      'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                    outer: 'flex-1 mb-0',
-                    input: 'h-10',
-                  }"
-                />
+                <FormKit v-model="search" id="search-sticky" placeholder="Search for order..." type="search" :classes="{
+                  inner:
+                    'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
+                  outer: 'flex-1 mb-0',
+                  input: 'h-10',
+                }" />
               </div>
               <div class="w-1/12 h-2">
-                <rs-button
-                  @click="filter()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Filter</rs-button
-                >
+                <rs-button @click="filter()" class="bg-heandshe hover:bg-heandshe">Filter</rs-button>
               </div>
             </div>
             <div class="">
               <rs-card style="margin-top: 40px">
                 <div>
                   <div>
-                    <DataTable
-                      :value="searchOrder"
-                      :paginator="true"
-                      :rows="10"
+                    <DataTable :value="searchOrder" :paginator="true" :rows="10"
                       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                      :rowsPerPageOptions="[10, 20, 50]"
-                      responsiveLayout="scroll"
-                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                    >
+                      :rowsPerPageOptions="[10, 20, 50]" responsiveLayout="scroll"
+                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                       <Column field="order_no" header="Order No"></Column>
-                      <Column
-                        field="order_status"
-                        header="Status"
-                        :sortable="true"
-                      ></Column>
+                      <Column field="order_status" header="Status" :sortable="true"></Column>
 
-                      <Column
-                        field="orderDatetime"
-                        header="Order Date"
-                        :sortable="true"
-                      ></Column>
-                      <Column
-                        field="order_totalAmount"
-                        header="Order Total ( RM )"
-                        :sortable="true"
-                      >
+                      <Column field="orderDatetime" header="Order Date" :sortable="true"></Column>
+                      <Column field="order_totalAmount" header="Order Total ( RM )" :sortable="true">
                         <template #body="searchOrder">
                           {{ formatPrice(searchOrder.data.order_totalAmount) }}
                         </template>
                       </Column>
-                      <Column
-                        field="order_customer"
-                        header="Customer Name"
-                      ></Column>
-                      <Column field="staffName" header="Staff Name"></Column>
-                      <Column
-                        :exportable="false"
-                        style="min-width: 8rem"
-                        header="Actions"
-                      >
+                      <Column field="order_customer" header="Customer Name"></Column>
+                      <Column field="staffName" header="Staff Name">
                         <template #body="searchOrder">
-                          <Button
-                            icon="pi pi-print"
-                            class="p-button-rounded p-button-warning"
-                            @click="print(searchOrder)"
-                          />
-                          <Button
-                            icon="pi pi-folder"
-                            class="p-button-rounded p-button-success"
-                            @click="selectOrder(searchOrder)"
-                          />
+                          {{ searchOrder.data.staffName != null ? searchOrder.data.staffName : 'No Staff' }}
                         </template>
                       </Column>
-                      <Column
-                        :exportable="false"
-                        style="min-width: 8rem"
-                        header="More Actions"
-                      >
+                      <Column :exportable="false" style="min-width: 8rem" header="Actions">
                         <template #body="searchOrder">
-                          <Button
-                            v-if="
-                              searchOrder.data.order_status == 'Completed' ||
-                              searchOrder.data.order_status == 'Preparing'
-                            "
-                            class="p-button-rounded p-button-warning"
-                            @click="refunds(searchOrder)"
-                          >
+                          <Button icon="pi pi-print" class="p-button-rounded p-button-warning"
+                            @click="print(searchOrder)" />
+                          <Button icon="pi pi-folder" class="p-button-rounded p-button-success"
+                            @click="selectOrder(searchOrder)" />
+                        </template>
+                      </Column>
+                      <Column :exportable="false" style="min-width: 8rem" header="More Actions">
+                        <template #body="searchOrder">
+                          <Button v-if="
+                            searchOrder.data.order_status == 'Completed' ||
+                            searchOrder.data.order_status == 'Preparing'
+                          " class="p-button-rounded p-button-warning" @click="refunds(searchOrder)">
                             Refund
                           </Button>
-                          <Button
-                            v-if="
-                              searchOrder.data.order_status == 'In Cart' ||
-                              searchOrder.data.order_status == 'Pending'
-                            "
-                            class="p-button-rounded p-button-danger"
-                            @click="cancels(searchOrder)"
-                          >
+                          <Button v-if="
+                            searchOrder.data.order_status == 'In Cart' ||
+                            searchOrder.data.order_status == 'Pending'
+                          " class="p-button-rounded p-button-danger" @click="cancels(searchOrder)">
                             Cancel
                           </Button>
                         </template>
                       </Column>
 
                       <template #paginatorstart>
-                        <Button
-                          type="button"
-                          icon="pi pi-refresh"
-                          class="p-button-text"
-                        />
+                        <Button type="button" icon="pi pi-refresh" class="p-button-text" />
                       </template>
                       <template #paginatorend>
-                        <Button
-                          type="button"
-                          icon="pi pi-cloud"
-                          class="p-button-text"
-                        />
+                        <Button type="button" icon="pi pi-cloud" class="p-button-text" />
                       </template>
                     </DataTable>
                   </div>
@@ -216,40 +160,18 @@
       </div>
     </rs-modal>
     <rs-modal title="Filter" v-model="filterModal" position="middle" size="md">
-      <FormKit
-        v-model="outlet_id"
-        type="radio"
-        label="Outlet"
-        :options="this.outlet"
-      />
+      <FormKit v-model="outlet_id" type="radio" label="Outlet" :options="this.outlet" />
 
-      <FormKit
-        v-model="order_status"
-        type="radio"
-        label="Order Status"
-        :options="['Cancelled', 'Completed', '	Pending', '	In Cart', 'Preparing']"
-      />
-      <FormKit
-        v-model="order_from"
-        type="radio"
-        label="Order From"
-        :options="['POS', 'Table']"
-      />
+      <FormKit v-model="order_status" type="radio" label="Order Status"
+        :options="['Cancelled', 'Completed', '	Pending', '	In Cart', 'Preparing']" />
+      <FormKit v-model="order_from" type="radio" label="Order From" :options="['POS', 'Table']" />
       <FormKit type="date" v-model="start_date" label="From Date" />
       <FormKit type="date" v-model="end_date" label="To Date" />
 
-      <rs-button
-        style="float: right"
-        variant="primary-outline"
-        @click="filters()"
-      >
+      <rs-button style="float: right" variant="primary-outline" @click="filters()">
         Clear
       </rs-button>
-      <rs-button
-        style="float: right"
-        class="mx-1 bg-heandshe hover:bg-heandshe"
-        @click="filters()"
-      >
+      <rs-button style="float: right" class="mx-1 bg-heandshe hover:bg-heandshe" @click="filters()">
         All Filter
       </rs-button>
     </rs-modal>
@@ -290,22 +212,10 @@
       </div>
       <!--  {{this.receiptData}} -->
       <div>
-        <vue3-html2pdf
-          :show-layout="false"
-          :float-layout="true"
-          :enable-download="true"
-          :preview-modal="false"
-          :paginate-elements-by-height="1400"
-          :filename="this.receiptData.data.receipt_no"
-          :pdf-quality="2"
-          :manual-pagination="false"
-          pdf-format="a4"
-          pdf-orientation="portrait"
-          pdf-content-width="800px"
-          @hasStartedGeneration="hasStartedGeneration()"
-          @hasGenerated="hasGenerated($event)"
-          ref="html2Pdf"
-        >
+        <vue3-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="false"
+          :paginate-elements-by-height="1400" :filename="this.receiptData.data.receipt_no" :pdf-quality="2"
+          :manual-pagination="false" pdf-format="a4" pdf-orientation="portrait" pdf-content-width="800px"
+          @hasStartedGeneration="hasStartedGeneration()" @hasGenerated="hasGenerated($event)" ref="html2Pdf">
           <template v-slot:pdf-content>
             <div class="text-center mt-10">
               <h5><strong> Receipt </strong></h5>
@@ -331,14 +241,11 @@
 
               <br />
               <label><strong>Order Details</strong></label>
-              <div
-                v-for="(input, k) in this.receiptData.data.order_detail"
-                :key="k"
-              >
+              <div v-for="(input, k) in this.receiptData.data.order_detail" :key="k">
                 <p>
                   {{ input.menu_name }} x {{ input.menu_quantity }} - RM
                   {{ formatPrice(input.menu_price) }}
-                  
+
                 </p>
               </div>
               <br />
@@ -347,23 +254,15 @@
         </vue3-html2pdf>
       </div>
       <div>
-        <rs-button
-          class="bg-heandshe hover:bg-heandshe w-full"
-          @click="generateReport()"
-          >Print PDF</rs-button
-        >
+        <rs-button class="bg-heandshe hover:bg-heandshe w-full" @click="generateReport()">Print PDF</rs-button>
       </div>
     </rs-modal>
     <!-- REFUND -->
     <rs-modal title="Refund" v-model="refunded" position="middle" size="md">
       Refund
       <br />
-      <FormKit
-        v-model="refundsValue"
-        type="checkbox"
-        :options="this.refundData"
-      />
-      
+      <FormKit v-model="refundsValue" type="checkbox" :options="this.refundData" />
+
       <rs-button @click="Refund()">Save</rs-button>
       <br />
     </rs-modal>
@@ -371,11 +270,7 @@
     <rs-modal title="Cancel" v-model="canceled" position="middle" size="md">
       Cancel
       <br />
-      <FormKit
-        v-model="cancelsValue"
-        type="checkbox"
-        :options="this.cancelData"
-      />
+      <FormKit v-model="cancelsValue" type="checkbox" :options="this.cancelData" />
       <rs-button @click="Cancel()">Save</rs-button>
     </rs-modal>
   </rs-layout>
@@ -419,24 +314,27 @@ export default {
         if (start_date.value != "" && end_date.value != "") {
           return (
             formatDate(start_date.value) < orders.orderDatetime &&
-            formatDate(end_date.value) > orders.orderDatetime 
+            formatDate(end_date.value) > orders.orderDatetime
           );
         } else if (search.value == "") {
           return (
             orders.outlet_id.toString().indexOf(outlet_id.value.toString()) !=
-              -1 &&
+            -1 &&
             orders.order_status
               .toString()
               .indexOf(order_status.value.toString()) != -1 &&
             orders.order_from.toString().indexOf(order_from.value.toString()) !=
-              -1 &&
+            -1 &&
             orders.order_customer
               .toLowerCase()
               .indexOf(search.value.toLowerCase()) != -1
           );
         } else {
           return (
-            orders.order_no.toString().indexOf(search.value.toString()) != -1
+            orders.order_no.toLowerCase().indexOf(search.value.toLowerCase()) != -1 ||
+            orders.order_customer
+              .toLowerCase()
+              .indexOf(search.value.toLowerCase()) != -1
           );
         }
       });
@@ -691,6 +589,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
+            console.log(response.data.data.Order_det);
             for (let i = 0; i < response.data.data.Order_det.length; i++) {
               if (response.data.data.Order_det[i].order_status == 1) {
                 this.status = "Completed";
