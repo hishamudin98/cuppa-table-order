@@ -5,6 +5,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import state from "@/store";
+// import SocketioService from './services/socketio.service.js';
 
 export default {
   setup() {
@@ -20,9 +21,14 @@ export default {
       state.dispatch("toggleDarkMode");
     });
 
+   
+
     return {
       Name: name,
     };
   },
+  // created() {
+  //   SocketioService.setupSocketConnection();
+  // }
 };
 </script>
