@@ -217,7 +217,7 @@ export default {
     },
     async print(data) {
       this.value =
-        process.env.APP_URL +
+        process.env.VUE_APP_MAIN_URL + 
         this.$route.params.outletid +
         "/" +
         data.data.outletTID;
