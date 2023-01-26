@@ -34,11 +34,12 @@
                       </div>
                     </div>
                   </template>
-                  <Column field="name" header="Menu Name">
+                  <Column field="name" header="Name">
                     <template #body="searchMenu">
                       <div class="flex flex-row gap-y-px">
                         <div class="pr-10">
-                          <img :src="searchMenu.data.images[0].image1" class="product-image" />
+                          <img v-if="searchMenu.data.images[0].image1" :src="searchMenu.data.images[0].image1" class="product-image" />
+                          <img v-else :src="'https://s3.ap-southeast-1.amazonaws.com/cdn.toyyibfnb.com/images/food.png'" class="product-image" />
                         </div>
 
                         <div class="mt-5">
@@ -47,16 +48,9 @@
                       </div>
                     </template>
                   </Column>
-                  <Column header="Status">
-                    <template #body="searchMenu">
 
-                      <rs-badges variant="success" v-if="searchMenu.data.status === '1'" @click="clickBtnStatus()">
-                        Active</rs-badges>
+                  <Column field="code" header="Code" :sortable="true"></Column>
 
-                      <rs-badges variant="danger" v-if="searchMenu.data.status === '0'" @click="clickBtnStatus()">
-                        Inactive</rs-badges>
-                    </template>
-                  </Column>
                   <Column header="Category">
                     <template #body="searchMenu">
                       {{ searchMenu.data.category[0].category_name }}
@@ -67,7 +61,26 @@
                       {{ formatPrice(searchMenu.data.price) }}
                     </template>
                   </Column>
-                  <Column field="code" header="Menu Code" :sortable="true"></Column>
+
+                  <Column field="station" header="Station">
+                    <template #body="searchMenu">
+                      <p v-if="searchMenu.data.station == '1'"> Kitchen </p>
+                      <p v-if="searchMenu.data.station == '2'"> Beverages </p>
+                      <p v-if="searchMenu.data.station == '3'"> Pastry </p>
+                    </template>
+                  </Column>
+
+
+                  <Column header="Status">
+                    <template #body="searchMenu">
+
+                      <rs-badges variant="success" v-if="searchMenu.data.status === '1'" @click="clickBtnStatus()">
+                        Active</rs-badges>
+
+                      <rs-badges variant="danger" v-if="searchMenu.data.status === '0'" @click="clickBtnStatus()">
+                        Inactive</rs-badges>
+                    </template>
+                  </Column>
                   <!-- <Column field="code" header="Raw Materials">
                     <template #body="searchMenu">
                       <router-link :to="{
@@ -113,13 +126,14 @@
       </div>
     </div>
     <rs-modal title="Add Menu" v-model="addMenuModal" position="middle" size="md">
-      <FormKit type="text" label="Menu Name" v-model="menu_name" />
-      <FormKit type="file" label="Images" v-model="menu_images" accept=".jpg, .png, .jpeg" />
-      <FormKit type="number" label="Menu Price ( RM )" v-model="menu_price" />
-      <FormKit type="select" label="Menu Stations" v-model="menu_station" placeholder="Choose Stations" :options="[
+      <FormKit type="text" label="Name" v-model="menu_name" />
+      <!-- <FormKit type="file" label="Images" v-model="menu_images" accept=".jpg, .png, .jpeg" validation="required" /> -->
+      <!-- <img :src="imageTarget" class="w-3/12 h-3/12"> -->
+      <FormKit type="number" label="Price ( RM )" v-model="menu_price" />
+      <FormKit type="select" label="Station" v-model="menu_station" placeholder="Choose Stations" :options="[
         { label: 'Kitchen', value: 1 },
         { label: 'Beverages', value: 2 },
-        { label: 'Bakery', value: 3 },
+        { label: 'Pastry', value: 3 },
       ]" />
       <!-- <FormKit
         type="select"
@@ -128,11 +142,11 @@
         v-model="category"
         :options="this.categories"
       /> -->
-      <label><strong>Menu Category</strong></label>
+      <label>Category</label>
       <!-- <vue-taggable-select v-model="category1" :options="this.categories" placeholder="Select Category">
       </vue-taggable-select> -->
-      <Multiselect v-model="menu_category" mode="tags" :close-on-select="false" :searchable="true" :create-option="true"
-        :options="this.categories" />
+      <Multiselect v-model="menu_category" mode="tags" placeholder="Choose Category" :close-on-select="false"
+        :searchable="true" :create-option="true" :options="this.categories" />
 
 
 
@@ -316,6 +330,7 @@ export default {
       menuDrop: false,
       file: "",
       fruit: null,
+      imageTarget: "",
     };
   },
   async created() {
@@ -442,6 +457,7 @@ export default {
       await axios(config)
         .then(
           function (response) {
+
             for (let i = 0; i < response.data.data.length; i++) {
               /* VARIATION */
               var variant = JSON.parse(response.data.data[i].menu_variant);
@@ -480,6 +496,7 @@ export default {
                 variants: this.variansi,
                 images: images[0].image1,
                 status: response.data.data[i].menu_status,
+                station: response.data.data[i].menu_station
               });
               this.variansi = [];
             }
@@ -536,7 +553,14 @@ export default {
           this.addVariantModal = false;
         }
       } else {
-        this.insert();
+
+        if (this.menu_name == "" || this.menu_price == "" || this.menu_station == "" || this.menu_category == "") {
+
+          alert("Please fill all the fields");
+          return;
+        } else {
+          this.insert();
+        }
       }
     },
     async editMenu(menu) {
@@ -550,15 +574,34 @@ export default {
       }
     },
 
+    async createBase64Img() {
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log('e', e);
+        // target = e.target.result;
+        this.imageTarget = e.target.result;
+      };
+
+      reader.readAsDataURL(this.menu_images[0].file);
+
+
+    },
+
     async insert() {
+
       var axios = require("axios");
       var data = null;
+      console.log("this file", this.file);
 
-      if (this.menu_images != "") {
-        this.file = this.menu_images[0].file;
-      } else {
-        this.file = null;
-      }
+      // const reader = new FileReader();
+      // reader.onload = async (e) => {
+      //   this.imageTarget = e.target.result;
+      //   this.file = e.target.result;
+
+      // };
+      // reader.readAsDataURL(this.menu_images[0].file);
+
       if (this.value == false) {
         data = JSON.stringify({
           menu_name: this.menu_name,
@@ -600,6 +643,7 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+
     },
     async edit(menuedit) {
       var axios = require("axios");
