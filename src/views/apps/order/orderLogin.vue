@@ -27,8 +27,8 @@
         <div v-if="LoginType == false">
           <!-- PILIH LOGIN TYPE -->
           <div class="h-full p-4">
-            <rs-button v-if="branchIsOpen == true"
-              class="w-full bg-heandshe hover:bg-heandshe" @click="CustomerDetails()">
+            <rs-button v-if="branchIsOpen == true" class="w-full bg-heandshe hover:bg-heandshe"
+              @click="CustomerDetails()">
               Guest
             </rs-button>
 
@@ -76,11 +76,11 @@
           <!-- LOGIN CUSTOMER -->
           <form-kit type="text" placeholder="Enter your name" validation="required" :validation-messages="{
             required: 'Please enter a name',
-          }" v-model="name" />
-          <FormKit type="tel" label="Phone number" placeholder="01xxxxxxxx" validation="matches:/^[0-9]{10}$/"
+          }" v-model="name" validation-visibility="live"/>
+          <FormKit type="tel" label="Phone number" placeholder="01xxxxxxxx" validation="[['required'], ['matches', /^[0-9]{10,11}$/]]"
             :validation-messages="{
               matches: 'Phone number must be in the format 01xxxxxxxx',
-            }" @keypress="onlyNumber" validation-visibility="dirty" v-model="phone" />
+            }" @keypress="onlyNumber" validation-visibility="live" v-model="phone" />
           <rs-button :disabled="isDisabled" class="w-full bg-heandshe hover:bg-heandshe"
             @click="orderType()">Proceed</rs-button>
           <hr class="my-3" />
@@ -204,8 +204,10 @@
         </div>
 
         <div v-if="deliveryTime == true">
-          <FormKit type="time" label="Delivery time" v-model="timer3" value="23:15" />
-          <FormKit type="date" label="Delivery Date" validation="required" v-model="datepicker" />
+          <FormKit type="time" label="Delivery timeeee" v-model="this.timer3" min="{{ this.timer3 }}"
+            value="{{  this.timer3 }}" />
+          <FormKit type="date" label="Delivery Date" validation="required" v-model="this.datepicker"
+            value="{{this.datepicker}}" />
           <FormKit type="select" label="Location Area" v-model="location"
             :options="['Kampus ', 'Lotus Bandar Puteri Bangi', 'PR1MA Bandar Bukit Mahkota', 'Apartment Putra', 'Apartment Seri Melati']" />
 
@@ -218,13 +220,6 @@
       </div>
     </div>
   </div>
-
-  <div v-if="!this.branch_Name">
-    <h1>
-      kedai tutup
-    </h1>
-  </div>
-
 
 </template>
 <script>
@@ -346,14 +341,27 @@ export default {
 
   mounted() {
     const current = new Date();
+
+    let month = current.getMonth() + 1 < 10 ? "0" + (current.getMonth() + 1) : current.getMonth() + 1;
+    let days = current.getDate() < 10 ? "0" + current.getDate() : current.getDate();
+    let year = current.getFullYear();
+
     const date = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
-    const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+
+    let hour = current.getHours() < 10 ? "0" + current.getHours() : current.getHours();
+    let minute = current.getMinutes() < 10 ? "0" + current.getMinutes() : current.getMinutes();
+    let second = current.getSeconds() < 10 ? "0" + current.getSeconds() : current.getSeconds();
+    const time = hour + ":" + minute + ":" + second;
     const day = current.getDay();
     const dateTime = date + ' ' + time;
     this.timestamp = dateTime;
     this.time = time;
     this.day = day;
 
+    this.timer3 = time;
+    this.datepicker = year + '-' + month + '-' + days;
+    console.log('time', this.timer3);
+    console.log('datepicker', this.datepicker);
 
 
 
@@ -365,7 +373,6 @@ export default {
       localStorage.removeItem("orderID");
     }
 
-    console.log('this.$route.params.table', this.$route.params.table);
     if (this.$route.params.table == undefined) {
       this.table = 1;
     } else if (this.$route.params.table != "") {
@@ -374,7 +381,6 @@ export default {
       this.table = 0;
     }
 
-    console.log('this.table', this.table);
 
     window.onbeforeunload = function () {
       localStorage.clear();
@@ -629,20 +635,18 @@ export default {
             this.branch_close = response.data.data[0].outlet_closingHours;
             this.branch_holiday = response.data.data[0].outlet_holiday;
 
-            console.log(this.branch_open);
-            console.log(this.time);
-
             let open = this.branch_open <= this.time;
             let close = this.branch_close >= this.time;
             if (open == true && close == true && this.branch_holiday.includes(this.day) == false) {
-              console.log('open', open);
-              console.log('close', close);
               this.branchIsOpen = true;
             } else if (open == false && close == false || this.branch_holiday.includes(this.day) == true) {
               this.branchIsOpen = false;
             }
+            // this.branchIsOpen = true;
 
-            console.log('this.branchIsOpen', this.branchIsOpen);
+            console.log(process.env.VUE_APP_FNB_URL);
+            // console.log(this.branchIsOpen);
+
 
           }.bind(this)
         )
