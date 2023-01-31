@@ -64,7 +64,11 @@
         </div>
         <div class="flex justify-between items-center" v-if=" this.address != null ">
           <div class="font-semibold">Delivery Fee</div>
-          <div class="font-semibold">RM 4.00</div>
+          <div class="font-semibold">RM {{this.chargeLocation.toFixed(2)}}</div>
+        </div>
+        <div class="flex justify-between items-center" >
+          <div class="font-semibold">Admin Fee</div>
+          <div class="font-semibold">RM 1.00</div>
         </div>
         <!-- <div class="flex justify-between items-center">
             <div class="font-semibold">Service Charges (10%)</div>
@@ -236,6 +240,7 @@ export default {
       address: "",
       delivery_date: "",
       pickup_time: "",
+      chargeLocation: 0,
     };
   },
   async created() {
@@ -323,6 +328,7 @@ export default {
                 menu_variant: this.orderData[i].menu_variant,
               });
             }
+            this.chargeLocation = response.data.data[0].chargeLocation
             this.orderid = response.data.data[0].order_id;
             this.orderNo = response.data.data[0].order_no;
             this.orderAmount = response.data.data[0].ordertotal_amount;

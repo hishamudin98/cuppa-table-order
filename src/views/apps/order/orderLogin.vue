@@ -268,7 +268,7 @@ export default {
         /* .get(`http://localhost:3000/getLocation`) */
         .then((response) => {
           if (response.status == 200)
-            getLocation.value = JSON.parse(JSON.stringify(response.data.data));
+            getLocation.value = response.data.data;
            
            for(let i = 0; i < getLocation.value.length; i++)
            {
