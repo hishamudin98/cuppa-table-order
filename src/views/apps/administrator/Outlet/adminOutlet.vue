@@ -65,6 +65,7 @@
                         <router-link :to="{ name: 'admin-station' }">
                           <Button icon="pi pi-bars" class="p-button-rounded p-button-success" />
                         </router-link>
+                        
 
                         <!-- <Button
                             icon="pi pi-trash"
@@ -95,13 +96,14 @@
       <FormKit label="Outlet Name" type="text" v-model="outlet_name" />
       <FormKit label="Phone No." type="number" v-model="outlet_phone" />
       <FormKit label="Email" type="email" v-model="outlet_email" />
-      <FormKit label="Postcode" type="number" v-model="outlet_postcode" />
+      <!-- <FormKit label="Postcode" type="number" v-model="outlet_postcode" /> -->
       <FormKit label="Address" type="textarea" v-model="outlet_address" />
+      
       <FormKit type="radio" label="Outlet Type" v-model="outlet_type" :options="[
         { label: 'HQ', value: 2 },
         { label: 'Branch', value: 3 },
       ]" />
-      <FormKit type="file" label="Images" v-model="outlet_images" accept=".jpg, .png, .jpeg" />
+      <!-- <FormKit type="file" label="Images" v-model="outlet_images" accept=".jpg, .png, .jpeg" /> -->
       <hr />
       <br />
       <label><strong>Organization's Information</strong></label>
@@ -110,14 +112,13 @@
       <!-- <FormKit label="Phone No." type="number" />
       <FormKit label="Email" type="email" />
       <FormKit label="Address" type="textarea" /> -->
-      <hr />
       <br />
-      <label><strong>Social Media's URL</strong></label>
+      <!-- <label><strong>Social Media's URL</strong></label>
       <br />
       <FormKit type="url" label="Official Website" placeholder="https://www.example.com..." />
       <FormKit type="url" label="Facebook" placeholder="https://www.example.com..." validation="url" />
       <FormKit type="url" label="Instagram" placeholder="https://www.example.com..." />
-      <FormKit type="url" label="Twitter" placeholder="https://www.example.com..." />
+      <FormKit type="url" label="Twitter" placeholder="https://www.example.com..." /> -->
       <rs-button style="float: right" @click="insertOutlet()"> Save </rs-button>
     </rs-modal>
     <!-- EDIT -->
