@@ -290,7 +290,7 @@
                 block
                 leading-normal
               "
-              @click="toggleTabs(1)"
+              @click="sentBank()"
               :class="{
                 'text-primary bg-white': paymentMethod !== 1,
                 'text-white bg-heandshe': paymentMethod === 1,
@@ -1457,7 +1457,7 @@ export default {
 
     /* FOR BANK PAYMENT */
     async sentBank() {
-      if (this.bankcode != "") {
+      /* if (this.bankcode != "") { */
         this.loading = true;
         this.total = this.totalPay.toFixed(2);
         this.roundNumber =
@@ -1503,9 +1503,9 @@ export default {
             this.loading = false;
             console.log(error);
           });
-      } else {
+      /* } else {
         alert("Please Select Bank Before Payment");
-      }
+      } */
     },
 
     async sentPOS() {
