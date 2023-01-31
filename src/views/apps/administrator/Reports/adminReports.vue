@@ -1,31 +1,9 @@
 <template>
   <rs-layout>
-    <div style="height: 10vh" class="bg-heandshe after:content-[''] p-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-x-2">
-          <div class="welcome text-lg font-semibold text-white">
-            Report Transaction
-          </div>
-        </div>
-
-        <div class="flex gap-x-2 items-center">
-          <div class="text-white">{{ this.staffName }}</div>
-          <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/cuppa.png"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="w-full flex flex-col">
       <div style="display: flex; flex-direction: row">
         <!-- UNTUK SEBELAH2 -->
-        <div>
-          <arbitrary />
-        </div>
+        
         <div class="w-full h-1/4 flex flex-col">
           <div class="w-full flex flex-row mb-0">
             <div class="inline-block w-1/2 pr-10">
@@ -52,30 +30,7 @@
             </div>
           </div>
           <div class="w-full" style="flex-direction: column">
-            <!-- UNTUK ATAS BAWAH -->
-            <!-- <div style="display: flex; flex-direction: row; padding-top: 10px">
-              <div class="w-full h-1">
-                <FormKit
-                  v-model="search"
-                  id="search-sticky"
-                  placeholder="Search for a ..."
-                  type="search"
-                  :classes="{
-                    inner:
-                      'border-0 rounded-md shadow-md shadow-slate-200 dark:shadow-slate-900',
-                    outer: 'flex-1 mb-0',
-                    input: 'h-10',
-                  }"
-                />
-              </div>
-              <div class="w-1/12" style="padding-top: 10px">
-                <rs-button
-                  @click="filter()"
-                  class="bg-heandshe hover:bg-heandshe"
-                  >Filter</rs-button
-                >
-              </div>
-            </div> -->
+            
             <div class="">
               <rs-card style="margin-top: 10px">
                 <div>
@@ -245,7 +200,6 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
-import Menu from "@/views/apps/administrator/adminSidemenu.vue";
 /* import Calendar from "primevue/calendar"; */
 
 export default {
@@ -256,7 +210,6 @@ export default {
     DataTable,
     Column,
     Button,
-    arbitrary: Menu,
     /* Calendar, */
   },
   setup() {

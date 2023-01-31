@@ -69,23 +69,19 @@
             <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
               <div
                 class="product-title mt-4"
-                v-if="product.menu_variation[1] != null"
+                v-if="product.menu_variant[1] != null"
               >
                 <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.menu_name }} ({{
-                    product.menu_variation[0].name
-                  }}
-                  , {{ product.menu_variation[1].name }})
+                  >{{ product.menu_name }} ({{ product.menu_variant[0].name }} ,
+                  {{ product.menu_variant[1].name }})
                 </span>
               </div>
               <div
                 class="product-title mt-4"
-                v-else-if="product.menu_variation[0] != null"
+                v-else-if="product.menu_variant[0] != null"
               >
                 <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.menu_name }} ({{
-                    product.menu_variation[0].name
-                  }})
+                  >{{ product.menu_name }} ({{ product.menu_variant[0].name }})
                 </span>
               </div>
               <div class="product-title mt-4" v-else>
@@ -160,23 +156,19 @@
             <div class="product-content-wrapper flex-1 flex flex-col px-4 mb-4">
               <div
                 class="product-title mt-4"
-                v-if="product.menu_variation[1] != null"
+                v-if="product.menu_variant[1] != null"
               >
                 <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.menu_name }} ({{
-                    product.menu_variation[0].name
-                  }}
-                  , {{ product.menu_variation[1].name }})
+                  >{{ product.menu_name }} ({{ product.menu_variant[0].name }} ,
+                  {{ product.menu_variant[1].name }})
                 </span>
               </div>
               <div
                 class="product-title mt-4"
-                v-else-if="product.menu_variation[0] != null"
+                v-else-if="product.menu_variant[0] != null"
               >
                 <span class="block text-base font-semibold line-clamp-2"
-                  >{{ product.menu_name }} ({{
-                    product.menu_variation[0].name
-                  }})
+                  >{{ product.menu_name }} ({{ product.menu_variant[0].name }})
                 </span>
               </div>
               <div class="product-title mt-4" v-else>
@@ -232,7 +224,7 @@
       </div>
       <div class="subtotal flex justify-between my-2">
         <div class="font-semibold">Delivery Charges</div>
-        <div>RM 4.00</div>
+        <div>RM {{formatPrice(deliveryFees)}}</div>
       </div>
       <!--  <div class="discount flex justify-between my-2">
           <div class="font-semibold">Membership Discount (7%)</div>
@@ -256,10 +248,8 @@
         </div> -->
       <hr />
       <div class="total flex justify-between my-2 text-xl">
-        <div class="font-semibold">Total (Rounding) </div>
-        <div class="font-semibold">
-          RM {{ formatPrice(this.totalPay) }}
-        </div>
+        <div class="font-semibold">Total (Rounding)</div>
+        <div class="font-semibold">RM {{ formatPrice(this.totalPay) }}</div>
       </div>
     </rs-card>
 
@@ -450,8 +440,7 @@
                   >
                     <span v-if="loading"> Loading </span>
                     <span v-else
-                      >Pay Online RM
-                      {{ formatPrice(this.totalPay) }}</span
+                      >Pay Online RM {{ formatPrice(this.totalPay) }}</span
                     >
                   </rs-button>
                 </div>
@@ -939,6 +928,9 @@ export default {
     const paymentMethod = ref(0);
     const route = useRoute();
     const MenuID = route.params.id;
+    const deliveryFees = ref(0);
+    const getLocation = ref("");
+    const location = ref(localStorage.location)
 
     const orders = ref([]);
     const orders2 = ref([]);
@@ -1039,6 +1031,27 @@ export default {
       openModal.value = true;
     };
 
+    onMounted(() => {
+      axios
+        .get(`${process.env.VUE_APP_FNB_URL}/getLocation`)
+        /* .get(`http://localhost:3000/getLocation`) */
+        .then((response) => {
+          if (response.status == 200)
+            getLocation.value = JSON.parse(JSON.stringify(response.data.data));
+
+            console.log(location.value)
+
+          let j =  getLocation.value.filter((loc) => {
+            return (
+              loc.loc_name
+                .toLowerCase()
+                .indexOf(location.value.toLowerCase()) != -1 
+            );
+          });
+          deliveryFees.value = j[0].loc_price;
+        });
+    });
+
     return {
       items,
       bankcode,
@@ -1053,6 +1066,9 @@ export default {
       openModalConfirmation,
       infaqtype,
       organizationList,
+      deliveryFees,
+      getLocation,
+      location,
       toggleTabs,
       formatPrice,
       formatSold,
@@ -1147,6 +1163,7 @@ export default {
         });
       }
     }, */
+
     async SetBank(code) {
       this.bankcode = code;
     },
@@ -1193,7 +1210,7 @@ export default {
                   menu_name: this.orderData[i].menu_name,
                   menu_price: this.orderData[i].menu_price,
                   menu_quantity: this.orderData[i].menu_quantity,
-                  menu_variation: variants,
+                  menu_variant: variants,
                   menu_image: [images[0].image1],
                   orderType: this.orderData[i].orderType,
                   menu_id: this.orderData[i].menu_id,
@@ -1205,7 +1222,7 @@ export default {
                   menu_name: this.orderData[i].menu_name,
                   menu_price: this.orderData[i].menu_price,
                   menu_quantity: this.orderData[i].menu_quantity,
-                  menu_variation: variants,
+                  menu_variant: variants,
                   menu_image: [images[0].image1],
                   orderType: this.orderData[i].orderType,
                   menu_id: this.orderData[i].menu_id,
@@ -1215,11 +1232,10 @@ export default {
             }
             this.tableNo = this.orderData[0].tableNo;
             this.totalAmount = response.data.data.am0untOrd3r;
-            
-            this.sst = (this.totalAmount + 4 )* 0.06;
+            this.sst = (this.totalAmount + this.deliveryFees) * 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = (this.totalAmount + 4) + this.sst;
-            this.totalPay = Math.round(this.totalPay * 10)/10;
+            this.totalPay = this.totalAmount + this.deliveryFees + this.sst;
+            this.totalPay = Math.round(this.totalPay * 10) / 10;
             if (this.totalAmount >= 70) {
               this.outletDisc = this.totalAmount * 0.1;
               this.totalPay = this.totalPay - this.outletDisc;
@@ -1389,7 +1405,7 @@ export default {
           /* _____________________________________________________________________________ */
           /* KALO NILAI DIA TOLAK */
           /* KALO NILAI DIE JADI 0 DALAM ARRAY */
-          if (exist2.quantity == 0) {
+          if (exist2.menu_quantity == 0) {
             let index = this.orders2.findIndex(
               (item) =>
                 item.sku === modalData.sku &&
@@ -1499,7 +1515,7 @@ export default {
           tax: this.sst,
           billName: "Order For Table " + this.tableNo,
           billDesc: "Order For Table " + this.tableNo,
-          billAmount: parseInt(this.roundNumber) ,
+          billAmount: parseInt(this.roundNumber),
           billExternalReferenceNo: "Order For Table " + this.tableNo,
           billTo: localStorage.name,
           billPhone: localStorage.phone,
@@ -1610,7 +1626,7 @@ export default {
         tax: this.sst,
         billName: "Order For Table " + this.tableNo,
         billDesc: "Order For Table " + this.tableNo,
-        billAmount: parseInt(this.roundNumber) ,
+        billAmount: parseInt(this.roundNumber),
         billExternalReferenceNo: "Order For Table " + this.tableNo,
         billTo: this.name,
         billPhone: "0174842981",

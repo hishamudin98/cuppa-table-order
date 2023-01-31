@@ -48,7 +48,7 @@
       <div v-for="(product, index) in orders" :key="index">
         <div class="order-wrapper flex flex-col gap-2">
           <div class="flex justify-between items-center">
-            <div>{{ product.menu_name }} x {{ product.menu_quantity }}</div>
+            <div>{{ product.menu_name }} ({{product.menu_variant[0].name}}) x {{ product.menu_quantity }}</div>
             <div class="font-semibold">
               RM {{ (product.menu_quantity * product.menu_price).toFixed(2) }}
             </div>
@@ -311,6 +311,7 @@ export default {
         .then(
           function (response) {
             this.orderData = JSON.parse(response.data.data[0].order_detail);
+            console.log(this.orderData)
             for (let i = 0; i < this.orderData.length; i++) {
               this.orders.push({
                 sku: this.orderData[i].sku,
@@ -319,6 +320,7 @@ export default {
                 menu_quantity: this.orderData[i].menu_quantity,
                 menu_id: this.orderData[i].menu_id,
                 tableNo: this.orderData[i].tableNo,
+                menu_variant: this.orderData[i].menu_variant,
               });
             }
             this.orderid = response.data.data[0].order_id;

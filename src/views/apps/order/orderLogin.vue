@@ -209,7 +209,7 @@
           <FormKit type="date" label="Delivery Date" validation="required" v-model="this.datepicker"
             value="{{this.datepicker}}" />
           <FormKit type="select" label="Location Area" v-model="location"
-            :options="['Kampus ', 'Lotus Bandar Puteri Bangi', 'PR1MA Bandar Bukit Mahkota', 'Apartment Putra', 'Apartment Seri Melati']" />
+            :options="Location" />
 
           <rs-button class="w-full bg-heandshe" @click="addDelivery()">Proceed</rs-button>
           <hr class="my-3" />
@@ -248,6 +248,8 @@ export default {
   },
   setup(props) {
     const changetable = ref(false);
+    const getLocation = ref("");
+    const Location = ref([]);
 
     const route = useRoute();
     const table = ref(route.params.table);
@@ -259,6 +261,21 @@ export default {
       phone: "",
     });
     const customerProceed = ref(false);
+
+    onMounted(() => {
+      axios
+        .get(`${process.env.VUE_APP_FNB_URL}/getLocation`)
+        /* .get(`http://localhost:3000/getLocation`) */
+        .then((response) => {
+          if (response.status == 200)
+            getLocation.value = JSON.parse(JSON.stringify(response.data.data));
+           
+           for(let i = 0; i < getLocation.value.length; i++)
+           {
+            Location.value.push(getLocation.value[i].loc_name)
+           }
+        });
+    });
 
     /* const customerAdvanced = (dataUser) => {
       if (dataUser != "") {
@@ -283,6 +300,8 @@ export default {
       customerData,
       customerProceed,
       branch,
+      getLocation,
+      Location,
       modules: [Navigation, Autoplay, Scrollbar, A11y],
     };
   },
@@ -359,6 +378,8 @@ export default {
     this.day = day;
 
     this.timer3 = time;
+    this.timer2 = time;
+    this.timer = time;
     this.datepicker = year + '-' + month + '-' + days;
     console.log('time', this.timer3);
     console.log('datepicker', this.datepicker);
