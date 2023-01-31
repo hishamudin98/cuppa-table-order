@@ -37,7 +37,7 @@
       Order failed
     </p>
     <p class="flex justify-center items-center font-semibold text-2xl">
-      RM {{ this.orderAmount }}
+      RM {{ this.transactionAmountNett }}
     </p>
   </div>
   <rs-card class="py-3 px-4">
@@ -327,6 +327,8 @@ export default {
             this.orderNo = response.data.data[0].order_no;
             this.orderAmount = response.data.data[0].ordertotal_amount;
             this.orderAmount = this.orderAmount.toFixed(2);
+            this.transactionAmountNett = response.data.data[0].transactionAmountNett;
+            this.transactionAmountNett = this.transactionAmountNett.toFixed(2);
             this.tableno = response.data.data[0].tableNNo;
             this.tax = response.data.data[0].tax;
             this.discount = response.data.data[0].discount;

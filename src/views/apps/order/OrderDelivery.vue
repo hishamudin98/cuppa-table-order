@@ -1,6 +1,4 @@
 <template>
-  
-
   <!-- v-elseOrder Menu Page -->
   <div class="order-menu-page">
     <div style="height: 43vh" class="bg-heandshe after:content-[''] p-4">
@@ -23,11 +21,7 @@
             <div class="text-white" v-if="guestMode == true">Guest</div> -->
           <div class="text-white">Cuppa 365 Coffee</div>
           <div class="bg-black h-10 w-10 p-1 rounded-full">
-            <img
-              class="flex-1"
-              src="@/assets/images/logo/cuppa.png"
-              alt=""
-            />
+            <img class="flex-1" src="@/assets/images/logo/cuppa.png" alt="" />
           </div>
         </div>
       </div>
@@ -84,11 +78,36 @@
         <perfect-scrollbar style="width: 100%">
           <div class="category-wrapper flex gap-x-4">
             <button
-              class="flex items-center rounded-lg py-2 px-3 bg-white dark:bg-slate-800 dark:text-gray-300 hover:bg-slate-200 font-semibold text-sm shadow-md shadow-slate-200 dark:shadow-slate-900 whitespace-nowrap"
+              class="
+                flex
+                items-center
+                rounded-lg
+                py-2
+                px-3
+                bg-white
+                dark:bg-slate-800 dark:text-gray-300
+                hover:bg-slate-200
+                font-semibold
+                text-sm
+                shadow-md shadow-slate-200
+                dark:shadow-slate-900
+                whitespace-nowrap
+              "
               @click="_filterByCategory(0)"
             >
               <div
-                class="flex items-center bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 w-10 h-10 rounded-lg mr-2"
+                class="
+                  flex
+                  items-center
+                  bg-slate-100
+                  dark:bg-slate-700
+                  border border-slate-200
+                  dark:border-slate-700
+                  w-10
+                  h-10
+                  rounded-lg
+                  mr-2
+                "
               >
                 <img
                   class="h-full w-full object-scale-down rounded-full"
@@ -98,13 +117,38 @@
               <span>All Menu</span>
             </button>
             <button
-              class="flex items-center rounded-lg py-2 px-3 bg-white dark:bg-slate-800 dark:text-gray-300 hover:bg-slate-200 font-semibold text-sm shadow-md shadow-slate-200 dark:shadow-slate-900 whitespace-nowrap"
+              class="
+                flex
+                items-center
+                rounded-lg
+                py-2
+                px-3
+                bg-white
+                dark:bg-slate-800 dark:text-gray-300
+                hover:bg-slate-200
+                font-semibold
+                text-sm
+                shadow-md shadow-slate-200
+                dark:shadow-slate-900
+                whitespace-nowrap
+              "
               v-for="(category, index) in categories"
               :key="index"
               @click="_filterByCategory(category.id)"
             >
               <div
-                class="flex items-center bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 w-10 h-10 rounded-lg mr-2"
+                class="
+                  flex
+                  items-center
+                  bg-slate-100
+                  dark:bg-slate-700
+                  border border-slate-200
+                  dark:border-slate-700
+                  w-10
+                  h-10
+                  rounded-lg
+                  mr-2
+                "
               >
                 <img
                   class="h-full w-full object-scale-down rounded-full"
@@ -180,7 +224,18 @@
 
                 <span
                   v-if="product.discount && product.discount != 0"
-                  class="product-discount text-sm bg-heandshe text-white absolute top-3 -right-2 px-2 py-1 rounded-md"
+                  class="
+                    product-discount
+                    text-sm
+                    bg-heandshe
+                    text-white
+                    absolute
+                    top-3
+                    -right-2
+                    px-2
+                    py-1
+                    rounded-md
+                  "
                 >
                   {{ product.discount }}% off
                 </span>
@@ -273,10 +328,21 @@
         <div class="rounded-t-3xl" style="min-height: 90vh">
           <perfect-scrollbar class="mb-4" style="height: 90vh">
             <button
-              class="flex justify-center items-center p-1 bg-heandshe absolute top-2 right-2 rounded-full z-50"
+              class="
+                flex
+                justify-center
+                items-center
+                p-1
+                bg-heandshe
+                absolute
+                top-2
+                right-2
+                rounded-full
+                z-50
+              "
             >
               <vue-feather
-                @click="( openModal = false ) & (isdisabled = false)"
+                @click="(openModal = false) & (isdisabled = false)"
                 class="text-primary-100"
                 type="x"
               ></vue-feather>
@@ -325,7 +391,16 @@
               <hr class="my-4" />
               <div class="modal-item-content">
                 <div
-                  class="membership flex gap-3 rounded-md shadow-md w-full p-3 mb-4"
+                  class="
+                    membership
+                    flex
+                    gap-3
+                    rounded-md
+                    shadow-md
+                    w-full
+                    p-3
+                    mb-4
+                  "
                 >
                   <form-kit
                     type="text"
@@ -420,7 +495,13 @@
                               :value="val"
                             />
                             <label
-                              class="text-gray-700 dark:text-gray-200 text-sm formkit-disabled:text-gray-300 dark:formkit-disabled:text-gray-700"
+                              class="
+                                text-gray-700
+                                dark:text-gray-200
+                                text-sm
+                                formkit-disabled:text-gray-300
+                                dark:formkit-disabled:text-gray-700
+                              "
                               :for="menus.sku + '-check-' + index"
                             >
                               {{ val }}
@@ -429,7 +510,15 @@
                           </div>
                           <div class="flex items-center gap-x-2">
                             <button
-                              class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                              class="
+                                flex
+                                items-center
+                                justify-center
+                                bg-heandshe
+                                text-primary-50
+                                p-1
+                                rounded-lg
+                              "
                             >
                               <vue-feather
                                 size="1rem"
@@ -443,7 +532,15 @@
                                 :value="quantity"
                             /></span>
                             <button
-                              class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                              class="
+                                flex
+                                items-center
+                                justify-center
+                                bg-heandshe
+                                text-primary-50
+                                p-1
+                                rounded-lg
+                              "
                               @click="increment()"
                             >
                               <vue-feather
@@ -475,7 +572,16 @@
             </div>
             <div class="modal-item-type mb-6 px-2"></div>
             <div
-              class="modal-item-action flex w-full justify-between items-center overflow-auto px-2 gap-x-2"
+              class="
+                modal-item-action
+                flex
+                w-full
+                justify-between
+                items-center
+                overflow-auto
+                px-2
+                gap-x-2
+              "
             >
               <button
                 class="bg-heandshe text-white w-full py-2 px-4 rounded-full"
@@ -501,7 +607,15 @@
               </button>
               <div class="flex gap-x-2">
                 <button
-                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-heandshe
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
                   @click="decrement()"
                 >
                   <!-- @click="quantity > 0 ? quantity-- : (quantity = 0)" -->
@@ -517,7 +631,15 @@
                     }"
                   /> -->
                 <button
-                  class="flex items-center justify-center bg-heandshe text-primary-50 p-1 rounded-lg"
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-heandshe
+                    text-primary-50
+                    p-1
+                    rounded-lg
+                  "
                   @click="increment()"
                 >
                   <!-- @click="quantity = quantity + 1" -->
@@ -535,12 +657,33 @@
       class="button-to-cart p-2 flex w-full z-50 rounded-full"
     >
       <button
-        class="bg-heandshe py-4 px-5 rounded-l-full text-white whitespace-nowrap shadow-md shadow-heandshe"
+        class="
+          bg-heandshe
+          py-4
+          px-5
+          rounded-l-full
+          text-white
+          whitespace-nowrap
+          shadow-md shadow-heandshe
+        "
       >
         RM {{ formatPrice(this.totalPrice) }}
       </button>
       <rs-button
-        class="flex justify-between items-center w-full bg-heandshe py-4 px-5 rounded-r-full text-white whitespace-nowrap shadow-md shadow-heandshe hover:bg-heandshe"
+        class="
+          flex
+          justify-between
+          items-center
+          w-full
+          bg-heandshe
+          py-4
+          px-5
+          rounded-r-full
+          text-white
+          whitespace-nowrap
+          shadow-md shadow-heandshe
+          hover:bg-heandshe
+        "
         v-on:click="insertOrder(discount)"
       >
         <div>Submit Order ({{ order.length }})</div>
@@ -615,6 +758,9 @@ export default {
     const variation = ref([]);
     const variation1 = ref([]);
     const variation2 = ref([]);
+    const deliveryFees = ref(0);
+    const getLocation = ref("");
+    const location = ref(localStorage.location)
 
     const formatPrice = (price) => {
       return parseFloat(price)
@@ -808,6 +954,29 @@ export default {
       defaultCatID.value = type;
     }
 
+    onMounted(() => {
+      if (orderID.value == "") {
+        axios
+          .get(`${process.env.VUE_APP_FNB_URL}/getLocation`)
+          /* .get(`http://localhost:3000/getLocation`) */
+          .then((response) => {
+            if (response.status == 200)
+              getLocation.value = JSON.parse(
+                JSON.stringify(response.data.data)
+              );
+
+            let j = getLocation.value.filter((loc) => {
+              return (
+                loc.loc_name
+                  .toLowerCase()
+                  .indexOf(location.value.toLowerCase()) != -1
+              );
+            });
+            deliveryFees.value = j[0].loc_price;
+          });
+      }
+    });
+
     const searchMenus = computed(() => {
       if (defaultCatID.value === 0) {
         return menus.value.filter((product) => {
@@ -866,6 +1035,9 @@ export default {
       formatSold,
       viewDetailItem,
       addToCart,
+      getLocation,
+      location,
+      deliveryFees,
       customerAdvanced,
       _filterByCategory,
       customerAdvancedOrder,
@@ -1101,7 +1273,9 @@ export default {
                             /(?:^|\s|-)\S/g,
                             (x) => x.toUpperCase()
                           ) +
-                          " ( + RM" +variasi[j].data[k].price.toFixed(2)+ " ) ",
+                          " ( + RM" +
+                          variasi[j].data[k].price.toFixed(2) +
+                          " ) ",
                         value: {
                           id: variasi[j].data[k].id,
                           name: variasi[j].data[k].name,
@@ -1177,7 +1351,7 @@ export default {
         await axios(config)
           .then(
             function (response) {
-                console.log(response.data.data)
+              console.log(response.data.data);
               this.IDMENU = response.data.data;
               /* :to="{ name: 'order-payment' , params:{id:  } }" */
               this.$router.push({
@@ -1197,6 +1371,7 @@ export default {
           time: localStorage.time,
           table: this.table,
           branch: localStorage.branch,
+          delivery: this.deliveryFees,
         });
 
         var config = {
@@ -1212,7 +1387,7 @@ export default {
         await axios(config)
           .then(
             function (response) {
-                console.log(response.data)
+              console.log(response.data);
               this.IDMENU = response.data.data;
               /* :to="{ name: 'order-payment' , params:{id:  } }" */
               this.$router.push({

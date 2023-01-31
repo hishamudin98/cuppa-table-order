@@ -224,7 +224,7 @@
       </div>
       <div class="subtotal flex justify-between my-2">
         <div class="font-semibold">Delivery Charges</div>
-        <div>RM {{formatPrice(deliveryFees)}}</div>
+        <div>RM {{formatPrice(this.location)}}</div>
       </div>
       <!--  <div class="discount flex justify-between my-2">
           <div class="font-semibold">Membership Discount (7%)</div>
@@ -249,7 +249,7 @@
       <hr />
       <div class="total flex justify-between my-2 text-xl">
         <div class="font-semibold">Total (Rounding)</div>
-        <div class="font-semibold">RM {{ formatPrice(this.totalPay) }}</div>
+        <div class="font-semibold">RM {{ formatPrice(this.orderTotalAmount) }}</div>
       </div>
     </rs-card>
 
@@ -440,7 +440,7 @@
                   >
                     <span v-if="loading"> Loading </span>
                     <span v-else
-                      >Pay Online RM {{ formatPrice(this.totalPay) }}</span
+                      >Pay Online RM {{ formatPrice(this.orderTotalAmount) }}</span
                     >
                   </rs-button>
                 </div>
@@ -492,33 +492,7 @@
       </div>
     </div>
 
-    <!--  <rs-button @click="openModalConfirmation = true" class="w-full mb-2"
-        >Pay Now with min infaq RM {{ formatPrice(Math.ceil(this.totalPay)) }}
-      </rs-button>
-      <rs-button
-        @click="openModalConfirmation = true"
-        class="w-full mb-2"
-        variant="primary-outline"
-        >Pay Now with more infaq RM
-        {{ formatPrice(Math.ceil(this.totalPay)) }}</rs-button
-      > -->
-    <!-- <router-link :to="{ name: 'order-confirm' }"> -->
-    <!--  <hr class="my-1" />
-    <center>OR</center>
-    <hr class="mb-4" />
-    <rs-button
-      class="w-full my-2"
-      variant="primary-outline"
-      @click="sentPOS()"
-      :disabled="loading"
-    >
-      <span v-if="loading"> Loading </span>
-      <span v-else> Pay at counter RM {{ formatPrice(this.totalPay) }}</span>
-    </rs-button> -->
-    <!-- <rs-button variant="primary-outline" class="w-full" @click="sentBank()">
-        Pay Online RM {{ formatPrice(this.totalPay) }}
-      </rs-button> -->
-    <!-- </router-link> -->
+    
   </div>
   <rs-modal
     title="This is a modal"
@@ -1039,8 +1013,6 @@ export default {
           if (response.status == 200)
             getLocation.value = JSON.parse(JSON.stringify(response.data.data));
 
-            console.log(location.value)
-
           let j =  getLocation.value.filter((loc) => {
             return (
               loc.loc_name
@@ -1087,6 +1059,7 @@ export default {
       service: 0,
       totalPay: 0,
       tableNo: 0,
+      orderTotalAmount: 0,
       discount: "",
       discountedP: 0,
       bankCode: "",
@@ -1121,13 +1094,13 @@ export default {
   },
 
   async created() {
-    this.getOrder();
     this.branch = localStorage.branch;
     this.time = localStorage.time;
     this.status = localStorage.status;
     window.addEventListener("beforeunload", () => {
       localStorage.setItem("branch", this.branch);
     });
+    
 
     /* history.pushState(null, null, location.href);
     window.onpopstate = function () {
@@ -1135,35 +1108,13 @@ export default {
     }; */
   },
 
-  mounted() {
-    /*  document.onclick = () => {
-      this.idleSecondsCounter = 0;
-    };
-    document.onmousemove = () => {
-      this.idleSecondsCounter = 0;
-    };
-    document.ontouchmove = () => {
-      this.idleSecondsCounter = 0;
-    };
-    this.idleSecondsTimer = setInterval(this.idleChecker, 1000); */
+    mounted() {
+      this.getOrder();
+    
   },
 
   methods: {
-    /* async idleChecker() {
-      this.idleSecondsCounter++; */
-    /* this.idleSecondsCounter = this.IDLE_COUNTER - this.idleSecondsCounter; */
-    /*  if (this.idleSecondsCounter >= this.IDLE_COUNTER) {
-        clearInterval(this.idleSecondsTimer);
-        this.idleSecondsTimer = null;
-        this.idleSecondsCounter = 0;
-        alert("You have been idle for 1 minute");
-        this.$router.push({
-          name: "main-order",
-          params: { branchID: this.branch, table: this.tablNo },
-        });
-      }
-    }, */
-
+   
     async SetBank(code) {
       this.bankcode = code;
     },
@@ -1230,11 +1181,14 @@ export default {
                 });
               }
             }
+
             this.tableNo = this.orderData[0].tableNo;
             this.totalAmount = response.data.data.am0untOrd3r;
-            this.sst = (this.totalAmount + this.deliveryFees) * 0.06;
+            this.orderTotalAmount = response.data.data.orderTotalAmount;
+            this.location = response.data.data.location;
+            this.sst = (this.totalAmount + this.location) * 0.06;
             /* this.service = this.totalAmount * 0.1; */
-            this.totalPay = this.totalAmount + this.deliveryFees + this.sst;
+            this.totalPay = this.totalAmount + this.sst;
             this.totalPay = Math.round(this.totalPay * 10) / 10;
             if (this.totalAmount >= 70) {
               this.outletDisc = this.totalAmount * 0.1;
@@ -1296,7 +1250,7 @@ export default {
             orderTotal1 = orderTotal1 + total1;
           }
           /* __________________________________________________________________________ */
-          this.totalAmount = orderTotal1 + orderTotal;
+          this.totalAmount = orderTotal1 + orderTotal + this.deliveryFees;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
           this.totalPay = this.totalAmount + this.sst;
@@ -1333,7 +1287,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + this.deliveryFees;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1359,7 +1313,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + this.deliveryFees;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1390,7 +1344,7 @@ export default {
             orderTotal1 = orderTotal1 + total1;
           }
           /* __________________________________________________________________________ */
-          this.totalAmount = orderTotal1 + orderTotal;
+          this.totalAmount = orderTotal1 + orderTotal + this.deliveryFees;
           this.sst = this.totalAmount * 0.06;
           /* this.service = this.totalAmount * 0.1; */
           this.totalPay = this.totalAmount + this.sst;
@@ -1427,7 +1381,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + this.deliveryFees;
             this.sst = this.totalAmount * 0.06;
 
             this.totalPay = this.totalAmount + this.sst;
@@ -1453,7 +1407,7 @@ export default {
               orderTotal1 = orderTotal1 + total1;
             }
             /* __________________________________________________________________________ */
-            this.totalAmount = orderTotal1 + orderTotal;
+            this.totalAmount = orderTotal1 + orderTotal + this.deliveryFees;
             this.sst = this.totalAmount * 0.06;
             /* this.service = this.totalAmount * 0.1; */
             this.totalPay = this.totalAmount + this.sst;
@@ -1468,12 +1422,14 @@ export default {
         }
       }
 
+      
+
       this.orders3 = this.orders.concat(this.orders2);
 
       var axios = require("axios");
       var data = JSON.stringify({
         order: this.orders3,
-        total: this.totalAmount,
+        total: this.totalAmount+this.deliveryFees,
         discounted: this.discountedP,
         orderID: this.MenuID,
       });
@@ -1676,6 +1632,7 @@ export default {
 
     async increment() {
       this.modalData.menu_quantity++;
+      
     },
     async decrement() {
       if (this.modalData.menu_quantity === 0) {
